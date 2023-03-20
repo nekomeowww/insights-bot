@@ -1,0 +1,49 @@
+# IDE
+.vscode/
+
+# Build / Release
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.db
+*.bin
+*.tar.gz
+/release/
+
+# Runtime / Compile Temporary Assets
+vendor/
+logs/
+
+# Credentials
+cert*/
+*.pem
+*.crt
+*.cer
+*.key
+*.p12
+
+# Test binary, build with `go test -c`
+*.test
+cover*
+coverage*
+insights-bot
+insights-bot
+!cmd/insights-bot
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# macOS
+.DS_Store
+
+# Configurations
+config.yaml
+config.yml
+
+# Local Configuration
+config.local.yaml
+
+# Temporary
+temp/

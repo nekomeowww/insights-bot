@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  hyphen:
+    image: nekomeowww/insights-bot:latest
+    restart: always
+    environment:
+      - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
+      - OPENAI_API_SECRET=<OpenAI API Secret Key>

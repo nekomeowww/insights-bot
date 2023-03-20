@@ -28,7 +28,7 @@ jobs:
       - name: 登录到 Docker Hub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: nekomeowww
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Create image tags
@@ -38,7 +38,7 @@ jobs:
           echo "tag=nekomeowww/insights-bot:${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Build and Push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./
           file: ./Dockerfile

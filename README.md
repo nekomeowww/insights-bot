@@ -29,7 +29,7 @@ docker-compose up -d
 ### Build with go
 
 ```shell
-go build -a -o "release/pero" "github.com/nekomeowww/insights-bot/cmd/pero"
+go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
 ```
 
 ### Build with Docker

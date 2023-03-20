@@ -87,7 +87,7 @@ jobs:
 
       # 测试构建
       - name: Test Build
-        run: go build -a -o "release/pero" "github.com/nekomeowww/insights-bot/cmd/pero"
+        run: go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
   # unittest:
   #   # 运行目标
   #   runs-on: ubuntu-latest

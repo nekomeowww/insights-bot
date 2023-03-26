@@ -32,8 +32,10 @@ type Handlers struct {
 func NewHandlers() func(param NewHandlersParam) *Handlers {
 	return func(param NewHandlersParam) *Handlers {
 		return &Handlers{
-			Dispatcher:      param.Dispatcher,
-			MessageHandlers: []handler.HandleFunc{},
+			Dispatcher: param.Dispatcher,
+			MessageHandlers: []handler.HandleFunc{
+				param.SummarizeHandler.HandleMessage,
+			},
 			ChannelPostHandlers: []handler.HandleFunc{
 				param.SummarizeHandler.HandleChannelPost,
 			},

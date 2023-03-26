@@ -1,6 +1,7 @@
 package summarize
 
 import (
+	"bytes"
 	"fmt"
 	"math"
 	"net/url"
@@ -115,7 +116,22 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 		return nil, err
 	}
 
-	urlContent, err := readability.FromURL(parsedURL.String(), 1*time.Minute)
+	buffer := new(bytes.Buffer)
+	resp, err := req.
+		C().
+		SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
+		SetTimeout(time.Minute).
+		R().
+		SetOutput(buffer).
+		Get(parsedURL.String())
+	if err != nil {
+		return nil, fmt.Errorf("failed to get url %s, %v", parsedURL.String(), err)
+	}
+	if !resp.IsSuccess() {
+		return nil, fmt.Errorf("failed to get url %s, status code: %d, dump: %s", parsedURL.String(), resp.StatusCode, resp.Dump())
+	}
+
+	urlContent, err := readability.FromReader(buffer, parsedURL)
 	if err != nil {
 		return nil, err
 	}

@@ -89,8 +89,11 @@ func (h *Handler) HandleChannelPost(c *handler.Context) {
 	}
 
 	h.Logger.WithFields(logrus.Fields{
-		"title": article.Title,
-		"url":   c.Update.ChannelPost.Text,
+		"title":                  article.Title,
+		"url":                    c.Update.ChannelPost.Text,
+		"prompt_token_usage":     resp.Usage.PromptTokens,
+		"completion_token_usage": resp.Usage.CompletionTokens,
+		"total_token_usage":      resp.Usage.TotalTokens,
 	}).Infof("✅ summarizing article done")
 	respMessages := lo.Map(resp.Choices, func(item goopenai.ChatCompletionChoice, _ int) string {
 		return item.Message.Content

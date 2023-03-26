@@ -11,6 +11,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram"
 	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/internal/models"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty"
@@ -20,6 +21,7 @@ func main() {
 	app := fx.New(fx.Options(
 		fx.Provide(configs.NewConfig()),
 		fx.Options(lib.NewModules()),
+		fx.Options(datastore.NewModules()),
 		fx.Options(models.NewModules()),
 		fx.Options(thirdparty.NewModules()),
 		fx.Options(telegram.NewModules()),

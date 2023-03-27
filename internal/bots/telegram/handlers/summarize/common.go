@@ -18,8 +18,9 @@ import (
 )
 
 var (
-	ErrNetworkError  = errors.New("network error")
-	ErrRequestFailed = errors.New("request failed")
+	ErrNetworkError        = errors.New("network error")
+	ErrRequestFailed       = errors.New("request failed")
+	ErrContentNotSupported = errors.New("content not supported")
 )
 
 func (h *Handler) summarizeInputURL(url string) (string, error) {
@@ -83,6 +84,11 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 	}
 	if !resp.IsSuccess() {
 		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, resp.Dump())
+	}
+	if !lo.Contains([]string{
+		"text/html",
+	}, resp.Header.Get("Content-Type")) {
+		return nil, fmt.Errorf("url fetched, but content-type not supported yet, %w, content-type: %s", ErrContentNotSupported, resp.Header.Get("Content-Type"))
 	}
 
 	buffer := new(bytes.Buffer)

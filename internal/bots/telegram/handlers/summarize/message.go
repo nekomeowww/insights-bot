@@ -62,6 +62,19 @@ func (h *Handler) HandleMessage(c *handler.Context) {
 	summarization, err := h.summarizeInputURL(urlString)
 	if err != nil {
 		h.Logger.Error(err)
+		if errors.Is(err, ErrContentNotSupported) {
+			_, err = c.Bot.Request(tgbotapi.EditMessageTextConfig{
+				BaseEdit: tgbotapi.BaseEdit{
+					ChatID:    c.Update.Message.Chat.ID,
+					MessageID: newMessage.MessageID,
+				},
+				Text: "暂时不支持量子速读这样的内容呢，可以换个别的链接试试。",
+			})
+			if err != nil {
+				h.Logger.Errorf("failed to send message to telegram... %v", err)
+				return
+			}
+		}
 		if errors.Is(err, ErrNetworkError) || errors.Is(err, ErrRequestFailed) {
 			_, err = c.Bot.Request(tgbotapi.EditMessageTextConfig{
 				BaseEdit: tgbotapi.BaseEdit{

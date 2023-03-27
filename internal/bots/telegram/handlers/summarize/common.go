@@ -106,7 +106,7 @@ func truncateContentBasedOnTokens(textContent string) (string, error) {
 		return "", err
 	}
 	if tokens > 3900 {
-		return string([]rune(textContent)[:int(math.Min(3900, float64(len(textContent))))]), nil
+		return string([]rune(textContent)[:int(math.Min(3900, float64(len([]rune(textContent)))))]), nil
 	}
 
 	return textContent, nil

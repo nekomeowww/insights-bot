@@ -13,8 +13,6 @@ import (
 var h *Handler
 
 func TestMain(m *testing.M) {
-	os.Setenv(configs.EnvOpenAIAPISecret, "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")
-
 	logger := logger.NewLogger(logrus.DebugLevel, "insights-bot", "", nil)
 	config := configs.NewConfig()()
 	openaiClient := thirdparty.NewOpenAIClient()(thirdparty.NewOpenAIClientParam{

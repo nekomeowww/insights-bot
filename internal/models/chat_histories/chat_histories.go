@@ -118,7 +118,8 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		"id":         id,
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
-	}).Debug("saved one telegram chat history")
+		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", "\\n"),
+	}).Info("saved one telegram chat history")
 	return nil
 }
 
@@ -132,10 +133,13 @@ func (m *ChatHistoriesModel) FindLastOneHourChatHistories(chatID int64) ([]*chat
 			Direction: 1,
 		})
 
+	m.Logger.Infof("querying chat histories for %d", chatID)
 	docs, err := m.Clover.FindAll(query)
 	if err != nil {
 		return make([]*chat_history.TelegramChatHistory, 0), err
 	}
+
+	m.Logger.Infof("found %d chat histories", len(docs))
 	if len(docs) == 0 {
 		return make([]*chat_history.TelegramChatHistory, 0), nil
 	}

@@ -93,20 +93,15 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		CreatedAt: time.Now().UnixMilli(),
 		UpdatedAt: time.Now().UnixMilli(),
 	}
-	if message.ForwardFrom != nil {
-		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + ExtractTextFromMessage(message)
-	} else if message.ForwardFromChat != nil {
-		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + ExtractTextFromMessage(message)
-	} else {
-		telegramChatHistory.Text = ExtractTextFromMessage(message)
-	}
+
+	text := ExtractTextFromMessage(message)
 	if telegramChatHistory.Text == "" {
 		m.Logger.Warn("message text is empty")
 		return nil
 	}
 
-	if utf8.RuneCountInString(telegramChatHistory.Text) >= 200 {
-		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), telegramChatHistory.Text)
+	if utf8.RuneCountInString(text) >= 200 {
+		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), text)
 		if err != nil {
 			return err
 		}
@@ -115,6 +110,14 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		}
 
 		telegramChatHistory.Text = resp.Choices[0].Message.Content
+	}
+
+	if message.ForwardFrom != nil {
+		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
+	} else if message.ForwardFromChat != nil {
+		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + text
+	} else {
+		telegramChatHistory.Text = text
 	}
 
 	id, err := m.Clover.InsertOne(

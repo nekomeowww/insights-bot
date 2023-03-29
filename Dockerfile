@@ -28,6 +28,10 @@ FROM alpine as runner
 RUN mkdir /app
 # 创建路径 /app/insights-bot/bin
 RUN mkdir -p /app/insights-bot/bin
+# 创建路径 /var/lib/insights-bot
+RUN mkdir -p /var/lib/insights-bot
+# 配置 CLOVER_DB_PATH 环境变量
+ENV CLOVER_DB_PATH /var/lib/insights-bot/insights_bot_clover_data.db
 
 COPY --from=builder /app/insights-bot/release/insights-bot /app/insights-bot/bin/
 

@@ -7,13 +7,13 @@ A bot works with OpenAI GPT models to provide insights for your Telegram info fl
 ### Run
 
 ```shell
-OPENAI_API_SECRET=<OpenAI API Secret Key> TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> insights-bot
+OPENAI_API_SECRET=<OpenAI API Secret Key> TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> CLOVER_DB_PATH=<path to store DB> insights-bot
 ```
 
 ### Run with Docker
 
 ```shell
-docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> insights-bot nekomeowww/insights-bot:latest
+docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e CLOVER_DB_PATH=<path to store DB> insights-bot nekomeowww/insights-bot:latest
 ```
 
 ### Run with docker-compose

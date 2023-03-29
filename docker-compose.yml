@@ -7,3 +7,4 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
+      - CLOVER_DB_PATH=<path to store DB>

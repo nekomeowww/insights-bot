@@ -68,6 +68,14 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	return firstName + " " + lastName
 }
 
+func ExtractTextFromMessage(message *tgbotapi.Message) string {
+	if message.Caption != "" {
+		return message.Caption
+	}
+
+	return message.Text
+}
+
 func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if message.Text == "" && message.Caption == "" {
 		m.Logger.Warn("message text is empty")
@@ -86,14 +94,17 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		UpdatedAt: time.Now().UnixMilli(),
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + message.Text
+		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + ExtractTextFromMessage(message)
 	} else if message.ForwardFromChat != nil {
-		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + message.Text
-	} else if message.Caption != "" {
-		telegramChatHistory.Text = message.Caption
+		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + ExtractTextFromMessage(message)
 	} else {
-		telegramChatHistory.Text = message.Text
+		telegramChatHistory.Text = ExtractTextFromMessage(message)
 	}
+	if telegramChatHistory.Text == "" {
+		m.Logger.Warn("message text is empty")
+		return nil
+	}
+
 	if utf8.RuneCountInString(telegramChatHistory.Text) >= 200 {
 		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), telegramChatHistory.Text)
 		if err != nil {
@@ -118,7 +129,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		"id":         id,
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
-		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", "\\n"),
+		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
 	}).Info("saved one telegram chat history")
 	return nil
 }

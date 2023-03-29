@@ -101,6 +101,7 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 	h.Logger.Infof("sending chat histories recap for chat %d", chatID)
 	message = tgbotapi.NewMessage(chatID, summarization)
 	message.ReplyToMessageID = c.Update.Message.MessageID
+	_, err = c.Bot.Send(message)
 	if err != nil {
 		h.Logger.Errorf("failed to send chat histories recap: %v", err)
 		return

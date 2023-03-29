@@ -1,9 +1,10 @@
 package datastore
 
 import (
-	"github.com/nekomeowww/insights-bot/internal/configs"
-	"github.com/nekomeowww/insights-bot/pkg/datastore/pinecone"
+	pinecone "github.com/nekomeowww/go-pinecone"
 	"go.uber.org/fx"
+
+	"github.com/nekomeowww/insights-bot/internal/configs"
 )
 
 type NewPineconeParam struct {
@@ -18,11 +19,10 @@ type Pinecone struct {
 
 func NewPinecone() func(NewPineconeParam) (*Pinecone, error) {
 	return func(param NewPineconeParam) (*Pinecone, error) {
-		client, err := pinecone.NewClient(
-			param.Config.Pinecone.IndexName,
-			param.Config.Pinecone.ProjectName,
-			param.Config.Pinecone.Environment,
-			param.Config.Pinecone.APIKey,
+		client, err := pinecone.New(
+			pinecone.WithAPIKey(param.Config.Pinecone.APIKey),
+			pinecone.WithEnvironment(param.Config.Pinecone.Environment),
+			pinecone.WithProjectName(param.Config.Pinecone.ProjectName),
 		)
 		if err != nil {
 			return nil, err

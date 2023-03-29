@@ -1,27 +1,38 @@
 package configs
 
-import "os"
+import (
+	"os"
 
-const (
-	EnvTelegramBotToken    = "TELEGRAM_BOT_TOKEN"
-	EnvOpenAIAPISecret     = "OPENAI_API_SECRET"
-	EnvPineconeIndexName   = "PINECONE_INDEX_NAME"
-	EnvPineconeProjectName = "PINECONE_PROJECT_NAME"
-	EnvPineconeEnvironment = "PINECONE_ENVIRONMENT"
-	EnvPineconeAPIKey      = "PINECONE_API_KEY"
+	"github.com/samber/lo"
 )
 
+const (
+	EnvTelegramBotToken             = "TELEGRAM_BOT_TOKEN"
+	EnvOpenAIAPISecret              = "OPENAI_API_SECRET"
+	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
+	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
+	EnvPineconeAPIKey               = "PINECONE_API_KEY"
+	EnvPineconeChatHistoryIndexName = "PINECONE_CHAT_HISTORY_INDEX_NAME"
+	EnvCloverDBPath                 = "CLOVER_DB_PATH"
+)
+
+type SectionPineconeIndexes struct {
+	ChatHistoryIndexName string
+}
+
 type SectionPinecone struct {
-	IndexName   string
 	ProjectName string
 	Environment string
 	APIKey      string
+
+	Indexes SectionPineconeIndexes
 }
 
 type Config struct {
 	TelegramBotToken string
 	OpenAIAPISecret  string
 	Pinecone         SectionPinecone
+	CloverDBPath     string
 }
 
 func NewConfig() func() *Config {
@@ -30,11 +41,14 @@ func NewConfig() func() *Config {
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
 			OpenAIAPISecret:  os.Getenv(EnvOpenAIAPISecret),
 			Pinecone: SectionPinecone{
-				IndexName:   os.Getenv(EnvPineconeIndexName),
 				ProjectName: os.Getenv(EnvPineconeProjectName),
 				Environment: os.Getenv(EnvPineconeEnvironment),
 				APIKey:      os.Getenv(EnvPineconeAPIKey),
+				Indexes: SectionPineconeIndexes{
+					ChatHistoryIndexName: os.Getenv(EnvPineconeChatHistoryIndexName),
+				},
 			},
+			CloverDBPath: lo.Ternary(os.Getenv(EnvCloverDBPath) != "", os.Getenv(EnvCloverDBPath), "insights_bot_clover_data.db"),
 		}
 	}
 }

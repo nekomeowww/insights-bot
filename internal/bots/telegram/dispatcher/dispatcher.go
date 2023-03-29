@@ -1,8 +1,6 @@
 package dispatcher
 
 import (
-	"runtime/debug"
-
 	"github.com/nekomeowww/insights-bot/pkg/handler"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
@@ -22,6 +20,7 @@ type NewDispatcherParam struct {
 
 type Dispatcher struct {
 	Logger              *logger.Logger
+	CommandHandlers     map[string]handler.HandleFunc
 	MessageHandlers     []handler.HandleFunc
 	ChannelPostHandlers []handler.HandleFunc
 }
@@ -30,8 +29,22 @@ func NewDispatcher() func(param NewDispatcherParam) *Dispatcher {
 	return func(param NewDispatcherParam) *Dispatcher {
 		return &Dispatcher{
 			Logger:              param.Logger,
+			CommandHandlers:     make(map[string]handler.HandleFunc),
 			MessageHandlers:     make([]handler.HandleFunc, 0),
 			ChannelPostHandlers: make([]handler.HandleFunc, 0),
+		}
+	}
+}
+
+func (d *Dispatcher) RegisterOneCommandHandler(cmd string, handler handler.HandleFunc) {
+	d.CommandHandlers[cmd] = handler
+}
+
+func (d *Dispatcher) DispatchCommand(c *handler.Context) {
+	for cmd, h := range d.CommandHandlers {
+		if c.Update.Message.Command() == cmd {
+			h(c)
+			continue
 		}
 	}
 }
@@ -42,16 +55,7 @@ func (d *Dispatcher) RegisterOneMessageHandler(handler handler.HandleFunc) {
 
 func (d *Dispatcher) DispatchMessage(c *handler.Context) {
 	for _, h := range d.MessageHandlers {
-		go func(handlerFunc handler.HandleFunc) {
-			defer func() {
-				if err := recover(); err != nil {
-					d.Logger.Errorf("Panic recovered from message handler, %v\n%s", err, debug.Stack())
-					return
-				}
-			}()
-
-			handlerFunc(c)
-		}(h)
+		h(c)
 	}
 }
 
@@ -61,15 +65,6 @@ func (d *Dispatcher) RegisterOneChannelPostHandler(handler handler.HandleFunc) {
 
 func (d *Dispatcher) DispatchChannelPost(c *handler.Context) {
 	for _, h := range d.ChannelPostHandlers {
-		go func(handlerFunc handler.HandleFunc) {
-			defer func() {
-				if err := recover(); err != nil {
-					d.Logger.Errorf("Panic recovered from channel post handler, %v\n%s", err, debug.Stack())
-					return
-				}
-			}()
-
-			handlerFunc(c)
-		}(h)
+		h(c)
 	}
 }

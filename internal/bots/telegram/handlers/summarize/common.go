@@ -2,16 +2,15 @@ package summarize
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
-	"math"
 	"net/url"
 	"time"
 
 	"github.com/go-shiori/go-readability"
 	"github.com/imroc/req/v3"
-	tokenizer "github.com/pandodao/tokenizer-go"
 	"github.com/samber/lo"
 	goopenai "github.com/sashabaranov/go-openai"
 	"github.com/sirupsen/logrus"
@@ -29,7 +28,7 @@ func (h *Handler) summarizeInputURL(url string) (string, error) {
 		return "", fmt.Errorf("failed to parse %s, %w", url, err)
 	}
 
-	textContent, err := truncateContentBasedOnTokens(article.TextContent)
+	textContent, err := h.OpenAI.TruncateContentBasedOnTokens(article.TextContent)
 	if err != nil {
 		return "", fmt.Errorf("failed to truncate content based on tokens... %w", err)
 	}
@@ -39,6 +38,7 @@ func (h *Handler) summarizeInputURL(url string) (string, error) {
 		"url":   url,
 	}).Infof("✍️ summarizing article...")
 	resp, err := h.OpenAI.SummarizeWithQuestionsAsSimplifiedChinese(
+		context.Background(),
 		article.Title,
 		article.Byline,
 		textContent,
@@ -103,17 +103,4 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 	}
 
 	return &urlContent, nil
-}
-
-// truncateContentBasedOnTokens 基于 token 计算的方式截断文本
-func truncateContentBasedOnTokens(textContent string) (string, error) {
-	tokens, err := tokenizer.CalToken(textContent)
-	if err != nil {
-		return "", err
-	}
-	if tokens > 3900 {
-		return string([]rune(textContent)[:int(math.Min(3900, float64(len([]rune(textContent)))))]), nil
-	}
-
-	return textContent, nil
 }

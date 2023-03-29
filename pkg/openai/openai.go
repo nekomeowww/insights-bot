@@ -3,7 +3,9 @@ package openai
 import (
 	"context"
 	"fmt"
+	"math"
 
+	"github.com/pandodao/tokenizer-go"
 	"github.com/sashabaranov/go-openai"
 )
 
@@ -17,10 +19,23 @@ func NewClient(apiSecret string) *Client {
 	}
 }
 
+// truncateContentBasedOnTokens 基于 token 计算的方式截断文本
+func (c *Client) TruncateContentBasedOnTokens(textContent string) (string, error) {
+	tokens, err := tokenizer.CalToken(textContent)
+	if err != nil {
+		return "", err
+	}
+	if tokens > 3900 {
+		return string([]rune(textContent)[:int(math.Min(3900, float64(len([]rune(textContent)))))]), nil
+	}
+
+	return textContent, nil
+}
+
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题
-func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(title, by, content string) (*openai.ChatCompletionResponse, error) {
+func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
 	resp, err := c.OpenAIClient.CreateChatCompletion(
-		context.Background(),
+		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
 			Messages: []openai.ChatCompletionMessage{
@@ -44,6 +59,70 @@ func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(title, by, content st
 						fmt.Sprintf("文章作者：%s；", by) +
 						fmt.Sprintf("文章正文：%s；", content) +
 						"接下来请你完成我所要求的任务。",
+				},
+			},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
+	resp, err := c.OpenAIClient.CreateChatCompletion(
+		ctx,
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role: openai.ChatMessageRoleSystem,
+					Content: "" +
+						"你是我的聊天消息总结助手。我将为你提供一条包含了人物名称、人物用户名、消息" +
+						"发送时间、消息内容等信息的消息，因为这条聊天消息有些过长了，我需要你帮我总" +
+						"结一下这条消息说了什么。最好一句话概括，如果这条消息有标题的话你可以直接返" +
+						"回标题。" +
+						"",
+				},
+				{
+					Role: openai.ChatMessageRoleUser,
+					Content: "" +
+						"消息：\n" +
+						llmFriendlyChatHistory + "\n" +
+						"请你帮我总结一下。",
+				},
+			},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
+	resp, err := c.OpenAIClient.CreateChatCompletion(
+		ctx,
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role: openai.ChatMessageRoleSystem,
+					Content: "" +
+						"你是我的聊天记录总结和回顾主力。我将为你提供一份不完整的、在过去一个小时中" +
+						"的、包含了人物名称、人物用户名、消息发送时间、消息内容等信息的聊天记录，这" +
+						"些聊天记录条目每条一行，我需要你通过这些聊天记录总结出一个列表，这个列表中" +
+						"包含了参与聊天人物所聊的主题和内容，以及他们聊天之后得出的结论。" +
+						"",
+				},
+				{
+					Role: openai.ChatMessageRoleUser,
+					Content: "" +
+						"聊天记录：\n" +
+						llmFriendlyChatHistories + "\n" +
+						"请你帮我总结一下。",
 				},
 			},
 		},

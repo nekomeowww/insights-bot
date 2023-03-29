@@ -30,11 +30,7 @@ func (h *Handler) commandInvalidResponse(c *handler.Context) {
 	}
 }
 
-func (h *Handler) HandleMessage(c *handler.Context) {
-	if c.Update.Message.Command() != "smr" {
-		return
-	}
-
+func (h *Handler) HandleSMRCommand(c *handler.Context) {
 	urlString := c.Update.Message.CommandArguments()
 	if urlString == "" {
 		go h.commandEmptyResponse(c)

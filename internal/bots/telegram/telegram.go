@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"context"
+	"runtime/debug"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -12,8 +13,10 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/dispatcher"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers"
 	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
 	"github.com/nekomeowww/insights-bot/pkg/handler"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
@@ -34,6 +37,8 @@ type NewBotParam struct {
 	Logger     *logger.Logger
 	Dispatcher *dispatcher.Dispatcher
 	Handlers   *handlers.Handlers
+
+	ChatHistories *chat_histories.ChatHistoriesModel
 }
 
 type Bot struct {
@@ -42,6 +47,8 @@ type Bot struct {
 	Config     *configs.Config
 	Logger     *logger.Logger
 	Dispatcher *dispatcher.Dispatcher
+
+	ChatHistories *chat_histories.ChatHistoriesModel
 
 	alreadyClose bool
 	closeChan    chan struct{}
@@ -59,10 +66,11 @@ func NewBot() func(param NewBotParam) (*Bot, error) {
 		}
 
 		bot := &Bot{
-			BotAPI:     b,
-			Logger:     param.Logger,
-			Dispatcher: param.Dispatcher,
-			closeChan:  make(chan struct{}, 1),
+			BotAPI:        b,
+			Logger:        param.Logger,
+			Dispatcher:    param.Dispatcher,
+			ChatHistories: param.ChatHistories,
+			closeChan:     make(chan struct{}, 1),
 		}
 
 		param.Lifecycle.Append(fx.Hook{
@@ -93,15 +101,15 @@ func (b *Bot) StopPull(ctx context.Context) {
 	}, utils.WithContext(ctx))
 }
 
-func (b *Bot) MapChatTypeToChineseText(chatType string) string {
+func (b *Bot) MapChatTypeToChineseText(chatType telegram.ChatType) string {
 	switch chatType {
-	case "private":
+	case telegram.ChatTypePrivate:
 		return "私聊"
-	case "group":
+	case telegram.ChatTypeGroup:
 		return "群组"
-	case "supergroup":
+	case telegram.ChatTypeSuperGroup:
 		return "超级群组"
-	case "channel":
+	case telegram.ChatTypeChannel:
 		return "频道"
 	default:
 		return "未知"
@@ -154,14 +162,14 @@ func (b *Bot) PullUpdates() {
 
 				if update.Message.Chat.Type == "private" {
 					b.Logger.Infof("[消息｜%s] %s (%s): %s",
-						b.MapChatTypeToChineseText(update.Message.Chat.Type),
+						b.MapChatTypeToChineseText(telegram.ChatType(update.Message.Chat.Type)),
 						strings.Join(identityStrings, " "),
 						color.FgYellow.Render(update.Message.From.ID),
 						lo.Ternary(update.Message.Text == "", "<empty or contains medias>", update.Message.Text),
 					)
 				} else {
 					b.Logger.Infof("[消息｜%s] [%s (%s)] %s (%s): %s",
-						b.MapChatTypeToChineseText(update.Message.Chat.Type),
+						b.MapChatTypeToChineseText(telegram.ChatType(update.Message.Chat.Type)),
 						color.FgGreen.Render(update.Message.Chat.Title),
 						color.FgYellow.Render(update.Message.Chat.ID),
 						strings.Join(identityStrings, " "),
@@ -169,8 +177,30 @@ func (b *Bot) PullUpdates() {
 						lo.Ternary(update.Message.Text == "", "<empty or contains medias>", update.Message.Text),
 					)
 				}
+				if update.Message.Command() != "" {
+					go func() {
+						defer func() {
+							if err := recover(); err != nil {
+								b.Logger.Errorf("Panic recovered from command dispatcher, %v\n%s", err, debug.Stack())
+								return
+							}
+						}()
 
-				b.Dispatcher.DispatchMessage(handler.NewContext(b.BotAPI, update))
+						b.Dispatcher.DispatchCommand(handler.NewContext(b.BotAPI, update))
+					}()
+
+				} else {
+					go func() {
+						defer func() {
+							if err := recover(); err != nil {
+								b.Logger.Errorf("Panic recovered from message dispatcher, %v\n%s", err, debug.Stack())
+								return
+							}
+						}()
+
+						b.Dispatcher.DispatchMessage(handler.NewContext(b.BotAPI, update))
+					}()
+				}
 			}
 			if update.MyChatMember != nil {
 				identityStrings := make([]string, 0)
@@ -188,7 +218,7 @@ func (b *Bot) PullUpdates() {
 				newMemberStatus := update.MyChatMember.NewChatMember.Status
 
 				b.Logger.Infof("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
-					b.MapChatTypeToChineseText(update.MyChatMember.Chat.Type),
+					b.MapChatTypeToChineseText(telegram.ChatType(update.MyChatMember.Chat.Type)),
 					color.FgGreen.Render(update.MyChatMember.Chat.Title),
 					color.FgYellow.Render(update.MyChatMember.Chat.ID),
 					strings.Join(identityStrings, " "),
@@ -218,12 +248,22 @@ func (b *Bot) PullUpdates() {
 			}
 			if update.ChannelPost != nil {
 				b.Logger.Infof("[频道消息｜%s] [%s (%s)]: %s",
-					b.MapChatTypeToChineseText(update.ChannelPost.Chat.Type),
+					b.MapChatTypeToChineseText(telegram.ChatType(update.ChannelPost.Chat.Type)),
 					color.FgGreen.Render(update.ChannelPost.Chat.Title),
 					color.FgYellow.Render(update.ChannelPost.Chat.ID),
 					lo.Ternary(update.ChannelPost.Text == "", "<empty or contains medias>", update.ChannelPost.Text),
 				)
-				b.Dispatcher.DispatchChannelPost(handler.NewContext(b.BotAPI, update))
+
+				go func() {
+					defer func() {
+						if err := recover(); err != nil {
+							b.Logger.Errorf("Panic recovered from channel post dispatcher, %v\n%s", err, debug.Stack())
+							return
+						}
+					}()
+
+					b.Dispatcher.DispatchChannelPost(handler.NewContext(b.BotAPI, update))
+				}()
 			}
 		case <-b.closeChan:
 			b.Logger.Info("stopped to receiving updates")

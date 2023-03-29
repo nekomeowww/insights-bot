@@ -95,7 +95,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 	}
 
 	text := ExtractTextFromMessage(message)
-	if telegramChatHistory.Text == "" {
+	if text == "" {
 		m.Logger.Warn("message text is empty")
 		return nil
 	}
@@ -109,7 +109,11 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 			return nil
 		}
 
-		telegramChatHistory.Text = resp.Choices[0].Message.Content
+		text = resp.Choices[0].Message.Content
+	}
+	if text == "" {
+		m.Logger.Warn("message text is empty")
+		return nil
 	}
 
 	if message.ForwardFrom != nil {
@@ -133,7 +137,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
-	}).Info("saved one telegram chat history")
+	}).Debug("saved one telegram chat history")
 	return nil
 }
 

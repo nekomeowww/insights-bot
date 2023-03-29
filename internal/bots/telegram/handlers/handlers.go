@@ -38,7 +38,7 @@ func NewHandlers() func(param NewHandlersParam) *Handlers {
 		return &Handlers{
 			Dispatcher: param.Dispatcher,
 			CommandHandlers: map[string]handler.HandleFunc{
-				"summarize":     param.SummarizeHandler.HandleSMRCommand,
+				"smr":           param.SummarizeHandler.HandleSMRCommand,
 				"recap":         param.ChatWithChatHistoryHandler.HandleRecapCommand,
 				"enable_recap":  param.ChatWithChatHistoryHandler.HandleEnableRecapCommand,
 				"disable_recap": param.ChatWithChatHistoryHandler.HandleDisableRecapCommand,

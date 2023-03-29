@@ -79,6 +79,7 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 		SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
 		SetTimeout(time.Minute).
 		R().
+		EnableDump().
 		Get(parsedURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)

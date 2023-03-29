@@ -60,17 +60,25 @@ func (h *Handler) HandleRecordMessage(c *handler.Context) {
 
 func (h *Handler) HandleRecapCommand(c *handler.Context) {
 	chatID := c.Update.Message.Chat.ID
-	h.Logger.Info("generating chat histories recap for chat %d", chatID)
+	h.Logger.Infof("generating chat histories recap for chat %d", chatID)
+
+	message := tgbotapi.NewMessage(chatID, "稍等我翻一下聊天记录看看你们都聊了什么哦～")
+	message.ReplyToMessageID = c.Update.Message.MessageID
+	_, err := c.Bot.Send(message)
+	if err != nil {
+		h.Logger.Errorf("failed to send chat histories recap: %v", err)
+		return
+	}
 
 	summarization, err := h.ChatHistories.SummarizeLastOneHourChatHistories(chatID)
 	if err != nil {
-		h.Logger.Error("failed to summarize last one hour chat histories: %v", err)
+		h.Logger.Errorf("failed to summarize last one hour chat histories: %v", err)
 
-		message := tgbotapi.NewMessage(chatID, "聊天记录回顾生成失败，请稍后再试！")
-		message.ReplyToMessageID = c.Update.Message.MessageID
-		_, err = c.Bot.Send(message)
+		errMessage := tgbotapi.NewMessage(chatID, "聊天记录回顾生成失败，请稍后再试！")
+		errMessage.ReplyToMessageID = c.Update.Message.MessageID
+		_, err = c.Bot.Send(errMessage)
 		if err != nil {
-			h.Logger.Error("failed to send chat histories recap: %v", err)
+			h.Logger.Errorf("failed to send chat histories recap: %v", err)
 			return
 		}
 
@@ -79,23 +87,22 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 	if summarization == "" {
 		h.Logger.Warn("summarization is empty")
 
-		message := tgbotapi.NewMessage(chatID, "暂时没有聊天记录可以生成聊天回顾哦，要再多聊点之后再试试吗？")
-		message.ReplyToMessageID = c.Update.Message.MessageID
-		_, err = c.Bot.Send(message)
+		errMessage := tgbotapi.NewMessage(chatID, "暂时没有聊天记录可以生成聊天回顾哦，要再多聊点之后再试试吗？")
+		errMessage.ReplyToMessageID = c.Update.Message.MessageID
+		_, err = c.Bot.Send(errMessage)
 		if err != nil {
-			h.Logger.Error("failed to send chat histories recap: %v", err)
+			h.Logger.Errorf("failed to send chat histories recap: %v", err)
 			return
 		}
 
 		return
 	}
 
-	h.Logger.Info("sending chat histories recap for chat %d", chatID)
-	message := tgbotapi.NewMessage(chatID, summarization)
+	h.Logger.Infof("sending chat histories recap for chat %d", chatID)
+	message = tgbotapi.NewMessage(chatID, summarization)
 	message.ReplyToMessageID = c.Update.Message.MessageID
-	_, err = c.Bot.Send(message)
 	if err != nil {
-		h.Logger.Error("failed to send chat histories recap: %v", err)
+		h.Logger.Errorf("failed to send chat histories recap: %v", err)
 		return
 	}
 }

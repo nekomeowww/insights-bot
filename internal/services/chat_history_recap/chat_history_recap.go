@@ -68,16 +68,16 @@ func Run() func(service *ChatHistoryRecapService) {
 func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 	chatIDs, err := s.TelegramChatFeatureFlags.ListChatHistoriesRecapEnabledChats()
 	if err != nil {
-		s.Logger.Error("failed to list chat histories recap enabled chats: %v", err)
+		s.Logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
 		return
 	}
 
 	for _, chatID := range chatIDs {
-		s.Logger.Info("generating chat histories recap for chat %d", chatID)
+		s.Logger.Infof("generating chat histories recap for chat %d", chatID)
 
 		summarization, err := s.ChatHistories.SummarizeLastOneHourChatHistories(chatID)
 		if err != nil {
-			s.Logger.Error("failed to summarize last one hour chat histories: %v", err)
+			s.Logger.Errorf("failed to summarize last one hour chat histories: %v", err)
 			continue
 		}
 		if summarization == "" {
@@ -89,7 +89,7 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 		message := tgbotapi.NewMessage(chatID, summarization)
 		_, err = s.Bot.Send(message)
 		if err != nil {
-			s.Logger.Error("failed to send chat histories recap: %v", err)
+			s.Logger.Errorf("failed to send chat histories recap: %v", err)
 			continue
 		}
 	}

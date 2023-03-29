@@ -14,6 +14,8 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/internal/models"
+	"github.com/nekomeowww/insights-bot/internal/services"
+	"github.com/nekomeowww/insights-bot/internal/services/chat_history_recap"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty"
 )
 
@@ -24,8 +26,10 @@ func main() {
 		fx.Options(datastore.NewModules()),
 		fx.Options(models.NewModules()),
 		fx.Options(thirdparty.NewModules()),
+		fx.Options(services.NewModules()),
 		fx.Options(telegram.NewModules()),
 		fx.Invoke(telegram.Run()),
+		fx.Invoke(chat_history_recap.Run()),
 		fx.Invoke(func() {
 			err := http.ListenAndServe(":6060", nil)
 			if err != nil {

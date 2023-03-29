@@ -32,6 +32,32 @@ func (c *Client) TruncateContentBasedOnTokens(textContent string) (string, error
 	return textContent, nil
 }
 
+// SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本
+func (c *Client) SplitContentBasedByTokenLimitations(textContent string) ([]string, error) {
+	slices := make([]string, 0)
+	slices, err := appendSplitTextByTokenLimitations(slices, textContent)
+	if err != nil {
+		return make([]string, 0), err
+	}
+
+	return slices, nil
+}
+
+func appendSplitTextByTokenLimitations(slices []string, textContent string) ([]string, error) {
+	tokens, err := tokenizer.CalToken(textContent)
+	if err != nil {
+		return make([]string, 0), err
+	}
+	if tokens > 3900 {
+		sliceFrom := math.Min(3900, float64(len([]rune(textContent))))
+		slices = append(slices, string([]rune(textContent)[:int(sliceFrom)]))
+		return appendSplitTextByTokenLimitations(slices, string([]rune(textContent)[int(sliceFrom):]))
+	}
+
+	slices = append(slices, textContent)
+	return slices, nil
+}
+
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题
 func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
 	resp, err := c.OpenAIClient.CreateChatCompletion(
@@ -114,7 +140,8 @@ func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChat
 						"你是我的聊天记录总结和回顾主力。我将为你提供一份不完整的、在过去一个小时中" +
 						"的、包含了人物名称、人物用户名、消息发送时间、消息内容等信息的聊天记录，这" +
 						"些聊天记录条目每条一行，我需要你通过这些聊天记录总结并以 Markdown 的语法" +
-						"输出一个列表，这个列表中包含了你发现的聊天主题，参与人和内容。" +
+						"输出一个列表，这个列表中包含了你发现的聊天主题，参与人和内容。不需要输出总" +
+						"结的大标题。" +
 						"",
 				},
 				{

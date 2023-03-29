@@ -1,6 +1,10 @@
 package utils
 
-import "unicode"
+import (
+	"regexp"
+	"strings"
+	"unicode"
+)
 
 func ContainsCJKChar(s string) bool {
 	for _, r := range s {
@@ -52,4 +56,28 @@ func ContainsCJKChar(s string) bool {
 	}
 
 	return false
+}
+
+// ReplaceMarkdownTitlesToBoldTexts
+func ReplaceMarkdownTitlesToBoldTexts(text string) (string, error) {
+	exp, err := regexp.Compile(`(?m)^(#){1,6} (.)*(\n)?`)
+	if err != nil {
+		return "", err
+	}
+	return exp.ReplaceAllStringFunc(text, func(s string) string {
+		println(s)
+		// remove hashtag
+		for strings.HasPrefix(s, "#") {
+			s = s[1:]
+		}
+		// remove space
+		s = s[1:]
+
+		sRunes := []rune(s)
+		ret := "**" + string(sRunes[:len(sRunes)-1])
+		if strings.HasSuffix(s, "\n") {
+			return ret + "**\n"
+		}
+		return ret + string(sRunes[len(sRunes)-1]) + "**"
+	}), nil
 }

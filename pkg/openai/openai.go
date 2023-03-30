@@ -137,19 +137,20 @@ func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChat
 				{
 					Role: openai.ChatMessageRoleSystem,
 					Content: "" +
-						"你是我的聊天记录总结和回顾主力。我将为你提供一份不完整的、在过去一个小时中" +
+						"你是我的聊天记录总结和回顾助理。我将为你提供一份不完整的、在过去一个小时中" +
 						"的、包含了人物名称、人物用户名、消息发送时间、消息内容等信息的聊天记录，这" +
-						"些聊天记录条目每条一行，我需要你通过这些聊天记录总结并以 Markdown 的语法" +
-						"输出一个列表，这个列表中包含了你发现的聊天主题，参与人和内容。不需要输出总" +
-						"结的大标题。" +
+						"些聊天记录条目每条一行，我需要你通过这些聊天记录总结并以 Markdown 的无序" +
+						"列表语法输出一个列表，这个列表中包含了你阅读之后理解总结出的的聊天主题，主" +
+						"题的参与人和内容。不需要输出大标题。\n" +
+						"聊天记录：\n" +
+						llmFriendlyChatHistories +
 						"",
 				},
 				{
 					Role: openai.ChatMessageRoleUser,
 					Content: "" +
-						"聊天记录：\n" +
-						llmFriendlyChatHistories + "\n" +
-						"请你帮我总结一下。",
+						"请你帮我总结一下。" +
+						"",
 				},
 			},
 		},

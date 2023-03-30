@@ -99,7 +99,7 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 		return
 	}
 
-	summarization, err = utils.ReplaceMarkdownTitlesToBoldTexts(summarization)
+	summarization, err = utils.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
 	if err != nil {
 		h.Logger.Errorf("failed to place titles to bold texts: %v", err)
 
@@ -118,7 +118,7 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 	h.Logger.Infof("sending chat histories recap for chat %d", chatID)
 	message = tgbotapi.NewMessage(chatID, summarization)
 	message.ReplyToMessageID = c.Update.Message.MessageID
-	message.ParseMode = "MarkdownV2"
+	message.ParseMode = "HTML"
 	_, err = c.Bot.Send(message)
 	if err != nil {
 		h.Logger.Errorf("failed to send chat histories recap: %v", err)

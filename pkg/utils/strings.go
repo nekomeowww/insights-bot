@@ -6,10 +6,6 @@ import (
 	"unicode"
 )
 
-var (
-	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
-)
-
 func ContainsCJKChar(s string) bool {
 	for _, r := range s {
 		if unicode.Is(unicode.Han, r) {
@@ -62,8 +58,12 @@ func ContainsCJKChar(s string) bool {
 	return false
 }
 
-// ReplaceMarkdownTitlesToBoldTexts
-func ReplaceMarkdownTitlesToBoldTexts(text string) (string, error) {
+var (
+	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
+)
+
+// ReplaceMarkdownTitlesToTelegramBoldElement
+func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
 	return matchMdTitles.ReplaceAllStringFunc(text, func(s string) string {
 		// remove hashtag
 		for strings.HasPrefix(s, "#") {
@@ -73,10 +73,14 @@ func ReplaceMarkdownTitlesToBoldTexts(text string) (string, error) {
 		s = strings.TrimPrefix(s, " ")
 
 		sRunes := []rune(s)
-		ret := "**" + string(sRunes[:len(sRunes)-1])
+		ret := "<b>" + string(sRunes[:len(sRunes)-1])
+
+		// if the line ends with a newline, add a newline to the end of the bold element
 		if strings.HasSuffix(s, "\n") {
-			return ret + "**\n"
+			return ret + "</b>\n"
 		}
-		return ret + string(sRunes[len(sRunes)-1]) + "**"
+
+		// otherwise, just return the bold element
+		return ret + string(sRunes[len(sRunes)-1]) + "</b>"
 	}), nil
 }

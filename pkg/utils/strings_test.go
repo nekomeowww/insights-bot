@@ -10,33 +10,33 @@ import (
 func TestReplaceMarkdownTitlesToBoldTexts(t *testing.T) {
 	prefix := ""
 	for i := 0; i < 6; i++ {
-		t.Run(fmt.Sprintf("title level %d", i+1), func(t *testing.T) {
+		t.Run(fmt.Sprintf("TitleLevel%d", i+1), func(t *testing.T) {
 			a := assert.New(t)
 
 			prefix += "#"
-			expect := "**Test**"
-			actual, err := ReplaceMarkdownTitlesToBoldTexts(fmt.Sprintf("%s Test", prefix))
+			expect := "<b>Test</b>"
+			actual, err := ReplaceMarkdownTitlesToTelegramBoldElement(fmt.Sprintf("%s Test", prefix))
 			a.Nil(err)
 			a.Equal(expect, actual)
 		})
 	}
 
-	t.Run("more hash tags", func(t *testing.T) {
+	t.Run("MoreHashTags", func(t *testing.T) {
 		a := assert.New(t)
 
 		prefix += "#"
 		expect := "####### Test"
-		actual, err := ReplaceMarkdownTitlesToBoldTexts(fmt.Sprintf("%s Test", prefix))
+		actual, err := ReplaceMarkdownTitlesToTelegramBoldElement(fmt.Sprintf("%s Test", prefix))
 		a.Nil(err)
 		a.Equal(expect, actual)
 	})
 
-	t.Run("multiple lines", func(t *testing.T) {
+	t.Run("MultipleLines", func(t *testing.T) {
 		a := assert.New(t)
 
-		expect := `**there is a title**
-**there is a subtitle**`
-		actual, err := ReplaceMarkdownTitlesToBoldTexts(`# there is a title
+		expect := `<b>there is a title</b>
+<b>there is a subtitle</b>`
+		actual, err := ReplaceMarkdownTitlesToTelegramBoldElement(`# there is a title
 ## there is a subtitle`)
 		a.Nil(err)
 		a.Equal(expect, actual)

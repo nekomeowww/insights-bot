@@ -87,6 +87,7 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 
 		s.Logger.Info("sending chat histories recap for chat %d", chatID)
 		message := tgbotapi.NewMessage(chatID, summarization)
+		message.ParseMode = "HTML"
 		_, err = s.Bot.Send(message)
 		if err != nil {
 			s.Logger.Errorf("failed to send chat histories recap: %v", err)

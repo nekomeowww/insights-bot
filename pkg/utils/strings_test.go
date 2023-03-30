@@ -16,7 +16,7 @@ func TestReplaceMarkdownTitlesToBoldTexts(t *testing.T) {
 			prefix += "#"
 			expect := "**Test**"
 			actual, err := ReplaceMarkdownTitlesToBoldTexts(fmt.Sprintf("%s Test", prefix))
-			a.Empty(err)
+			a.Nil(err)
 			a.Equal(expect, actual)
 		})
 	}
@@ -27,7 +27,7 @@ func TestReplaceMarkdownTitlesToBoldTexts(t *testing.T) {
 		prefix += "#"
 		expect := "####### Test"
 		actual, err := ReplaceMarkdownTitlesToBoldTexts(fmt.Sprintf("%s Test", prefix))
-		a.Empty(err)
+		a.Nil(err)
 		a.Equal(expect, actual)
 	})
 
@@ -38,7 +38,7 @@ func TestReplaceMarkdownTitlesToBoldTexts(t *testing.T) {
 **there is a subtitle**`
 		actual, err := ReplaceMarkdownTitlesToBoldTexts(`# there is a title
 ## there is a subtitle`)
-		a.Empty(err)
+		a.Nil(err)
 		a.Equal(expect, actual)
 	})
 }

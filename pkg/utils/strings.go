@@ -6,6 +6,10 @@ import (
 	"unicode"
 )
 
+var (
+	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
+)
+
 func ContainsCJKChar(s string) bool {
 	for _, r := range s {
 		if unicode.Is(unicode.Han, r) {
@@ -60,18 +64,13 @@ func ContainsCJKChar(s string) bool {
 
 // ReplaceMarkdownTitlesToBoldTexts
 func ReplaceMarkdownTitlesToBoldTexts(text string) (string, error) {
-	exp, err := regexp.Compile(`(?m)^(#){1,6} (.)*(\n)?`)
-	if err != nil {
-		return "", err
-	}
-	return exp.ReplaceAllStringFunc(text, func(s string) string {
-		println(s)
+	return matchMdTitles.ReplaceAllStringFunc(text, func(s string) string {
 		// remove hashtag
 		for strings.HasPrefix(s, "#") {
-			s = s[1:]
+			s = strings.TrimPrefix(s, "#")
 		}
 		// remove space
-		s = s[1:]
+		s = strings.TrimPrefix(s, " ")
 
 		sRunes := []rune(s)
 		ret := "**" + string(sRunes[:len(sRunes)-1])

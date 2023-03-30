@@ -197,7 +197,7 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 	}
 
 	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
-	for i, s := range chatHistoriesSlices {
+	for _, s := range chatHistoriesSlices {
 		c.Logger.Info("✍️ summarizing last one hour chat histories")
 		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
 		if err != nil {
@@ -217,8 +217,8 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 			continue
 		}
 
-		chatHistoriesSummarizations = append(chatHistoriesSummarizations, fmt.Sprintf("部分 %d\n\n%s", i, resp.Choices[0].Message.Content))
+		chatHistoriesSummarizations = append(chatHistoriesSummarizations, resp.Choices[0].Message.Content)
 	}
 
-	return strings.Join(chatHistoriesSummarizations, "\n"), nil
+	return strings.Join(chatHistoriesSummarizations, "\n\n"), nil
 }

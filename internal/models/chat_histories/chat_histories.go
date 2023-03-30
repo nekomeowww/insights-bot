@@ -191,25 +191,34 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
-	chatHistoriesContent, err := c.OpenAI.TruncateContentBasedOnTokens(chatHistories)
+	chatHistoriesSlices, err := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories)
 	if err != nil {
 		return "", fmt.Errorf("failed to truncate content based on tokens... %w", err)
 	}
 
-	c.Logger.Info("✍️ summarizing last one hour chat histories")
-	resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), chatHistoriesContent)
-	if err != nil {
-		return "", err
-	}
-	if len(resp.Choices) == 0 {
-		return "", nil
+	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
+	for _, s := range chatHistoriesSlices {
+		c.Logger.Info("✍️ summarizing last one hour chat histories")
+		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
+		if err != nil {
+			return "", err
+		}
+		if len(resp.Choices) == 0 {
+			return "", nil
+		}
+
+		c.Logger.WithFields(logrus.Fields{
+			"chat_id":                chatID,
+			"prompt_token_usage":     resp.Usage.PromptTokens,
+			"completion_token_usage": resp.Usage.CompletionTokens,
+			"total_token_usage":      resp.Usage.TotalTokens,
+		}).Info("✅ summarized last one hour chat histories")
+		if resp.Choices[0].Message.Content == "" {
+			continue
+		}
+
+		chatHistoriesSummarizations = append(chatHistoriesSummarizations, resp.Choices[0].Message.Content)
 	}
 
-	c.Logger.WithFields(logrus.Fields{
-		"chat_id":                chatID,
-		"prompt_token_usage":     resp.Usage.PromptTokens,
-		"completion_token_usage": resp.Usage.CompletionTokens,
-		"total_token_usage":      resp.Usage.TotalTokens,
-	}).Info("✅ summarized last one hour chat histories")
-	return resp.Choices[0].Message.Content, nil
+	return strings.Join(chatHistoriesSummarizations, "\n\n"), nil
 }

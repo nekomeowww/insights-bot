@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/go-shiori/go-readability"
@@ -78,6 +79,7 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 		SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
 		SetTimeout(time.Minute).
 		R().
+		EnableDump().
 		Get(parsedURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
@@ -85,9 +87,7 @@ func extractContentFromURL(urlString string) (*readability.Article, error) {
 	if !resp.IsSuccess() {
 		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, resp.Dump())
 	}
-	if !lo.Contains([]string{
-		"text/html",
-	}, resp.Header.Get("Content-Type")) {
+	if !strings.Contains(resp.Header.Get("Content-Type"), "text/html") {
 		return nil, fmt.Errorf("url fetched, but content-type not supported yet, %w, content-type: %s", ErrContentNotSupported, resp.Header.Get("Content-Type"))
 	}
 

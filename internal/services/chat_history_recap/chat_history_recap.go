@@ -76,9 +76,19 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 	for _, chatID := range chatIDs {
 		s.Logger.Infof("generating chat histories recap for chat %d", chatID)
 
-		summarization, err := s.ChatHistories.SummarizeLastOneHourChatHistories(chatID)
+		histories, err := s.ChatHistories.FindLastSixHourChatHistories(chatID)
 		if err != nil {
-			s.Logger.Errorf("failed to summarize last one hour chat histories: %v", err)
+			s.Logger.Errorf("failed to find last six hour chat histories: %v", err)
+			continue
+		}
+		if len(histories) <= 5 {
+			s.Logger.Warn("no enough chat histories")
+			continue
+		}
+
+		summarization, err := s.ChatHistories.SummarizeChatHistories(histories)
+		if err != nil {
+			s.Logger.Errorf("failed to summarize last six hour chat histories: %v", err)
 			continue
 		}
 		if summarization == "" {

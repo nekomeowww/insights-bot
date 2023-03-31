@@ -71,7 +71,35 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 		return
 	}
 
-	summarization, err := h.ChatHistories.SummarizeLastOneHourChatHistories(chatID)
+	histories, err := h.ChatHistories.FindLastOneHourChatHistories(chatID)
+	if err != nil {
+		h.Logger.Errorf("failed to find last one hour chat histories: %v", err)
+
+		errMessage := tgbotapi.NewMessage(chatID, "聊天记录回顾生成失败，请稍后再试！")
+		errMessage.ReplyToMessageID = c.Update.Message.MessageID
+		_, err = c.Bot.Send(errMessage)
+		if err != nil {
+			h.Logger.Errorf("failed to send chat histories recap: %v", err)
+			return
+		}
+
+		return
+	}
+	if len(histories) <= 5 {
+		h.Logger.Warn("chat histories are too few")
+
+		errMessage := tgbotapi.NewMessage(chatID, "暂时没有聊天记录可以生成聊天回顾哦，要再多聊点之后再试试吗？")
+		errMessage.ReplyToMessageID = c.Update.Message.MessageID
+		_, err = c.Bot.Send(errMessage)
+		if err != nil {
+			h.Logger.Errorf("failed to send chat histories recap: %v", err)
+			return
+		}
+
+		return
+	}
+
+	summarization, err := h.ChatHistories.SummarizeChatHistories(histories)
 	if err != nil {
 		h.Logger.Errorf("failed to summarize last one hour chat histories: %v", err)
 

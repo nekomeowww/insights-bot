@@ -76,6 +76,26 @@ func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	return message.Text
 }
 
+func (m *ChatHistoriesModel) extractTextWithSummarization(message *tgbotapi.Message) (string, error) {
+	text := ExtractTextFromMessage(message)
+	if text == "" {
+		return "", nil
+	}
+	if utf8.RuneCountInString(text) >= 200 {
+		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), text)
+		if err != nil {
+			return "", err
+		}
+		if len(resp.Choices) == 0 {
+			return "", nil
+		}
+
+		return resp.Choices[0].Message.Content, nil
+	}
+
+	return text, nil
+}
+
 func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if message.Text == "" && message.Caption == "" {
 		m.Logger.Warn("message text is empty")
@@ -94,34 +114,33 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		UpdatedAt: time.Now().UnixMilli(),
 	}
 
-	text := ExtractTextFromMessage(message)
-	if text == "" {
-		m.Logger.Warn("message text is empty")
-		return nil
-	}
-
-	if utf8.RuneCountInString(text) >= 200 {
-		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), text)
-		if err != nil {
-			return err
-		}
-		if len(resp.Choices) == 0 {
-			return nil
-		}
-
-		text = resp.Choices[0].Message.Content
+	text, err := m.extractTextWithSummarization(message)
+	if err != nil {
+		return err
 	}
 	if text == "" {
 		m.Logger.Warn("message text is empty")
 		return nil
 	}
-
 	if message.ForwardFrom != nil {
 		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
 	} else if message.ForwardFromChat != nil {
 		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + text
 	} else {
 		telegramChatHistory.Text = text
+	}
+	if message.ReplyToMessage != nil {
+		repliedToText, err := m.extractTextWithSummarization(message.ReplyToMessage)
+		if err != nil {
+			return err
+		}
+		if repliedToText != "" {
+			telegramChatHistory.RepliedToMessageID = message.ReplyToMessage.MessageID
+			telegramChatHistory.RepliedToUserID = message.ReplyToMessage.From.ID
+			telegramChatHistory.RepliedToFullName = FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
+			telegramChatHistory.RepliedToUsername = message.ReplyToMessage.From.UserName
+			telegramChatHistory.RepliedToText = repliedToText
+		}
 	}
 
 	id, err := m.Clover.InsertOne(
@@ -187,7 +206,28 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
-		historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf("%s (用户名：%s) 于 %s 发送：%s", message.FullName, message.Username, time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05"), message.Text))
+		var fullContextMessage string
+		if message.RepliedToMessageID == 0 {
+			fullContextMessage = fmt.Sprintf(
+				"%s (用户名：%s) 于 %s 发送：%s",
+				message.FullName,
+				message.Username,
+				time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05"),
+				message.Text,
+			)
+		} else {
+			fullContextMessage = fmt.Sprintf(
+				"%s (用户名：%s) 于 %s 回复 %s (用户名：%s) ：%s",
+				message.FullName,
+				message.Username,
+				time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05"),
+				message.RepliedToFullName,
+				message.RepliedToUsername,
+				message.Text,
+			)
+		}
+
+		historiesLLMFriendly = append(historiesLLMFriendly, fullContextMessage)
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")

@@ -161,10 +161,18 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 }
 
 func (m *ChatHistoriesModel) FindLastOneHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
+}
+
+func (m *ChatHistoriesModel) FindLastSixHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+	return m.FindChatHistoriesByTimeBefore(chatID, 6*time.Hour)
+}
+
+func (m *ChatHistoriesModel) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*chat_history.TelegramChatHistory, error) {
 	query := clover.
 		NewQuery(chat_history.TelegramChatHistory{}.CollectionName()).
 		Where(clover.Field("chat_id").Eq(chatID)).
-		Where(clover.Field("chatted_at").Gt(time.Now().Add(-time.Hour).UnixMilli())).
+		Where(clover.Field("chatted_at").Gt(time.Now().Add(-before).UnixMilli())).
 		Sort(clover.SortOption{
 			Field:     "message_id",
 			Direction: 1,
@@ -195,15 +203,7 @@ func (m *ChatHistoriesModel) FindLastOneHourChatHistories(chatID int64) ([]*chat
 	return chatHistories, nil
 }
 
-func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (string, error) {
-	histories, err := c.FindLastOneHourChatHistories(chatID)
-	if err != nil {
-		return "", err
-	}
-	if len(histories) <= 5 {
-		return "", nil
-	}
-
+func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
 		chattedAt := time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05")
@@ -243,7 +243,6 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 		}
 
 		c.Logger.WithFields(logrus.Fields{
-			"chat_id":                chatID,
 			"prompt_token_usage":     resp.Usage.PromptTokens,
 			"completion_token_usage": resp.Usage.CompletionTokens,
 			"total_token_usage":      resp.Usage.TotalTokens,

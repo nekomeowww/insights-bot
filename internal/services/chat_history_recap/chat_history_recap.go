@@ -47,7 +47,7 @@ func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) *ChatHis
 			OpenAI:                   param.OpenAI,
 		}
 
-		service.Cron.AddFunc("@hourly", service.SendChatHistoriesRecap)
+		service.Cron.AddFunc("@every 6h", service.SendChatHistoriesRecap)
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(context.Context) error {
 				service.Cron.Stop()
@@ -55,6 +55,7 @@ func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) *ChatHis
 			},
 		})
 
+		service.Logger.Infof("chat history recap service started")
 		return service
 	}
 }

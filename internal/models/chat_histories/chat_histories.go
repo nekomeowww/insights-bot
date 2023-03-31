@@ -206,28 +206,23 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
-		var fullContextMessage string
+		chattedAt := time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05")
+		partialContextMessage := fmt.Sprintf("%s (用户名：%s) 于 %s", message.FullName, message.Username, chattedAt)
 		if message.RepliedToMessageID == 0 {
-			fullContextMessage = fmt.Sprintf(
-				"%s (用户名：%s) 于 %s 发送：%s",
-				message.FullName,
-				message.Username,
-				time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05"),
+			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
+				"%s 发送：%s",
+				partialContextMessage,
 				message.Text,
-			)
+			))
 		} else {
-			fullContextMessage = fmt.Sprintf(
-				"%s (用户名：%s) 于 %s 回复 %s (用户名：%s) ：%s",
-				message.FullName,
-				message.Username,
-				time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05"),
+			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
+				"%s 回复 %s (用户名：%s) ：%s",
+				partialContextMessage,
 				message.RepliedToFullName,
 				message.RepliedToUsername,
 				message.Text,
-			)
+			))
 		}
-
-		historiesLLMFriendly = append(historiesLLMFriendly, fullContextMessage)
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
@@ -238,7 +233,7 @@ func (c *ChatHistoriesModel) SummarizeLastOneHourChatHistories(chatID int64) (st
 
 	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
-		c.Logger.Info("✍️ summarizing last one hour chat histories")
+		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
 		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
 		if err != nil {
 			return "", err

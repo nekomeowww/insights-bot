@@ -11,7 +11,7 @@ func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 	require := require.New(t)
 
 	c := &Client{}
-	slices, err := c.SplitContentBasedByTokenLimitations(strings.Repeat("a", 20000))
+	slices, err := c.SplitContentBasedByTokenLimitations(strings.Repeat("a", 20000), 3900)
 	require.NoError(err)
 
 	require.Equal(3, len(slices))

@@ -1,13 +1,14 @@
 package chat_with_chat_history
 
 import (
+	"fmt"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
 	"github.com/nekomeowww/insights-bot/internal/models/telegram_chat_feature_flags"
 	"github.com/nekomeowww/insights-bot/pkg/handler"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 )
@@ -127,24 +128,8 @@ func (h *Handler) HandleRecapCommand(c *handler.Context) {
 		return
 	}
 
-	summarization, err = utils.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
-	if err != nil {
-		h.Logger.Errorf("failed to place titles to bold texts: %v", err)
-
-		errMessage := tgbotapi.NewMessage(chatID, "在聊天记录回顾中替换标题到粗体文本时失败，请稍后再试！")
-		errMessage.ReplyToMessageID = c.Update.Message.MessageID
-		_, err = c.Bot.Send(errMessage)
-		if err != nil {
-			h.Logger.Errorf("failed to send chat histories recap: %v", err)
-			return
-		}
-
-		return
-	}
-	h.Logger.Infof("replaced all titles to bold texts")
-
 	h.Logger.Infof("sending chat histories recap for chat %d", chatID)
-	message = tgbotapi.NewMessage(chatID, summarization)
+	message = tgbotapi.NewMessage(chatID, fmt.Sprintf("%s\n#recap", summarization))
 	message.ReplyToMessageID = c.Update.Message.MessageID
 	message.ParseMode = "HTML"
 	_, err = c.Bot.Send(message)

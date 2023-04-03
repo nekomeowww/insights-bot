@@ -2,6 +2,7 @@ package chat_history_recap
 
 import (
 	"context"
+	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	cron "github.com/robfig/cron/v3"
@@ -97,7 +98,7 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 		}
 
 		s.Logger.Info("sending chat histories recap for chat %d", chatID)
-		message := tgbotapi.NewMessage(chatID, summarization)
+		message := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s\n#recap_auto", summarization))
 		message.ParseMode = "HTML"
 		_, err = s.Bot.Send(message)
 		if err != nil {

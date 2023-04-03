@@ -20,22 +20,22 @@ func NewClient(apiSecret string) *Client {
 }
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本
-func (c *Client) TruncateContentBasedOnTokens(textContent string) (string, error) {
+func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) (string, error) {
 	tokens, err := tokenizer.CalToken(textContent)
 	if err != nil {
 		return "", err
 	}
-	if tokens > 3900 {
-		return string([]rune(textContent)[:int(math.Min(3900, float64(len([]rune(textContent)))))]), nil
+	if tokens > limits {
+		return string([]rune(textContent)[:int(math.Min(float64(limits), float64(len([]rune(textContent)))))]), nil
 	}
 
 	return textContent, nil
 }
 
 // SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本
-func (c *Client) SplitContentBasedByTokenLimitations(textContent string) ([]string, error) {
+func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) ([]string, error) {
 	slices := make([]string, 0)
-	slices, err := appendSplitTextByTokenLimitations(slices, textContent)
+	slices, err := appendSplitTextByTokenLimitations(slices, textContent, limits)
 	if err != nil {
 		return make([]string, 0), err
 	}
@@ -43,15 +43,15 @@ func (c *Client) SplitContentBasedByTokenLimitations(textContent string) ([]stri
 	return slices, nil
 }
 
-func appendSplitTextByTokenLimitations(slices []string, textContent string) ([]string, error) {
+func appendSplitTextByTokenLimitations(slices []string, textContent string, limits int) ([]string, error) {
 	tokens, err := tokenizer.CalToken(textContent)
 	if err != nil {
 		return make([]string, 0), err
 	}
-	if tokens > 3900 {
-		sliceFrom := math.Min(3900, float64(len([]rune(textContent))))
+	if tokens > limits {
+		sliceFrom := math.Min(float64(limits), float64(len([]rune(textContent))))
 		slices = append(slices, string([]rune(textContent)[:int(sliceFrom)]))
-		return appendSplitTextByTokenLimitations(slices, string([]rune(textContent)[int(sliceFrom):]))
+		return appendSplitTextByTokenLimitations(slices, string([]rune(textContent)[int(sliceFrom):]), limits)
 	}
 
 	slices = append(slices, textContent)

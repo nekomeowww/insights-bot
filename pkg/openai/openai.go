@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 
 	"github.com/pandodao/tokenizer-go"
 	"github.com/sashabaranov/go-openai"
@@ -13,9 +14,16 @@ type Client struct {
 	OpenAIClient *openai.Client
 }
 
-func NewClient(apiSecret string) *Client {
+func NewClient(apiSecret string, apiHost string) *Client {
+	config := openai.DefaultConfig(apiSecret)
+	apiHostURL, apiHostURLParseErr := url.Parse(apiHost)
+	if apiHostURLParseErr == nil {
+		config.BaseURL = fmt.Sprintf("%s://%s", apiHostURL.Scheme, apiHostURL.Host)
+	}
+
+	client := openai.NewClientWithConfig(config)
 	return &Client{
-		OpenAIClient: openai.NewClient(apiSecret),
+		OpenAIClient: client,
 	}
 }
 

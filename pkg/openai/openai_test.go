@@ -7,6 +7,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestNewClient(t *testing.T) {
+	NewClient("", "https://openai.example.com")
+}
+
 func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 	require := require.New(t)
 

@@ -15,6 +15,6 @@ type NewOpenAIClientParam struct {
 
 func NewOpenAIClient() func(NewOpenAIClientParam) *openai.Client {
 	return func(param NewOpenAIClientParam) *openai.Client {
-		return openai.NewClient(param.Config.OpenAIAPISecret)
+		return openai.NewClient(param.Config.OpenAIAPISecret, param.Config.OpenAIAPIHost)
 	}
 }

@@ -8,3 +8,4 @@ services:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
       - CLOVER_DB_PATH=<path to store DB>
+      # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host

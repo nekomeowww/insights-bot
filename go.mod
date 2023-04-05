@@ -13,7 +13,7 @@ require (
 	github.com/pandodao/tokenizer-go v0.1.0
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/samber/lo v1.38.1
-	github.com/sashabaranov/go-openai v1.5.3
+	github.com/sashabaranov/go-openai v1.6.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.2
 	go.uber.org/fx v1.19.2

@@ -9,6 +9,7 @@ import (
 const (
 	EnvTelegramBotToken             = "TELEGRAM_BOT_TOKEN"
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET"
+	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
 	EnvPineconeAPIKey               = "PINECONE_API_KEY"
@@ -31,6 +32,7 @@ type SectionPinecone struct {
 type Config struct {
 	TelegramBotToken string
 	OpenAIAPISecret  string
+	OpenAIAPIHost    string
 	Pinecone         SectionPinecone
 	CloverDBPath     string
 }
@@ -40,6 +42,7 @@ func NewConfig() func() *Config {
 		return &Config{
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
 			OpenAIAPISecret:  os.Getenv(EnvOpenAIAPISecret),
+			OpenAIAPIHost:    os.Getenv(EnvOpenAIAPIHost),
 			Pinecone: SectionPinecone{
 				ProjectName: os.Getenv(EnvPineconeProjectName),
 				Environment: os.Getenv(EnvPineconeEnvironment),

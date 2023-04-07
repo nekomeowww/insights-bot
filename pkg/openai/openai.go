@@ -18,7 +18,7 @@ func NewClient(apiSecret string, apiHost string) *Client {
 	config := openai.DefaultConfig(apiSecret)
 	apiHostURL, apiHostURLParseErr := url.Parse(apiHost)
 	if apiHostURLParseErr == nil {
-		config.BaseURL = fmt.Sprintf("%s://%s", apiHostURL.Scheme, apiHostURL.Host)
+		config.BaseURL = fmt.Sprintf("%s://%s/v1", apiHostURL.Scheme, apiHostURL.Host)
 	}
 
 	client := openai.NewClientWithConfig(config)

@@ -3,7 +3,6 @@ package openai
 import (
 	"context"
 	"fmt"
-	"math"
 	"net/url"
 
 	"github.com/pandodao/tokenizer-go"
@@ -29,12 +28,25 @@ func NewClient(apiSecret string, apiHost string) *Client {
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本
 func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) (string, error) {
-	tokens, err := tokenizer.CalToken(textContent)
+	r, err := tokenizer.Encode(textContent)
 	if err != nil {
 		return "", err
 	}
-	if tokens > limits {
-		return string([]rune(textContent)[:int(math.Min(float64(limits), float64(len([]rune(textContent)))))]), nil
+
+	if len(r.Bpe) > limits {
+		truncatedText, err := tokenizer.Decode(r.Bpe[:limits])
+		if err != nil {
+			return "", err
+		}
+		origin := []rune(textContent)
+		truncated := []rune(truncatedText)
+
+		// 需要确保截断后最后一个字符不是半个汉字
+		if truncated[len(truncated)-1] != origin[len(truncated)-1] {
+			truncatedText = string(truncated[:len(truncated)-1])
+		}
+
+		return truncatedText, nil
 	}
 
 	return textContent, nil
@@ -43,26 +55,17 @@ func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) (s
 // SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本
 func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) ([]string, error) {
 	slices := make([]string, 0)
-	slices, err := appendSplitTextByTokenLimitations(slices, textContent, limits)
-	if err != nil {
-		return make([]string, 0), err
+	for {
+		s, err := c.TruncateContentBasedOnTokens(textContent, limits)
+		if err != nil {
+			return nil, err
+		}
+		slices = append(slices, s)
+		textContent = textContent[len(s):]
+		if len(textContent) == 0 {
+			break
+		}
 	}
-
-	return slices, nil
-}
-
-func appendSplitTextByTokenLimitations(slices []string, textContent string, limits int) ([]string, error) {
-	tokens, err := tokenizer.CalToken(textContent)
-	if err != nil {
-		return make([]string, 0), err
-	}
-	if tokens > limits {
-		sliceFrom := math.Min(float64(limits), float64(len([]rune(textContent))))
-		slices = append(slices, string([]rune(textContent)[:int(sliceFrom)]))
-		return appendSplitTextByTokenLimitations(slices, string([]rune(textContent)[int(sliceFrom):]), limits)
-	}
-
-	slices = append(slices, textContent)
 	return slices, nil
 }
 

@@ -9,7 +9,6 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/ostafen/clover/v2"
-	goopenai "github.com/sashabaranov/go-openai"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
@@ -17,7 +16,6 @@ import (
 	telegram_bot "github.com/nekomeowww/insights-bot/pkg/bots/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
-	"github.com/nekomeowww/insights-bot/pkg/text_splitter"
 	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )

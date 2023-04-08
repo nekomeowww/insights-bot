@@ -28,9 +28,10 @@ type NewHandlersParam struct {
 type Handlers struct {
 	Dispatcher *dispatcher.Dispatcher
 
-	CommandHandlers     map[string]handler.HandleFunc
-	MessageHandlers     []handler.HandleFunc
-	ChannelPostHandlers []handler.HandleFunc
+	CommandHandlers       map[string]handler.HandleFunc
+	MessageHandlers       []handler.HandleFunc
+	ChannelPostHandlers   []handler.HandleFunc
+	CallbackQueryHandlers map[string]handler.HandleFunc
 }
 
 func NewHandlers() func(param NewHandlersParam) *Handlers {
@@ -49,6 +50,9 @@ func NewHandlers() func(param NewHandlersParam) *Handlers {
 			ChannelPostHandlers: []handler.HandleFunc{
 				param.SummarizeHandler.HandleChannelPost,
 			},
+			CallbackQueryHandlers: map[string]handler.HandleFunc{
+				"recap/select_hour": param.ChatWithChatHistoryHandler.HandleCallbackQuery,
+			},
 		}
 	}
 }
@@ -62,5 +66,8 @@ func (h *Handlers) RegisterHandlers() {
 	}
 	for _, cph := range h.ChannelPostHandlers {
 		h.Dispatcher.RegisterOneChannelPostHandler(cph)
+	}
+	for route, cph := range h.CallbackQueryHandlers {
+		h.Dispatcher.RegisterOneCallbackQueryHandler(route, cph)
 	}
 }

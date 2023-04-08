@@ -7,6 +7,7 @@ require (
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/gookit/color v1.5.2
+	github.com/gorilla/schema v1.2.0
 	github.com/imroc/req/v3 v3.33.2
 	github.com/nekomeowww/go-pinecone v0.0.1
 	github.com/ostafen/clover/v2 v2.0.0-alpha.2
@@ -15,6 +16,7 @@ require (
 	github.com/samber/lo v1.38.1
 	github.com/sashabaranov/go-openai v1.6.1
 	github.com/sirupsen/logrus v1.9.0
+	github.com/sourcegraph/conc v0.3.0
 	github.com/stretchr/testify v1.8.2
 	go.uber.org/fx v1.19.2
 )

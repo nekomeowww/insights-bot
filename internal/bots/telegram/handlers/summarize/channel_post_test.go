@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 		Config: config,
 	})
 	if err != nil {
-		os.Exit(1)
+		panic(err)
 	}
 
 	h = NewHandler()(NewHandlerParam{

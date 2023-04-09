@@ -226,10 +226,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
-	chatHistoriesSlices, err := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 3000)
-	if err != nil {
-		return "", fmt.Errorf("failed to split content based on tokens... %w", err)
-	}
+	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 3000)
 
 	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {

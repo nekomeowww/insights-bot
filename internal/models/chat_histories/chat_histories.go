@@ -13,6 +13,7 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
+	telegram_bot "github.com/nekomeowww/insights-bot/pkg/bots/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
@@ -54,30 +55,8 @@ func NewChatHistoriesModel() func(NewChatHistoriesModelParam) (*ChatHistoriesMod
 	}
 }
 
-func FullNameFromFirstAndLastName(firstName, lastName string) string {
-	if lastName == "" {
-		return firstName
-	}
-	if firstName == "" {
-		return lastName
-	}
-	if utils.ContainsCJKChar(firstName) || utils.ContainsCJKChar(lastName) {
-		return lastName + firstName
-	}
-
-	return firstName + " " + lastName
-}
-
-func ExtractTextFromMessage(message *tgbotapi.Message) string {
-	if message.Caption != "" {
-		return message.Caption
-	}
-
-	return message.Text
-}
-
 func (m *ChatHistoriesModel) extractTextWithSummarization(message *tgbotapi.Message) (string, error) {
-	text := ExtractTextFromMessage(message)
+	text := telegram_bot.ExtractTextFromMessage(message)
 	if text == "" {
 		return "", nil
 	}
@@ -108,7 +87,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		MessageID: message.MessageID,
 		UserID:    message.From.ID,
 		Username:  message.From.UserName,
-		FullName:  FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName),
+		FullName:  telegram_bot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName),
 		ChattedAt: time.Unix(int64(message.Date), 0).UnixMilli(),
 		CreatedAt: time.Now().UnixMilli(),
 		UpdatedAt: time.Now().UnixMilli(),
@@ -123,7 +102,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistory.Text = "转发了来自" + FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
+		telegramChatHistory.Text = "转发了来自" + telegram_bot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
 	} else if message.ForwardFromChat != nil {
 		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + text
 	} else {
@@ -137,7 +116,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		if repliedToText != "" {
 			telegramChatHistory.RepliedToMessageID = message.ReplyToMessage.MessageID
 			telegramChatHistory.RepliedToUserID = message.ReplyToMessage.From.ID
-			telegramChatHistory.RepliedToFullName = FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
+			telegramChatHistory.RepliedToFullName = telegram_bot.FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
 			telegramChatHistory.RepliedToUsername = message.ReplyToMessage.From.UserName
 			telegramChatHistory.RepliedToText = repliedToText
 		}
@@ -227,7 +206,6 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 3000)
-
 	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
 		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)

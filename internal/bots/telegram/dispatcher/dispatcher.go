@@ -1,8 +1,11 @@
 package dispatcher
 
 import (
+	"net/url"
+
 	"github.com/nekomeowww/insights-bot/pkg/handler"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"go.uber.org/fx"
 )
 
@@ -19,19 +22,21 @@ type NewDispatcherParam struct {
 }
 
 type Dispatcher struct {
-	Logger              *logger.Logger
-	CommandHandlers     map[string]handler.HandleFunc
-	MessageHandlers     []handler.HandleFunc
-	ChannelPostHandlers []handler.HandleFunc
+	Logger                *logger.Logger
+	CommandHandlers       map[string]handler.HandleFunc
+	MessageHandlers       []handler.HandleFunc
+	ChannelPostHandlers   []handler.HandleFunc
+	CallbackQueryHandlers map[string]handler.HandleFunc
 }
 
 func NewDispatcher() func(param NewDispatcherParam) *Dispatcher {
 	return func(param NewDispatcherParam) *Dispatcher {
 		return &Dispatcher{
-			Logger:              param.Logger,
-			CommandHandlers:     make(map[string]handler.HandleFunc),
-			MessageHandlers:     make([]handler.HandleFunc, 0),
-			ChannelPostHandlers: make([]handler.HandleFunc, 0),
+			Logger:                param.Logger,
+			CommandHandlers:       make(map[string]handler.HandleFunc),
+			MessageHandlers:       make([]handler.HandleFunc, 0),
+			ChannelPostHandlers:   make([]handler.HandleFunc, 0),
+			CallbackQueryHandlers: make(map[string]handler.HandleFunc),
 		}
 	}
 }
@@ -66,5 +71,22 @@ func (d *Dispatcher) RegisterOneChannelPostHandler(handler handler.HandleFunc) {
 func (d *Dispatcher) DispatchChannelPost(c *handler.Context) {
 	for _, h := range d.ChannelPostHandlers {
 		h(c)
+	}
+}
+
+func (d *Dispatcher) RegisterOneCallbackQueryHandler(route string, handler handler.HandleFunc) {
+	d.CallbackQueryHandlers[route] = handler
+}
+
+func (d *Dispatcher) DispatchCallbackQuery(c *handler.Context) {
+	for route, h := range d.CallbackQueryHandlers {
+		parsedRoute, err := url.Parse(c.Update.CallbackQuery.Data)
+		if err != nil {
+			d.Logger.Errorf("failed to parse callback query data, err: %v, data: %v", err, utils.SprintJSON(parsedRoute))
+			continue
+		}
+		if parsedRoute.Host+parsedRoute.Path == route {
+			h(c)
+		}
 	}
 }

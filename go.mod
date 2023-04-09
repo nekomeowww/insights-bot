@@ -7,6 +7,7 @@ require (
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/gookit/color v1.5.2
+	github.com/gorilla/schema v1.2.0
 	github.com/imroc/req/v3 v3.33.2
 	github.com/nekomeowww/go-pinecone v0.0.1
 	github.com/ostafen/clover/v2 v2.0.0-alpha.2
@@ -54,6 +55,7 @@ require (
 	github.com/quic-go/qtls-go1-19 v0.2.0 // indirect
 	github.com/quic-go/qtls-go1-20 v0.1.0 // indirect
 	github.com/quic-go/quic-go v0.32.0 // indirect
+	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/samber/mo v1.8.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect

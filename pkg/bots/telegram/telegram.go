@@ -1,7 +1,13 @@
 package telegram
 
 import (
+	"fmt"
+	"net/url"
 	"regexp"
+
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+
+	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 var (
@@ -46,4 +52,36 @@ func EscapeStringForMarkdownV2(src string) string {
 	}
 
 	return result
+}
+
+func NewCallbackQueryData(component string, route string, queries url.Values) string {
+	return fmt.Sprintf("cbq://%s/%s?%s", component, route, queries.Encode())
+}
+
+func FullNameFromFirstAndLastName(firstName, lastName string) string {
+	if lastName == "" {
+		return firstName
+	}
+	if firstName == "" {
+		return lastName
+	}
+	if utils.ContainsCJKChar(firstName) && !utils.ContainsCJKChar(lastName) {
+		return firstName + " " + lastName
+	}
+	if !utils.ContainsCJKChar(firstName) && utils.ContainsCJKChar(lastName) {
+		return lastName + " " + firstName
+	}
+	if utils.ContainsCJKChar(firstName) && utils.ContainsCJKChar(lastName) {
+		return lastName + " " + firstName
+	}
+
+	return firstName + " " + lastName
+}
+
+func ExtractTextFromMessage(message *tgbotapi.Message) string {
+	if message.Caption != "" {
+		return message.Caption
+	}
+
+	return message.Text
 }

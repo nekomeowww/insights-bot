@@ -4,16 +4,22 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"unicode/utf8"
 
-	"github.com/pandodao/tokenizer-go"
+	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
 )
 
 type Client struct {
-	OpenAIClient *openai.Client
+	tiktokenEncoding *tiktoken.Tiktoken
+	OpenAIClient     *openai.Client
 }
 
-func NewClient(apiSecret string, apiHost string) *Client {
+func NewClient(apiSecret string, apiHost string) (*Client, error) {
+	tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
+	if err != nil {
+		return nil, err
+	}
 	config := openai.DefaultConfig(apiSecret)
 	apiHostURL, apiHostURLParseErr := url.Parse(apiHost)
 	if apiHostURLParseErr == nil {
@@ -22,51 +28,47 @@ func NewClient(apiSecret string, apiHost string) *Client {
 
 	client := openai.NewClientWithConfig(config)
 	return &Client{
-		OpenAIClient: client,
-	}
+		OpenAIClient:     client,
+		tiktokenEncoding: tokenizer,
+	}, nil
 }
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本
-func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) (string, error) {
-	r, err := tokenizer.Encode(textContent)
-	if err != nil {
-		return "", err
+func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) string {
+	tokens := c.tiktokenEncoding.Encode(textContent, nil, nil)
+	if len(tokens) <= limits {
+		return textContent
 	}
 
-	if len(r.Bpe) > limits {
-		truncatedText, err := tokenizer.Decode(r.Bpe[:limits])
-		if err != nil {
-			return "", err
-		}
-		origin := []rune(textContent)
-		truncated := []rune(truncatedText)
+	truncated := c.tiktokenEncoding.Decode(tokens[:limits])
 
-		// 需要确保截断后最后一个字符不是半个汉字
-		if truncated[len(truncated)-1] != origin[len(truncated)-1] {
-			truncatedText = string(truncated[:len(truncated)-1])
-		}
+	for len(truncated) > 0 {
 
-		return truncatedText, nil
+		// 假设 textContent = "小溪河水清澈见底", Encode 结果为 "[31809,36117,103,31106,111,53610,80866,162,122,230,90070,11795,243]"
+		// 当 limits = 4, 那么 tokens[:limits] = "[31809,36117,103,31106]", Decode 结果为 "小溪\xe6\xb2"
+		// 这里的 \xe6\xb2 是一个不完整的 UTF-8 编码，无法正确解析为一个完整的字符。下面得代码处理这种情况把它去掉。
+
+		r, size := utf8.DecodeLastRuneInString(truncated)
+		if r != utf8.RuneError {
+			break
+		}
+		truncated = truncated[:len(truncated)-size]
 	}
-
-	return textContent, nil
+	return truncated
 }
 
 // SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本
-func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) ([]string, error) {
+func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) []string {
 	slices := make([]string, 0)
 	for {
-		s, err := c.TruncateContentBasedOnTokens(textContent, limits)
-		if err != nil {
-			return nil, err
-		}
+		s := c.TruncateContentBasedOnTokens(textContent, limits)
 		slices = append(slices, s)
 		textContent = textContent[len(s):]
-		if len(textContent) == 0 {
+		if textContent == "" {
 			break
 		}
 	}
-	return slices, nil
+	return slices
 }
 
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题

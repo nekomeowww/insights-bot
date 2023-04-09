@@ -15,9 +15,12 @@ var h *Handler
 func TestMain(m *testing.M) {
 	logger := logger.NewLogger(logrus.DebugLevel, "insights-bot", "", nil)
 	config := configs.NewConfig()()
-	openaiClient := thirdparty.NewOpenAIClient()(thirdparty.NewOpenAIClientParam{
+	openaiClient, err := thirdparty.NewOpenAIClient()(thirdparty.NewOpenAIClientParam{
 		Config: config,
 	})
+	if err != nil {
+		os.Exit(1)
+	}
 
 	h = NewHandler()(NewHandlerParam{
 		Logger: logger,

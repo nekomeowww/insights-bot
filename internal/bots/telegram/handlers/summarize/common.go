@@ -29,11 +29,7 @@ func (h *Handler) summarizeInputURL(url string) (string, error) {
 		return "", fmt.Errorf("failed to parse %s, %w", url, err)
 	}
 
-	textContent, err := h.OpenAI.TruncateContentBasedOnTokens(article.TextContent, 3000)
-	if err != nil {
-		return "", fmt.Errorf("failed to truncate content based on tokens... %w", err)
-	}
-
+	textContent := h.OpenAI.TruncateContentBasedOnTokens(article.TextContent, 3000)
 	h.Logger.WithFields(logrus.Fields{
 		"title": article.Title,
 		"url":   url,

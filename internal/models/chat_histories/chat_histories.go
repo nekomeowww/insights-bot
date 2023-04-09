@@ -182,11 +182,19 @@ func (m *ChatHistoriesModel) FindChatHistoriesByTimeBefore(chatID int64, before 
 	return chatHistories, nil
 }
 
+func formatFullNameAndUsername(fullName, username string) string {
+	if username == "" {
+		return fullName
+	}
+
+	return fmt.Sprintf("%s (用户名：%s)", fullName, username)
+}
+
 func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
 		chattedAt := time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05")
-		partialContextMessage := fmt.Sprintf("%s (用户名：%s) 于 %s", message.FullName, message.Username, chattedAt)
+		partialContextMessage := fmt.Sprintf("%s 于 %s", formatFullNameAndUsername(message.FullName, message.Username), chattedAt)
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
 				"%s 发送：%s",
@@ -195,10 +203,9 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 			))
 		} else {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"%s 回复 %s (用户名：%s) ：%s",
+				"%s 回复 %s ：%s",
 				partialContextMessage,
-				message.RepliedToFullName,
-				message.RepliedToUsername,
+				formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername),
 				message.Text,
 			))
 		}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/pkoukk/tiktoken-go"
@@ -15,15 +16,38 @@ type Client struct {
 	OpenAIClient     *openai.Client
 }
 
+func parseOpenAIAPIHost(apiHost string) (string, error) {
+	if !strings.HasPrefix(apiHost, "https://") && !strings.HasPrefix(apiHost, "http://") {
+		apiHost = "http://" + apiHost
+	}
+
+	parsedURL, err := url.Parse(apiHost)
+	if err != nil {
+		return "", err
+	}
+
+	host := fmt.Sprintf("%s://%s", parsedURL.Scheme, parsedURL.Host)
+	if host != "" {
+		return host, nil
+	}
+
+	return "", fmt.Errorf("invalid API host: %s", apiHost)
+}
+
 func NewClient(apiSecret string, apiHost string) (*Client, error) {
 	tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
 	if err != nil {
 		return nil, err
 	}
+
 	config := openai.DefaultConfig(apiSecret)
-	apiHostURL, apiHostURLParseErr := url.Parse(apiHost)
-	if apiHostURLParseErr == nil {
-		config.BaseURL = fmt.Sprintf("%s://%s/v1", apiHostURL.Scheme, apiHostURL.Host)
+	if apiHost != "" {
+		apiHost, err = parseOpenAIAPIHost(apiHost)
+		if err != nil {
+			return nil, err
+		}
+
+		config.BaseURL = fmt.Sprintf("%s/v1", apiHost)
 	}
 
 	client := openai.NewClientWithConfig(config)

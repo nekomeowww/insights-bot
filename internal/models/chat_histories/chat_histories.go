@@ -186,6 +186,9 @@ func formatFullNameAndUsername(fullName, username string) string {
 	if username == "" {
 		return fullName
 	}
+	if utf8.RuneCountInString(fullName) >= 10 {
+		return fmt.Sprintf("%s (用户名：%s)", username, username)
+	}
 
 	return fmt.Sprintf("%s (用户名：%s)", fullName, username)
 }
@@ -193,7 +196,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
-		chattedAt := time.UnixMilli(message.ChattedAt).Format("2006-01-02 15:04:05")
+		chattedAt := time.UnixMilli(message.ChattedAt).Format("15:04:05")
 		partialContextMessage := fmt.Sprintf("%s 于 %s", formatFullNameAndUsername(message.FullName, message.Username), chattedAt)
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(

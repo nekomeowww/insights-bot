@@ -68,7 +68,7 @@ func (h *Handler) HandleCallbackQuery(c *handler.Context) {
 	_, err = c.Bot.Request(tgbotapi.NewEditMessageTextAndMarkup(
 		chatID,
 		messageID,
-		"正在为过去 %d 个小时的聊天记录生成回顾，请稍等...",
+		fmt.Sprintf("正在为过去 %d 个小时的聊天记录生成回顾，请稍等...", data.Hour),
 		tgbotapi.NewInlineKeyboardMarkup([]tgbotapi.InlineKeyboardButton{}),
 	))
 	if err != nil {

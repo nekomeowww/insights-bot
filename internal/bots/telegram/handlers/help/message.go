@@ -15,7 +15,7 @@ func (h *Handler) HandleHelpCommand(c *handler.Context) {
 关闭聊天记录回顾（群组） 用法：/disable_recap
 	`)
 	message.ReplyToMessageID = c.Update.Message.MessageID
-	_, err := c.Bot.Request(message)
+	err := c.Bot.MustSend(message)
 	if err != nil {
 		h.Logger.Errorf("failed to send message to telegram... %v", err)
 		return

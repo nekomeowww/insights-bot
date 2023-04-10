@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  hyphen:
+  insights_bot:
     image: nekomeowww/insights-bot:latest
     restart: always
     environment:
@@ -9,3 +9,18 @@ services:
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
       - CLOVER_DB_PATH=<path to store DB>
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
+    profiles:
+      - hub
+
+  insights_bot_local:
+    image: insights-bot
+    restart: always
+    environment:
+      - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
+      - OPENAI_API_SECRET=<OpenAI API Secret Key>
+      # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    profiles:
+      - local

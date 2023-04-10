@@ -5,6 +5,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/dispatcher"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/chat_with_chat_history"
+	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/help"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/summarize"
 	"github.com/nekomeowww/insights-bot/pkg/handler"
 )
@@ -12,6 +13,7 @@ import (
 func NewModules() fx.Option {
 	return fx.Options(
 		fx.Provide(NewHandlers()),
+		fx.Provide(help.NewHandler()),
 		fx.Provide(summarize.NewHandler()),
 		fx.Provide(chat_with_chat_history.NewHandler()),
 	)
@@ -21,6 +23,7 @@ type NewHandlersParam struct {
 	fx.In
 
 	Dispatcher                 *dispatcher.Dispatcher
+	HelpHandler                *help.Handler
 	SummarizeHandler           *summarize.Handler
 	ChatWithChatHistoryHandler *chat_with_chat_history.Handler
 }
@@ -39,6 +42,8 @@ func NewHandlers() func(param NewHandlersParam) *Handlers {
 		return &Handlers{
 			Dispatcher: param.Dispatcher,
 			CommandHandlers: map[string]handler.HandleFunc{
+				"help":          param.HelpHandler.HandleHelpCommand,
+				"start":         param.HelpHandler.HandleHelpCommand,
 				"smr":           param.SummarizeHandler.HandleSMRCommand,
 				"recap":         param.ChatWithChatHistoryHandler.HandleRecapCommand,
 				"enable_recap":  param.ChatWithChatHistoryHandler.HandleEnableRecapCommand,

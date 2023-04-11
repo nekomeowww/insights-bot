@@ -23,7 +23,7 @@ type Bot struct {
 func (b *Bot) MustSend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 	message, err := b.Send(chattable)
 	if err != nil {
-		b.logger.Error("failed to send %v to telegram: %v", utils.SprintJSON(chattable), err)
+		b.logger.Errorf("failed to send %v to telegram: %v", utils.SprintJSON(chattable), err)
 		return nil
 	}
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"regexp"
+	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
@@ -54,10 +55,12 @@ func EscapeStringForMarkdownV2(src string) string {
 	return result
 }
 
+// NewCallbackQueryData
 func NewCallbackQueryData(component string, route string, queries url.Values) string {
 	return fmt.Sprintf("cbq://%s/%s?%s", component, route, queries.Encode())
 }
 
+// FullNameFromFirstAndLastName
 func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	if lastName == "" {
 		return firstName
@@ -78,10 +81,50 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	return firstName + " " + lastName
 }
 
+// ExtractTextFromMessage
 func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	if message.Caption != "" {
 		return message.Caption
 	}
 
 	return message.Text
+}
+
+// EscapeHTMLSymbols
+//
+//	< with &lt;
+//	> with &gt;
+//	& with &amp;
+func EscapeHTMLSymbols(str string) string {
+	str = strings.ReplaceAll(str, "<", "&lt;")
+	str = strings.ReplaceAll(str, ">", "&gt;")
+	str = strings.ReplaceAll(str, "&", "&amp;")
+	return str
+}
+
+var (
+	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
+)
+
+// ReplaceMarkdownTitlesToTelegramBoldElement
+func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
+	return matchMdTitles.ReplaceAllStringFunc(text, func(s string) string {
+		// remove hashtag
+		for strings.HasPrefix(s, "#") {
+			s = strings.TrimPrefix(s, "#")
+		}
+		// remove space
+		s = strings.TrimPrefix(s, " ")
+
+		sRunes := []rune(s)
+		ret := "<b>" + string(sRunes[:len(sRunes)-1])
+
+		// if the line ends with a newline, add a newline to the end of the bold element
+		if strings.HasSuffix(s, "\n") {
+			return ret + "</b>\n"
+		}
+
+		// otherwise, just return the bold element
+		return ret + string(sRunes[len(sRunes)-1]) + "</b>"
+	}), nil
 }

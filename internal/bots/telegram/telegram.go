@@ -117,19 +117,19 @@ func (b *Bot) MapChatTypeToChineseText(chatType telegram.ChatType) string {
 	}
 }
 
-func (b *Bot) MapMemberStatusToChineseText(memberStatus string) string {
+func (b *Bot) MapMemberStatusToChineseText(memberStatus telegram.MemberStatus) string {
 	switch memberStatus {
-	case "creator":
+	case telegram.MemberStatusCreator:
 		return "创建者"
-	case "administrator":
+	case telegram.MemberStatusAdministrator:
 		return "管理员"
-	case "member":
+	case telegram.MemberStatusMember:
 		return "成员"
-	case "restricted":
+	case telegram.MemberStatusRestricted:
 		return "受限成员"
-	case "left":
+	case telegram.MemberStatusLeft:
 		return "已离开"
-	case "kicked":
+	case telegram.MemberStatusKicked:
 		return "已被踢出"
 	default:
 		return "未知"
@@ -192,8 +192,8 @@ func (b *Bot) handleChatMember(update tgbotapi.Update) {
 		identityStrings = append(identityStrings, "@"+update.MyChatMember.From.UserName)
 	}
 
-	oldMemberStatus := update.MyChatMember.OldChatMember.Status
-	newMemberStatus := update.MyChatMember.NewChatMember.Status
+	oldMemberStatus := telegram.MemberStatus(update.MyChatMember.OldChatMember.Status)
+	newMemberStatus := telegram.MemberStatus(update.MyChatMember.NewChatMember.Status)
 
 	b.Logger.Infof("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
 		b.MapChatTypeToChineseText(telegram.ChatType(update.MyChatMember.Chat.Type)),

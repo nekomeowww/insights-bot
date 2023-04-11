@@ -7,6 +7,26 @@ import (
 	"github.com/samber/lo"
 )
 
+func (h *Handler) checkTogglingRecapPermission(bot *handler.Bot, chatID, userID int64) (bool, error) {
+	member, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
+		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
+			ChatID: chatID,
+			UserID: userID,
+		},
+	})
+	if err != nil {
+		return false, err
+	}
+	if !lo.Contains([]telegram.MemberStatus{
+		telegram.MemberStatusCreator,
+		telegram.MemberStatusAdministrator,
+	}, telegram.MemberStatus(member.Status)) {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func (h *Handler) HandleEnableRecapCommand(c *handler.Context) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
@@ -16,7 +36,23 @@ func (h *Handler) HandleEnableRecapCommand(c *handler.Context) {
 		return
 	}
 
-	err := h.TelegramChatFeatureFlags.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
+	hasTogglingRecapPermission, err := h.checkTogglingRecapPermission(c.Bot, c.Update.Message.Chat.ID, c.Update.Message.From.ID)
+	if err != nil {
+		h.Logger.Errorf("failed to check toggling recap permission: %v", err)
+
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "聊天记录回顾功能开启失败，请稍后再试！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+	if !hasTogglingRecapPermission {
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "你没有权限开启聊天记录回顾功能哦！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+
+	err = h.TelegramChatFeatureFlags.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
 	if err != nil {
 		h.Logger.Errorf("failed to enable chat histories recap: %v", err)
 
@@ -40,7 +76,23 @@ func (h *Handler) HandleDisableRecapCommand(c *handler.Context) {
 		return
 	}
 
-	err := h.TelegramChatFeatureFlags.DisableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
+	hasTogglingRecapPermission, err := h.checkTogglingRecapPermission(c.Bot, c.Update.Message.Chat.ID, c.Update.Message.From.ID)
+	if err != nil {
+		h.Logger.Errorf("failed to check toggling recap permission: %v", err)
+
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "聊天记录回顾功能开启失败，请稍后再试！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+	if !hasTogglingRecapPermission {
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "你没有权限关闭聊天记录回顾功能哦！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+
+	err = h.TelegramChatFeatureFlags.DisableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
 	if err != nil {
 		h.Logger.Errorf("failed to enable chat histories recap: %v", err)
 

@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram"
 	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
 	"github.com/nekomeowww/insights-bot/internal/models/telegram_chat_feature_flags"
+	telegram_bot "github.com/nekomeowww/insights-bot/pkg/bots/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 )
@@ -94,6 +95,13 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 		}
 		if summarization == "" {
 			s.Logger.Warn("summarization is empty")
+			continue
+		}
+
+		summarization = telegram_bot.EscapeHTMLSymbols(summarization)
+		summarization, err = telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
+		if err != nil {
+			s.Logger.Errorf("failed to replace markdown titles to telegram bold element: %v", err)
 			continue
 		}
 

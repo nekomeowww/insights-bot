@@ -17,7 +17,6 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type NewChatHistoriesModelParam struct {
@@ -239,7 +238,9 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 		chatHistoriesSummarizations = append(chatHistoriesSummarizations, resp.Choices[0].Message.Content)
 	}
 
-	finalSummarization, err := utils.ReplaceMarkdownTitlesToTelegramBoldElement(strings.Join(chatHistoriesSummarizations, "\n\n"))
+	finalSummarization := strings.Join(chatHistoriesSummarizations, "\n\n")
+	finalSummarization = telegram_bot.EscapeHTMLSymbols(finalSummarization)
+	finalSummarization, err := telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(finalSummarization)
 	if err != nil {
 		return "", fmt.Errorf("failed to replace markdown titles to telegram bold element: %w", err)
 	}

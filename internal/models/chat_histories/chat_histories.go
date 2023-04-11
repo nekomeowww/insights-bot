@@ -238,13 +238,5 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 		chatHistoriesSummarizations = append(chatHistoriesSummarizations, resp.Choices[0].Message.Content)
 	}
 
-	finalSummarization := strings.Join(chatHistoriesSummarizations, "\n\n")
-	finalSummarization = telegram_bot.EscapeHTMLSymbols(finalSummarization)
-	finalSummarization, err := telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(finalSummarization)
-	if err != nil {
-		return "", fmt.Errorf("failed to replace markdown titles to telegram bold element: %w", err)
-	}
-
-	c.Logger.Infof("replaced all titles to bold texts")
-	return finalSummarization, nil
+	return strings.Join(chatHistoriesSummarizations, "\n\n"), nil
 }

@@ -52,6 +52,29 @@ func (h *Handler) HandleEnableRecapCommand(c *handler.Context) {
 		return
 	}
 
+	botMember, err := c.Bot.GetChatMember(tgbotapi.GetChatMemberConfig{
+		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
+			ChatID: c.Update.Message.Chat.ID,
+			UserID: c.Bot.Self.ID,
+		},
+	})
+	if err != nil {
+		h.Logger.Errorf("failed to check toggling recap permission: %v", err)
+
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "聊天记录回顾功能开启失败，请稍后再试！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+	if !lo.Contains([]telegram.MemberStatus{
+		telegram.MemberStatusAdministrator,
+	}, telegram.MemberStatus(botMember.Status)) {
+		message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "请先将机器人设为群组管理员，然后再开启聊天记录回顾功能哦！")
+		message.ReplyToMessageID = c.Update.Message.MessageID
+		c.Bot.MustSend(message)
+		return
+	}
+
 	err = h.TelegramChatFeatureFlags.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
 	if err != nil {
 		h.Logger.Errorf("failed to enable chat histories recap: %v", err)

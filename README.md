@@ -36,6 +36,12 @@ Remember to replace your token and cookie in `docker-compose.yml`
 docker-compose up -d
 ```
 
+If you prefer run docker image from local codes,
+
+```shell
+docker-compose --profile local up -d --build
+```
+
 ## Build on your own
 
 ### Build with go

@@ -93,7 +93,7 @@ func (h *Handler) HandleCallbackQuery(c *handler.Context) {
 		return
 	}
 
-	summarization, err := h.ChatHistories.SummarizeChatHistories(histories)
+	summarization, err := h.ChatHistories.SummarizeChatHistories(chatID, histories)
 	if err != nil {
 		h.Logger.Errorf("failed to summarize last one hour chat histories: %v", err)
 

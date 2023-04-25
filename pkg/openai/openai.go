@@ -166,13 +166,21 @@ func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyCha
 }
 
 func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
+	sb := new(strings.Builder)
+	err := ChatHistorySummarizationPrompt.Execute(sb, ChatHistorySummarizationPromptInputs{
+		ChatHistory: llmFriendlyChatHistories,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := c.OpenAIClient.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
 			Messages: []openai.ChatCompletionMessage{{
 				Role:    openai.ChatMessageRoleSystem,
-				Content: fmt.Sprintf(ChatHistorySummarizationPrompt, llmFriendlyChatHistories),
+				Content: fmt.Sprintf(sb.String(), llmFriendlyChatHistories),
 			}},
 		},
 	)

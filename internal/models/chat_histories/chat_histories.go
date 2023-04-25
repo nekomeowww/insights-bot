@@ -2,13 +2,17 @@ package chat_histories
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
+	"text/template"
 	"time"
 	"unicode/utf8"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/google/uuid"
 	"github.com/ostafen/clover/v2"
+	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
@@ -192,22 +196,42 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return fmt.Sprintf("%s (用户名：%s)", fullName, username)
 }
 
-func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.TelegramChatHistory) (string, error) {
+type RecapOutputTemplateInputs struct {
+	ChatID int64
+	Recaps []openai.ChatHistorySummarizationOutputs
+}
+
+var RecapOutputTemplate = lo.Must(template.
+	New(uuid.New().String()).
+	Funcs(template.FuncMap{
+		"join": strings.Join,
+		"sub":  func(a, b int) int { return a - b },
+	}).
+	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}## {{ $r.TopicName }}
+参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
+讨论：{{ range $di, $d := $r.Discussion }}
+{{ if gt $d.MessageID 0 }} - <a href="https://t.me/c/{{ $chatID }}/{{ $d.MessageID }}">{{ $d.Point }}</a>{{ else }} - {{ $d.Point }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+结论：{{ $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
+
+{{ end }}{{ end }}`))
+
+func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
-		chattedAt := time.UnixMilli(message.ChattedAt).Format("15:04:05")
-		partialContextMessage := fmt.Sprintf("%s 于 %s", formatFullNameAndUsername(message.FullName, message.Username), chattedAt)
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"%s 发送：%s",
-				partialContextMessage,
+				"消息 ID: %d: %s 发送：%s",
+				message.MessageID,
+				formatFullNameAndUsername(message.FullName, message.Username),
 				message.Text,
 			))
 		} else {
+			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的消息 ID 为 %d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"%s 回复 %s ：%s",
-				partialContextMessage,
-				formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername),
+				"消息 ID: %d: %s 回复 %s：%s",
+				message.MessageID,
+				formatFullNameAndUsername(message.FullName, message.Username),
+				repliedToPartialContextMessage,
 				message.Text,
 			))
 		}
@@ -215,7 +239,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 3000)
-	chatHistoriesSummarizations := make([]string, 0, len(chatHistoriesSlices))
+	chatHistoriesSummarizations := make([]openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
 		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
 		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
@@ -235,8 +259,23 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(histories []*chat_history.Te
 			continue
 		}
 
-		chatHistoriesSummarizations = append(chatHistoriesSummarizations, resp.Choices[0].Message.Content)
+		var output openai.ChatHistorySummarizationOutputs
+		err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &output)
+		if err != nil {
+			return "", err
+		}
+
+		chatHistoriesSummarizations = append(chatHistoriesSummarizations, output)
 	}
 
-	return strings.Join(chatHistoriesSummarizations, "\n\n"), nil
+	sb := new(strings.Builder)
+	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
+		ChatID: chatID,
+		Recaps: chatHistoriesSummarizations,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return sb.String(), nil
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func TestNewClient(t *testing.T) {
-	NewClient("", "https://openai.example.com")
+	_, _ = NewClient("", "https://openai.example.com")
 }
 
 func TestTruncateContentBasedOnTokens(t *testing.T) {

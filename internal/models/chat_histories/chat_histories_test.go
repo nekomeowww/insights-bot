@@ -2,6 +2,7 @@ package chat_histories
 
 import (
 	"os"
+	"strings"
 	"testing"
 	"time"
 
@@ -13,6 +14,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
+	"github.com/nekomeowww/insights-bot/pkg/openai"
 	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
@@ -137,4 +139,75 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *chat_history.TelegramChatHistory, _ int) int {
 		return item.MessageID
 	}))
+}
+
+func TestRecapOutputTemplateExecute(t *testing.T) {
+	sb := new(strings.Builder)
+	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
+		ChatID: 123456789,
+		Recaps: []openai.ChatHistorySummarizationOutputs{
+			{
+				TopicName:                        "Topic 1",
+				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
+				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+					{
+						Point:     "Point 1",
+						MessageID: 1,
+					},
+					{
+						Point: "Point 2",
+					},
+				},
+				Conclusion: "Conclusion 1",
+			},
+			{
+				TopicName:                        "Topic 3",
+				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
+				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+					{
+						Point: "Point 1",
+					},
+					{
+						Point:     "Point 2",
+						MessageID: 1,
+					},
+				},
+			},
+			{
+				TopicName:                        "Topic 1",
+				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
+				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+					{
+						Point:     "Point 1",
+						MessageID: 1,
+					},
+					{
+						Point: "Point 2",
+					},
+				},
+				Conclusion: "Conclusion 2",
+			},
+		},
+	})
+	require.NoError(t, err)
+	expected := `## Topic 1
+参与人：User 1，User 2
+讨论：
+ - <a href="https://t.me/c/123456789/1">Point 1</a>
+ - Point 2
+结论：Conclusion 1
+
+## Topic 3
+参与人：User 1，User 2
+讨论：
+ - Point 1
+ - <a href="https://t.me/c/123456789/1">Point 2</a>
+
+## Topic 1
+参与人：User 1，User 2
+讨论：
+ - <a href="https://t.me/c/123456789/1">Point 1</a>
+ - Point 2
+结论：Conclusion 2`
+	assert.Equal(t, expected, sb.String())
 }

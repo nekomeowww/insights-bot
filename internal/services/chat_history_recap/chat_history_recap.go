@@ -88,7 +88,7 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 			continue
 		}
 
-		summarization, err := s.ChatHistories.SummarizeChatHistories(histories)
+		summarization, err := s.ChatHistories.SummarizeChatHistories(chatID, histories)
 		if err != nil {
 			s.Logger.Errorf("failed to summarize last six hour chat histories: %v", err)
 			continue

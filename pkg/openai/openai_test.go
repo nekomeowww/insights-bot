@@ -1,15 +1,20 @@
 package openai
 
 import (
+	"context"
+	"fmt"
+	"io"
+	"os"
 	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"github.com/stretchr/testify/require"
 )
 
 func TestNewClient(t *testing.T) {
-	NewClient("", "https://openai.example.com")
+	_, _ = NewClient("", "https://openai.example.com")
 }
 
 func TestTruncateContentBasedOnTokens(t *testing.T) {
@@ -71,4 +76,25 @@ func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 			require.Equal(t, table.expected, actual)
 		})
 	}
+}
+
+func TestRecap(t *testing.T) {
+	c, err := NewClient("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", "https://openai.ayaka.io")
+	require.NoError(t, err)
+
+	file, err := os.Open(utils.RelativePathOf("../../temp/testdata/聊天总结/测试语料_1_partial.txt"))
+	require.NoError(t, err)
+	require.NotNil(t, file)
+	defer file.Close()
+
+	sb := new(strings.Builder)
+	_, err = io.Copy(sb, file)
+	require.NoError(t, err)
+
+	resp, err := c.SummarizeWithChatHistories(context.Background(), sb.String())
+	require.NoError(t, err)
+	require.NotNil(t, resp)
+	require.Len(t, resp.Choices, 1)
+
+	fmt.Println(resp.Choices[0].Message.Content)
 }

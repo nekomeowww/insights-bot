@@ -180,7 +180,7 @@ func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChat
 			Model: openai.GPT3Dot5Turbo,
 			Messages: []openai.ChatCompletionMessage{{
 				Role:    openai.ChatMessageRoleSystem,
-				Content: fmt.Sprintf(sb.String(), llmFriendlyChatHistories),
+				Content: sb.String(),
 			}},
 		},
 	)

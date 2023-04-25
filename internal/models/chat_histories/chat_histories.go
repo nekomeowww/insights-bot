@@ -238,7 +238,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
-	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 3000)
+	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
 	chatHistoriesSummarizations := make([]openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
 		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)

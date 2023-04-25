@@ -218,20 +218,19 @@ var RecapOutputTemplate = lo.Must(template.
 func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
-		chattedAt := time.UnixMilli(message.ChattedAt).Format("15:04:05")
-		partialContextMessage := fmt.Sprintf("%s 于 %s", formatFullNameAndUsername(message.FullName, message.Username), chattedAt)
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"消息 ID: %d, %s 发送：%s",
+				"消息 ID: %d: %s 发送：%s",
 				message.MessageID,
-				partialContextMessage,
+				formatFullNameAndUsername(message.FullName, message.Username),
 				message.Text,
 			))
 		} else {
-			repliedToPartialContextMessage := fmt.Sprintf("%s 于 %s 发送的消息 ID 为 %d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), chattedAt, message.RepliedToMessageID)
+			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的消息 ID 为 %d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"%s 回复 %s：%s",
-				partialContextMessage,
+				"消息 ID: %d: %s 回复 %s：%s",
+				message.MessageID,
+				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
 				message.Text,
 			))

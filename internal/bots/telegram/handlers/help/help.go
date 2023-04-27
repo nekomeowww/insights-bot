@@ -18,7 +18,7 @@ type Handler struct {
 func NewHandler() func(NewHandlerParam) *Handler {
 	return func(param NewHandlerParam) *Handler {
 		return &Handler{
-			Logger:                   param.Logger,
+			Logger: param.Logger,
 		}
 	}
 }

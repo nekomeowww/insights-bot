@@ -151,8 +151,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
 				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
 					{
-						Point:     "Point 1",
-						MessageID: 1,
+						Point:              "Point 1",
+						CriticalMessageIDs: []int64{1, 2},
 					},
 					{
 						Point: "Point 2",
@@ -168,8 +168,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 						Point: "Point 1",
 					},
 					{
-						Point:     "Point 2",
-						MessageID: 1,
+						Point:              "Point 2",
+						CriticalMessageIDs: []int64{1, 2},
 					},
 				},
 			},
@@ -178,8 +178,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
 				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
 					{
-						Point:     "Point 1",
-						MessageID: 1,
+						Point:              "Point 1",
+						CriticalMessageIDs: []int64{1, 2},
 					},
 					{
 						Point: "Point 2",
@@ -193,7 +193,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 	expected := `## Topic 1
 参与人：User 1，User 2
 讨论：
- - <a href="https://t.me/c/123456789/1">Point 1</a>
+ - Point 1 [<a href="https://t.me/c/123456789/1">Link 1</a>] [<a href="https://t.me/c/123456789/2">Link 2</a>]
  - Point 2
 结论：Conclusion 1
 
@@ -201,12 +201,12 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 参与人：User 1，User 2
 讨论：
  - Point 1
- - <a href="https://t.me/c/123456789/1">Point 2</a>
+ - Point 2 [<a href="https://t.me/c/123456789/1">Link 1</a>] [<a href="https://t.me/c/123456789/2">Link 2</a>]
 
 ## Topic 1
 参与人：User 1，User 2
 讨论：
- - <a href="https://t.me/c/123456789/1">Point 1</a>
+ - Point 1 [<a href="https://t.me/c/123456789/1">Link 1</a>] [<a href="https://t.me/c/123456789/2">Link 2</a>]
  - Point 2
 结论：Conclusion 2`
 	assert.Equal(t, expected, sb.String())

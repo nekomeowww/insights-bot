@@ -187,14 +187,11 @@ func (m *ChatHistoriesModel) FindChatHistoriesByTimeBefore(chatID int64, before 
 }
 
 func formatFullNameAndUsername(fullName, username string) string {
-	if username == "" {
-		return fullName
-	}
 	if utf8.RuneCountInString(fullName) >= 10 {
-		return fmt.Sprintf("%s (用户名：%s)", username, username)
+		return username
 	}
 
-	return fmt.Sprintf("%s (用户名：%s)", fullName, username)
+	return strings.ReplaceAll(fullName, "#", "")
 }
 
 type RecapOutputTemplateInputs struct {
@@ -222,7 +219,7 @@ var RecapOutputTemplate = lo.Must(template.
 	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceMsgID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceMsgID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[Link {{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ escape $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))

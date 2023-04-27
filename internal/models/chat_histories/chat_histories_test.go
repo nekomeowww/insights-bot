@@ -195,7 +195,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 	expected := `## <a href="https://t.me/c/123456789/1">Topic 1</a>
 参与人：User 1，User 2
 讨论：
- - Point 1 <a href="https://t.me/c/123456789/1">[Link 1]</a> <a href="https://t.me/c/123456789/2">[Link 2]</a>
+ - Point 1 <a href="https://t.me/c/123456789/1">[1]</a> <a href="https://t.me/c/123456789/2">[2]</a>
  - Point 2
 结论：Conclusion 1
 
@@ -203,12 +203,12 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 参与人：User 1，User 2
 讨论：
  - Point 1
- - Point 2 <a href="https://t.me/c/123456789/1">[Link 1]</a> <a href="https://t.me/c/123456789/2">[Link 2]</a>
+ - Point 2 <a href="https://t.me/c/123456789/1">[1]</a> <a href="https://t.me/c/123456789/2">[2]</a>
 
 ## <a href="https://t.me/c/123456789/2">Topic 1</a>
 参与人：User 1，User 2
 讨论：
- - Point 1 <a href="https://t.me/c/123456789/1">[Link 1]</a> <a href="https://t.me/c/123456789/2">[Link 2]</a>
+ - Point 1 <a href="https://t.me/c/123456789/1">[1]</a> <a href="https://t.me/c/123456789/2">[2]</a>
  - Point 2
 结论：Conclusion 2`
 	assert.Equal(t, expected, sb.String())

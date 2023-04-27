@@ -4,54 +4,111 @@ A bot works with OpenAI GPT models to provide insights for your Telegram info fl
 
 ## Usage
 
-### Run
+### Commands
 
-```shell
-OPENAI_API_SECRET=<OpenAI API Secret Key> TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> CLOVER_DB_PATH=<path to store DB> insights-bot
+Insights Bot ships with a set of commands, you can use `/help` to get a list of available commands when talking to the bot in Telegram.
+
+#### Summarize webpages
+
+Command: `/smr`
+
+Arguments: URL
+
+Usage:
+
+```txt
+/smr https://www.example.com
 ```
 
-#### Run with a specific OpenAI API endpoint host
+By sending `/smr` command with a URL, the bot will try to summarize the webpage and return the result.
 
-```shell
-OPENAI_API_HOST=https://<Some Host> OPENAI_API_SECRET=<OpenAI API Secret Key> TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> CLOVER_DB_PATH=<path to store DB> insights-bot
+#### Enable chat history recapturing
+
+Command: `/enable_recap`
+
+Arguments: None
+
+```txt
+/enable_recap
 ```
 
-### Run with Docker
+> **Note**
+> This command requires user to be an administrator of the chat.
 
-```shell
-docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e CLOVER_DB_PATH=<path to store DB> insights-bot nekomeowww/insights-bot:latest
+> **Warning**
+> **This command will also enable the bot to rapidly send a chat history recap automatically for each 6 hours.**
+
+By sending `/enable_recap` command, the bot will start to capture the chat histories and try to summarize them when you send `/recap` command afterwards.
+
+#### Disable chat history recapturing
+
+Command: `/disable_recap`
+
+Arguments: None
+
+```txt
+/disable_recap
 ```
 
-#### Run with docker and a specific OpenAI API endpoint host
+> **Note**
+> This command requires user to be an administrator of the chat.
+
+> **Warning**
+> **This command will also disable the functionalities of `/recap` command**
+
+By sending `/disable_recap` command, the bot will stop capturing the chat histories and no longer respond to `/recap` command.
+
+#### Summarize chat histories or Recap
+
+By sending `/recap` command, the bot will try to summarize the chat histories and return the result you choose later. Such as:
+
+```txt
+/recap
+```
+
+## Deployment
+
+### Run with docker
 
 ```shell
-docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_HOST=https://<Some Host> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e CLOVER_DB_PATH=<path to store DB> insights-bot nekomeowww/insights-bot:latest
+docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> insights-bot nekomeowww/insights-bot:latest
 ```
 
 ### Run with docker-compose
 
-Remember to replace your token and cookie in `docker-compose.yml`
+**Remember to replace your OpenAI token and other environment variables in `docker-compose.yml`**, and then run:
 
 ```shell
 docker-compose up -d
 ```
 
-If you prefer run docker image from local codes,
+If you prefer run docker image from local codes, then run:
 
 ```shell
 docker-compose --profile local up -d --build
 ```
 
-## Build on your own
+### Build on your own
 
-### Build with go
+#### Build with go
 
 ```shell
 go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
 ```
 
-### Build with Docker
+#### Build with Docker
 
 ```shell
 docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 ```
+
+## Configurations
+
+### Environment variables
+
+| Name | Required | Default | Description |
+| ---- | -------- | ------- | ----------- |
+| `TELEGRAM_BOT_TOKEN` | `true` | | Telegram Bot API token, you can create one and obtain the token through [@BotFather](https://t.me/BotFather) |
+| `OPENAI_API_SECRET` | `true` | | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys). |
+| `OPENAI_API_HOST` | `false` | `https://api.openai.com` | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev` |
+| `CLOVER_DB_PATH` | `false` | `insights_bot_clover_data.db` | Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file. |

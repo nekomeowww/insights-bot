@@ -199,7 +199,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 
 type RecapOutputTemplateInputs struct {
 	ChatID string
-	Recaps []openai.ChatHistorySummarizationOutputs
+	Recaps []*openai.ChatHistorySummarizationOutputs
 }
 
 func formatChatID(chatID int64) string {
@@ -251,7 +251,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
-	chatHistoriesSummarizations := make([]openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
+	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
 		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
 		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
@@ -271,11 +271,25 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 			continue
 		}
 
-		var outputs []openai.ChatHistorySummarizationOutputs
+		var outputs []*openai.ChatHistorySummarizationOutputs
 		err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 		if err != nil {
 			c.Logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
 			return "", err
+		}
+
+		for _, o := range outputs {
+			for _, d := range o.Discussion {
+				d.CriticalMessageIDs = lo.UniqBy(d.CriticalMessageIDs, func(item int64) int64 {
+					return item
+				})
+				d.CriticalMessageIDs = lo.Filter(d.CriticalMessageIDs, func(item int64, _ int) bool {
+					return item != 0
+				})
+				if len(d.CriticalMessageIDs) > 5 {
+					d.CriticalMessageIDs = d.CriticalMessageIDs[:5]
+				}
+			}
 		}
 
 		chatHistoriesSummarizations = append(chatHistoriesSummarizations, outputs...)

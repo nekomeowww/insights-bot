@@ -17,11 +17,11 @@ type ChatHistorySummarizationOutputsDiscussion struct {
 }
 
 type ChatHistorySummarizationOutputs struct {
-	TopicName                        string                                      `json:"topicName"`
-	SinceMsgID                       int64                                       `json:"sinceMsgId"`
-	ParticipantsNamesWithoutUsername []string                                    `json:"participantsNamesWithoutUsername"`
-	Discussion                       []ChatHistorySummarizationOutputsDiscussion `json:"discussion"`
-	Conclusion                       string                                      `json:"conclusion"`
+	TopicName                        string                                       `json:"topicName"`
+	SinceMsgID                       int64                                        `json:"sinceMsgId"`
+	ParticipantsNamesWithoutUsername []string                                     `json:"participantsNamesWithoutUsername"`
+	Discussion                       []*ChatHistorySummarizationOutputsDiscussion `json:"discussion"`
+	Conclusion                       string                                       `json:"conclusion"`
 }
 
 var ChatHistorySummarizationPrompt = lo.Must(template.New(uuid.New().String()).Parse("" +

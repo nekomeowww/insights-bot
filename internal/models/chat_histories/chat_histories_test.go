@@ -145,12 +145,12 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 	sb := new(strings.Builder)
 	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
-		Recaps: []openai.ChatHistorySummarizationOutputs{
+		Recaps: []*openai.ChatHistorySummarizationOutputs{
 			{
 				TopicName:                        "Topic 1",
 				SinceMsgID:                       1,
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{
 						Point:              "Point 1",
 						CriticalMessageIDs: []int64{1, 2},
@@ -164,7 +164,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 			{
 				TopicName:                        "Topic 3",
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{
 						Point: "Point 1",
 					},
@@ -178,7 +178,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 				TopicName:                        "Topic 1",
 				SinceMsgID:                       2,
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-				Discussion: []openai.ChatHistorySummarizationOutputsDiscussion{
+				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{
 						Point:              "Point 1",
 						CriticalMessageIDs: []int64{1, 2},

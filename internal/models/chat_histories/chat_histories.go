@@ -204,15 +204,16 @@ type RecapOutputTemplateInputs struct {
 var RecapOutputTemplate = lo.Must(template.
 	New(uuid.New().String()).
 	Funcs(template.FuncMap{
-		"join": strings.Join,
-		"sub":  func(a, b int) int { return a - b },
-		"add":  func(a, b int) int { return a + b },
+		"join":   strings.Join,
+		"sub":    func(a, b int) int { return a - b },
+		"add":    func(a, b int) int { return a + b },
+		"escape": telegram_bot.EscapeHTMLSymbols,
 	}).
-	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}## {{ $r.TopicName }}
+	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}## {{ escape $r.TopicName }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}[<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">Link {{ add $cIndex 1 }}</a>]{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
-结论：{{ $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
+ - {{ escape $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}[<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">Link {{ add $cIndex 1 }}</a>]{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
 

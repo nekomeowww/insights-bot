@@ -98,7 +98,6 @@ func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
 			continue
 		}
 
-		summarization = telegram_bot.EscapeHTMLSymbols(summarization)
 		summarization, err = telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
 		if err != nil {
 			s.Logger.Errorf("failed to replace markdown titles to telegram bold element: %v", err)

@@ -111,7 +111,6 @@ func (h *Handler) HandleCallbackQuery(c *handler.Context) {
 		return
 	}
 
-	summarization = telegram_bot.EscapeHTMLSymbols(summarization)
 	summarization, err = telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
 	if err != nil {
 		errMessage := tgbotapi.NewMessage(chatID, "聊天记录回顾生成失败，请稍后再试！")

@@ -227,6 +227,35 @@ var RecapOutputTemplate = lo.Must(template.
 
 {{ end }}{{ end }}`))
 
+func (c *ChatHistoriesModel) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
+	c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
+	resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
+	if err != nil {
+		return nil, err
+	}
+	if len(resp.Choices) == 0 {
+		return nil, nil
+	}
+
+	c.Logger.WithFields(logrus.Fields{
+		"prompt_token_usage":     resp.Usage.PromptTokens,
+		"completion_token_usage": resp.Usage.CompletionTokens,
+		"total_token_usage":      resp.Usage.TotalTokens,
+	}).Info("✅ summarized last one hour chat histories")
+	if resp.Choices[0].Message.Content == "" {
+		return nil, nil
+	}
+
+	var outputs []*openai.ChatHistorySummarizationOutputs
+	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
+	if err != nil {
+		c.Logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
+		return nil, err
+	}
+
+	return outputs, nil
+}
+
 func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
@@ -253,29 +282,22 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
-		c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
-		resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
-		if err != nil {
-			return "", err
-		}
-		if len(resp.Choices) == 0 {
-			return "", nil
-		}
-
-		c.Logger.WithFields(logrus.Fields{
-			"prompt_token_usage":     resp.Usage.PromptTokens,
-			"completion_token_usage": resp.Usage.CompletionTokens,
-			"total_token_usage":      resp.Usage.TotalTokens,
-		}).Info("✅ summarized last one hour chat histories")
-		if resp.Choices[0].Message.Content == "" {
-			continue
-		}
-
 		var outputs []*openai.ChatHistorySummarizationOutputs
-		err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
+		_, _, err := lo.AttemptWithDelay(3, time.Second, func(tried int, delay time.Duration) error {
+			o, err := c.summarizeChatHistoriesSlice(s)
+			if err != nil {
+				c.Logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
+				return err
+			}
+
+			outputs = o
+			return nil
+		})
 		if err != nil {
-			c.Logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
 			return "", err
+		}
+		if outputs == nil {
+			continue
 		}
 
 		for _, o := range outputs {

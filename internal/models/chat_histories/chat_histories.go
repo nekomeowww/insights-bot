@@ -263,6 +263,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 		var output openai.ChatHistorySummarizationOutputs
 		err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &output)
 		if err != nil {
+			c.Logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
 			return "", err
 		}
 

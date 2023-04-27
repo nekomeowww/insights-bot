@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -197,8 +198,17 @@ func formatFullNameAndUsername(fullName, username string) string {
 }
 
 type RecapOutputTemplateInputs struct {
-	ChatID int64
+	ChatID string
 	Recaps []openai.ChatHistorySummarizationOutputs
+}
+
+func formatChatID(chatID int64) string {
+	chatIDStr := strconv.FormatInt(chatID, 10)
+	if strings.HasPrefix(chatIDStr, "-100") {
+		return strings.TrimPrefix(chatIDStr, "-100")
+	}
+
+	return chatIDStr
 }
 
 var RecapOutputTemplate = lo.Must(template.
@@ -273,7 +283,7 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 
 	sb := new(strings.Builder)
 	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
-		ChatID: chatID,
+		ChatID: formatChatID(chatID),
 		Recaps: chatHistoriesSummarizations,
 	})
 	if err != nil {

@@ -144,7 +144,7 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 func TestRecapOutputTemplateExecute(t *testing.T) {
 	sb := new(strings.Builder)
 	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
-		ChatID: 123456789,
+		ChatID: formatChatID(-100123456789),
 		Recaps: []openai.ChatHistorySummarizationOutputs{
 			{
 				TopicName:                        "Topic 1",

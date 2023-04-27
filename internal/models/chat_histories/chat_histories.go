@@ -206,11 +206,12 @@ var RecapOutputTemplate = lo.Must(template.
 	Funcs(template.FuncMap{
 		"join": strings.Join,
 		"sub":  func(a, b int) int { return a - b },
+		"add":  func(a, b int) int { return a + b },
 	}).
 	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}## {{ $r.TopicName }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
-{{ if gt $d.MessageID 0 }} - <a href="https://t.me/c/{{ $chatID }}/{{ $d.MessageID }}">{{ $d.Point }}</a>{{ else }} - {{ $d.Point }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}[<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">Link {{ add $cIndex 1 }}</a>]{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
@@ -220,15 +221,15 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"消息 ID: %d: %s 发送：%s",
+				"msgId:%d: %s 发送：%s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				message.Text,
 			))
 		} else {
-			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的消息 ID 为 %d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
+			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的 msgId:%d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"消息 ID: %d: %s 回复 %s：%s",
+				"msgId:%d: %s 回复 %s：%s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,

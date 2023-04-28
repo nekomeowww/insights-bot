@@ -10,6 +10,10 @@ import (
 
 func RecordMessage(chatHistories *chat_histories.Model, tgchats *tgchats.Model) func(c *tgbot.Context, next func()) {
 	return func(c *tgbot.Context, next func()) {
+		if c.Update.Message == nil {
+			return
+		}
+
 		chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 		if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 			return

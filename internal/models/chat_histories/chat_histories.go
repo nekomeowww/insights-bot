@@ -18,13 +18,13 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
-	telegram_bot "github.com/nekomeowww/insights-bot/pkg/bots/telegram"
+	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
 )
 
-type NewChatHistoriesModelParam struct {
+type NewModelParams struct {
 	fx.In
 
 	Logger *logger.Logger
@@ -32,14 +32,14 @@ type NewChatHistoriesModelParam struct {
 	OpenAI *openai.Client
 }
 
-type ChatHistoriesModel struct {
-	Logger *logger.Logger
-	Clover *datastore.Clover
-	OpenAI *openai.Client
+type Model struct {
+	logger *logger.Logger
+	clover *datastore.Clover
+	openAI *openai.Client
 }
 
-func NewChatHistoriesModel() func(NewChatHistoriesModelParam) (*ChatHistoriesModel, error) {
-	return func(param NewChatHistoriesModelParam) (*ChatHistoriesModel, error) {
+func NewModel() func(NewModelParams) (*Model, error) {
+	return func(param NewModelParams) (*Model, error) {
 		hasCollection, err := param.Clover.HasCollection(chat_history.TelegramChatHistory{}.CollectionName())
 		if err != nil {
 			return nil, err
@@ -51,21 +51,21 @@ func NewChatHistoriesModel() func(NewChatHistoriesModelParam) (*ChatHistoriesMod
 			}
 		}
 
-		return &ChatHistoriesModel{
-			Logger: param.Logger,
-			Clover: param.Clover,
-			OpenAI: param.OpenAI,
+		return &Model{
+			logger: param.Logger,
+			clover: param.Clover,
+			openAI: param.OpenAI,
 		}, nil
 	}
 }
 
-func (m *ChatHistoriesModel) extractTextWithSummarization(message *tgbotapi.Message) (string, error) {
-	text := telegram_bot.ExtractTextFromMessage(message)
+func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string, error) {
+	text := tgbot.ExtractTextFromMessage(message)
 	if text == "" {
 		return "", nil
 	}
 	if utf8.RuneCountInString(text) >= 200 {
-		resp, err := m.OpenAI.SummarizeWithOneChatHistory(context.Background(), text)
+		resp, err := m.openAI.SummarizeWithOneChatHistory(context.Background(), text)
 		if err != nil {
 			return "", err
 		}
@@ -79,9 +79,9 @@ func (m *ChatHistoriesModel) extractTextWithSummarization(message *tgbotapi.Mess
 	return text, nil
 }
 
-func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
+func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if message.Text == "" && message.Caption == "" {
-		m.Logger.Warn("message text is empty")
+		m.logger.Warn("message text is empty")
 		return nil
 	}
 
@@ -91,7 +91,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		MessageID: message.MessageID,
 		UserID:    message.From.ID,
 		Username:  message.From.UserName,
-		FullName:  telegram_bot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName),
+		FullName:  tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName),
 		ChattedAt: time.Unix(int64(message.Date), 0).UnixMilli(),
 		CreatedAt: time.Now().UnixMilli(),
 		UpdatedAt: time.Now().UnixMilli(),
@@ -102,11 +102,11 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		return err
 	}
 	if text == "" {
-		m.Logger.Warn("message text is empty")
+		m.logger.Warn("message text is empty")
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistory.Text = "转发了来自" + telegram_bot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
+		telegramChatHistory.Text = "转发了来自" + tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
 	} else if message.ForwardFromChat != nil {
 		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + text
 	} else {
@@ -120,13 +120,13 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		if repliedToText != "" {
 			telegramChatHistory.RepliedToMessageID = message.ReplyToMessage.MessageID
 			telegramChatHistory.RepliedToUserID = message.ReplyToMessage.From.ID
-			telegramChatHistory.RepliedToFullName = telegram_bot.FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
+			telegramChatHistory.RepliedToFullName = tgbot.FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
 			telegramChatHistory.RepliedToUsername = message.ReplyToMessage.From.UserName
 			telegramChatHistory.RepliedToText = repliedToText
 		}
 	}
 
-	id, err := m.Clover.InsertOne(
+	id, err := m.clover.InsertOne(
 		chat_history.TelegramChatHistory{}.CollectionName(),
 		clover.NewDocumentOf(telegramChatHistory),
 	)
@@ -134,7 +134,7 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 		return err
 	}
 
-	m.Logger.WithFields(logrus.Fields{
+	m.logger.WithFields(logrus.Fields{
 		"id":         id,
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
@@ -143,15 +143,15 @@ func (m *ChatHistoriesModel) SaveOneTelegramChatHistory(message *tgbotapi.Messag
 	return nil
 }
 
-func (m *ChatHistoriesModel) FindLastOneHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
 }
 
-func (m *ChatHistoriesModel) FindLastSixHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, 6*time.Hour)
 }
 
-func (m *ChatHistoriesModel) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*chat_history.TelegramChatHistory, error) {
+func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*chat_history.TelegramChatHistory, error) {
 	query := clover.
 		NewQuery(chat_history.TelegramChatHistory{}.CollectionName()).
 		Where(clover.Field("chat_id").Eq(chatID)).
@@ -161,13 +161,13 @@ func (m *ChatHistoriesModel) FindChatHistoriesByTimeBefore(chatID int64, before 
 			Direction: 1,
 		})
 
-	m.Logger.Infof("querying chat histories for %d", chatID)
-	docs, err := m.Clover.FindAll(query)
+	m.logger.Infof("querying chat histories for %d", chatID)
+	docs, err := m.clover.FindAll(query)
 	if err != nil {
 		return make([]*chat_history.TelegramChatHistory, 0), err
 	}
 
-	m.Logger.Infof("found %d chat histories", len(docs))
+	m.logger.Infof("found %d chat histories", len(docs))
 	if len(docs) == 0 {
 		return make([]*chat_history.TelegramChatHistory, 0), nil
 	}
@@ -214,7 +214,7 @@ var RecapOutputTemplate = lo.Must(template.
 		"join":   strings.Join,
 		"sub":    func(a, b int) int { return a - b },
 		"add":    func(a, b int) int { return a + b },
-		"escape": telegram_bot.EscapeHTMLSymbols,
+		"escape": tgbot.EscapeHTMLSymbols,
 	}).
 	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceMsgID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceMsgID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
@@ -224,9 +224,9 @@ var RecapOutputTemplate = lo.Must(template.
 
 {{ end }}{{ end }}`))
 
-func (c *ChatHistoriesModel) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
-	c.Logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
-	resp, err := c.OpenAI.SummarizeWithChatHistories(context.Background(), s)
+func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
+	c.logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
+	resp, err := c.openAI.SummarizeWithChatHistories(context.Background(), s)
 	if err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func (c *ChatHistoriesModel) summarizeChatHistoriesSlice(s string) ([]*openai.Ch
 		return nil, nil
 	}
 
-	c.Logger.WithFields(logrus.Fields{
+	c.logger.WithFields(logrus.Fields{
 		"prompt_token_usage":     resp.Usage.PromptTokens,
 		"completion_token_usage": resp.Usage.CompletionTokens,
 		"total_token_usage":      resp.Usage.TotalTokens,
@@ -246,14 +246,14 @@ func (c *ChatHistoriesModel) summarizeChatHistoriesSlice(s string) ([]*openai.Ch
 	var outputs []*openai.ChatHistorySummarizationOutputs
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 	if err != nil {
-		c.Logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
+		c.logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
 		return nil, err
 	}
 
 	return outputs, nil
 }
 
-func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
+func (c *Model) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
@@ -276,14 +276,14 @@ func (c *ChatHistoriesModel) SummarizeChatHistories(chatID int64, histories []*c
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
-	chatHistoriesSlices := c.OpenAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
+	chatHistoriesSlices := c.openAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 	for _, s := range chatHistoriesSlices {
 		var outputs []*openai.ChatHistorySummarizationOutputs
 		_, _, err := lo.AttemptWithDelay(3, time.Second, func(tried int, delay time.Duration) error {
 			o, err := c.summarizeChatHistoriesSlice(s)
 			if err != nil {
-				c.Logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
+				c.logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
 				return err
 			}
 

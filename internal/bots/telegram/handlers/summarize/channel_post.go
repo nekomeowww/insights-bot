@@ -4,58 +4,28 @@ import (
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/imroc/req/v3"
-	"go.uber.org/fx"
 
-	"github.com/nekomeowww/insights-bot/pkg/handler"
-	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/nekomeowww/insights-bot/pkg/openai"
+	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 )
 
-type NewHandlerParam struct {
-	fx.In
-
-	Logger *logger.Logger
-	OpenAI *openai.Client
-}
-
-type Handler struct {
-	Logger *logger.Logger
-
-	ReqClient *req.Client
-	OpenAI    *openai.Client
-}
-
-func NewHandler() func(param NewHandlerParam) *Handler {
-	return func(param NewHandlerParam) *Handler {
-		handler := &Handler{
-			Logger:    param.Logger,
-			ReqClient: req.C(),
-			OpenAI:    param.OpenAI,
-		}
-		return handler
-	}
-}
-
-func (h *Handler) HandleChannelPost(c *handler.Context) {
+func (h *Handlers) HandleChannelPost(c *tgbot.Context) error {
 	// 转发的消息不处理
 	if c.Update.ChannelPost.ForwardFrom != nil {
-		return
+		return nil
 	}
 	// 转发的消息不处理
 	if c.Update.ChannelPost.ForwardFromChat != nil {
-		return
+		return nil
 	}
 	// 若无 /s 命令则不处理
 	if !strings.HasPrefix(c.Update.ChannelPost.Text, "/smr ") {
-		return
+		return nil
 	}
 
 	urlString := strings.TrimSpace(strings.TrimPrefix(c.Update.ChannelPost.Text, "/smr "))
-	summarization, err := h.summarizeInputURL(urlString)
+	summarization, err := h.smr.SummarizeInputURL(urlString)
 	if err != nil {
-		h.Logger.Error(err)
-		return
+		return tgbot.NewExceptionError(err)
 	}
 
 	_, err = c.Bot.Request(tgbotapi.EditMessageTextConfig{
@@ -67,7 +37,8 @@ func (h *Handler) HandleChannelPost(c *handler.Context) {
 		Text:      summarization,
 	})
 	if err != nil {
-		h.Logger.Errorf("failed to send message to telegram... %v", err)
-		return
+		return tgbot.NewExceptionError(err)
 	}
+
+	return nil
 }

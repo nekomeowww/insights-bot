@@ -1,47 +1,16 @@
-package telegram_chat_feature_flags
+package tgchats
 
 import (
 	"github.com/ostafen/clover/v2"
 	"github.com/samber/lo"
-	"go.uber.org/fx"
 
-	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/types/telegram_chat_feature_flag"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram/tgchat"
 )
 
-type NewTelegramChatFeatureFlagsModelParam struct {
-	fx.In
-
-	Clover *datastore.Clover
-}
-
-type TelegramChatFeatureFlagsModel struct {
-	Clover *datastore.Clover
-}
-
-func NewFeatureFlagsModel() func(NewTelegramChatFeatureFlagsModelParam) (*TelegramChatFeatureFlagsModel, error) {
-	return func(param NewTelegramChatFeatureFlagsModelParam) (*TelegramChatFeatureFlagsModel, error) {
-		hasCollection, err := param.Clover.HasCollection(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName())
-		if err != nil {
-			return nil, err
-		}
-		if !hasCollection {
-			err = param.Clover.CreateCollection(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName())
-			if err != nil {
-				return nil, err
-			}
-		}
-
-		return &TelegramChatFeatureFlagsModel{
-			Clover: param.Clover,
-		}, nil
-	}
-}
-
-func (m *TelegramChatFeatureFlagsModel) findOneFeatureFlag(chatID int64, chatType telegram.ChatType) (*telegram_chat_feature_flag.TelegramChatFeatureFlag, error) {
+func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType) (*tgchat.FeatureFlag, error) {
 	query := clover.
-		NewQuery(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName()).
+		NewQuery(tgchat.FeatureFlag{}.CollectionName()).
 		Where(clover.Field("chat_id").Eq(chatID)).
 		Where(clover.Field("chat_type").In(string(telegram.ChatTypeGroup), string(telegram.ChatTypeSuperGroup)))
 
@@ -53,7 +22,7 @@ func (m *TelegramChatFeatureFlagsModel) findOneFeatureFlag(chatID int64, chatTyp
 		return nil, nil
 	}
 
-	var featureFlags telegram_chat_feature_flag.TelegramChatFeatureFlag
+	var featureFlags tgchat.FeatureFlag
 	err = doc.Unmarshal(&featureFlags)
 	if err != nil {
 		return nil, err
@@ -62,7 +31,7 @@ func (m *TelegramChatFeatureFlagsModel) findOneFeatureFlag(chatID int64, chatTyp
 	return &featureFlags, nil
 }
 
-func (m *TelegramChatFeatureFlagsModel) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
+func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil
 	}
@@ -73,8 +42,8 @@ func (m *TelegramChatFeatureFlagsModel) EnableChatHistoriesRecap(chatID int64, c
 	}
 	if featureFlags == nil {
 		_, err = m.Clover.InsertOne(
-			telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName(),
-			clover.NewDocumentOf(telegram_chat_feature_flag.TelegramChatFeatureFlag{
+			tgchat.FeatureFlag{}.CollectionName(),
+			clover.NewDocumentOf(tgchat.FeatureFlag{
 				ID:                        clover.NewObjectId(),
 				ChatID:                    chatID,
 				ChatType:                  chatType,
@@ -94,7 +63,7 @@ func (m *TelegramChatFeatureFlagsModel) EnableChatHistoriesRecap(chatID int64, c
 	updates := make(map[string]any)
 	updates["feature_chat_histories_recap"] = true
 	err = m.Clover.UpdateById(
-		telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName(),
+		tgchat.FeatureFlag{}.CollectionName(),
 		featureFlags.ID,
 		updates,
 	)
@@ -105,7 +74,7 @@ func (m *TelegramChatFeatureFlagsModel) EnableChatHistoriesRecap(chatID int64, c
 	return nil
 }
 
-func (m *TelegramChatFeatureFlagsModel) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
+func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil
 	}
@@ -116,8 +85,8 @@ func (m *TelegramChatFeatureFlagsModel) DisableChatHistoriesRecap(chatID int64, 
 	}
 	if featureFlags == nil {
 		_, err = m.Clover.InsertOne(
-			telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName(),
-			clover.NewDocumentOf(telegram_chat_feature_flag.TelegramChatFeatureFlag{
+			tgchat.FeatureFlag{}.CollectionName(),
+			clover.NewDocumentOf(tgchat.FeatureFlag{
 				ID:                        clover.NewObjectId(),
 				ChatID:                    chatID,
 				ChatType:                  chatType,
@@ -137,7 +106,7 @@ func (m *TelegramChatFeatureFlagsModel) DisableChatHistoriesRecap(chatID int64, 
 	updates := make(map[string]any)
 	updates["feature_chat_histories_recap"] = false
 	err = m.Clover.UpdateById(
-		telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName(),
+		tgchat.FeatureFlag{}.CollectionName(),
 		featureFlags.ID,
 		updates,
 	)
@@ -148,7 +117,7 @@ func (m *TelegramChatFeatureFlagsModel) DisableChatHistoriesRecap(chatID int64, 
 	return nil
 }
 
-func (m *TelegramChatFeatureFlagsModel) HasChatHistoriesRecapEnabled(chatID int64, chatType telegram.ChatType) (bool, error) {
+func (m *Model) HasChatHistoriesRecapEnabled(chatID int64, chatType telegram.ChatType) (bool, error) {
 	featureFlags, err := m.findOneFeatureFlag(chatID, chatType)
 	if err != nil {
 		return false, err
@@ -160,9 +129,9 @@ func (m *TelegramChatFeatureFlagsModel) HasChatHistoriesRecapEnabled(chatID int6
 	return featureFlags.FeatureChatHistoriesRecap, nil
 }
 
-func (m *TelegramChatFeatureFlagsModel) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
+func (m *Model) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
 	query := clover.
-		NewQuery(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName()).
+		NewQuery(tgchat.FeatureFlag{}.CollectionName()).
 		Where(clover.Field("chat_type").In(string(telegram.ChatTypeGroup), string(telegram.ChatTypeSuperGroup))).
 		Where(clover.Field("feature_chat_histories_recap").Eq(true))
 
@@ -174,9 +143,9 @@ func (m *TelegramChatFeatureFlagsModel) ListChatHistoriesRecapEnabledChats() ([]
 		return make([]int64, 0), nil
 	}
 
-	featureFlagsChats := make([]*telegram_chat_feature_flag.TelegramChatFeatureFlag, 0, len(docs))
+	featureFlagsChats := make([]*tgchat.FeatureFlag, 0, len(docs))
 	for _, doc := range docs {
-		var featureFlags telegram_chat_feature_flag.TelegramChatFeatureFlag
+		var featureFlags tgchat.FeatureFlag
 		err = doc.Unmarshal(&featureFlags)
 		if err != nil {
 			return make([]int64, 0), err
@@ -185,7 +154,7 @@ func (m *TelegramChatFeatureFlagsModel) ListChatHistoriesRecapEnabledChats() ([]
 		featureFlagsChats = append(featureFlagsChats, &featureFlags)
 	}
 
-	return lo.Map(featureFlagsChats, func(featureFlags *telegram_chat_feature_flag.TelegramChatFeatureFlag, _ int) int64 {
+	return lo.Map(featureFlagsChats, func(featureFlags *tgchat.FeatureFlag, _ int) int64 {
 		return featureFlags.ChatID
 	}), nil
 }

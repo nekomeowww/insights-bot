@@ -19,42 +19,38 @@ func (h Handlers) CommandHelp() string {
 	return "量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>"
 }
 
-func (h *Handlers) Handle(c *tgbot.Context) error {
+func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	urlString := c.Update.Message.CommandArguments()
 	if urlString == "" {
-		return tgbot.NewMessageError("没有找到链接，可以发送一个有效的链接吗？用法：/smr <链接>").WithReply(c.Update.Message)
+		return nil, tgbot.NewMessageError("没有找到链接，可以发送一个有效的链接吗？用法：/smr <链接>").WithReply(c.Update.Message)
 	}
 
 	parsedURL, err := url.Parse(urlString)
 	if err != nil {
-		return tgbot.NewMessageError("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>").WithReply(c.Update.Message)
+		return nil, tgbot.NewMessageError("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>").WithReply(c.Update.Message)
 	}
 	if parsedURL.Scheme == "" || !lo.Contains([]string{"http", "https"}, parsedURL.Scheme) {
-		return tgbot.NewMessageError("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>").WithReply(c.Update.Message)
+		return nil, tgbot.NewMessageError("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>").WithReply(c.Update.Message)
 	}
 
 	message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "请稍等，量子速读中...")
 	message.ReplyToMessageID = c.Update.Message.MessageID
 	processingMessage, err := c.Bot.Send(message)
 	if err != nil {
-		return tgbot.NewExceptionError(err)
+		return nil, tgbot.NewExceptionError(err)
 	}
 
 	summarization, err := h.smr.SummarizeInputURL(urlString)
 	if err != nil {
 		if errors.Is(err, smr.ErrContentNotSupported) {
-			return tgbot.NewMessageError("暂时不支持量子速读这样的内容呢，可以换个别的链接试试。").WithEdit(&processingMessage)
+			return nil, tgbot.NewMessageError("暂时不支持量子速读这样的内容呢，可以换个别的链接试试。").WithEdit(&processingMessage)
 		}
 		if errors.Is(err, smr.ErrNetworkError) || errors.Is(err, smr.ErrRequestFailed) {
-			return tgbot.NewMessageError("量子速读的链接读取失败了哦。可以再试试？").WithEdit(&processingMessage)
+			return nil, tgbot.NewMessageError("量子速读的链接读取失败了哦。可以再试试？").WithEdit(&processingMessage)
 		} else {
-			return tgbot.NewMessageError("量子速读失败了。可以再试试？").WithEdit(&processingMessage)
+			return nil, tgbot.NewMessageError("量子速读失败了。可以再试试？").WithEdit(&processingMessage)
 		}
 	}
 
-	message = tgbotapi.NewMessage(c.Update.Message.Chat.ID, summarization)
-	message.ParseMode = "HTML"
-	message.ReplyToMessageID = c.Update.Message.MessageID
-	_ = c.Bot.MustSend(message)
-	return nil
+	return c.NewMessageReplyTo(summarization, c.Update.Message.MessageID).WithParseModeHTML(), nil
 }

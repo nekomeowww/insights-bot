@@ -22,21 +22,12 @@ func (b *Bot) MustSend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 	return &message
 }
 
-func (b *Bot) EditMessageText(chatID int64, messageID int, text string) error {
-	_, err := b.Request(tgbotapi.EditMessageTextConfig{
-		BaseEdit: tgbotapi.BaseEdit{ChatID: chatID, MessageID: messageID},
-		Text:     text,
-	})
+func (b *Bot) MustRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
+	resp, err := b.Request(chattable)
 	if err != nil {
-		return err
+		b.logger.Errorf("failed to request %v to telegram: %v", utils.SprintJSON(chattable), err)
+		return nil
 	}
 
-	return nil
-}
-
-func (b *Bot) MustEditMessageText(chatID int64, messageID int, text string) {
-	err := b.EditMessageText(chatID, messageID, text)
-	if err != nil {
-		b.logger.Errorf("failed to edit message text: %v", err)
-	}
+	return resp
 }

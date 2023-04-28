@@ -7,6 +7,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/gorilla/schema"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/samber/lo"
 )
 
 type UpdateType string
@@ -98,4 +99,24 @@ func (c *Context) CallbackQueryDataBindQuery(dst interface{}) error {
 	}
 
 	return nil
+}
+
+func (c *Context) NewMessage(message string) MessageResponse {
+	return NewMessage(c.Update.FromChat().ID, message)
+}
+
+func (c *Context) NewMessageReplyTo(message string, replyToMessageID int) MessageResponse {
+	return NewMessageReplyTo(c.Update.FromChat().ID, message, replyToMessageID)
+}
+
+func (c *Context) NewEditMessageText(messageID int, text string) EditMessageResponse {
+	return EditMessageResponse{
+		textConfig: lo.ToPtr(tgbotapi.NewEditMessageText(c.Update.FromChat().ID, messageID, text)),
+	}
+}
+
+func (c *Context) NewEditMessageTextAndReplyMarkup(messageID int, text string, replyMarkup tgbotapi.InlineKeyboardMarkup) EditMessageResponse {
+	return EditMessageResponse{
+		textConfig: lo.ToPtr(tgbotapi.NewEditMessageTextAndMarkup(c.Update.FromChat().ID, messageID, text, replyMarkup)),
+	}
 }

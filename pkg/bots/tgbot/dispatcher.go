@@ -27,7 +27,7 @@ type Dispatcher struct {
 	helpCommand           *helpCommandHandler
 	middlewares           []MiddlewareFunc
 	commandHandlers       map[string]HandleFunc
-	messageHandlers       []Handler
+	messageHandlers       map[string]HandleFunc
 	channelPostHandlers   []Handler
 	callbackQueryHandlers map[string]HandleFunc
 }
@@ -39,7 +39,7 @@ func NewDispatcher() func(param NewDispatcherParam) *Dispatcher {
 			helpCommand:           newHelpCommandHandler(),
 			middlewares:           make([]MiddlewareFunc, 0),
 			commandHandlers:       make(map[string]HandleFunc),
-			messageHandlers:       make([]Handler, 0),
+			messageHandlers:       make(map[string]HandleFunc),
 			channelPostHandlers:   make([]Handler, 0),
 			callbackQueryHandlers: make(map[string]HandleFunc),
 		}
@@ -58,8 +58,8 @@ func (d *Dispatcher) OnCommand(h CommandHandler) {
 	d.commandHandlers[h.Command()] = NewHandler(h.Handle).Handle
 }
 
-func (d *Dispatcher) OnMessage(handler Handler) {
-	d.messageHandlers = append(d.messageHandlers, handler)
+func (d *Dispatcher) OnMessage(h MessageHandler) {
+	d.messageHandlers[h.Message()] = NewHandler(h.Handle).Handle
 }
 
 func (d *Dispatcher) dispatchMessage(c *Context) {
@@ -89,15 +89,20 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 		d.dispatchInGoroutine(func() {
 			for cmd, f := range d.commandHandlers {
 				if c.Update.Message.Command() == cmd {
-					_ = f(c)
+					_, _ = f(c)
 				}
 			}
 		})
 
 	} else {
 		d.dispatchInGoroutine(func() {
-			for _, h := range d.messageHandlers {
-				_ = h.Handle(c)
+			for msg, f := range d.messageHandlers {
+				if c.Update.Message.Text == msg {
+					_, _ = f(c)
+				}
+				if c.Update.Message.Caption == msg {
+					_, _ = f(c)
+				}
 			}
 		})
 	}
@@ -117,7 +122,7 @@ func (d *Dispatcher) dispatchChannelPost(c *Context) {
 
 	d.dispatchInGoroutine(func() {
 		for _, h := range d.channelPostHandlers {
-			_ = h.Handle(c)
+			_, _ = h.Handle(c)
 		}
 	})
 }
@@ -142,7 +147,7 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 				continue
 			}
 			if parsedRoute.Host+parsedRoute.Path == route {
-				_ = h(c)
+				_, _ = h(c)
 			}
 		}
 	})
@@ -190,9 +195,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 
 func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 	for _, m := range d.middlewares {
-		_ = m(NewContext(bot, update, d.Logger), func() {
-
-		})
+		m(NewContext(bot, update, d.Logger), func() {})
 	}
 
 	ctx := NewContext(bot, update, d.Logger)

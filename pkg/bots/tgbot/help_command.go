@@ -2,8 +2,6 @@ package tgbot
 
 import (
 	"strings"
-
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 var _ CommandHandler = (*helpCommandHandler)(nil)
@@ -28,7 +26,7 @@ func (h helpCommandHandler) CommandHelp() string {
 	return "获取帮助"
 }
 
-func (h helpCommandHandler) Handle(c *Context) error {
+func (h helpCommandHandler) Handle(c *Context) (Response, error) {
 	helpMessage := strings.Builder{}
 	helpMessage.WriteString("你好，欢迎使用 Insights Bot！\n\n")
 	helpMessage.WriteString("我当前支持这些命令：\n")
@@ -47,9 +45,5 @@ func (h helpCommandHandler) Handle(c *Context) error {
 	}
 	helpMessage.WriteString(strings.Join(subCommandHelpMessages, "\n"))
 
-	message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, helpMessage.String())
-	message.ReplyToMessageID = c.Update.Message.MessageID
-	message.ParseMode = "HTML"
-	_ = c.Bot.MustSend(message)
-	return nil
+	return c.NewMessageReplyTo(helpMessage.String(), c.Update.Message.MessageID).WithParseModeHTML(), nil
 }

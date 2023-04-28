@@ -7,8 +7,10 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers"
+	"github.com/nekomeowww/insights-bot/internal/bots/telegram/middlewares"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
+	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
@@ -33,6 +35,7 @@ type NewBotParam struct {
 	Handlers   *handlers.Handlers
 
 	ChatHistories *chat_histories.Model
+	TgChats       *tgchats.Model
 }
 
 type Bot struct {
@@ -74,8 +77,9 @@ func NewBot() func(param NewBotParam) (*Bot, error) {
 			},
 		})
 
-		param.Logger.Infof("Authorized as bot @%s", bot.Self.UserName)
+		param.Dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
 		param.Handlers.InstallAll()
+		param.Logger.Infof("Authorized as bot @%s", bot.Self.UserName)
 		return bot, nil
 	}
 }

@@ -10,8 +10,8 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram"
 	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
-	"github.com/nekomeowww/insights-bot/internal/models/telegram_chat_feature_flags"
-	telegram_bot "github.com/nekomeowww/insights-bot/pkg/bots/telegram"
+	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
+	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 )
@@ -21,35 +21,39 @@ type NewChatHistoryRecapServiceParam struct {
 
 	Lifecycle fx.Lifecycle
 
-	Bot                      *telegram.Bot
-	Logger                   *logger.Logger
-	ChatHistories            *chat_histories.ChatHistoriesModel
-	TelegramChatFeatureFlags *telegram_chat_feature_flags.TelegramChatFeatureFlagsModel
-	OpenAI                   *openai.Client
+	Bot           *telegram.Bot
+	Logger        *logger.Logger
+	ChatHistories *chat_histories.Model
+	TgChats       *tgchats.Model
+	OpenAI        *openai.Client
 }
 
 type ChatHistoryRecapService struct {
 	Cron *cron.Cron
 
-	Bot                      *telegram.Bot
-	Logger                   *logger.Logger
-	ChatHistories            *chat_histories.ChatHistoriesModel
-	TelegramChatFeatureFlags *telegram_chat_feature_flags.TelegramChatFeatureFlagsModel
-	OpenAI                   *openai.Client
+	bot           *telegram.Bot
+	logger        *logger.Logger
+	chatHistories *chat_histories.Model
+	tgchats       *tgchats.Model
+	openai        *openai.Client
 }
 
-func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) *ChatHistoryRecapService {
-	return func(param NewChatHistoryRecapServiceParam) *ChatHistoryRecapService {
+func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) (*ChatHistoryRecapService, error) {
+	return func(param NewChatHistoryRecapServiceParam) (*ChatHistoryRecapService, error) {
 		service := &ChatHistoryRecapService{
-			Cron:                     cron.New(),
-			Bot:                      param.Bot,
-			Logger:                   param.Logger,
-			ChatHistories:            param.ChatHistories,
-			TelegramChatFeatureFlags: param.TelegramChatFeatureFlags,
-			OpenAI:                   param.OpenAI,
+			Cron:          cron.New(),
+			bot:           param.Bot,
+			logger:        param.Logger,
+			chatHistories: param.ChatHistories,
+			tgchats:       param.TgChats,
+			openai:        param.OpenAI,
 		}
 
-		service.Cron.AddFunc("@every 6h", service.SendChatHistoriesRecap)
+		_, err := service.Cron.AddFunc("@every 6h", service.SendChatHistoriesRecap)
+		if err != nil {
+			return nil, err
+		}
+
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(context.Context) error {
 				service.Cron.Stop()
@@ -57,8 +61,8 @@ func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) *ChatHis
 			},
 		})
 
-		service.Logger.Infof("chat history recap service started")
-		return service
+		service.logger.Infof("chat history recap service started")
+		return service, nil
 	}
 }
 
@@ -69,47 +73,47 @@ func Run() func(service *ChatHistoryRecapService) {
 }
 
 func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
-	chatIDs, err := s.TelegramChatFeatureFlags.ListChatHistoriesRecapEnabledChats()
+	chatIDs, err := s.tgchats.ListChatHistoriesRecapEnabledChats()
 	if err != nil {
-		s.Logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
+		s.logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
 		return
 	}
 
 	for _, chatID := range chatIDs {
-		s.Logger.Infof("generating chat histories recap for chat %d", chatID)
+		s.logger.Infof("generating chat histories recap for chat %d", chatID)
 
-		histories, err := s.ChatHistories.FindLastSixHourChatHistories(chatID)
+		histories, err := s.chatHistories.FindLastSixHourChatHistories(chatID)
 		if err != nil {
-			s.Logger.Errorf("failed to find last six hour chat histories: %v", err)
+			s.logger.Errorf("failed to find last six hour chat histories: %v", err)
 			continue
 		}
 		if len(histories) <= 5 {
-			s.Logger.Warn("no enough chat histories")
+			s.logger.Warn("no enough chat histories")
 			continue
 		}
 
-		summarization, err := s.ChatHistories.SummarizeChatHistories(chatID, histories)
+		summarization, err := s.chatHistories.SummarizeChatHistories(chatID, histories)
 		if err != nil {
-			s.Logger.Errorf("failed to summarize last six hour chat histories: %v", err)
+			s.logger.Errorf("failed to summarize last six hour chat histories: %v", err)
 			continue
 		}
 		if summarization == "" {
-			s.Logger.Warn("summarization is empty")
+			s.logger.Warn("summarization is empty")
 			continue
 		}
 
-		summarization, err = telegram_bot.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
+		summarization, err = tgbot.ReplaceMarkdownTitlesToTelegramBoldElement(summarization)
 		if err != nil {
-			s.Logger.Errorf("failed to replace markdown titles to telegram bold element: %v", err)
+			s.logger.Errorf("failed to replace markdown titles to telegram bold element: %v", err)
 			continue
 		}
 
-		s.Logger.Infof("sending chat histories recap for chat %d", chatID)
+		s.logger.Infof("sending chat histories recap for chat %d", chatID)
 		message := tgbotapi.NewMessage(chatID, fmt.Sprintf("%s\n\n#recap #recap_auto\n<em>🤖️ Generated by chatGPT</em>", summarization))
 		message.ParseMode = "HTML"
-		_, err = s.Bot.Send(message)
+		_, err = s.bot.Send(message)
 		if err != nil {
-			s.Logger.Errorf("failed to send chat histories recap: %v", err)
+			s.logger.Errorf("failed to send chat histories recap: %v", err)
 			continue
 		}
 	}

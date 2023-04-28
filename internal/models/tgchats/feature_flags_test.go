@@ -1,33 +1,15 @@
-package telegram_chat_feature_flags
+package tgchats
 
 import (
 	"testing"
 
-	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/types/telegram_chat_feature_flag"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"github.com/ostafen/clover/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
-
-var model *TelegramChatFeatureFlagsModel
-
-func TestMain(m *testing.M) {
-	clover, cancel := datastore.NewTestClover()()
-	defer cancel()
-
-	var err error
-	model, err = NewFeatureFlagsModel()(NewTelegramChatFeatureFlagsModelParam{
-		Clover: clover,
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	m.Run()
-}
 
 func TestChatHistoriesRecap(t *testing.T) {
 	chatID := utils.RandomInt64()
@@ -40,14 +22,14 @@ func TestChatHistoriesRecap(t *testing.T) {
 		require.NoError(err)
 
 		query := clover.
-			NewQuery(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName()).
+			NewQuery(tgchat.FeatureFlag{}.CollectionName()).
 			Where(clover.Field("chat_id").Eq(chatID))
 
 		doc, err := model.Clover.FindFirst(query)
 		require.NoError(err)
 		require.NotNil(doc)
 
-		var featureFlag telegram_chat_feature_flag.TelegramChatFeatureFlag
+		var featureFlag tgchat.FeatureFlag
 		err = doc.Unmarshal(&featureFlag)
 		require.NoError(err)
 
@@ -66,14 +48,14 @@ func TestChatHistoriesRecap(t *testing.T) {
 		require.NoError(err)
 
 		query := clover.
-			NewQuery(telegram_chat_feature_flag.TelegramChatFeatureFlag{}.CollectionName()).
+			NewQuery(tgchat.FeatureFlag{}.CollectionName()).
 			Where(clover.Field("chat_id").Eq(chatID))
 
 		doc, err := model.Clover.FindFirst(query)
 		require.NoError(err)
 		require.NotNil(doc)
 
-		var featureFlag telegram_chat_feature_flag.TelegramChatFeatureFlag
+		var featureFlag tgchat.FeatureFlag
 		err = doc.Unmarshal(&featureFlag)
 		require.NoError(err)
 

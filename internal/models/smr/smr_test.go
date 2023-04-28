@@ -1,20 +1,31 @@
-package summarize
+package smr
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
+
+var model *Model
+
+func TestMain(m *testing.M) {
+	model = NewModel()(NewModelParams{
+		Logger: lib.NewLogger()(),
+	})
+	os.Exit(m.Run())
+}
 
 func TestExtractContentFromURL(t *testing.T) {
 	t.Run("NoHost", func(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		article, err := extractContentFromURL("https://a.b.c")
+		article, err := model.extractContentFromURL("https://a.b.c")
 		require.Error(err)
 		require.Nil(article)
 
@@ -28,7 +39,7 @@ func TestExtractContentFromURL(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		article, err := extractContentFromURL(fmt.Sprintf("https://mp.weixin.qq.com/s/%s", ""))
+		article, err := model.extractContentFromURL(fmt.Sprintf("https://mp.weixin.qq.com/s/%s", ""))
 		require.NoError(err)
 
 		assert.NotEmpty(article.Title)

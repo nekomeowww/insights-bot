@@ -19,7 +19,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
-var model *ChatHistoriesModel
+var model *Model
 
 func TestMain(m *testing.M) {
 	logger := lib.NewLogger()()
@@ -28,7 +28,7 @@ func TestMain(m *testing.M) {
 	defer cancel()
 
 	var err error
-	model, err = NewChatHistoriesModel()(NewChatHistoriesModelParam{
+	model, err = NewModel()(NewModelParams{
 		Clover: db,
 		Logger: logger,
 	})
@@ -64,7 +64,7 @@ func TestSaveOneTelegramChatHistory(t *testing.T) {
 		Where(clover.Field("chat_id").Eq(message.Chat.ID)).
 		Where(clover.Field("message_id").Eq(message.MessageID))
 
-	doc, err := model.Clover.FindFirst(query)
+	doc, err := model.clover.FindFirst(query)
 	require.NoError(err)
 	require.NotNil(doc)
 

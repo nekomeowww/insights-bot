@@ -1,4 +1,4 @@
-package telegram
+package tgbot
 
 import (
 	"fmt"
@@ -8,6 +8,7 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
@@ -127,4 +128,38 @@ func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
 		// otherwise, just return the bold element
 		return ret + string(sRunes[len(sRunes)-1]) + "</b>"
 	}), nil
+}
+
+func MapChatTypeToChineseText(chatType telegram.ChatType) string {
+	switch chatType {
+	case telegram.ChatTypePrivate:
+		return "私聊"
+	case telegram.ChatTypeGroup:
+		return "群组"
+	case telegram.ChatTypeSuperGroup:
+		return "超级群组"
+	case telegram.ChatTypeChannel:
+		return "频道"
+	default:
+		return "未知"
+	}
+}
+
+func MapMemberStatusToChineseText(memberStatus telegram.MemberStatus) string {
+	switch memberStatus {
+	case telegram.MemberStatusCreator:
+		return "创建者"
+	case telegram.MemberStatusAdministrator:
+		return "管理员"
+	case telegram.MemberStatusMember:
+		return "成员"
+	case telegram.MemberStatusRestricted:
+		return "受限成员"
+	case telegram.MemberStatusLeft:
+		return "已离开"
+	case telegram.MemberStatusKicked:
+		return "已被踢出"
+	default:
+		return "未知"
+	}
 }

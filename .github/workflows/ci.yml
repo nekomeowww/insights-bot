@@ -11,47 +11,47 @@ on:
       - "**/*.md"
 
 jobs:
-  # scan:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     # 代码签出
-  #     - uses: actions/checkout@v3
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      # 代码签出
+      - uses: actions/checkout@v3
 
-  #     # 设定 Go 环境
-  #     - uses: actions/setup-go@v3
-  #       with:
-  #         go-version: "^1.19.0"
-  #         cache: true
+      # 设定 Go 环境
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "^1.19.0"
+          cache: true
 
-  #     # Get values for cache paths to be used in later steps
-  #     - name: Setup Go Cache PATH
-  #       id: go-cache-paths
-  #       run: |
-  #         echo "go-build=$(go env GOCACHE)"  >> $GITHUB_OUTPUT
-  #         echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+      # Get values for cache paths to be used in later steps
+      - name: Setup Go Cache PATH
+        id: go-cache-paths
+        run: |
+          echo "go-build=$(go env GOCACHE)"  >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
 
-  #     # Cache go build cache, used to speedup go test
-  #     - name: Go Build Cache
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ${{ steps.go-cache-paths.outputs.go-build }}
-  #         key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+      # Cache go build cache, used to speedup go test
+      - name: Go Build Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
 
-  #     # Cache go mod cache, used to speedup builds
-  #     - name: Go Mod Cache
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ${{ steps.go-cache-paths.outputs.go-mod }}
-  #         key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+      # Cache go mod cache, used to speedup builds
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
 
-  #     - name: Setup govulncheck
-  #       run: go install golang.org/x/vuln/cmd/govulncheck@latest
+      - name: Setup govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
 
-  #     # 代码检查潜在错误
-  #     - name: Vet (Scan for potential mistakes)
-  #       run: |
-  #         go vet ./...
-  #         govulncheck ./...
+      # 代码检查潜在错误
+      - name: Vet (Scan for potential mistakes)
+        run: |
+          go vet ./...
+          govulncheck ./...
   buildtest:
     runs-on: ubuntu-latest
     steps:
@@ -88,6 +88,39 @@ jobs:
       # 测试构建
       - name: Test Build
         run: go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
+  ent_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "^1.20"
+      - uses: ent/contrib/ci@master
+  ent_lint_migration:
+    services:
+      # Spin up a postgres:10 container to be used as the dev-database for analysis.
+      postgres:
+        image: postgres:10
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: pass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.1
+        with:
+          fetch-depth: 0 # Mandatory unless "latest" is set below.
+      - uses: ariga/atlas-action@v0
+        with:
+          dir: ent/migrate/migrations
+          dir-format: atlas # Or: atlas, goose, dbmate
+          dev-url: postgres://postgres:pass@localhost:5432/test?sslmode=disable
   # unittest:
   #   # 运行目标
   #   runs-on: ubuntu-latest

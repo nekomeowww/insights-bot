@@ -7,7 +7,6 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
-      - CLOVER_DB_PATH=<path to store DB>
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
     profiles:
       - hub
@@ -24,3 +23,17 @@ services:
       dockerfile: ./Dockerfile
     profiles:
       - local
+
+  # db_migration:
+  #   image: arigaio/atlas
+  #   network_mode: host
+  #   volumes:
+  #     - ./ent/migrate/migrations:/migrations
+  #   command: ['migrate', 'apply', '--url', '${DB_MIGRATION_DB_URL}', '--dir', 'file:///migrations', '--tx-mode', 'all' ]
+
+  # gen_db_migration:
+  #   image: arigaio/atlas
+  #   network_mode: host
+  #   volumes:
+  #     - ./ent:/ent
+  #   command: ['migrate', 'diff', '--dir', 'file://ent/migrate/migrations', '--to', 'ent://ent/schema', '--dev-url', '${DB_MIGRATION_DEV_DB_URL}' ]

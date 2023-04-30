@@ -1,21 +1,24 @@
 package chat_histories
 
 import (
+	"context"
 	"os"
 	"strings"
 	"testing"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/ostafen/clover/v2"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/nekomeowww/insights-bot/ent"
+	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
-	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
+	"github.com/nekomeowww/insights-bot/pkg/tutils"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
@@ -24,12 +27,16 @@ var model *Model
 func TestMain(m *testing.M) {
 	logger := lib.NewLogger()()
 
-	db, cancel := datastore.NewTestClover()()
-	defer cancel()
+	ent, err := datastore.NewEnt()(datastore.NewEntParams{
+		Lifecycle: tutils.NewEmtpyLifecycle(),
+		Configs:   configs.NewTestConfig()(),
+	})
+	if err != nil {
+		panic(err)
+	}
 
-	var err error
 	model, err = NewModel()(NewModelParams{
-		Clover: db,
+		Ent:    ent,
 		Logger: logger,
 	})
 	if err != nil {
@@ -59,21 +66,18 @@ func TestSaveOneTelegramChatHistory(t *testing.T) {
 	err := model.SaveOneTelegramChatHistory(message)
 	require.NoError(err)
 
-	query := clover.
-		NewQuery(chat_history.TelegramChatHistory{}.CollectionName()).
-		Where(clover.Field("chat_id").Eq(message.Chat.ID)).
-		Where(clover.Field("message_id").Eq(message.MessageID))
-
-	doc, err := model.clover.FindFirst(query)
+	chatHistory, err := model.ent.TelegramChatHistories.
+		Query().
+		Where(
+			telegramchathistories.ChatID(message.Chat.ID),
+			telegramchathistories.MessageID(int64(message.MessageID)),
+		).
+		First(context.Background())
 	require.NoError(err)
-	require.NotNil(doc)
-
-	var chatHistory chat_history.TelegramChatHistory
-	err = doc.Unmarshal(&chatHistory)
-	require.NoError(err)
+	require.NotNil(chatHistory)
 
 	assert.Equal(message.Chat.ID, chatHistory.ChatID)
-	assert.Equal(message.MessageID, chatHistory.MessageID)
+	assert.Equal(int64(message.MessageID), chatHistory.MessageID)
 	assert.Equal(message.From.ID, chatHistory.UserID)
 	assert.Equal(message.From.FirstName, chatHistory.FullName)
 	assert.Equal(message.From.UserName, chatHistory.Username)
@@ -136,7 +140,7 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	require.NoError(err)
 	require.Len(histories, 3)
 
-	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *chat_history.TelegramChatHistory, _ int) int {
+	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *ent.TelegramChatHistories, _ int) int64 {
 		return item.MessageID
 	}))
 }

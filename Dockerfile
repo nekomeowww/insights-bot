@@ -19,6 +19,7 @@ COPY . /app/insights-bot
 # 切换到 /app/insights-bot 目录
 WORKDIR /app/insights-bot
 
+# Build
 RUN go env
 RUN go env -w CGO_ENABLED=0
 RUN go mod download
@@ -26,6 +27,8 @@ RUN go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cm
 
 # 设定运行步骤所使用的镜像为基于 Debian 发行版镜像
 FROM debian as runner
+
+RUN apt update && apt upgrade -y && apt install -y ca-certificates
 
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
 

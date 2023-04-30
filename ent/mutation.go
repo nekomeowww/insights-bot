@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/predicate"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
-	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
 )
 
 const (
@@ -25,9 +25,1364 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
+	TypeChatHistories            = "ChatHistories"
 	TypeTelegramChatFeatureFlags = "TelegramChatFeatureFlags"
-	TypeTelegramChatHistories    = "TelegramChatHistories"
 )
+
+// ChatHistoriesMutation represents an operation that mutates the ChatHistories nodes in the graph.
+type ChatHistoriesMutation struct {
+	config
+	op                       Op
+	typ                      string
+	id                       *uuid.UUID
+	chat_id                  *int64
+	addchat_id               *int64
+	message_id               *int64
+	addmessage_id            *int64
+	user_id                  *int64
+	adduser_id               *int64
+	username                 *string
+	full_name                *string
+	text                     *string
+	replied_to_message_id    *int64
+	addreplied_to_message_id *int64
+	replied_to_user_id       *int64
+	addreplied_to_user_id    *int64
+	replied_to_full_name     *string
+	replied_to_username      *string
+	replied_to_text          *string
+	chatted_at               *int64
+	addchatted_at            *int64
+	embedded                 *bool
+	created_at               *int64
+	addcreated_at            *int64
+	updated_at               *int64
+	addupdated_at            *int64
+	clearedFields            map[string]struct{}
+	done                     bool
+	oldValue                 func(context.Context) (*ChatHistories, error)
+	predicates               []predicate.ChatHistories
+}
+
+var _ ent.Mutation = (*ChatHistoriesMutation)(nil)
+
+// chathistoriesOption allows management of the mutation configuration using functional options.
+type chathistoriesOption func(*ChatHistoriesMutation)
+
+// newChatHistoriesMutation creates new mutation for the ChatHistories entity.
+func newChatHistoriesMutation(c config, op Op, opts ...chathistoriesOption) *ChatHistoriesMutation {
+	m := &ChatHistoriesMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeChatHistories,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withChatHistoriesID sets the ID field of the mutation.
+func withChatHistoriesID(id uuid.UUID) chathistoriesOption {
+	return func(m *ChatHistoriesMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ChatHistories
+		)
+		m.oldValue = func(ctx context.Context) (*ChatHistories, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ChatHistories.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withChatHistories sets the old ChatHistories of the mutation.
+func withChatHistories(node *ChatHistories) chathistoriesOption {
+	return func(m *ChatHistoriesMutation) {
+		m.oldValue = func(context.Context) (*ChatHistories, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ChatHistoriesMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ChatHistoriesMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ChatHistories entities.
+func (m *ChatHistoriesMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ChatHistoriesMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *ChatHistoriesMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().ChatHistories.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChatID sets the "chat_id" field.
+func (m *ChatHistoriesMutation) SetChatID(i int64) {
+	m.chat_id = &i
+	m.addchat_id = nil
+}
+
+// ChatID returns the value of the "chat_id" field in the mutation.
+func (m *ChatHistoriesMutation) ChatID() (r int64, exists bool) {
+	v := m.chat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatID returns the old "chat_id" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldChatID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
+	}
+	return oldValue.ChatID, nil
+}
+
+// AddChatID adds i to the "chat_id" field.
+func (m *ChatHistoriesMutation) AddChatID(i int64) {
+	if m.addchat_id != nil {
+		*m.addchat_id += i
+	} else {
+		m.addchat_id = &i
+	}
+}
+
+// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
+func (m *ChatHistoriesMutation) AddedChatID() (r int64, exists bool) {
+	v := m.addchat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChatID resets all changes to the "chat_id" field.
+func (m *ChatHistoriesMutation) ResetChatID() {
+	m.chat_id = nil
+	m.addchat_id = nil
+}
+
+// SetMessageID sets the "message_id" field.
+func (m *ChatHistoriesMutation) SetMessageID(i int64) {
+	m.message_id = &i
+	m.addmessage_id = nil
+}
+
+// MessageID returns the value of the "message_id" field in the mutation.
+func (m *ChatHistoriesMutation) MessageID() (r int64, exists bool) {
+	v := m.message_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMessageID returns the old "message_id" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldMessageID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMessageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMessageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMessageID: %w", err)
+	}
+	return oldValue.MessageID, nil
+}
+
+// AddMessageID adds i to the "message_id" field.
+func (m *ChatHistoriesMutation) AddMessageID(i int64) {
+	if m.addmessage_id != nil {
+		*m.addmessage_id += i
+	} else {
+		m.addmessage_id = &i
+	}
+}
+
+// AddedMessageID returns the value that was added to the "message_id" field in this mutation.
+func (m *ChatHistoriesMutation) AddedMessageID() (r int64, exists bool) {
+	v := m.addmessage_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMessageID resets all changes to the "message_id" field.
+func (m *ChatHistoriesMutation) ResetMessageID() {
+	m.message_id = nil
+	m.addmessage_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ChatHistoriesMutation) SetUserID(i int64) {
+	m.user_id = &i
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ChatHistoriesMutation) UserID() (r int64, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds i to the "user_id" field.
+func (m *ChatHistoriesMutation) AddUserID(i int64) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *ChatHistoriesMutation) AddedUserID() (r int64, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ChatHistoriesMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetUsername sets the "username" field.
+func (m *ChatHistoriesMutation) SetUsername(s string) {
+	m.username = &s
+}
+
+// Username returns the value of the "username" field in the mutation.
+func (m *ChatHistoriesMutation) Username() (r string, exists bool) {
+	v := m.username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUsername returns the old "username" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUsername is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUsername: %w", err)
+	}
+	return oldValue.Username, nil
+}
+
+// ResetUsername resets all changes to the "username" field.
+func (m *ChatHistoriesMutation) ResetUsername() {
+	m.username = nil
+}
+
+// SetFullName sets the "full_name" field.
+func (m *ChatHistoriesMutation) SetFullName(s string) {
+	m.full_name = &s
+}
+
+// FullName returns the value of the "full_name" field in the mutation.
+func (m *ChatHistoriesMutation) FullName() (r string, exists bool) {
+	v := m.full_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFullName returns the old "full_name" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldFullName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFullName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFullName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFullName: %w", err)
+	}
+	return oldValue.FullName, nil
+}
+
+// ResetFullName resets all changes to the "full_name" field.
+func (m *ChatHistoriesMutation) ResetFullName() {
+	m.full_name = nil
+}
+
+// SetText sets the "text" field.
+func (m *ChatHistoriesMutation) SetText(s string) {
+	m.text = &s
+}
+
+// Text returns the value of the "text" field in the mutation.
+func (m *ChatHistoriesMutation) Text() (r string, exists bool) {
+	v := m.text
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldText returns the old "text" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldText(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldText is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldText requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldText: %w", err)
+	}
+	return oldValue.Text, nil
+}
+
+// ResetText resets all changes to the "text" field.
+func (m *ChatHistoriesMutation) ResetText() {
+	m.text = nil
+}
+
+// SetRepliedToMessageID sets the "replied_to_message_id" field.
+func (m *ChatHistoriesMutation) SetRepliedToMessageID(i int64) {
+	m.replied_to_message_id = &i
+	m.addreplied_to_message_id = nil
+}
+
+// RepliedToMessageID returns the value of the "replied_to_message_id" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToMessageID() (r int64, exists bool) {
+	v := m.replied_to_message_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToMessageID returns the old "replied_to_message_id" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToMessageID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToMessageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToMessageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToMessageID: %w", err)
+	}
+	return oldValue.RepliedToMessageID, nil
+}
+
+// AddRepliedToMessageID adds i to the "replied_to_message_id" field.
+func (m *ChatHistoriesMutation) AddRepliedToMessageID(i int64) {
+	if m.addreplied_to_message_id != nil {
+		*m.addreplied_to_message_id += i
+	} else {
+		m.addreplied_to_message_id = &i
+	}
+}
+
+// AddedRepliedToMessageID returns the value that was added to the "replied_to_message_id" field in this mutation.
+func (m *ChatHistoriesMutation) AddedRepliedToMessageID() (r int64, exists bool) {
+	v := m.addreplied_to_message_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRepliedToMessageID resets all changes to the "replied_to_message_id" field.
+func (m *ChatHistoriesMutation) ResetRepliedToMessageID() {
+	m.replied_to_message_id = nil
+	m.addreplied_to_message_id = nil
+}
+
+// SetRepliedToUserID sets the "replied_to_user_id" field.
+func (m *ChatHistoriesMutation) SetRepliedToUserID(i int64) {
+	m.replied_to_user_id = &i
+	m.addreplied_to_user_id = nil
+}
+
+// RepliedToUserID returns the value of the "replied_to_user_id" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToUserID() (r int64, exists bool) {
+	v := m.replied_to_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToUserID returns the old "replied_to_user_id" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToUserID: %w", err)
+	}
+	return oldValue.RepliedToUserID, nil
+}
+
+// AddRepliedToUserID adds i to the "replied_to_user_id" field.
+func (m *ChatHistoriesMutation) AddRepliedToUserID(i int64) {
+	if m.addreplied_to_user_id != nil {
+		*m.addreplied_to_user_id += i
+	} else {
+		m.addreplied_to_user_id = &i
+	}
+}
+
+// AddedRepliedToUserID returns the value that was added to the "replied_to_user_id" field in this mutation.
+func (m *ChatHistoriesMutation) AddedRepliedToUserID() (r int64, exists bool) {
+	v := m.addreplied_to_user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRepliedToUserID resets all changes to the "replied_to_user_id" field.
+func (m *ChatHistoriesMutation) ResetRepliedToUserID() {
+	m.replied_to_user_id = nil
+	m.addreplied_to_user_id = nil
+}
+
+// SetRepliedToFullName sets the "replied_to_full_name" field.
+func (m *ChatHistoriesMutation) SetRepliedToFullName(s string) {
+	m.replied_to_full_name = &s
+}
+
+// RepliedToFullName returns the value of the "replied_to_full_name" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToFullName() (r string, exists bool) {
+	v := m.replied_to_full_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToFullName returns the old "replied_to_full_name" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToFullName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToFullName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToFullName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToFullName: %w", err)
+	}
+	return oldValue.RepliedToFullName, nil
+}
+
+// ResetRepliedToFullName resets all changes to the "replied_to_full_name" field.
+func (m *ChatHistoriesMutation) ResetRepliedToFullName() {
+	m.replied_to_full_name = nil
+}
+
+// SetRepliedToUsername sets the "replied_to_username" field.
+func (m *ChatHistoriesMutation) SetRepliedToUsername(s string) {
+	m.replied_to_username = &s
+}
+
+// RepliedToUsername returns the value of the "replied_to_username" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToUsername() (r string, exists bool) {
+	v := m.replied_to_username
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToUsername returns the old "replied_to_username" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToUsername(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToUsername is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToUsername requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToUsername: %w", err)
+	}
+	return oldValue.RepliedToUsername, nil
+}
+
+// ResetRepliedToUsername resets all changes to the "replied_to_username" field.
+func (m *ChatHistoriesMutation) ResetRepliedToUsername() {
+	m.replied_to_username = nil
+}
+
+// SetRepliedToText sets the "replied_to_text" field.
+func (m *ChatHistoriesMutation) SetRepliedToText(s string) {
+	m.replied_to_text = &s
+}
+
+// RepliedToText returns the value of the "replied_to_text" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToText() (r string, exists bool) {
+	v := m.replied_to_text
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToText returns the old "replied_to_text" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToText(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToText is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToText requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToText: %w", err)
+	}
+	return oldValue.RepliedToText, nil
+}
+
+// ResetRepliedToText resets all changes to the "replied_to_text" field.
+func (m *ChatHistoriesMutation) ResetRepliedToText() {
+	m.replied_to_text = nil
+}
+
+// SetChattedAt sets the "chatted_at" field.
+func (m *ChatHistoriesMutation) SetChattedAt(i int64) {
+	m.chatted_at = &i
+	m.addchatted_at = nil
+}
+
+// ChattedAt returns the value of the "chatted_at" field in the mutation.
+func (m *ChatHistoriesMutation) ChattedAt() (r int64, exists bool) {
+	v := m.chatted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChattedAt returns the old "chatted_at" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldChattedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChattedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChattedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChattedAt: %w", err)
+	}
+	return oldValue.ChattedAt, nil
+}
+
+// AddChattedAt adds i to the "chatted_at" field.
+func (m *ChatHistoriesMutation) AddChattedAt(i int64) {
+	if m.addchatted_at != nil {
+		*m.addchatted_at += i
+	} else {
+		m.addchatted_at = &i
+	}
+}
+
+// AddedChattedAt returns the value that was added to the "chatted_at" field in this mutation.
+func (m *ChatHistoriesMutation) AddedChattedAt() (r int64, exists bool) {
+	v := m.addchatted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChattedAt resets all changes to the "chatted_at" field.
+func (m *ChatHistoriesMutation) ResetChattedAt() {
+	m.chatted_at = nil
+	m.addchatted_at = nil
+}
+
+// SetEmbedded sets the "embedded" field.
+func (m *ChatHistoriesMutation) SetEmbedded(b bool) {
+	m.embedded = &b
+}
+
+// Embedded returns the value of the "embedded" field in the mutation.
+func (m *ChatHistoriesMutation) Embedded() (r bool, exists bool) {
+	v := m.embedded
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmbedded returns the old "embedded" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldEmbedded(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmbedded is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmbedded requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmbedded: %w", err)
+	}
+	return oldValue.Embedded, nil
+}
+
+// ResetEmbedded resets all changes to the "embedded" field.
+func (m *ChatHistoriesMutation) ResetEmbedded() {
+	m.embedded = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *ChatHistoriesMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *ChatHistoriesMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *ChatHistoriesMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *ChatHistoriesMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *ChatHistoriesMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *ChatHistoriesMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *ChatHistoriesMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *ChatHistoriesMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *ChatHistoriesMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *ChatHistoriesMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the ChatHistoriesMutation builder.
+func (m *ChatHistoriesMutation) Where(ps ...predicate.ChatHistories) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the ChatHistoriesMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *ChatHistoriesMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.ChatHistories, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *ChatHistoriesMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *ChatHistoriesMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (ChatHistories).
+func (m *ChatHistoriesMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ChatHistoriesMutation) Fields() []string {
+	fields := make([]string, 0, 15)
+	if m.chat_id != nil {
+		fields = append(fields, chathistories.FieldChatID)
+	}
+	if m.message_id != nil {
+		fields = append(fields, chathistories.FieldMessageID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, chathistories.FieldUserID)
+	}
+	if m.username != nil {
+		fields = append(fields, chathistories.FieldUsername)
+	}
+	if m.full_name != nil {
+		fields = append(fields, chathistories.FieldFullName)
+	}
+	if m.text != nil {
+		fields = append(fields, chathistories.FieldText)
+	}
+	if m.replied_to_message_id != nil {
+		fields = append(fields, chathistories.FieldRepliedToMessageID)
+	}
+	if m.replied_to_user_id != nil {
+		fields = append(fields, chathistories.FieldRepliedToUserID)
+	}
+	if m.replied_to_full_name != nil {
+		fields = append(fields, chathistories.FieldRepliedToFullName)
+	}
+	if m.replied_to_username != nil {
+		fields = append(fields, chathistories.FieldRepliedToUsername)
+	}
+	if m.replied_to_text != nil {
+		fields = append(fields, chathistories.FieldRepliedToText)
+	}
+	if m.chatted_at != nil {
+		fields = append(fields, chathistories.FieldChattedAt)
+	}
+	if m.embedded != nil {
+		fields = append(fields, chathistories.FieldEmbedded)
+	}
+	if m.created_at != nil {
+		fields = append(fields, chathistories.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, chathistories.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ChatHistoriesMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case chathistories.FieldChatID:
+		return m.ChatID()
+	case chathistories.FieldMessageID:
+		return m.MessageID()
+	case chathistories.FieldUserID:
+		return m.UserID()
+	case chathistories.FieldUsername:
+		return m.Username()
+	case chathistories.FieldFullName:
+		return m.FullName()
+	case chathistories.FieldText:
+		return m.Text()
+	case chathistories.FieldRepliedToMessageID:
+		return m.RepliedToMessageID()
+	case chathistories.FieldRepliedToUserID:
+		return m.RepliedToUserID()
+	case chathistories.FieldRepliedToFullName:
+		return m.RepliedToFullName()
+	case chathistories.FieldRepliedToUsername:
+		return m.RepliedToUsername()
+	case chathistories.FieldRepliedToText:
+		return m.RepliedToText()
+	case chathistories.FieldChattedAt:
+		return m.ChattedAt()
+	case chathistories.FieldEmbedded:
+		return m.Embedded()
+	case chathistories.FieldCreatedAt:
+		return m.CreatedAt()
+	case chathistories.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case chathistories.FieldChatID:
+		return m.OldChatID(ctx)
+	case chathistories.FieldMessageID:
+		return m.OldMessageID(ctx)
+	case chathistories.FieldUserID:
+		return m.OldUserID(ctx)
+	case chathistories.FieldUsername:
+		return m.OldUsername(ctx)
+	case chathistories.FieldFullName:
+		return m.OldFullName(ctx)
+	case chathistories.FieldText:
+		return m.OldText(ctx)
+	case chathistories.FieldRepliedToMessageID:
+		return m.OldRepliedToMessageID(ctx)
+	case chathistories.FieldRepliedToUserID:
+		return m.OldRepliedToUserID(ctx)
+	case chathistories.FieldRepliedToFullName:
+		return m.OldRepliedToFullName(ctx)
+	case chathistories.FieldRepliedToUsername:
+		return m.OldRepliedToUsername(ctx)
+	case chathistories.FieldRepliedToText:
+		return m.OldRepliedToText(ctx)
+	case chathistories.FieldChattedAt:
+		return m.OldChattedAt(ctx)
+	case chathistories.FieldEmbedded:
+		return m.OldEmbedded(ctx)
+	case chathistories.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case chathistories.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ChatHistories field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ChatHistoriesMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case chathistories.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatID(v)
+		return nil
+	case chathistories.FieldMessageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMessageID(v)
+		return nil
+	case chathistories.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case chathistories.FieldUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUsername(v)
+		return nil
+	case chathistories.FieldFullName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFullName(v)
+		return nil
+	case chathistories.FieldText:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetText(v)
+		return nil
+	case chathistories.FieldRepliedToMessageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToMessageID(v)
+		return nil
+	case chathistories.FieldRepliedToUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToUserID(v)
+		return nil
+	case chathistories.FieldRepliedToFullName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToFullName(v)
+		return nil
+	case chathistories.FieldRepliedToUsername:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToUsername(v)
+		return nil
+	case chathistories.FieldRepliedToText:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToText(v)
+		return nil
+	case chathistories.FieldChattedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChattedAt(v)
+		return nil
+	case chathistories.FieldEmbedded:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmbedded(v)
+		return nil
+	case chathistories.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case chathistories.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ChatHistories field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ChatHistoriesMutation) AddedFields() []string {
+	var fields []string
+	if m.addchat_id != nil {
+		fields = append(fields, chathistories.FieldChatID)
+	}
+	if m.addmessage_id != nil {
+		fields = append(fields, chathistories.FieldMessageID)
+	}
+	if m.adduser_id != nil {
+		fields = append(fields, chathistories.FieldUserID)
+	}
+	if m.addreplied_to_message_id != nil {
+		fields = append(fields, chathistories.FieldRepliedToMessageID)
+	}
+	if m.addreplied_to_user_id != nil {
+		fields = append(fields, chathistories.FieldRepliedToUserID)
+	}
+	if m.addchatted_at != nil {
+		fields = append(fields, chathistories.FieldChattedAt)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, chathistories.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, chathistories.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ChatHistoriesMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case chathistories.FieldChatID:
+		return m.AddedChatID()
+	case chathistories.FieldMessageID:
+		return m.AddedMessageID()
+	case chathistories.FieldUserID:
+		return m.AddedUserID()
+	case chathistories.FieldRepliedToMessageID:
+		return m.AddedRepliedToMessageID()
+	case chathistories.FieldRepliedToUserID:
+		return m.AddedRepliedToUserID()
+	case chathistories.FieldChattedAt:
+		return m.AddedChattedAt()
+	case chathistories.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case chathistories.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ChatHistoriesMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case chathistories.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChatID(v)
+		return nil
+	case chathistories.FieldMessageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMessageID(v)
+		return nil
+	case chathistories.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case chathistories.FieldRepliedToMessageID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRepliedToMessageID(v)
+		return nil
+	case chathistories.FieldRepliedToUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRepliedToUserID(v)
+		return nil
+	case chathistories.FieldChattedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChattedAt(v)
+		return nil
+	case chathistories.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case chathistories.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ChatHistories numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ChatHistoriesMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ChatHistoriesMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ChatHistoriesMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ChatHistories nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ChatHistoriesMutation) ResetField(name string) error {
+	switch name {
+	case chathistories.FieldChatID:
+		m.ResetChatID()
+		return nil
+	case chathistories.FieldMessageID:
+		m.ResetMessageID()
+		return nil
+	case chathistories.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case chathistories.FieldUsername:
+		m.ResetUsername()
+		return nil
+	case chathistories.FieldFullName:
+		m.ResetFullName()
+		return nil
+	case chathistories.FieldText:
+		m.ResetText()
+		return nil
+	case chathistories.FieldRepliedToMessageID:
+		m.ResetRepliedToMessageID()
+		return nil
+	case chathistories.FieldRepliedToUserID:
+		m.ResetRepliedToUserID()
+		return nil
+	case chathistories.FieldRepliedToFullName:
+		m.ResetRepliedToFullName()
+		return nil
+	case chathistories.FieldRepliedToUsername:
+		m.ResetRepliedToUsername()
+		return nil
+	case chathistories.FieldRepliedToText:
+		m.ResetRepliedToText()
+		return nil
+	case chathistories.FieldChattedAt:
+		m.ResetChattedAt()
+		return nil
+	case chathistories.FieldEmbedded:
+		m.ResetEmbedded()
+		return nil
+	case chathistories.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case chathistories.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ChatHistories field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ChatHistoriesMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ChatHistoriesMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ChatHistoriesMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ChatHistoriesMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ChatHistoriesMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ChatHistoriesMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ChatHistoriesMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ChatHistories unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ChatHistoriesMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ChatHistories edge %s", name)
+}
 
 // TelegramChatFeatureFlagsMutation represents an operation that mutates the TelegramChatFeatureFlags nodes in the graph.
 type TelegramChatFeatureFlagsMutation struct {
@@ -677,1359 +2032,4 @@ func (m *TelegramChatFeatureFlagsMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *TelegramChatFeatureFlagsMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown TelegramChatFeatureFlags edge %s", name)
-}
-
-// TelegramChatHistoriesMutation represents an operation that mutates the TelegramChatHistories nodes in the graph.
-type TelegramChatHistoriesMutation struct {
-	config
-	op                       Op
-	typ                      string
-	id                       *uuid.UUID
-	chat_id                  *int64
-	addchat_id               *int64
-	message_id               *int64
-	addmessage_id            *int64
-	user_id                  *int64
-	adduser_id               *int64
-	username                 *string
-	full_name                *string
-	text                     *string
-	replied_to_message_id    *int64
-	addreplied_to_message_id *int64
-	replied_to_user_id       *int64
-	addreplied_to_user_id    *int64
-	replied_to_full_name     *string
-	replied_to_username      *string
-	replied_to_text          *string
-	chatted_at               *int64
-	addchatted_at            *int64
-	embedded                 *bool
-	created_at               *int64
-	addcreated_at            *int64
-	updated_at               *int64
-	addupdated_at            *int64
-	clearedFields            map[string]struct{}
-	done                     bool
-	oldValue                 func(context.Context) (*TelegramChatHistories, error)
-	predicates               []predicate.TelegramChatHistories
-}
-
-var _ ent.Mutation = (*TelegramChatHistoriesMutation)(nil)
-
-// telegramchathistoriesOption allows management of the mutation configuration using functional options.
-type telegramchathistoriesOption func(*TelegramChatHistoriesMutation)
-
-// newTelegramChatHistoriesMutation creates new mutation for the TelegramChatHistories entity.
-func newTelegramChatHistoriesMutation(c config, op Op, opts ...telegramchathistoriesOption) *TelegramChatHistoriesMutation {
-	m := &TelegramChatHistoriesMutation{
-		config:        c,
-		op:            op,
-		typ:           TypeTelegramChatHistories,
-		clearedFields: make(map[string]struct{}),
-	}
-	for _, opt := range opts {
-		opt(m)
-	}
-	return m
-}
-
-// withTelegramChatHistoriesID sets the ID field of the mutation.
-func withTelegramChatHistoriesID(id uuid.UUID) telegramchathistoriesOption {
-	return func(m *TelegramChatHistoriesMutation) {
-		var (
-			err   error
-			once  sync.Once
-			value *TelegramChatHistories
-		)
-		m.oldValue = func(ctx context.Context) (*TelegramChatHistories, error) {
-			once.Do(func() {
-				if m.done {
-					err = errors.New("querying old values post mutation is not allowed")
-				} else {
-					value, err = m.Client().TelegramChatHistories.Get(ctx, id)
-				}
-			})
-			return value, err
-		}
-		m.id = &id
-	}
-}
-
-// withTelegramChatHistories sets the old TelegramChatHistories of the mutation.
-func withTelegramChatHistories(node *TelegramChatHistories) telegramchathistoriesOption {
-	return func(m *TelegramChatHistoriesMutation) {
-		m.oldValue = func(context.Context) (*TelegramChatHistories, error) {
-			return node, nil
-		}
-		m.id = &node.ID
-	}
-}
-
-// Client returns a new `ent.Client` from the mutation. If the mutation was
-// executed in a transaction (ent.Tx), a transactional client is returned.
-func (m TelegramChatHistoriesMutation) Client() *Client {
-	client := &Client{config: m.config}
-	client.init()
-	return client
-}
-
-// Tx returns an `ent.Tx` for mutations that were executed in transactions;
-// it returns an error otherwise.
-func (m TelegramChatHistoriesMutation) Tx() (*Tx, error) {
-	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, errors.New("ent: mutation is not running in a transaction")
-	}
-	tx := &Tx{config: m.config}
-	tx.init()
-	return tx, nil
-}
-
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of TelegramChatHistories entities.
-func (m *TelegramChatHistoriesMutation) SetID(id uuid.UUID) {
-	m.id = &id
-}
-
-// ID returns the ID value in the mutation. Note that the ID is only available
-// if it was provided to the builder or after it was returned from the database.
-func (m *TelegramChatHistoriesMutation) ID() (id uuid.UUID, exists bool) {
-	if m.id == nil {
-		return
-	}
-	return *m.id, true
-}
-
-// IDs queries the database and returns the entity ids that match the mutation's predicate.
-// That means, if the mutation is applied within a transaction with an isolation level such
-// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
-// or updated by the mutation.
-func (m *TelegramChatHistoriesMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
-	switch {
-	case m.op.Is(OpUpdateOne | OpDeleteOne):
-		id, exists := m.ID()
-		if exists {
-			return []uuid.UUID{id}, nil
-		}
-		fallthrough
-	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().TelegramChatHistories.Query().Where(m.predicates...).IDs(ctx)
-	default:
-		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
-	}
-}
-
-// SetChatID sets the "chat_id" field.
-func (m *TelegramChatHistoriesMutation) SetChatID(i int64) {
-	m.chat_id = &i
-	m.addchat_id = nil
-}
-
-// ChatID returns the value of the "chat_id" field in the mutation.
-func (m *TelegramChatHistoriesMutation) ChatID() (r int64, exists bool) {
-	v := m.chat_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldChatID returns the old "chat_id" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldChatID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldChatID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
-	}
-	return oldValue.ChatID, nil
-}
-
-// AddChatID adds i to the "chat_id" field.
-func (m *TelegramChatHistoriesMutation) AddChatID(i int64) {
-	if m.addchat_id != nil {
-		*m.addchat_id += i
-	} else {
-		m.addchat_id = &i
-	}
-}
-
-// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedChatID() (r int64, exists bool) {
-	v := m.addchat_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetChatID resets all changes to the "chat_id" field.
-func (m *TelegramChatHistoriesMutation) ResetChatID() {
-	m.chat_id = nil
-	m.addchat_id = nil
-}
-
-// SetMessageID sets the "message_id" field.
-func (m *TelegramChatHistoriesMutation) SetMessageID(i int64) {
-	m.message_id = &i
-	m.addmessage_id = nil
-}
-
-// MessageID returns the value of the "message_id" field in the mutation.
-func (m *TelegramChatHistoriesMutation) MessageID() (r int64, exists bool) {
-	v := m.message_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldMessageID returns the old "message_id" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldMessageID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMessageID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMessageID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMessageID: %w", err)
-	}
-	return oldValue.MessageID, nil
-}
-
-// AddMessageID adds i to the "message_id" field.
-func (m *TelegramChatHistoriesMutation) AddMessageID(i int64) {
-	if m.addmessage_id != nil {
-		*m.addmessage_id += i
-	} else {
-		m.addmessage_id = &i
-	}
-}
-
-// AddedMessageID returns the value that was added to the "message_id" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedMessageID() (r int64, exists bool) {
-	v := m.addmessage_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetMessageID resets all changes to the "message_id" field.
-func (m *TelegramChatHistoriesMutation) ResetMessageID() {
-	m.message_id = nil
-	m.addmessage_id = nil
-}
-
-// SetUserID sets the "user_id" field.
-func (m *TelegramChatHistoriesMutation) SetUserID(i int64) {
-	m.user_id = &i
-	m.adduser_id = nil
-}
-
-// UserID returns the value of the "user_id" field in the mutation.
-func (m *TelegramChatHistoriesMutation) UserID() (r int64, exists bool) {
-	v := m.user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUserID returns the old "user_id" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldUserID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
-	}
-	return oldValue.UserID, nil
-}
-
-// AddUserID adds i to the "user_id" field.
-func (m *TelegramChatHistoriesMutation) AddUserID(i int64) {
-	if m.adduser_id != nil {
-		*m.adduser_id += i
-	} else {
-		m.adduser_id = &i
-	}
-}
-
-// AddedUserID returns the value that was added to the "user_id" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedUserID() (r int64, exists bool) {
-	v := m.adduser_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUserID resets all changes to the "user_id" field.
-func (m *TelegramChatHistoriesMutation) ResetUserID() {
-	m.user_id = nil
-	m.adduser_id = nil
-}
-
-// SetUsername sets the "username" field.
-func (m *TelegramChatHistoriesMutation) SetUsername(s string) {
-	m.username = &s
-}
-
-// Username returns the value of the "username" field in the mutation.
-func (m *TelegramChatHistoriesMutation) Username() (r string, exists bool) {
-	v := m.username
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUsername returns the old "username" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldUsername(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUsername is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUsername requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUsername: %w", err)
-	}
-	return oldValue.Username, nil
-}
-
-// ResetUsername resets all changes to the "username" field.
-func (m *TelegramChatHistoriesMutation) ResetUsername() {
-	m.username = nil
-}
-
-// SetFullName sets the "full_name" field.
-func (m *TelegramChatHistoriesMutation) SetFullName(s string) {
-	m.full_name = &s
-}
-
-// FullName returns the value of the "full_name" field in the mutation.
-func (m *TelegramChatHistoriesMutation) FullName() (r string, exists bool) {
-	v := m.full_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFullName returns the old "full_name" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldFullName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFullName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFullName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFullName: %w", err)
-	}
-	return oldValue.FullName, nil
-}
-
-// ResetFullName resets all changes to the "full_name" field.
-func (m *TelegramChatHistoriesMutation) ResetFullName() {
-	m.full_name = nil
-}
-
-// SetText sets the "text" field.
-func (m *TelegramChatHistoriesMutation) SetText(s string) {
-	m.text = &s
-}
-
-// Text returns the value of the "text" field in the mutation.
-func (m *TelegramChatHistoriesMutation) Text() (r string, exists bool) {
-	v := m.text
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldText returns the old "text" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldText(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldText is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldText requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldText: %w", err)
-	}
-	return oldValue.Text, nil
-}
-
-// ResetText resets all changes to the "text" field.
-func (m *TelegramChatHistoriesMutation) ResetText() {
-	m.text = nil
-}
-
-// SetRepliedToMessageID sets the "replied_to_message_id" field.
-func (m *TelegramChatHistoriesMutation) SetRepliedToMessageID(i int64) {
-	m.replied_to_message_id = &i
-	m.addreplied_to_message_id = nil
-}
-
-// RepliedToMessageID returns the value of the "replied_to_message_id" field in the mutation.
-func (m *TelegramChatHistoriesMutation) RepliedToMessageID() (r int64, exists bool) {
-	v := m.replied_to_message_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRepliedToMessageID returns the old "replied_to_message_id" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldRepliedToMessageID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRepliedToMessageID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRepliedToMessageID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRepliedToMessageID: %w", err)
-	}
-	return oldValue.RepliedToMessageID, nil
-}
-
-// AddRepliedToMessageID adds i to the "replied_to_message_id" field.
-func (m *TelegramChatHistoriesMutation) AddRepliedToMessageID(i int64) {
-	if m.addreplied_to_message_id != nil {
-		*m.addreplied_to_message_id += i
-	} else {
-		m.addreplied_to_message_id = &i
-	}
-}
-
-// AddedRepliedToMessageID returns the value that was added to the "replied_to_message_id" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedRepliedToMessageID() (r int64, exists bool) {
-	v := m.addreplied_to_message_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetRepliedToMessageID resets all changes to the "replied_to_message_id" field.
-func (m *TelegramChatHistoriesMutation) ResetRepliedToMessageID() {
-	m.replied_to_message_id = nil
-	m.addreplied_to_message_id = nil
-}
-
-// SetRepliedToUserID sets the "replied_to_user_id" field.
-func (m *TelegramChatHistoriesMutation) SetRepliedToUserID(i int64) {
-	m.replied_to_user_id = &i
-	m.addreplied_to_user_id = nil
-}
-
-// RepliedToUserID returns the value of the "replied_to_user_id" field in the mutation.
-func (m *TelegramChatHistoriesMutation) RepliedToUserID() (r int64, exists bool) {
-	v := m.replied_to_user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRepliedToUserID returns the old "replied_to_user_id" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldRepliedToUserID(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRepliedToUserID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRepliedToUserID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRepliedToUserID: %w", err)
-	}
-	return oldValue.RepliedToUserID, nil
-}
-
-// AddRepliedToUserID adds i to the "replied_to_user_id" field.
-func (m *TelegramChatHistoriesMutation) AddRepliedToUserID(i int64) {
-	if m.addreplied_to_user_id != nil {
-		*m.addreplied_to_user_id += i
-	} else {
-		m.addreplied_to_user_id = &i
-	}
-}
-
-// AddedRepliedToUserID returns the value that was added to the "replied_to_user_id" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedRepliedToUserID() (r int64, exists bool) {
-	v := m.addreplied_to_user_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetRepliedToUserID resets all changes to the "replied_to_user_id" field.
-func (m *TelegramChatHistoriesMutation) ResetRepliedToUserID() {
-	m.replied_to_user_id = nil
-	m.addreplied_to_user_id = nil
-}
-
-// SetRepliedToFullName sets the "replied_to_full_name" field.
-func (m *TelegramChatHistoriesMutation) SetRepliedToFullName(s string) {
-	m.replied_to_full_name = &s
-}
-
-// RepliedToFullName returns the value of the "replied_to_full_name" field in the mutation.
-func (m *TelegramChatHistoriesMutation) RepliedToFullName() (r string, exists bool) {
-	v := m.replied_to_full_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRepliedToFullName returns the old "replied_to_full_name" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldRepliedToFullName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRepliedToFullName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRepliedToFullName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRepliedToFullName: %w", err)
-	}
-	return oldValue.RepliedToFullName, nil
-}
-
-// ResetRepliedToFullName resets all changes to the "replied_to_full_name" field.
-func (m *TelegramChatHistoriesMutation) ResetRepliedToFullName() {
-	m.replied_to_full_name = nil
-}
-
-// SetRepliedToUsername sets the "replied_to_username" field.
-func (m *TelegramChatHistoriesMutation) SetRepliedToUsername(s string) {
-	m.replied_to_username = &s
-}
-
-// RepliedToUsername returns the value of the "replied_to_username" field in the mutation.
-func (m *TelegramChatHistoriesMutation) RepliedToUsername() (r string, exists bool) {
-	v := m.replied_to_username
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRepliedToUsername returns the old "replied_to_username" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldRepliedToUsername(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRepliedToUsername is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRepliedToUsername requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRepliedToUsername: %w", err)
-	}
-	return oldValue.RepliedToUsername, nil
-}
-
-// ResetRepliedToUsername resets all changes to the "replied_to_username" field.
-func (m *TelegramChatHistoriesMutation) ResetRepliedToUsername() {
-	m.replied_to_username = nil
-}
-
-// SetRepliedToText sets the "replied_to_text" field.
-func (m *TelegramChatHistoriesMutation) SetRepliedToText(s string) {
-	m.replied_to_text = &s
-}
-
-// RepliedToText returns the value of the "replied_to_text" field in the mutation.
-func (m *TelegramChatHistoriesMutation) RepliedToText() (r string, exists bool) {
-	v := m.replied_to_text
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRepliedToText returns the old "replied_to_text" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldRepliedToText(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRepliedToText is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRepliedToText requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRepliedToText: %w", err)
-	}
-	return oldValue.RepliedToText, nil
-}
-
-// ResetRepliedToText resets all changes to the "replied_to_text" field.
-func (m *TelegramChatHistoriesMutation) ResetRepliedToText() {
-	m.replied_to_text = nil
-}
-
-// SetChattedAt sets the "chatted_at" field.
-func (m *TelegramChatHistoriesMutation) SetChattedAt(i int64) {
-	m.chatted_at = &i
-	m.addchatted_at = nil
-}
-
-// ChattedAt returns the value of the "chatted_at" field in the mutation.
-func (m *TelegramChatHistoriesMutation) ChattedAt() (r int64, exists bool) {
-	v := m.chatted_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldChattedAt returns the old "chatted_at" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldChattedAt(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldChattedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldChattedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldChattedAt: %w", err)
-	}
-	return oldValue.ChattedAt, nil
-}
-
-// AddChattedAt adds i to the "chatted_at" field.
-func (m *TelegramChatHistoriesMutation) AddChattedAt(i int64) {
-	if m.addchatted_at != nil {
-		*m.addchatted_at += i
-	} else {
-		m.addchatted_at = &i
-	}
-}
-
-// AddedChattedAt returns the value that was added to the "chatted_at" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedChattedAt() (r int64, exists bool) {
-	v := m.addchatted_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetChattedAt resets all changes to the "chatted_at" field.
-func (m *TelegramChatHistoriesMutation) ResetChattedAt() {
-	m.chatted_at = nil
-	m.addchatted_at = nil
-}
-
-// SetEmbedded sets the "embedded" field.
-func (m *TelegramChatHistoriesMutation) SetEmbedded(b bool) {
-	m.embedded = &b
-}
-
-// Embedded returns the value of the "embedded" field in the mutation.
-func (m *TelegramChatHistoriesMutation) Embedded() (r bool, exists bool) {
-	v := m.embedded
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEmbedded returns the old "embedded" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldEmbedded(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmbedded is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmbedded requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmbedded: %w", err)
-	}
-	return oldValue.Embedded, nil
-}
-
-// ResetEmbedded resets all changes to the "embedded" field.
-func (m *TelegramChatHistoriesMutation) ResetEmbedded() {
-	m.embedded = nil
-}
-
-// SetCreatedAt sets the "created_at" field.
-func (m *TelegramChatHistoriesMutation) SetCreatedAt(i int64) {
-	m.created_at = &i
-	m.addcreated_at = nil
-}
-
-// CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *TelegramChatHistoriesMutation) CreatedAt() (r int64, exists bool) {
-	v := m.created_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedAt returns the old "created_at" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
-	}
-	return oldValue.CreatedAt, nil
-}
-
-// AddCreatedAt adds i to the "created_at" field.
-func (m *TelegramChatHistoriesMutation) AddCreatedAt(i int64) {
-	if m.addcreated_at != nil {
-		*m.addcreated_at += i
-	} else {
-		m.addcreated_at = &i
-	}
-}
-
-// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedCreatedAt() (r int64, exists bool) {
-	v := m.addcreated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreatedAt resets all changes to the "created_at" field.
-func (m *TelegramChatHistoriesMutation) ResetCreatedAt() {
-	m.created_at = nil
-	m.addcreated_at = nil
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (m *TelegramChatHistoriesMutation) SetUpdatedAt(i int64) {
-	m.updated_at = &i
-	m.addupdated_at = nil
-}
-
-// UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *TelegramChatHistoriesMutation) UpdatedAt() (r int64, exists bool) {
-	v := m.updated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedAt returns the old "updated_at" field's value of the TelegramChatHistories entity.
-// If the TelegramChatHistories object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TelegramChatHistoriesMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
-	}
-	return oldValue.UpdatedAt, nil
-}
-
-// AddUpdatedAt adds i to the "updated_at" field.
-func (m *TelegramChatHistoriesMutation) AddUpdatedAt(i int64) {
-	if m.addupdated_at != nil {
-		*m.addupdated_at += i
-	} else {
-		m.addupdated_at = &i
-	}
-}
-
-// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedUpdatedAt() (r int64, exists bool) {
-	v := m.addupdated_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *TelegramChatHistoriesMutation) ResetUpdatedAt() {
-	m.updated_at = nil
-	m.addupdated_at = nil
-}
-
-// Where appends a list predicates to the TelegramChatHistoriesMutation builder.
-func (m *TelegramChatHistoriesMutation) Where(ps ...predicate.TelegramChatHistories) {
-	m.predicates = append(m.predicates, ps...)
-}
-
-// WhereP appends storage-level predicates to the TelegramChatHistoriesMutation builder. Using this method,
-// users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *TelegramChatHistoriesMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.TelegramChatHistories, len(ps))
-	for i := range ps {
-		p[i] = ps[i]
-	}
-	m.Where(p...)
-}
-
-// Op returns the operation name.
-func (m *TelegramChatHistoriesMutation) Op() Op {
-	return m.op
-}
-
-// SetOp allows setting the mutation operation.
-func (m *TelegramChatHistoriesMutation) SetOp(op Op) {
-	m.op = op
-}
-
-// Type returns the node type of this mutation (TelegramChatHistories).
-func (m *TelegramChatHistoriesMutation) Type() string {
-	return m.typ
-}
-
-// Fields returns all fields that were changed during this mutation. Note that in
-// order to get all numeric fields that were incremented/decremented, call
-// AddedFields().
-func (m *TelegramChatHistoriesMutation) Fields() []string {
-	fields := make([]string, 0, 15)
-	if m.chat_id != nil {
-		fields = append(fields, telegramchathistories.FieldChatID)
-	}
-	if m.message_id != nil {
-		fields = append(fields, telegramchathistories.FieldMessageID)
-	}
-	if m.user_id != nil {
-		fields = append(fields, telegramchathistories.FieldUserID)
-	}
-	if m.username != nil {
-		fields = append(fields, telegramchathistories.FieldUsername)
-	}
-	if m.full_name != nil {
-		fields = append(fields, telegramchathistories.FieldFullName)
-	}
-	if m.text != nil {
-		fields = append(fields, telegramchathistories.FieldText)
-	}
-	if m.replied_to_message_id != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToMessageID)
-	}
-	if m.replied_to_user_id != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToUserID)
-	}
-	if m.replied_to_full_name != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToFullName)
-	}
-	if m.replied_to_username != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToUsername)
-	}
-	if m.replied_to_text != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToText)
-	}
-	if m.chatted_at != nil {
-		fields = append(fields, telegramchathistories.FieldChattedAt)
-	}
-	if m.embedded != nil {
-		fields = append(fields, telegramchathistories.FieldEmbedded)
-	}
-	if m.created_at != nil {
-		fields = append(fields, telegramchathistories.FieldCreatedAt)
-	}
-	if m.updated_at != nil {
-		fields = append(fields, telegramchathistories.FieldUpdatedAt)
-	}
-	return fields
-}
-
-// Field returns the value of a field with the given name. The second boolean
-// return value indicates that this field was not set, or was not defined in the
-// schema.
-func (m *TelegramChatHistoriesMutation) Field(name string) (ent.Value, bool) {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		return m.ChatID()
-	case telegramchathistories.FieldMessageID:
-		return m.MessageID()
-	case telegramchathistories.FieldUserID:
-		return m.UserID()
-	case telegramchathistories.FieldUsername:
-		return m.Username()
-	case telegramchathistories.FieldFullName:
-		return m.FullName()
-	case telegramchathistories.FieldText:
-		return m.Text()
-	case telegramchathistories.FieldRepliedToMessageID:
-		return m.RepliedToMessageID()
-	case telegramchathistories.FieldRepliedToUserID:
-		return m.RepliedToUserID()
-	case telegramchathistories.FieldRepliedToFullName:
-		return m.RepliedToFullName()
-	case telegramchathistories.FieldRepliedToUsername:
-		return m.RepliedToUsername()
-	case telegramchathistories.FieldRepliedToText:
-		return m.RepliedToText()
-	case telegramchathistories.FieldChattedAt:
-		return m.ChattedAt()
-	case telegramchathistories.FieldEmbedded:
-		return m.Embedded()
-	case telegramchathistories.FieldCreatedAt:
-		return m.CreatedAt()
-	case telegramchathistories.FieldUpdatedAt:
-		return m.UpdatedAt()
-	}
-	return nil, false
-}
-
-// OldField returns the old value of the field from the database. An error is
-// returned if the mutation operation is not UpdateOne, or the query to the
-// database failed.
-func (m *TelegramChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		return m.OldChatID(ctx)
-	case telegramchathistories.FieldMessageID:
-		return m.OldMessageID(ctx)
-	case telegramchathistories.FieldUserID:
-		return m.OldUserID(ctx)
-	case telegramchathistories.FieldUsername:
-		return m.OldUsername(ctx)
-	case telegramchathistories.FieldFullName:
-		return m.OldFullName(ctx)
-	case telegramchathistories.FieldText:
-		return m.OldText(ctx)
-	case telegramchathistories.FieldRepliedToMessageID:
-		return m.OldRepliedToMessageID(ctx)
-	case telegramchathistories.FieldRepliedToUserID:
-		return m.OldRepliedToUserID(ctx)
-	case telegramchathistories.FieldRepliedToFullName:
-		return m.OldRepliedToFullName(ctx)
-	case telegramchathistories.FieldRepliedToUsername:
-		return m.OldRepliedToUsername(ctx)
-	case telegramchathistories.FieldRepliedToText:
-		return m.OldRepliedToText(ctx)
-	case telegramchathistories.FieldChattedAt:
-		return m.OldChattedAt(ctx)
-	case telegramchathistories.FieldEmbedded:
-		return m.OldEmbedded(ctx)
-	case telegramchathistories.FieldCreatedAt:
-		return m.OldCreatedAt(ctx)
-	case telegramchathistories.FieldUpdatedAt:
-		return m.OldUpdatedAt(ctx)
-	}
-	return nil, fmt.Errorf("unknown TelegramChatHistories field %s", name)
-}
-
-// SetField sets the value of a field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TelegramChatHistoriesMutation) SetField(name string, value ent.Value) error {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetChatID(v)
-		return nil
-	case telegramchathistories.FieldMessageID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetMessageID(v)
-		return nil
-	case telegramchathistories.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUserID(v)
-		return nil
-	case telegramchathistories.FieldUsername:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUsername(v)
-		return nil
-	case telegramchathistories.FieldFullName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFullName(v)
-		return nil
-	case telegramchathistories.FieldText:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetText(v)
-		return nil
-	case telegramchathistories.FieldRepliedToMessageID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRepliedToMessageID(v)
-		return nil
-	case telegramchathistories.FieldRepliedToUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRepliedToUserID(v)
-		return nil
-	case telegramchathistories.FieldRepliedToFullName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRepliedToFullName(v)
-		return nil
-	case telegramchathistories.FieldRepliedToUsername:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRepliedToUsername(v)
-		return nil
-	case telegramchathistories.FieldRepliedToText:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRepliedToText(v)
-		return nil
-	case telegramchathistories.FieldChattedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetChattedAt(v)
-		return nil
-	case telegramchathistories.FieldEmbedded:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEmbedded(v)
-		return nil
-	case telegramchathistories.FieldCreatedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedAt(v)
-		return nil
-	case telegramchathistories.FieldUpdatedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedAt(v)
-		return nil
-	}
-	return fmt.Errorf("unknown TelegramChatHistories field %s", name)
-}
-
-// AddedFields returns all numeric fields that were incremented/decremented during
-// this mutation.
-func (m *TelegramChatHistoriesMutation) AddedFields() []string {
-	var fields []string
-	if m.addchat_id != nil {
-		fields = append(fields, telegramchathistories.FieldChatID)
-	}
-	if m.addmessage_id != nil {
-		fields = append(fields, telegramchathistories.FieldMessageID)
-	}
-	if m.adduser_id != nil {
-		fields = append(fields, telegramchathistories.FieldUserID)
-	}
-	if m.addreplied_to_message_id != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToMessageID)
-	}
-	if m.addreplied_to_user_id != nil {
-		fields = append(fields, telegramchathistories.FieldRepliedToUserID)
-	}
-	if m.addchatted_at != nil {
-		fields = append(fields, telegramchathistories.FieldChattedAt)
-	}
-	if m.addcreated_at != nil {
-		fields = append(fields, telegramchathistories.FieldCreatedAt)
-	}
-	if m.addupdated_at != nil {
-		fields = append(fields, telegramchathistories.FieldUpdatedAt)
-	}
-	return fields
-}
-
-// AddedField returns the numeric value that was incremented/decremented on a field
-// with the given name. The second boolean return value indicates that this field
-// was not set, or was not defined in the schema.
-func (m *TelegramChatHistoriesMutation) AddedField(name string) (ent.Value, bool) {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		return m.AddedChatID()
-	case telegramchathistories.FieldMessageID:
-		return m.AddedMessageID()
-	case telegramchathistories.FieldUserID:
-		return m.AddedUserID()
-	case telegramchathistories.FieldRepliedToMessageID:
-		return m.AddedRepliedToMessageID()
-	case telegramchathistories.FieldRepliedToUserID:
-		return m.AddedRepliedToUserID()
-	case telegramchathistories.FieldChattedAt:
-		return m.AddedChattedAt()
-	case telegramchathistories.FieldCreatedAt:
-		return m.AddedCreatedAt()
-	case telegramchathistories.FieldUpdatedAt:
-		return m.AddedUpdatedAt()
-	}
-	return nil, false
-}
-
-// AddField adds the value to the field with the given name. It returns an error if
-// the field is not defined in the schema, or if the type mismatched the field
-// type.
-func (m *TelegramChatHistoriesMutation) AddField(name string, value ent.Value) error {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddChatID(v)
-		return nil
-	case telegramchathistories.FieldMessageID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddMessageID(v)
-		return nil
-	case telegramchathistories.FieldUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUserID(v)
-		return nil
-	case telegramchathistories.FieldRepliedToMessageID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddRepliedToMessageID(v)
-		return nil
-	case telegramchathistories.FieldRepliedToUserID:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddRepliedToUserID(v)
-		return nil
-	case telegramchathistories.FieldChattedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddChattedAt(v)
-		return nil
-	case telegramchathistories.FieldCreatedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddCreatedAt(v)
-		return nil
-	case telegramchathistories.FieldUpdatedAt:
-		v, ok := value.(int64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddUpdatedAt(v)
-		return nil
-	}
-	return fmt.Errorf("unknown TelegramChatHistories numeric field %s", name)
-}
-
-// ClearedFields returns all nullable fields that were cleared during this
-// mutation.
-func (m *TelegramChatHistoriesMutation) ClearedFields() []string {
-	return nil
-}
-
-// FieldCleared returns a boolean indicating if a field with the given name was
-// cleared in this mutation.
-func (m *TelegramChatHistoriesMutation) FieldCleared(name string) bool {
-	_, ok := m.clearedFields[name]
-	return ok
-}
-
-// ClearField clears the value of the field with the given name. It returns an
-// error if the field is not defined in the schema.
-func (m *TelegramChatHistoriesMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown TelegramChatHistories nullable field %s", name)
-}
-
-// ResetField resets all changes in the mutation for the field with the given name.
-// It returns an error if the field is not defined in the schema.
-func (m *TelegramChatHistoriesMutation) ResetField(name string) error {
-	switch name {
-	case telegramchathistories.FieldChatID:
-		m.ResetChatID()
-		return nil
-	case telegramchathistories.FieldMessageID:
-		m.ResetMessageID()
-		return nil
-	case telegramchathistories.FieldUserID:
-		m.ResetUserID()
-		return nil
-	case telegramchathistories.FieldUsername:
-		m.ResetUsername()
-		return nil
-	case telegramchathistories.FieldFullName:
-		m.ResetFullName()
-		return nil
-	case telegramchathistories.FieldText:
-		m.ResetText()
-		return nil
-	case telegramchathistories.FieldRepliedToMessageID:
-		m.ResetRepliedToMessageID()
-		return nil
-	case telegramchathistories.FieldRepliedToUserID:
-		m.ResetRepliedToUserID()
-		return nil
-	case telegramchathistories.FieldRepliedToFullName:
-		m.ResetRepliedToFullName()
-		return nil
-	case telegramchathistories.FieldRepliedToUsername:
-		m.ResetRepliedToUsername()
-		return nil
-	case telegramchathistories.FieldRepliedToText:
-		m.ResetRepliedToText()
-		return nil
-	case telegramchathistories.FieldChattedAt:
-		m.ResetChattedAt()
-		return nil
-	case telegramchathistories.FieldEmbedded:
-		m.ResetEmbedded()
-		return nil
-	case telegramchathistories.FieldCreatedAt:
-		m.ResetCreatedAt()
-		return nil
-	case telegramchathistories.FieldUpdatedAt:
-		m.ResetUpdatedAt()
-		return nil
-	}
-	return fmt.Errorf("unknown TelegramChatHistories field %s", name)
-}
-
-// AddedEdges returns all edge names that were set/added in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// AddedIDs returns all IDs (to other nodes) that were added for the given edge
-// name in this mutation.
-func (m *TelegramChatHistoriesMutation) AddedIDs(name string) []ent.Value {
-	return nil
-}
-
-// RemovedEdges returns all edge names that were removed in this mutation.
-func (m *TelegramChatHistoriesMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
-// the given name in this mutation.
-func (m *TelegramChatHistoriesMutation) RemovedIDs(name string) []ent.Value {
-	return nil
-}
-
-// ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *TelegramChatHistoriesMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
-	return edges
-}
-
-// EdgeCleared returns a boolean which indicates if the edge with the given name
-// was cleared in this mutation.
-func (m *TelegramChatHistoriesMutation) EdgeCleared(name string) bool {
-	return false
-}
-
-// ClearEdge clears the value of the edge with the given name. It returns an error
-// if that edge is not defined in the schema.
-func (m *TelegramChatHistoriesMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown TelegramChatHistories unique edge %s", name)
-}
-
-// ResetEdge resets all changes to the edge with the given name in this mutation.
-// It returns an error if the edge is not defined in the schema.
-func (m *TelegramChatHistoriesMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown TelegramChatHistories edge %s", name)
 }

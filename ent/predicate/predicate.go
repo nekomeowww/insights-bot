@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// ChatHistories is the predicate function for chathistories builders.
+type ChatHistories func(*sql.Selector)
+
 // TelegramChatFeatureFlags is the predicate function for telegramchatfeatureflags builders.
 type TelegramChatFeatureFlags func(*sql.Selector)
-
-// TelegramChatHistories is the predicate function for telegramchathistories builders.
-type TelegramChatHistories func(*sql.Selector)

@@ -18,7 +18,7 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/ent"
-	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
@@ -75,7 +75,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 
-	telegramChatHistoryCreate := m.ent.Client.TelegramChatHistories.
+	telegramChatHistoryCreate := m.ent.ChatHistories.
 		Create().
 		SetChatID(message.Chat.ID).
 		SetMessageID(int64(message.MessageID)).
@@ -127,28 +127,28 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	return nil
 }
 
-func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*ent.TelegramChatHistories, error) {
+func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
 }
 
-func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.TelegramChatHistories, error) {
+func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, 6*time.Hour)
 }
 
-func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.TelegramChatHistories, error) {
+func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.ChatHistories, error) {
 	m.logger.Infof("querying chat histories for %d", chatID)
-	telegramChatHistories, err := m.ent.Client.TelegramChatHistories.
+	telegramChatHistories, err := m.ent.ChatHistories.
 		Query().
 		Where(
-			telegramchathistories.ChatID(chatID),
-			telegramchathistories.ChattedAtGT(time.Now().Add(-before).UnixMilli()),
+			chathistories.ChatID(chatID),
+			chathistories.ChattedAtGT(time.Now().Add(-before).UnixMilli()),
 		).
 		Order(
-			telegramchathistories.ByMessageID(sql.OrderDesc()),
+			chathistories.ByMessageID(sql.OrderDesc()),
 		).
 		All(context.TODO())
 	if err != nil {
-		return make([]*ent.TelegramChatHistories, 0), err
+		return make([]*ent.ChatHistories, 0), err
 	}
 
 	return telegramChatHistories, nil
@@ -221,7 +221,7 @@ func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 	return outputs, nil
 }
 
-func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.TelegramChatHistories) (string, error) {
+func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {

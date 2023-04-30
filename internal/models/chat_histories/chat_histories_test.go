@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/nekomeowww/insights-bot/ent"
-	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
@@ -66,11 +66,11 @@ func TestSaveOneTelegramChatHistory(t *testing.T) {
 	err := model.SaveOneTelegramChatHistory(message)
 	require.NoError(err)
 
-	chatHistory, err := model.ent.TelegramChatHistories.
+	chatHistory, err := model.ent.ChatHistories.
 		Query().
 		Where(
-			telegramchathistories.ChatID(message.Chat.ID),
-			telegramchathistories.MessageID(int64(message.MessageID)),
+			chathistories.ChatID(message.Chat.ID),
+			chathistories.MessageID(int64(message.MessageID)),
 		).
 		First(context.Background())
 	require.NoError(err)
@@ -140,7 +140,7 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	require.NoError(err)
 	require.Len(histories, 3)
 
-	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *ent.TelegramChatHistories, _ int) int64 {
+	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *ent.ChatHistories, _ int) int64 {
 		return item.MessageID
 	}))
 }

@@ -9,6 +9,18 @@ import (
 	"github.com/nekomeowww/insights-bot/ent"
 )
 
+// The ChatHistoriesFunc type is an adapter to allow the use of ordinary
+// function as ChatHistories mutator.
+type ChatHistoriesFunc func(context.Context, *ent.ChatHistoriesMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ChatHistoriesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.ChatHistoriesMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ChatHistoriesMutation", m)
+}
+
 // The TelegramChatFeatureFlagsFunc type is an adapter to allow the use of ordinary
 // function as TelegramChatFeatureFlags mutator.
 type TelegramChatFeatureFlagsFunc func(context.Context, *ent.TelegramChatFeatureFlagsMutation) (ent.Value, error)
@@ -19,18 +31,6 @@ func (f TelegramChatFeatureFlagsFunc) Mutate(ctx context.Context, m ent.Mutation
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TelegramChatFeatureFlagsMutation", m)
-}
-
-// The TelegramChatHistoriesFunc type is an adapter to allow the use of ordinary
-// function as TelegramChatHistories mutator.
-type TelegramChatHistoriesFunc func(context.Context, *ent.TelegramChatHistoriesMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f TelegramChatHistoriesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.TelegramChatHistoriesMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TelegramChatHistoriesMutation", m)
 }
 
 // Condition is a hook condition function.

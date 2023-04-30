@@ -12,10 +12,10 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
+	// ChatHistories is the client for interacting with the ChatHistories builders.
+	ChatHistories *ChatHistoriesClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
-	// TelegramChatHistories is the client for interacting with the TelegramChatHistories builders.
-	TelegramChatHistories *TelegramChatHistoriesClient
 
 	// lazily loaded.
 	client     *Client
@@ -147,8 +147,8 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
+	tx.ChatHistories = NewChatHistoriesClient(tx.config)
 	tx.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(tx.config)
-	tx.TelegramChatHistories = NewTelegramChatHistoriesClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -158,7 +158,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: TelegramChatFeatureFlags.QueryXXX(), the query will be executed
+// applies a query, for example: ChatHistories.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

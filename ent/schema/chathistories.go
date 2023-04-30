@@ -8,13 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-// TelegramChatHistories holds the schema definition for the TelegramChatHistories entity.
-type TelegramChatHistories struct {
+// ChatHistories holds the schema definition for the ChatHistories entity.
+type ChatHistories struct {
 	ent.Schema
 }
 
-// Fields of the TelegramChatHistories.
-func (TelegramChatHistories) Fields() []ent.Field {
+// Fields of the ChatHistories.
+func (ChatHistories) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique().Immutable(),
 		field.Int64("chat_id").Default(0),
@@ -35,7 +35,7 @@ func (TelegramChatHistories) Fields() []ent.Field {
 	}
 }
 
-// Edges of the TelegramChatHistories.
-func (TelegramChatHistories) Edges() []ent.Edge {
+// Edges of the ChatHistories.
+func (ChatHistories) Edges() []ent.Edge {
 	return nil
 }

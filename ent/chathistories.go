@@ -9,11 +9,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 )
 
-// TelegramChatHistories is the model entity for the TelegramChatHistories schema.
-type TelegramChatHistories struct {
+// ChatHistories is the model entity for the ChatHistories schema.
+type ChatHistories struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -51,17 +51,17 @@ type TelegramChatHistories struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*TelegramChatHistories) scanValues(columns []string) ([]any, error) {
+func (*ChatHistories) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case telegramchathistories.FieldEmbedded:
+		case chathistories.FieldEmbedded:
 			values[i] = new(sql.NullBool)
-		case telegramchathistories.FieldChatID, telegramchathistories.FieldMessageID, telegramchathistories.FieldUserID, telegramchathistories.FieldRepliedToMessageID, telegramchathistories.FieldRepliedToUserID, telegramchathistories.FieldChattedAt, telegramchathistories.FieldCreatedAt, telegramchathistories.FieldUpdatedAt:
+		case chathistories.FieldChatID, chathistories.FieldMessageID, chathistories.FieldUserID, chathistories.FieldRepliedToMessageID, chathistories.FieldRepliedToUserID, chathistories.FieldChattedAt, chathistories.FieldCreatedAt, chathistories.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case telegramchathistories.FieldUsername, telegramchathistories.FieldFullName, telegramchathistories.FieldText, telegramchathistories.FieldRepliedToFullName, telegramchathistories.FieldRepliedToUsername, telegramchathistories.FieldRepliedToText:
+		case chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText:
 			values[i] = new(sql.NullString)
-		case telegramchathistories.FieldID:
+		case chathistories.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -71,192 +71,192 @@ func (*TelegramChatHistories) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the TelegramChatHistories fields.
-func (tch *TelegramChatHistories) assignValues(columns []string, values []any) error {
+// to the ChatHistories fields.
+func (ch *ChatHistories) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case telegramchathistories.FieldID:
+		case chathistories.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				tch.ID = *value
+				ch.ID = *value
 			}
-		case telegramchathistories.FieldChatID:
+		case chathistories.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				tch.ChatID = value.Int64
+				ch.ChatID = value.Int64
 			}
-		case telegramchathistories.FieldMessageID:
+		case chathistories.FieldMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field message_id", values[i])
 			} else if value.Valid {
-				tch.MessageID = value.Int64
+				ch.MessageID = value.Int64
 			}
-		case telegramchathistories.FieldUserID:
+		case chathistories.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				tch.UserID = value.Int64
+				ch.UserID = value.Int64
 			}
-		case telegramchathistories.FieldUsername:
+		case chathistories.FieldUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field username", values[i])
 			} else if value.Valid {
-				tch.Username = value.String
+				ch.Username = value.String
 			}
-		case telegramchathistories.FieldFullName:
+		case chathistories.FieldFullName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field full_name", values[i])
 			} else if value.Valid {
-				tch.FullName = value.String
+				ch.FullName = value.String
 			}
-		case telegramchathistories.FieldText:
+		case chathistories.FieldText:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field text", values[i])
 			} else if value.Valid {
-				tch.Text = value.String
+				ch.Text = value.String
 			}
-		case telegramchathistories.FieldRepliedToMessageID:
+		case chathistories.FieldRepliedToMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field replied_to_message_id", values[i])
 			} else if value.Valid {
-				tch.RepliedToMessageID = value.Int64
+				ch.RepliedToMessageID = value.Int64
 			}
-		case telegramchathistories.FieldRepliedToUserID:
+		case chathistories.FieldRepliedToUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field replied_to_user_id", values[i])
 			} else if value.Valid {
-				tch.RepliedToUserID = value.Int64
+				ch.RepliedToUserID = value.Int64
 			}
-		case telegramchathistories.FieldRepliedToFullName:
+		case chathistories.FieldRepliedToFullName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field replied_to_full_name", values[i])
 			} else if value.Valid {
-				tch.RepliedToFullName = value.String
+				ch.RepliedToFullName = value.String
 			}
-		case telegramchathistories.FieldRepliedToUsername:
+		case chathistories.FieldRepliedToUsername:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field replied_to_username", values[i])
 			} else if value.Valid {
-				tch.RepliedToUsername = value.String
+				ch.RepliedToUsername = value.String
 			}
-		case telegramchathistories.FieldRepliedToText:
+		case chathistories.FieldRepliedToText:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field replied_to_text", values[i])
 			} else if value.Valid {
-				tch.RepliedToText = value.String
+				ch.RepliedToText = value.String
 			}
-		case telegramchathistories.FieldChattedAt:
+		case chathistories.FieldChattedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chatted_at", values[i])
 			} else if value.Valid {
-				tch.ChattedAt = value.Int64
+				ch.ChattedAt = value.Int64
 			}
-		case telegramchathistories.FieldEmbedded:
+		case chathistories.FieldEmbedded:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field embedded", values[i])
 			} else if value.Valid {
-				tch.Embedded = value.Bool
+				ch.Embedded = value.Bool
 			}
-		case telegramchathistories.FieldCreatedAt:
+		case chathistories.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tch.CreatedAt = value.Int64
+				ch.CreatedAt = value.Int64
 			}
-		case telegramchathistories.FieldUpdatedAt:
+		case chathistories.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tch.UpdatedAt = value.Int64
+				ch.UpdatedAt = value.Int64
 			}
 		default:
-			tch.selectValues.Set(columns[i], values[i])
+			ch.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the TelegramChatHistories.
+// Value returns the ent.Value that was dynamically selected and assigned to the ChatHistories.
 // This includes values selected through modifiers, order, etc.
-func (tch *TelegramChatHistories) Value(name string) (ent.Value, error) {
-	return tch.selectValues.Get(name)
+func (ch *ChatHistories) Value(name string) (ent.Value, error) {
+	return ch.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this TelegramChatHistories.
-// Note that you need to call TelegramChatHistories.Unwrap() before calling this method if this TelegramChatHistories
+// Update returns a builder for updating this ChatHistories.
+// Note that you need to call ChatHistories.Unwrap() before calling this method if this ChatHistories
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tch *TelegramChatHistories) Update() *TelegramChatHistoriesUpdateOne {
-	return NewTelegramChatHistoriesClient(tch.config).UpdateOne(tch)
+func (ch *ChatHistories) Update() *ChatHistoriesUpdateOne {
+	return NewChatHistoriesClient(ch.config).UpdateOne(ch)
 }
 
-// Unwrap unwraps the TelegramChatHistories entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the ChatHistories entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tch *TelegramChatHistories) Unwrap() *TelegramChatHistories {
-	_tx, ok := tch.config.driver.(*txDriver)
+func (ch *ChatHistories) Unwrap() *ChatHistories {
+	_tx, ok := ch.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: TelegramChatHistories is not a transactional entity")
+		panic("ent: ChatHistories is not a transactional entity")
 	}
-	tch.config.driver = _tx.drv
-	return tch
+	ch.config.driver = _tx.drv
+	return ch
 }
 
 // String implements the fmt.Stringer.
-func (tch *TelegramChatHistories) String() string {
+func (ch *ChatHistories) String() string {
 	var builder strings.Builder
-	builder.WriteString("TelegramChatHistories(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tch.ID))
+	builder.WriteString("ChatHistories(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", tch.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", ch.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("message_id=")
-	builder.WriteString(fmt.Sprintf("%v", tch.MessageID))
+	builder.WriteString(fmt.Sprintf("%v", ch.MessageID))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", tch.UserID))
+	builder.WriteString(fmt.Sprintf("%v", ch.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("username=")
-	builder.WriteString(tch.Username)
+	builder.WriteString(ch.Username)
 	builder.WriteString(", ")
 	builder.WriteString("full_name=")
-	builder.WriteString(tch.FullName)
+	builder.WriteString(ch.FullName)
 	builder.WriteString(", ")
 	builder.WriteString("text=")
-	builder.WriteString(tch.Text)
+	builder.WriteString(ch.Text)
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_message_id=")
-	builder.WriteString(fmt.Sprintf("%v", tch.RepliedToMessageID))
+	builder.WriteString(fmt.Sprintf("%v", ch.RepliedToMessageID))
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", tch.RepliedToUserID))
+	builder.WriteString(fmt.Sprintf("%v", ch.RepliedToUserID))
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_full_name=")
-	builder.WriteString(tch.RepliedToFullName)
+	builder.WriteString(ch.RepliedToFullName)
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_username=")
-	builder.WriteString(tch.RepliedToUsername)
+	builder.WriteString(ch.RepliedToUsername)
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_text=")
-	builder.WriteString(tch.RepliedToText)
+	builder.WriteString(ch.RepliedToText)
 	builder.WriteString(", ")
 	builder.WriteString("chatted_at=")
-	builder.WriteString(fmt.Sprintf("%v", tch.ChattedAt))
+	builder.WriteString(fmt.Sprintf("%v", ch.ChattedAt))
 	builder.WriteString(", ")
 	builder.WriteString("embedded=")
-	builder.WriteString(fmt.Sprintf("%v", tch.Embedded))
+	builder.WriteString(fmt.Sprintf("%v", ch.Embedded))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", tch.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", ch.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", tch.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", ch.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// TelegramChatHistoriesSlice is a parsable slice of TelegramChatHistories.
-type TelegramChatHistoriesSlice []*TelegramChatHistories
+// ChatHistoriesSlice is a parsable slice of ChatHistories.
+type ChatHistoriesSlice []*ChatHistories

@@ -14,8 +14,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
-	"github.com/nekomeowww/insights-bot/ent/telegramchathistories"
 
 	"github.com/nekomeowww/insights-bot/ent/internal"
 )
@@ -25,10 +25,10 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// ChatHistories is the client for interacting with the ChatHistories builders.
+	ChatHistories *ChatHistoriesClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
-	// TelegramChatHistories is the client for interacting with the TelegramChatHistories builders.
-	TelegramChatHistories *TelegramChatHistoriesClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -42,8 +42,8 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.ChatHistories = NewChatHistoriesClient(c.config)
 	c.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(c.config)
-	c.TelegramChatHistories = NewTelegramChatHistoriesClient(c.config)
 }
 
 type (
@@ -128,8 +128,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:                      ctx,
 		config:                   cfg,
+		ChatHistories:            NewChatHistoriesClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
-		TelegramChatHistories:    NewTelegramChatHistoriesClient(cfg),
 	}, nil
 }
 
@@ -149,15 +149,15 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:                      ctx,
 		config:                   cfg,
+		ChatHistories:            NewChatHistoriesClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
-		TelegramChatHistories:    NewTelegramChatHistoriesClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		TelegramChatFeatureFlags.
+//		ChatHistories.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -179,26 +179,144 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.ChatHistories.Use(hooks...)
 	c.TelegramChatFeatureFlags.Use(hooks...)
-	c.TelegramChatHistories.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.ChatHistories.Intercept(interceptors...)
 	c.TelegramChatFeatureFlags.Intercept(interceptors...)
-	c.TelegramChatHistories.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *ChatHistoriesMutation:
+		return c.ChatHistories.mutate(ctx, m)
 	case *TelegramChatFeatureFlagsMutation:
 		return c.TelegramChatFeatureFlags.mutate(ctx, m)
-	case *TelegramChatHistoriesMutation:
-		return c.TelegramChatHistories.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// ChatHistoriesClient is a client for the ChatHistories schema.
+type ChatHistoriesClient struct {
+	config
+}
+
+// NewChatHistoriesClient returns a client for the ChatHistories from the given config.
+func NewChatHistoriesClient(c config) *ChatHistoriesClient {
+	return &ChatHistoriesClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `chathistories.Hooks(f(g(h())))`.
+func (c *ChatHistoriesClient) Use(hooks ...Hook) {
+	c.hooks.ChatHistories = append(c.hooks.ChatHistories, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `chathistories.Intercept(f(g(h())))`.
+func (c *ChatHistoriesClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ChatHistories = append(c.inters.ChatHistories, interceptors...)
+}
+
+// Create returns a builder for creating a ChatHistories entity.
+func (c *ChatHistoriesClient) Create() *ChatHistoriesCreate {
+	mutation := newChatHistoriesMutation(c.config, OpCreate)
+	return &ChatHistoriesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ChatHistories entities.
+func (c *ChatHistoriesClient) CreateBulk(builders ...*ChatHistoriesCreate) *ChatHistoriesCreateBulk {
+	return &ChatHistoriesCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ChatHistories.
+func (c *ChatHistoriesClient) Update() *ChatHistoriesUpdate {
+	mutation := newChatHistoriesMutation(c.config, OpUpdate)
+	return &ChatHistoriesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ChatHistoriesClient) UpdateOne(ch *ChatHistories) *ChatHistoriesUpdateOne {
+	mutation := newChatHistoriesMutation(c.config, OpUpdateOne, withChatHistories(ch))
+	return &ChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ChatHistoriesClient) UpdateOneID(id uuid.UUID) *ChatHistoriesUpdateOne {
+	mutation := newChatHistoriesMutation(c.config, OpUpdateOne, withChatHistoriesID(id))
+	return &ChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ChatHistories.
+func (c *ChatHistoriesClient) Delete() *ChatHistoriesDelete {
+	mutation := newChatHistoriesMutation(c.config, OpDelete)
+	return &ChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ChatHistoriesClient) DeleteOne(ch *ChatHistories) *ChatHistoriesDeleteOne {
+	return c.DeleteOneID(ch.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ChatHistoriesClient) DeleteOneID(id uuid.UUID) *ChatHistoriesDeleteOne {
+	builder := c.Delete().Where(chathistories.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ChatHistoriesDeleteOne{builder}
+}
+
+// Query returns a query builder for ChatHistories.
+func (c *ChatHistoriesClient) Query() *ChatHistoriesQuery {
+	return &ChatHistoriesQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeChatHistories},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ChatHistories entity by its id.
+func (c *ChatHistoriesClient) Get(ctx context.Context, id uuid.UUID) (*ChatHistories, error) {
+	return c.Query().Where(chathistories.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ChatHistoriesClient) GetX(ctx context.Context, id uuid.UUID) *ChatHistories {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ChatHistoriesClient) Hooks() []Hook {
+	return c.hooks.ChatHistories
+}
+
+// Interceptors returns the client interceptors.
+func (c *ChatHistoriesClient) Interceptors() []Interceptor {
+	return c.inters.ChatHistories
+}
+
+func (c *ChatHistoriesClient) mutate(ctx context.Context, m *ChatHistoriesMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ChatHistoriesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ChatHistoriesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown ChatHistories mutation op: %q", m.Op())
 	}
 }
 
@@ -320,131 +438,13 @@ func (c *TelegramChatFeatureFlagsClient) mutate(ctx context.Context, m *Telegram
 	}
 }
 
-// TelegramChatHistoriesClient is a client for the TelegramChatHistories schema.
-type TelegramChatHistoriesClient struct {
-	config
-}
-
-// NewTelegramChatHistoriesClient returns a client for the TelegramChatHistories from the given config.
-func NewTelegramChatHistoriesClient(c config) *TelegramChatHistoriesClient {
-	return &TelegramChatHistoriesClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `telegramchathistories.Hooks(f(g(h())))`.
-func (c *TelegramChatHistoriesClient) Use(hooks ...Hook) {
-	c.hooks.TelegramChatHistories = append(c.hooks.TelegramChatHistories, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `telegramchathistories.Intercept(f(g(h())))`.
-func (c *TelegramChatHistoriesClient) Intercept(interceptors ...Interceptor) {
-	c.inters.TelegramChatHistories = append(c.inters.TelegramChatHistories, interceptors...)
-}
-
-// Create returns a builder for creating a TelegramChatHistories entity.
-func (c *TelegramChatHistoriesClient) Create() *TelegramChatHistoriesCreate {
-	mutation := newTelegramChatHistoriesMutation(c.config, OpCreate)
-	return &TelegramChatHistoriesCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of TelegramChatHistories entities.
-func (c *TelegramChatHistoriesClient) CreateBulk(builders ...*TelegramChatHistoriesCreate) *TelegramChatHistoriesCreateBulk {
-	return &TelegramChatHistoriesCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for TelegramChatHistories.
-func (c *TelegramChatHistoriesClient) Update() *TelegramChatHistoriesUpdate {
-	mutation := newTelegramChatHistoriesMutation(c.config, OpUpdate)
-	return &TelegramChatHistoriesUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *TelegramChatHistoriesClient) UpdateOne(tch *TelegramChatHistories) *TelegramChatHistoriesUpdateOne {
-	mutation := newTelegramChatHistoriesMutation(c.config, OpUpdateOne, withTelegramChatHistories(tch))
-	return &TelegramChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *TelegramChatHistoriesClient) UpdateOneID(id uuid.UUID) *TelegramChatHistoriesUpdateOne {
-	mutation := newTelegramChatHistoriesMutation(c.config, OpUpdateOne, withTelegramChatHistoriesID(id))
-	return &TelegramChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for TelegramChatHistories.
-func (c *TelegramChatHistoriesClient) Delete() *TelegramChatHistoriesDelete {
-	mutation := newTelegramChatHistoriesMutation(c.config, OpDelete)
-	return &TelegramChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *TelegramChatHistoriesClient) DeleteOne(tch *TelegramChatHistories) *TelegramChatHistoriesDeleteOne {
-	return c.DeleteOneID(tch.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TelegramChatHistoriesClient) DeleteOneID(id uuid.UUID) *TelegramChatHistoriesDeleteOne {
-	builder := c.Delete().Where(telegramchathistories.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &TelegramChatHistoriesDeleteOne{builder}
-}
-
-// Query returns a query builder for TelegramChatHistories.
-func (c *TelegramChatHistoriesClient) Query() *TelegramChatHistoriesQuery {
-	return &TelegramChatHistoriesQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeTelegramChatHistories},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a TelegramChatHistories entity by its id.
-func (c *TelegramChatHistoriesClient) Get(ctx context.Context, id uuid.UUID) (*TelegramChatHistories, error) {
-	return c.Query().Where(telegramchathistories.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *TelegramChatHistoriesClient) GetX(ctx context.Context, id uuid.UUID) *TelegramChatHistories {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *TelegramChatHistoriesClient) Hooks() []Hook {
-	return c.hooks.TelegramChatHistories
-}
-
-// Interceptors returns the client interceptors.
-func (c *TelegramChatHistoriesClient) Interceptors() []Interceptor {
-	return c.inters.TelegramChatHistories
-}
-
-func (c *TelegramChatHistoriesClient) mutate(ctx context.Context, m *TelegramChatHistoriesMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&TelegramChatHistoriesCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&TelegramChatHistoriesUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&TelegramChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&TelegramChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown TelegramChatHistories mutation op: %q", m.Op())
-	}
-}
-
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		TelegramChatFeatureFlags, TelegramChatHistories []ent.Hook
+		ChatHistories, TelegramChatFeatureFlags []ent.Hook
 	}
 	inters struct {
-		TelegramChatFeatureFlags, TelegramChatHistories []ent.Interceptor
+		ChatHistories, TelegramChatFeatureFlags []ent.Interceptor
 	}
 )
 

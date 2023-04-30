@@ -21,22 +21,11 @@ RUN go env
 RUN go env -w CGO_ENABLED=0
 RUN go mod download
 RUN go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
-RUN go install ariga.io/atlas/cmd/atlas@latest
 
 # 设定运行步骤所使用的镜像为基于 Debian 发行版镜像
 FROM debian as runner
 
-# 创建路径 /app/insights-bot
-RUN mkdir -p /app/insights-bot
-# 创建路径 /var/lib/insights-bot
-RUN mkdir -p /var/lib/insights-bot
-
-# 配置 CLOVER_DB_PATH 环境变量
-ENV CLOVER_DB_PATH /var/lib/insights-bot/insights_bot_clover_data.db
-
-COPY --from=builder /app/insights-bot/ent/migrate/migrations /app/insights-bot/migrations
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
-COPY --from=builder /go/bin/atlas /usr/local/bin/
 
 # 入点是编译好的应用程序
 CMD [ "/usr/local/bin/insights-bot" ]

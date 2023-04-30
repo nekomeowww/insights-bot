@@ -98,31 +98,7 @@ jobs:
         with:
           go-version: "^1.20"
       - uses: ent/contrib/ci@master
-  ent_lint_migration:
-    services:
-      # Spin up a postgres:10 container to be used as the dev-database for analysis.
-      postgres:
-        image: postgres:10
-        env:
-          POSTGRES_DB: test
-          POSTGRES_PASSWORD: pass
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.0.1
-        with:
-          fetch-depth: 0 # Mandatory unless "latest" is set below.
-      - uses: ariga/atlas-action@v0
-        with:
-          dir: ent/migrate/migrations
-          dir-format: atlas # Or: atlas, goose, dbmate
-          dev-url: postgres://postgres:pass@localhost:5432/test?sslmode=disable
+
   # unittest:
   #   # 运行目标
   #   runs-on: ubuntu-latest

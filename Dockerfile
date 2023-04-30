@@ -5,7 +5,7 @@ FROM golang:1.20 as builder
 
 ARG VERSION
 
-RUN apt install -y ca-certificates
+RUN apt update && apt upgrade -y && apt install -y ca-certificates
 
 # 设定 Go 使用 模块化依赖 管理方式：GO111MODULE
 RUN GO111MODULE=on

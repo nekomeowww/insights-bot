@@ -2,8 +2,6 @@ package configs
 
 import (
 	"os"
-
-	"github.com/samber/lo"
 )
 
 const (
@@ -14,7 +12,7 @@ const (
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
 	EnvPineconeAPIKey               = "PINECONE_API_KEY"
 	EnvPineconeChatHistoryIndexName = "PINECONE_CHAT_HISTORY_INDEX_NAME"
-	EnvCloverDBPath                 = "CLOVER_DB_PATH"
+	EnvDBConnectionString           = "DB_CONNECTION_STR"
 )
 
 type SectionPineconeIndexes struct {
@@ -29,12 +27,17 @@ type SectionPinecone struct {
 	Indexes SectionPineconeIndexes
 }
 
+type SectionDB struct {
+	ConnectionString string
+}
+
 type Config struct {
 	TelegramBotToken string
 	OpenAIAPISecret  string
 	OpenAIAPIHost    string
 	Pinecone         SectionPinecone
 	CloverDBPath     string
+	DB               SectionDB
 }
 
 func NewConfig() func() *Config {
@@ -51,7 +54,19 @@ func NewConfig() func() *Config {
 					ChatHistoryIndexName: os.Getenv(EnvPineconeChatHistoryIndexName),
 				},
 			},
-			CloverDBPath: lo.Ternary(os.Getenv(EnvCloverDBPath) != "", os.Getenv(EnvCloverDBPath), "insights_bot_clover_data.db"),
+			DB: SectionDB{
+				ConnectionString: os.Getenv(EnvDBConnectionString),
+			},
+		}
+	}
+}
+
+func NewTestConfig() func() *Config {
+	return func() *Config {
+		return &Config{
+			DB: SectionDB{
+				ConnectionString: "postgresql://postgres:123456@localhost:5432/postgres?search_path=public&sslmode=disable",
+			},
 		}
 	}
 }

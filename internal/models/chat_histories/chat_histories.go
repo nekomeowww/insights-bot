@@ -10,50 +10,40 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"entgo.io/ent/dialect/sql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/google/uuid"
-	"github.com/ostafen/clover/v2"
 	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
+	"github.com/nekomeowww/insights-bot/ent"
+	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
-	"github.com/nekomeowww/insights-bot/pkg/types/chat_history"
 )
 
 type NewModelParams struct {
 	fx.In
 
 	Logger *logger.Logger
-	Clover *datastore.Clover
+	Ent    *datastore.Ent
 	OpenAI *openai.Client
 }
 
 type Model struct {
 	logger *logger.Logger
-	clover *datastore.Clover
+	ent    *datastore.Ent
 	openAI *openai.Client
 }
 
 func NewModel() func(NewModelParams) (*Model, error) {
 	return func(param NewModelParams) (*Model, error) {
-		hasCollection, err := param.Clover.HasCollection(chat_history.TelegramChatHistory{}.CollectionName())
-		if err != nil {
-			return nil, err
-		}
-		if !hasCollection {
-			err = param.Clover.CreateCollection(chat_history.TelegramChatHistory{}.CollectionName())
-			if err != nil {
-				return nil, err
-			}
-		}
-
 		return &Model{
 			logger: param.Logger,
-			clover: param.Clover,
+			ent:    param.Ent,
 			openAI: param.OpenAI,
 		}, nil
 	}
@@ -85,17 +75,14 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 
-	telegramChatHistory := chat_history.TelegramChatHistory{
-		ID:        clover.NewObjectId(),
-		ChatID:    message.Chat.ID,
-		MessageID: message.MessageID,
-		UserID:    message.From.ID,
-		Username:  message.From.UserName,
-		FullName:  tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName),
-		ChattedAt: time.Unix(int64(message.Date), 0).UnixMilli(),
-		CreatedAt: time.Now().UnixMilli(),
-		UpdatedAt: time.Now().UnixMilli(),
-	}
+	telegramChatHistoryCreate := m.ent.ChatHistories.
+		Create().
+		SetChatID(message.Chat.ID).
+		SetMessageID(int64(message.MessageID)).
+		SetUserID(message.From.ID).
+		SetUsername(message.From.UserName).
+		SetFullName(tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName)).
+		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli())
 
 	text, err := m.extractTextWithSummarization(message)
 	if err != nil {
@@ -106,11 +93,11 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistory.Text = "转发了来自" + tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text
+		telegramChatHistoryCreate.SetText("转发了来自" + tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text)
 	} else if message.ForwardFromChat != nil {
-		telegramChatHistory.Text = "转发了来自" + message.ForwardFromChat.Title + "的消息：" + text
+		telegramChatHistoryCreate.SetText("转发了来自" + message.ForwardFromChat.Title + "的消息：" + text)
 	} else {
-		telegramChatHistory.Text = text
+		telegramChatHistoryCreate.SetText(text)
 	}
 	if message.ReplyToMessage != nil {
 		repliedToText, err := m.extractTextWithSummarization(message.ReplyToMessage)
@@ -118,24 +105,21 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 			return err
 		}
 		if repliedToText != "" {
-			telegramChatHistory.RepliedToMessageID = message.ReplyToMessage.MessageID
-			telegramChatHistory.RepliedToUserID = message.ReplyToMessage.From.ID
-			telegramChatHistory.RepliedToFullName = tgbot.FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName)
-			telegramChatHistory.RepliedToUsername = message.ReplyToMessage.From.UserName
-			telegramChatHistory.RepliedToText = repliedToText
+			telegramChatHistoryCreate.SetRepliedToMessageID(int64(message.ReplyToMessage.MessageID))
+			telegramChatHistoryCreate.SetRepliedToUserID(message.ReplyToMessage.From.ID)
+			telegramChatHistoryCreate.SetRepliedToFullName(tgbot.FullNameFromFirstAndLastName(message.ReplyToMessage.From.FirstName, message.ReplyToMessage.From.LastName))
+			telegramChatHistoryCreate.SetRepliedToUsername(message.ReplyToMessage.From.UserName)
+			telegramChatHistoryCreate.SetRepliedToText(repliedToText)
 		}
 	}
 
-	id, err := m.clover.InsertOne(
-		chat_history.TelegramChatHistory{}.CollectionName(),
-		clover.NewDocumentOf(telegramChatHistory),
-	)
+	telegramChatHistory, err := telegramChatHistoryCreate.Save(context.TODO())
 	if err != nil {
 		return err
 	}
 
 	m.logger.WithFields(logrus.Fields{
-		"id":         id,
+		"id":         telegramChatHistory.ID,
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
@@ -143,47 +127,31 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	return nil
 }
 
-func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
 }
 
-func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*chat_history.TelegramChatHistory, error) {
+func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, 6*time.Hour)
 }
 
-func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*chat_history.TelegramChatHistory, error) {
-	query := clover.
-		NewQuery(chat_history.TelegramChatHistory{}.CollectionName()).
-		Where(clover.Field("chat_id").Eq(chatID)).
-		Where(clover.Field("chatted_at").Gt(time.Now().Add(-before).UnixMilli())).
-		Sort(clover.SortOption{
-			Field:     "message_id",
-			Direction: 1,
-		})
-
+func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.ChatHistories, error) {
 	m.logger.Infof("querying chat histories for %d", chatID)
-	docs, err := m.clover.FindAll(query)
+	telegramChatHistories, err := m.ent.ChatHistories.
+		Query().
+		Where(
+			chathistories.ChatID(chatID),
+			chathistories.ChattedAtGT(time.Now().Add(-before).UnixMilli()),
+		).
+		Order(
+			chathistories.ByMessageID(sql.OrderDesc()),
+		).
+		All(context.TODO())
 	if err != nil {
-		return make([]*chat_history.TelegramChatHistory, 0), err
+		return make([]*ent.ChatHistories, 0), err
 	}
 
-	m.logger.Infof("found %d chat histories", len(docs))
-	if len(docs) == 0 {
-		return make([]*chat_history.TelegramChatHistory, 0), nil
-	}
-
-	chatHistories := make([]*chat_history.TelegramChatHistory, 0, len(docs))
-	for _, doc := range docs {
-		var chatHistory chat_history.TelegramChatHistory
-		err = doc.Unmarshal(&chatHistory)
-		if err != nil {
-			return make([]*chat_history.TelegramChatHistory, 0), err
-		}
-
-		chatHistories = append(chatHistories, &chatHistory)
-	}
-
-	return chatHistories, nil
+	return telegramChatHistories, nil
 }
 
 func formatFullNameAndUsername(fullName, username string) string {
@@ -253,7 +221,7 @@ func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 	return outputs, nil
 }
 
-func (c *Model) SummarizeChatHistories(chatID int64, histories []*chat_history.TelegramChatHistory) (string, error) {
+func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {

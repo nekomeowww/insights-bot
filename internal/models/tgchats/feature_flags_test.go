@@ -1,12 +1,12 @@
 package tgchats
 
 import (
+	"context"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/types/telegram/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
-	"github.com/ostafen/clover/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,17 +21,14 @@ func TestChatHistoriesRecap(t *testing.T) {
 		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup)
 		require.NoError(err)
 
-		query := clover.
-			NewQuery(tgchat.FeatureFlag{}.CollectionName()).
-			Where(clover.Field("chat_id").Eq(chatID))
-
-		doc, err := model.Clover.FindFirst(query)
+		featureFlag, err := model.ent.TelegramChatFeatureFlags.
+			Query().
+			Where(
+				telegramchatfeatureflags.ChatID(chatID),
+			).
+			First(context.Background())
 		require.NoError(err)
-		require.NotNil(doc)
-
-		var featureFlag tgchat.FeatureFlag
-		err = doc.Unmarshal(&featureFlag)
-		require.NoError(err)
+		require.NotNil(featureFlag)
 
 		assert.True(featureFlag.FeatureChatHistoriesRecap)
 
@@ -47,18 +44,14 @@ func TestChatHistoriesRecap(t *testing.T) {
 		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup)
 		require.NoError(err)
 
-		query := clover.
-			NewQuery(tgchat.FeatureFlag{}.CollectionName()).
-			Where(clover.Field("chat_id").Eq(chatID))
-
-		doc, err := model.Clover.FindFirst(query)
+		featureFlag, err := model.ent.TelegramChatFeatureFlags.
+			Query().
+			Where(
+				telegramchatfeatureflags.ChatID(chatID),
+			).
+			First(context.Background())
 		require.NoError(err)
-		require.NotNil(doc)
-
-		var featureFlag tgchat.FeatureFlag
-		err = doc.Unmarshal(&featureFlag)
-		require.NoError(err)
-
+		require.NotNil(featureFlag)
 		assert.False(featureFlag.FeatureChatHistoriesRecap)
 
 		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, telegram.ChatTypeGroup)

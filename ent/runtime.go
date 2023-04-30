@@ -62,7 +62,7 @@ func init() {
 	// chathistoriesDescChattedAt is the schema descriptor for chatted_at field.
 	chathistoriesDescChattedAt := chathistoriesFields[12].Descriptor()
 	// chathistories.DefaultChattedAt holds the default value on creation for the chatted_at field.
-	chathistories.DefaultChattedAt = chathistoriesDescChattedAt.Default.(int64)
+	chathistories.DefaultChattedAt = chathistoriesDescChattedAt.Default.(func() int64)
 	// chathistoriesDescEmbedded is the schema descriptor for embedded field.
 	chathistoriesDescEmbedded := chathistoriesFields[13].Descriptor()
 	// chathistories.DefaultEmbedded holds the default value on creation for the embedded field.

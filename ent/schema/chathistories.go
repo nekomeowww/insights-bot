@@ -28,7 +28,7 @@ func (ChatHistories) Fields() []ent.Field {
 		field.Text("replied_to_full_name").Default(""),
 		field.Text("replied_to_username").Default(""),
 		field.Text("replied_to_text").Default(""),
-		field.Int64("chatted_at").Default(time.Now().Unix()),
+		field.Int64("chatted_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 		field.Bool("embedded").Default(false),
 		field.Int64("created_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 		field.Int64("updated_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),

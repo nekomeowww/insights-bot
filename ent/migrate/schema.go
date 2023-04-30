@@ -22,7 +22,7 @@ var (
 		{Name: "replied_to_full_name", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "replied_to_username", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "replied_to_text", Type: field.TypeString, Size: 2147483647, Default: ""},
-		{Name: "chatted_at", Type: field.TypeInt64, Default: 1682852653},
+		{Name: "chatted_at", Type: field.TypeInt64},
 		{Name: "embedded", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},

@@ -100,7 +100,7 @@ var (
 	// DefaultRepliedToText holds the default value on creation for the "replied_to_text" field.
 	DefaultRepliedToText string
 	// DefaultChattedAt holds the default value on creation for the "chatted_at" field.
-	DefaultChattedAt int64
+	DefaultChattedAt func() int64
 	// DefaultEmbedded holds the default value on creation for the "embedded" field.
 	DefaultEmbedded bool
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

@@ -324,7 +324,7 @@ func (chc *ChatHistoriesCreate) defaults() {
 		chc.mutation.SetRepliedToText(v)
 	}
 	if _, ok := chc.mutation.ChattedAt(); !ok {
-		v := chathistories.DefaultChattedAt
+		v := chathistories.DefaultChattedAt()
 		chc.mutation.SetChattedAt(v)
 	}
 	if _, ok := chc.mutation.Embedded(); !ok {

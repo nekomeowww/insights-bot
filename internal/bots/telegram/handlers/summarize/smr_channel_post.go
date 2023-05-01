@@ -26,5 +26,5 @@ func (h *Handlers) HandleChannelPost(c *tgbot.Context) (tgbot.Response, error) {
 		return nil, tgbot.NewExceptionError(err)
 	}
 
-	return c.NewEditMessageText(c.Update.ChannelPost.MessageID, summarization).WithParseModeHTML(), nil
+	return c.NewEditMessageText(c.Update.ChannelPost.MessageID, summarization.FormatSummarizationAsHTML()).WithParseModeHTML(), nil
 }

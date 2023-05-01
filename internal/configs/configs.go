@@ -6,6 +6,7 @@ import (
 
 const (
 	EnvTelegramBotToken             = "TELEGRAM_BOT_TOKEN"
+	EnvSlackBotToken                = "SLACK_BOT_TOKEN"
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET"
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
@@ -33,6 +34,7 @@ type SectionDB struct {
 
 type Config struct {
 	TelegramBotToken string
+	SlackBotToken    string
 	OpenAIAPISecret  string
 	OpenAIAPIHost    string
 	Pinecone         SectionPinecone
@@ -44,6 +46,7 @@ func NewConfig() func() *Config {
 	return func() *Config {
 		return &Config{
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
+			SlackBotToken:    os.Getenv(EnvSlackBotToken),
 			OpenAIAPISecret:  os.Getenv(EnvOpenAIAPISecret),
 			OpenAIAPIHost:    os.Getenv(EnvOpenAIAPIHost),
 			Pinecone: SectionPinecone{

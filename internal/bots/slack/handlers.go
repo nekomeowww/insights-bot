@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/samber/lo"
+	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 )
 
@@ -26,10 +27,10 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 		return
 	}
 
-	s.Logger.WithFields(map[string]any{
+	s.Logger.WithFields(logrus.Fields{
 		"user_id":    body.UserId,
 		"channel_id": body.ChannelId,
-	}).Infof("[Slack] Command received: /smr %s", body.Text)
+	}).Infof("slack: command received: /smr %s", body.Text)
 
 	urlString := body.Text
 	var err error

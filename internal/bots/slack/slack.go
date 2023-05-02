@@ -3,6 +3,7 @@ package slack
 import (
 	"context"
 	"errors"
+	"net"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -95,7 +96,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 func Run() func(bot *SlackBot) error {
 	return func(bot *SlackBot) error {
 		if bot == nil {
-			return
+			return nil
 		}
 
 		listener, err := net.Listen("tcp", bot.server.Addr)
@@ -109,7 +110,8 @@ func Run() func(bot *SlackBot) error {
 				bot.Logger.WithField("error", err.Error()).Fatal("slack bot server error")
 			}
 		}()
-		
+
 		go bot.runSmr()
+		return nil
 	}
 }

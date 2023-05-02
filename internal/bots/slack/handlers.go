@@ -6,9 +6,9 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
-	"github.com/slack-go/slack"
 )
 
 type recivedCommandInfo struct {
@@ -48,11 +48,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	}
 
 	if err != nil {
-		ctx.JSON(http.StatusOK, &slack.WebhookMessage{
-			Parse:        slack.MarkdownType,
-			Text:         err.Error(),
-			ResponseType: slack.ResponseTypeInChannel,
-		})
+		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(err.Error()))
 		return
 	}
 
@@ -60,9 +56,5 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	s.processChan <- body
 
 	// response
-	ctx.JSON(http.StatusOK, &slack.WebhookMessage{
-		Parse:        slack.MarkdownType,
-		Text:         "请稍等，量子速读中...",
-		ResponseType: slack.ResponseTypeInChannel,
-	})
+	ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("请稍等，量子速读中..."))
 }

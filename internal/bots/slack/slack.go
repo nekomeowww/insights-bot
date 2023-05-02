@@ -10,6 +10,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/samber/lo"
 	"github.com/slack-go/slack"
 	"go.uber.org/fx"
 )
@@ -48,7 +49,9 @@ type SlackBot struct {
 
 func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 	return func(param NewSlackBotParam) *SlackBot {
-		if param.Config.SlackBotToken == "" {
+		slackConfig := param.Config.Slack
+
+		if slackConfig.BotToken == "" {
 			param.Logger.Warn("slack bot token not provided, will not create bot instance")
 			return nil
 		}
@@ -58,7 +61,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 			logger:      param.Logger,
 			closeChan:   make(chan struct{}, 1),
 			processChan: make(chan recivedCommandInfo, 10),
-			slackCli:    slack.New(param.Config.SlackBotToken),
+			slackCli:    slack.New(slackConfig.BotToken),
 			smrModel:    param.SMR,
 		}
 
@@ -70,7 +73,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 
 		engine := gin.Default()
 		engine.POST("/slack/command/smr", slackBot.postCommandInfo)
-		slackBot.server = &http.Server{Addr: ":7070", Handler: engine}
+		slackBot.server = &http.Server{Addr: lo.Ternary(slackConfig.Port == "", ":7070", slackConfig.Port), Handler: engine}
 
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {

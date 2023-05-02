@@ -91,15 +91,24 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 	}
 }
 
-func Run() func(bot *SlackBot) {
-	return func(bot *SlackBot) {
+func Run() func(bot *SlackBot) error {
+	return func(bot *SlackBot) error {
 		if bot == nil {
 			return
 		}
-		go bot.runSmr()
 
-		if err := bot.server.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-			bot.Logger.WithField("error", err.Error()).Error("slack bot server error")
+		listener, err := net.Listen("tcp", bot.server.Addr)
+		if err != nil {
+			return err
 		}
+
+		go func() {
+			err = bot.server.Serve(listener)
+			if err != nil && err != http.ErrServerClosed {
+				bot.Logger.WithField("error", err.Error()).Fatal("slack bot server error")
+			}
+		}()
+		
+		go bot.runSmr()
 	}
 }

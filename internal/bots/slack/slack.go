@@ -32,8 +32,8 @@ type NewSlackBotParam struct {
 }
 
 type SlackBot struct {
-	Config *configs.Config
-	Logger *logger.Logger
+	config *configs.Config
+	logger *logger.Logger
 
 	smrModel *smr.Model
 
@@ -54,8 +54,8 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 		}
 
 		slackBot := &SlackBot{
-			Config:      param.Config,
-			Logger:      param.Logger,
+			config:      param.Config,
+			logger:      param.Logger,
 			closeChan:   make(chan struct{}, 1),
 			processChan: make(chan recivedCommandInfo, 10),
 			slackCli:    slack.New(param.Config.SlackBotToken),
@@ -80,7 +80,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 					param.Logger.WithField("error", err.Error()).Error("slack bot server shutdown failed")
 					return err
 				}
-				slackBot.Logger.Info("stopped to receiving new requests")
+				slackBot.logger.Info("stopped to receiving new requests")
 
 				slackBot.alreadyClosed = true
 				slackBot.closeChan <- struct{}{}
@@ -107,7 +107,7 @@ func Run() func(bot *SlackBot) error {
 		go func() {
 			err = bot.server.Serve(listener)
 			if err != nil && err != http.ErrServerClosed {
-				bot.Logger.WithField("error", err.Error()).Fatal("slack bot server error")
+				bot.logger.WithField("error", err.Error()).Fatal("slack bot server error")
 			}
 		}()
 

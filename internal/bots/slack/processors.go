@@ -19,18 +19,18 @@ func (b *SlackBot) smr(info recivedCommandInfo) {
 		} else {
 			errMsg = "量子速读失败了。可以再试试？"
 		}
-		b.Logger.WithField("error", err.Error()).Error("slack: summarization failed")
+		b.logger.WithField("error", err.Error()).Error("slack: summarization failed")
 
 		_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(errMsg, false))
 		if err != nil {
-			b.Logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
+			b.logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
 		}
 		return
 	}
 
 	_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
 	if err != nil {
-		b.Logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
+		b.logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
 	}
 }
 
@@ -39,13 +39,13 @@ func (b *SlackBot) runSmr() {
 	for {
 		select {
 		case <-b.closeChan:
-			b.Logger.WithField("last tasks", len(b.processChan)).Info("slack: received stop signal, waiting for all tasks done")
+			b.logger.WithField("last tasks", len(b.processChan)).Info("slack: received stop signal, waiting for all tasks done")
 			needToClose = true
 		case info := <-b.processChan:
 			b.smr(info)
 		}
 		if needToClose && len(b.processChan) == 0 {
-			b.Logger.Info("slack: all tasks done")
+			b.logger.Info("slack: all tasks done")
 			break
 		}
 	}

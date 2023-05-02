@@ -23,11 +23,11 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	var body recivedCommandInfo
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
-		s.Logger.WithField("error", err.Error()).Warn("failed to bind request body, maybe slack request definition changed")
+		s.logger.WithField("error", err.Error()).Warn("failed to bind request body, maybe slack request definition changed")
 		return
 	}
 
-	s.Logger.WithFields(logrus.Fields{
+	s.logger.WithFields(logrus.Fields{
 		"user_id":    body.UserId,
 		"channel_id": body.ChannelId,
 	}).Infof("slack: command received: /smr %s", body.Text)

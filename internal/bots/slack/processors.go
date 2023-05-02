@@ -28,7 +28,7 @@ func (b *SlackBot) smr(info recivedCommandInfo) {
 		return
 	}
 
-	_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(summarization.FormatSummarizationAsMarkdown(), false))
+	_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
 	if err != nil {
 		b.Logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
 	}

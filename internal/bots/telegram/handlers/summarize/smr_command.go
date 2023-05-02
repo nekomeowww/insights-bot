@@ -52,5 +52,5 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		}
 	}
 
-	return c.NewMessageReplyTo(summarization, c.Update.Message.MessageID).WithParseModeHTML(), nil
+	return c.NewMessageReplyTo(summarization.FormatSummarizationAsHTML(), c.Update.Message.MessageID).WithParseModeHTML(), nil
 }

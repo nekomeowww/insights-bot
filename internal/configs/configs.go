@@ -5,7 +5,11 @@ import (
 )
 
 const (
-	EnvTelegramBotToken             = "TELEGRAM_BOT_TOKEN"
+	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN"
+
+	EnvSlackBotToken = "SLACK_BOT_TOKEN"
+	EnvSlackBotPort  = "SLACK_BOT_PORT"
+
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET"
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
@@ -27,6 +31,11 @@ type SectionPinecone struct {
 	Indexes SectionPineconeIndexes
 }
 
+type SectionSlack struct {
+	Port     string
+	BotToken string
+}
+
 type SectionDB struct {
 	ConnectionString string
 }
@@ -38,14 +47,19 @@ type Config struct {
 	Pinecone         SectionPinecone
 	CloverDBPath     string
 	DB               SectionDB
+	Slack            SectionSlack
 }
 
 func NewConfig() func() *Config {
 	return func() *Config {
 		return &Config{
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
-			OpenAIAPISecret:  os.Getenv(EnvOpenAIAPISecret),
-			OpenAIAPIHost:    os.Getenv(EnvOpenAIAPIHost),
+			Slack: SectionSlack{
+				BotToken: os.Getenv(EnvSlackBotToken),
+				Port:     os.Getenv(EnvSlackBotPort),
+			},
+			OpenAIAPISecret: os.Getenv(EnvOpenAIAPISecret),
+			OpenAIAPIHost:   os.Getenv(EnvOpenAIAPIHost),
 			Pinecone: SectionPinecone{
 				ProjectName: os.Getenv(EnvPineconeProjectName),
 				Environment: os.Getenv(EnvPineconeEnvironment),

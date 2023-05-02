@@ -8,7 +8,10 @@ services:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
       - DB_CONNECTION_STR=<PostgresSQL database URL>
+      # - SLACK_BOT_TOKEN=<Slack Bot User OAuth Token> # optional, uncomment this if you want to enable slack integration
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
+    ports:
+      - 7070:7070
     profiles:
       - hub
 
@@ -19,7 +22,10 @@ services:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
       - DB_CONNECTION_STR=<PostgresSQL database URL>
+      # - SLACK_BOT_TOKEN=<Slack Bot User OAuth Token> # optional, uncomment this if you want to enable slack integration
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
+    ports:
+      - 7070:7070
     build:
       context: .
       dockerfile: ./Dockerfile

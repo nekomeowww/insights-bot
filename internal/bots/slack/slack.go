@@ -64,6 +64,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 		_, err := slackBot.slackCli.AuthTest()
 		if err != nil {
 			param.Logger.WithError(err).Fatalf("slack bot token auth test failed")
+			return nil
 		}
 
 		engine := gin.Default()

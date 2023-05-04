@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/samber/lo"
@@ -53,7 +54,11 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	).First(context.Background())
 	if err != nil {
 		s.logger.WithField("error", err.Error()).Warn("slack: failed to get team's access token")
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		if ent.IsNotFound(err) {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
@@ -83,28 +88,10 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 		return
 	}
 
-	affectRows, err := b.ent.SlackOAuthCredentials.Update().
-		Where(slackoauthcredentials.TeamID(resp.Team.ID)).
-		SetAccessToken(resp.AccessToken).
-		Save(context.Background())
-
+	err = b.createNewSlackCredential(resp.Team.ID, resp.AccessToken)
 	if err != nil {
-		b.logger.WithError(err).Warn("slack: failed to update access token")
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return
-	}
-
-	if affectRows == 0 {
-		// create
-		err = b.ent.SlackOAuthCredentials.Create().
-			SetTeamID(resp.Team.ID).
-			SetAccessToken(resp.AccessToken).
-			Exec(context.Background())
-		if err != nil {
-			b.logger.WithError(err).Warn("slack: failed to save access token")
-			ctx.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
 	}
 
 	ctx.Header("content-type", "text/html")

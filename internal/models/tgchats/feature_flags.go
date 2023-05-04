@@ -122,7 +122,7 @@ func (m *Model) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
 	featureFlagsChats, err := m.ent.TelegramChatFeatureFlags.
 		Query().
 		Where(
-			telegramchatfeatureflags.ChatType(string(telegram.ChatTypeGroup)),
+			telegramchatfeatureflags.ChatTypeIn(string(telegram.ChatTypeGroup), string(telegram.ChatTypeSuperGroup)),
 			telegramchatfeatureflags.FeatureChatHistoriesRecap(true),
 		).
 		All(context.Background())

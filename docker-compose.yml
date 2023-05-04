@@ -21,7 +21,7 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
-      - DB_CONNECTION_STR=<PostgresSQL database URL>
+      - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
       # - SLACK_BOT_TOKEN=<Slack Bot User OAuth Token> # optional, uncomment this if you want to enable slack integration
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
     ports:
@@ -29,5 +29,17 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    profiles:
+      - local
+
+  db_local:
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./.postgres/data:/var/lib/postgresql/data
     profiles:
       - local

@@ -1,0 +1,12 @@
+# Folders
+.git
+.github/
+.postgres/
+docs/
+
+# Files
+.dockerignore
+.gitignore
+docker-compose.yml
+Dockerfile
+README.md

@@ -7,7 +7,7 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
+	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
@@ -48,8 +48,8 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	}
 
 	// get access token
-	token, err := s.ent.SavedSlackToken.Query().Where(
-		savedslacktoken.TeamID(body.TeamId),
+	token, err := s.ent.SlackOAuthCredentials.Query().Where(
+		slackoauthcredentials.TeamID(body.TeamId),
 	).First(context.Background())
 	if err != nil {
 		s.logger.WithField("error", err.Error()).Warn("slack: failed to get team's access token")
@@ -83,8 +83,8 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 		return
 	}
 
-	affectRows, err := b.ent.SavedSlackToken.Update().
-		Where(savedslacktoken.TeamID(resp.Team.ID)).
+	affectRows, err := b.ent.SlackOAuthCredentials.Update().
+		Where(slackoauthcredentials.TeamID(resp.Team.ID)).
 		SetAccessToken(resp.AccessToken).
 		Save(context.Background())
 
@@ -96,7 +96,7 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 
 	if affectRows == 0 {
 		// create
-		err = b.ent.SavedSlackToken.Create().
+		err = b.ent.SlackOAuthCredentials.Create().
 			SetTeamID(resp.Team.ID).
 			SetAccessToken(resp.AccessToken).
 			Exec(context.Background())

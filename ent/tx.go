@@ -14,8 +14,8 @@ type Tx struct {
 	config
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
-	// SavedSlackToken is the client for interacting with the SavedSlackToken builders.
-	SavedSlackToken *SavedSlackTokenClient
+	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
+	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
 
@@ -150,7 +150,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.ChatHistories = NewChatHistoriesClient(tx.config)
-	tx.SavedSlackToken = NewSavedSlackTokenClient(tx.config)
+	tx.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(tx.config)
 	tx.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(tx.config)
 }
 

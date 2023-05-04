@@ -8,13 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
-// SavedSlackToken holds the schema definition for the SavedSlackToken entity.
-type SavedSlackToken struct {
+// SlackOAuthCredentials holds the schema definition for the SlackOAuthCredentials entity.
+type SlackOAuthCredentials struct {
 	ent.Schema
 }
 
 // Fields of the SavedSlackToken.
-func (SavedSlackToken) Fields() []ent.Field {
+func (SlackOAuthCredentials) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique().Immutable(),
 		field.Text("team_id").NotEmpty().Unique().Immutable(),
@@ -25,6 +25,6 @@ func (SavedSlackToken) Fields() []ent.Field {
 }
 
 // Edges of the SavedSlackToken.
-func (SavedSlackToken) Edges() []ent.Edge {
+func (SlackOAuthCredentials) Edges() []ent.Edge {
 	return nil
 }

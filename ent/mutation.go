@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/predicate"
-	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
+	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 )
 
@@ -27,7 +27,7 @@ const (
 
 	// Node types.
 	TypeChatHistories            = "ChatHistories"
-	TypeSavedSlackToken          = "SavedSlackToken"
+	TypeSlackOAuthCredentials    = "SlackOAuthCredentials"
 	TypeTelegramChatFeatureFlags = "TelegramChatFeatureFlags"
 )
 
@@ -1386,8 +1386,8 @@ func (m *ChatHistoriesMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ChatHistories edge %s", name)
 }
 
-// SavedSlackTokenMutation represents an operation that mutates the SavedSlackToken nodes in the graph.
-type SavedSlackTokenMutation struct {
+// SlackOAuthCredentialsMutation represents an operation that mutates the SlackOAuthCredentials nodes in the graph.
+type SlackOAuthCredentialsMutation struct {
 	config
 	op            Op
 	typ           string
@@ -1400,21 +1400,21 @@ type SavedSlackTokenMutation struct {
 	addupdated_at *int64
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*SavedSlackToken, error)
-	predicates    []predicate.SavedSlackToken
+	oldValue      func(context.Context) (*SlackOAuthCredentials, error)
+	predicates    []predicate.SlackOAuthCredentials
 }
 
-var _ ent.Mutation = (*SavedSlackTokenMutation)(nil)
+var _ ent.Mutation = (*SlackOAuthCredentialsMutation)(nil)
 
-// savedslacktokenOption allows management of the mutation configuration using functional options.
-type savedslacktokenOption func(*SavedSlackTokenMutation)
+// slackoauthcredentialsOption allows management of the mutation configuration using functional options.
+type slackoauthcredentialsOption func(*SlackOAuthCredentialsMutation)
 
-// newSavedSlackTokenMutation creates new mutation for the SavedSlackToken entity.
-func newSavedSlackTokenMutation(c config, op Op, opts ...savedslacktokenOption) *SavedSlackTokenMutation {
-	m := &SavedSlackTokenMutation{
+// newSlackOAuthCredentialsMutation creates new mutation for the SlackOAuthCredentials entity.
+func newSlackOAuthCredentialsMutation(c config, op Op, opts ...slackoauthcredentialsOption) *SlackOAuthCredentialsMutation {
+	m := &SlackOAuthCredentialsMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeSavedSlackToken,
+		typ:           TypeSlackOAuthCredentials,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -1423,20 +1423,20 @@ func newSavedSlackTokenMutation(c config, op Op, opts ...savedslacktokenOption) 
 	return m
 }
 
-// withSavedSlackTokenID sets the ID field of the mutation.
-func withSavedSlackTokenID(id uuid.UUID) savedslacktokenOption {
-	return func(m *SavedSlackTokenMutation) {
+// withSlackOAuthCredentialsID sets the ID field of the mutation.
+func withSlackOAuthCredentialsID(id uuid.UUID) slackoauthcredentialsOption {
+	return func(m *SlackOAuthCredentialsMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *SavedSlackToken
+			value *SlackOAuthCredentials
 		)
-		m.oldValue = func(ctx context.Context) (*SavedSlackToken, error) {
+		m.oldValue = func(ctx context.Context) (*SlackOAuthCredentials, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().SavedSlackToken.Get(ctx, id)
+					value, err = m.Client().SlackOAuthCredentials.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -1445,10 +1445,10 @@ func withSavedSlackTokenID(id uuid.UUID) savedslacktokenOption {
 	}
 }
 
-// withSavedSlackToken sets the old SavedSlackToken of the mutation.
-func withSavedSlackToken(node *SavedSlackToken) savedslacktokenOption {
-	return func(m *SavedSlackTokenMutation) {
-		m.oldValue = func(context.Context) (*SavedSlackToken, error) {
+// withSlackOAuthCredentials sets the old SlackOAuthCredentials of the mutation.
+func withSlackOAuthCredentials(node *SlackOAuthCredentials) slackoauthcredentialsOption {
+	return func(m *SlackOAuthCredentialsMutation) {
+		m.oldValue = func(context.Context) (*SlackOAuthCredentials, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -1457,7 +1457,7 @@ func withSavedSlackToken(node *SavedSlackToken) savedslacktokenOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m SavedSlackTokenMutation) Client() *Client {
+func (m SlackOAuthCredentialsMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -1465,7 +1465,7 @@ func (m SavedSlackTokenMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m SavedSlackTokenMutation) Tx() (*Tx, error) {
+func (m SlackOAuthCredentialsMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -1475,14 +1475,14 @@ func (m SavedSlackTokenMutation) Tx() (*Tx, error) {
 }
 
 // SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of SavedSlackToken entities.
-func (m *SavedSlackTokenMutation) SetID(id uuid.UUID) {
+// operation is only accepted on creation of SlackOAuthCredentials entities.
+func (m *SlackOAuthCredentialsMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *SavedSlackTokenMutation) ID() (id uuid.UUID, exists bool) {
+func (m *SlackOAuthCredentialsMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -1493,7 +1493,7 @@ func (m *SavedSlackTokenMutation) ID() (id uuid.UUID, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *SavedSlackTokenMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+func (m *SlackOAuthCredentialsMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -1502,19 +1502,19 @@ func (m *SavedSlackTokenMutation) IDs(ctx context.Context) ([]uuid.UUID, error) 
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().SavedSlackToken.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().SlackOAuthCredentials.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetTeamID sets the "team_id" field.
-func (m *SavedSlackTokenMutation) SetTeamID(s string) {
+func (m *SlackOAuthCredentialsMutation) SetTeamID(s string) {
 	m.team_id = &s
 }
 
 // TeamID returns the value of the "team_id" field in the mutation.
-func (m *SavedSlackTokenMutation) TeamID() (r string, exists bool) {
+func (m *SlackOAuthCredentialsMutation) TeamID() (r string, exists bool) {
 	v := m.team_id
 	if v == nil {
 		return
@@ -1522,10 +1522,10 @@ func (m *SavedSlackTokenMutation) TeamID() (r string, exists bool) {
 	return *v, true
 }
 
-// OldTeamID returns the old "team_id" field's value of the SavedSlackToken entity.
-// If the SavedSlackToken object wasn't provided to the builder, the object is fetched from the database.
+// OldTeamID returns the old "team_id" field's value of the SlackOAuthCredentials entity.
+// If the SlackOAuthCredentials object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SavedSlackTokenMutation) OldTeamID(ctx context.Context) (v string, err error) {
+func (m *SlackOAuthCredentialsMutation) OldTeamID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTeamID is only allowed on UpdateOne operations")
 	}
@@ -1540,17 +1540,17 @@ func (m *SavedSlackTokenMutation) OldTeamID(ctx context.Context) (v string, err 
 }
 
 // ResetTeamID resets all changes to the "team_id" field.
-func (m *SavedSlackTokenMutation) ResetTeamID() {
+func (m *SlackOAuthCredentialsMutation) ResetTeamID() {
 	m.team_id = nil
 }
 
 // SetAccessToken sets the "access_token" field.
-func (m *SavedSlackTokenMutation) SetAccessToken(s string) {
+func (m *SlackOAuthCredentialsMutation) SetAccessToken(s string) {
 	m.access_token = &s
 }
 
 // AccessToken returns the value of the "access_token" field in the mutation.
-func (m *SavedSlackTokenMutation) AccessToken() (r string, exists bool) {
+func (m *SlackOAuthCredentialsMutation) AccessToken() (r string, exists bool) {
 	v := m.access_token
 	if v == nil {
 		return
@@ -1558,10 +1558,10 @@ func (m *SavedSlackTokenMutation) AccessToken() (r string, exists bool) {
 	return *v, true
 }
 
-// OldAccessToken returns the old "access_token" field's value of the SavedSlackToken entity.
-// If the SavedSlackToken object wasn't provided to the builder, the object is fetched from the database.
+// OldAccessToken returns the old "access_token" field's value of the SlackOAuthCredentials entity.
+// If the SlackOAuthCredentials object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SavedSlackTokenMutation) OldAccessToken(ctx context.Context) (v string, err error) {
+func (m *SlackOAuthCredentialsMutation) OldAccessToken(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldAccessToken is only allowed on UpdateOne operations")
 	}
@@ -1576,18 +1576,18 @@ func (m *SavedSlackTokenMutation) OldAccessToken(ctx context.Context) (v string,
 }
 
 // ResetAccessToken resets all changes to the "access_token" field.
-func (m *SavedSlackTokenMutation) ResetAccessToken() {
+func (m *SlackOAuthCredentialsMutation) ResetAccessToken() {
 	m.access_token = nil
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *SavedSlackTokenMutation) SetCreatedAt(i int64) {
+func (m *SlackOAuthCredentialsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
 	m.addcreated_at = nil
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *SavedSlackTokenMutation) CreatedAt() (r int64, exists bool) {
+func (m *SlackOAuthCredentialsMutation) CreatedAt() (r int64, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -1595,10 +1595,10 @@ func (m *SavedSlackTokenMutation) CreatedAt() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldCreatedAt returns the old "created_at" field's value of the SavedSlackToken entity.
-// If the SavedSlackToken object wasn't provided to the builder, the object is fetched from the database.
+// OldCreatedAt returns the old "created_at" field's value of the SlackOAuthCredentials entity.
+// If the SlackOAuthCredentials object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SavedSlackTokenMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+func (m *SlackOAuthCredentialsMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -1613,7 +1613,7 @@ func (m *SavedSlackTokenMutation) OldCreatedAt(ctx context.Context) (v int64, er
 }
 
 // AddCreatedAt adds i to the "created_at" field.
-func (m *SavedSlackTokenMutation) AddCreatedAt(i int64) {
+func (m *SlackOAuthCredentialsMutation) AddCreatedAt(i int64) {
 	if m.addcreated_at != nil {
 		*m.addcreated_at += i
 	} else {
@@ -1622,7 +1622,7 @@ func (m *SavedSlackTokenMutation) AddCreatedAt(i int64) {
 }
 
 // AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
-func (m *SavedSlackTokenMutation) AddedCreatedAt() (r int64, exists bool) {
+func (m *SlackOAuthCredentialsMutation) AddedCreatedAt() (r int64, exists bool) {
 	v := m.addcreated_at
 	if v == nil {
 		return
@@ -1631,19 +1631,19 @@ func (m *SavedSlackTokenMutation) AddedCreatedAt() (r int64, exists bool) {
 }
 
 // ResetCreatedAt resets all changes to the "created_at" field.
-func (m *SavedSlackTokenMutation) ResetCreatedAt() {
+func (m *SlackOAuthCredentialsMutation) ResetCreatedAt() {
 	m.created_at = nil
 	m.addcreated_at = nil
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (m *SavedSlackTokenMutation) SetUpdatedAt(i int64) {
+func (m *SlackOAuthCredentialsMutation) SetUpdatedAt(i int64) {
 	m.updated_at = &i
 	m.addupdated_at = nil
 }
 
 // UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *SavedSlackTokenMutation) UpdatedAt() (r int64, exists bool) {
+func (m *SlackOAuthCredentialsMutation) UpdatedAt() (r int64, exists bool) {
 	v := m.updated_at
 	if v == nil {
 		return
@@ -1651,10 +1651,10 @@ func (m *SavedSlackTokenMutation) UpdatedAt() (r int64, exists bool) {
 	return *v, true
 }
 
-// OldUpdatedAt returns the old "updated_at" field's value of the SavedSlackToken entity.
-// If the SavedSlackToken object wasn't provided to the builder, the object is fetched from the database.
+// OldUpdatedAt returns the old "updated_at" field's value of the SlackOAuthCredentials entity.
+// If the SlackOAuthCredentials object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SavedSlackTokenMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+func (m *SlackOAuthCredentialsMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
 	}
@@ -1669,7 +1669,7 @@ func (m *SavedSlackTokenMutation) OldUpdatedAt(ctx context.Context) (v int64, er
 }
 
 // AddUpdatedAt adds i to the "updated_at" field.
-func (m *SavedSlackTokenMutation) AddUpdatedAt(i int64) {
+func (m *SlackOAuthCredentialsMutation) AddUpdatedAt(i int64) {
 	if m.addupdated_at != nil {
 		*m.addupdated_at += i
 	} else {
@@ -1678,7 +1678,7 @@ func (m *SavedSlackTokenMutation) AddUpdatedAt(i int64) {
 }
 
 // AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
-func (m *SavedSlackTokenMutation) AddedUpdatedAt() (r int64, exists bool) {
+func (m *SlackOAuthCredentialsMutation) AddedUpdatedAt() (r int64, exists bool) {
 	v := m.addupdated_at
 	if v == nil {
 		return
@@ -1687,20 +1687,20 @@ func (m *SavedSlackTokenMutation) AddedUpdatedAt() (r int64, exists bool) {
 }
 
 // ResetUpdatedAt resets all changes to the "updated_at" field.
-func (m *SavedSlackTokenMutation) ResetUpdatedAt() {
+func (m *SlackOAuthCredentialsMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 	m.addupdated_at = nil
 }
 
-// Where appends a list predicates to the SavedSlackTokenMutation builder.
-func (m *SavedSlackTokenMutation) Where(ps ...predicate.SavedSlackToken) {
+// Where appends a list predicates to the SlackOAuthCredentialsMutation builder.
+func (m *SlackOAuthCredentialsMutation) Where(ps ...predicate.SlackOAuthCredentials) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the SavedSlackTokenMutation builder. Using this method,
+// WhereP appends storage-level predicates to the SlackOAuthCredentialsMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *SavedSlackTokenMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.SavedSlackToken, len(ps))
+func (m *SlackOAuthCredentialsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SlackOAuthCredentials, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -1708,36 +1708,36 @@ func (m *SavedSlackTokenMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *SavedSlackTokenMutation) Op() Op {
+func (m *SlackOAuthCredentialsMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *SavedSlackTokenMutation) SetOp(op Op) {
+func (m *SlackOAuthCredentialsMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (SavedSlackToken).
-func (m *SavedSlackTokenMutation) Type() string {
+// Type returns the node type of this mutation (SlackOAuthCredentials).
+func (m *SlackOAuthCredentialsMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *SavedSlackTokenMutation) Fields() []string {
+func (m *SlackOAuthCredentialsMutation) Fields() []string {
 	fields := make([]string, 0, 4)
 	if m.team_id != nil {
-		fields = append(fields, savedslacktoken.FieldTeamID)
+		fields = append(fields, slackoauthcredentials.FieldTeamID)
 	}
 	if m.access_token != nil {
-		fields = append(fields, savedslacktoken.FieldAccessToken)
+		fields = append(fields, slackoauthcredentials.FieldAccessToken)
 	}
 	if m.created_at != nil {
-		fields = append(fields, savedslacktoken.FieldCreatedAt)
+		fields = append(fields, slackoauthcredentials.FieldCreatedAt)
 	}
 	if m.updated_at != nil {
-		fields = append(fields, savedslacktoken.FieldUpdatedAt)
+		fields = append(fields, slackoauthcredentials.FieldUpdatedAt)
 	}
 	return fields
 }
@@ -1745,15 +1745,15 @@ func (m *SavedSlackTokenMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *SavedSlackTokenMutation) Field(name string) (ent.Value, bool) {
+func (m *SlackOAuthCredentialsMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case savedslacktoken.FieldTeamID:
+	case slackoauthcredentials.FieldTeamID:
 		return m.TeamID()
-	case savedslacktoken.FieldAccessToken:
+	case slackoauthcredentials.FieldAccessToken:
 		return m.AccessToken()
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		return m.CreatedAt()
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		return m.UpdatedAt()
 	}
 	return nil, false
@@ -1762,47 +1762,47 @@ func (m *SavedSlackTokenMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *SavedSlackTokenMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *SlackOAuthCredentialsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case savedslacktoken.FieldTeamID:
+	case slackoauthcredentials.FieldTeamID:
 		return m.OldTeamID(ctx)
-	case savedslacktoken.FieldAccessToken:
+	case slackoauthcredentials.FieldAccessToken:
 		return m.OldAccessToken(ctx)
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown SavedSlackToken field %s", name)
+	return nil, fmt.Errorf("unknown SlackOAuthCredentials field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *SavedSlackTokenMutation) SetField(name string, value ent.Value) error {
+func (m *SlackOAuthCredentialsMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case savedslacktoken.FieldTeamID:
+	case slackoauthcredentials.FieldTeamID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTeamID(v)
 		return nil
-	case savedslacktoken.FieldAccessToken:
+	case slackoauthcredentials.FieldAccessToken:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAccessToken(v)
 		return nil
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -1810,18 +1810,18 @@ func (m *SavedSlackTokenMutation) SetField(name string, value ent.Value) error {
 		m.SetUpdatedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown SavedSlackToken field %s", name)
+	return fmt.Errorf("unknown SlackOAuthCredentials field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *SavedSlackTokenMutation) AddedFields() []string {
+func (m *SlackOAuthCredentialsMutation) AddedFields() []string {
 	var fields []string
 	if m.addcreated_at != nil {
-		fields = append(fields, savedslacktoken.FieldCreatedAt)
+		fields = append(fields, slackoauthcredentials.FieldCreatedAt)
 	}
 	if m.addupdated_at != nil {
-		fields = append(fields, savedslacktoken.FieldUpdatedAt)
+		fields = append(fields, slackoauthcredentials.FieldUpdatedAt)
 	}
 	return fields
 }
@@ -1829,11 +1829,11 @@ func (m *SavedSlackTokenMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *SavedSlackTokenMutation) AddedField(name string) (ent.Value, bool) {
+func (m *SlackOAuthCredentialsMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		return m.AddedCreatedAt()
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		return m.AddedUpdatedAt()
 	}
 	return nil, false
@@ -1842,16 +1842,16 @@ func (m *SavedSlackTokenMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *SavedSlackTokenMutation) AddField(name string, value ent.Value) error {
+func (m *SlackOAuthCredentialsMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreatedAt(v)
 		return nil
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -1859,94 +1859,94 @@ func (m *SavedSlackTokenMutation) AddField(name string, value ent.Value) error {
 		m.AddUpdatedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown SavedSlackToken numeric field %s", name)
+	return fmt.Errorf("unknown SlackOAuthCredentials numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *SavedSlackTokenMutation) ClearedFields() []string {
+func (m *SlackOAuthCredentialsMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *SavedSlackTokenMutation) FieldCleared(name string) bool {
+func (m *SlackOAuthCredentialsMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *SavedSlackTokenMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown SavedSlackToken nullable field %s", name)
+func (m *SlackOAuthCredentialsMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown SlackOAuthCredentials nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *SavedSlackTokenMutation) ResetField(name string) error {
+func (m *SlackOAuthCredentialsMutation) ResetField(name string) error {
 	switch name {
-	case savedslacktoken.FieldTeamID:
+	case slackoauthcredentials.FieldTeamID:
 		m.ResetTeamID()
 		return nil
-	case savedslacktoken.FieldAccessToken:
+	case slackoauthcredentials.FieldAccessToken:
 		m.ResetAccessToken()
 		return nil
-	case savedslacktoken.FieldCreatedAt:
+	case slackoauthcredentials.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
-	case savedslacktoken.FieldUpdatedAt:
+	case slackoauthcredentials.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown SavedSlackToken field %s", name)
+	return fmt.Errorf("unknown SlackOAuthCredentials field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *SavedSlackTokenMutation) AddedEdges() []string {
+func (m *SlackOAuthCredentialsMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *SavedSlackTokenMutation) AddedIDs(name string) []ent.Value {
+func (m *SlackOAuthCredentialsMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *SavedSlackTokenMutation) RemovedEdges() []string {
+func (m *SlackOAuthCredentialsMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *SavedSlackTokenMutation) RemovedIDs(name string) []ent.Value {
+func (m *SlackOAuthCredentialsMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *SavedSlackTokenMutation) ClearedEdges() []string {
+func (m *SlackOAuthCredentialsMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *SavedSlackTokenMutation) EdgeCleared(name string) bool {
+func (m *SlackOAuthCredentialsMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *SavedSlackTokenMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown SavedSlackToken unique edge %s", name)
+func (m *SlackOAuthCredentialsMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SlackOAuthCredentials unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *SavedSlackTokenMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown SavedSlackToken edge %s", name)
+func (m *SlackOAuthCredentialsMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SlackOAuthCredentials edge %s", name)
 }
 
 // TelegramChatFeatureFlagsMutation represents an operation that mutates the TelegramChatFeatureFlags nodes in the graph.

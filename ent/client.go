@@ -15,7 +15,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
-	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
+	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 
 	"github.com/nekomeowww/insights-bot/ent/internal"
@@ -28,8 +28,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
-	// SavedSlackToken is the client for interacting with the SavedSlackToken builders.
-	SavedSlackToken *SavedSlackTokenClient
+	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
+	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
 }
@@ -46,7 +46,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ChatHistories = NewChatHistoriesClient(c.config)
-	c.SavedSlackToken = NewSavedSlackTokenClient(c.config)
+	c.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(c.config)
 	c.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(c.config)
 }
 
@@ -133,7 +133,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
-		SavedSlackToken:          NewSavedSlackTokenClient(cfg),
+		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
@@ -155,7 +155,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
-		SavedSlackToken:          NewSavedSlackTokenClient(cfg),
+		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
@@ -186,7 +186,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.ChatHistories.Use(hooks...)
-	c.SavedSlackToken.Use(hooks...)
+	c.SlackOAuthCredentials.Use(hooks...)
 	c.TelegramChatFeatureFlags.Use(hooks...)
 }
 
@@ -194,7 +194,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.ChatHistories.Intercept(interceptors...)
-	c.SavedSlackToken.Intercept(interceptors...)
+	c.SlackOAuthCredentials.Intercept(interceptors...)
 	c.TelegramChatFeatureFlags.Intercept(interceptors...)
 }
 
@@ -203,8 +203,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *ChatHistoriesMutation:
 		return c.ChatHistories.mutate(ctx, m)
-	case *SavedSlackTokenMutation:
-		return c.SavedSlackToken.mutate(ctx, m)
+	case *SlackOAuthCredentialsMutation:
+		return c.SlackOAuthCredentials.mutate(ctx, m)
 	case *TelegramChatFeatureFlagsMutation:
 		return c.TelegramChatFeatureFlags.mutate(ctx, m)
 	default:
@@ -330,92 +330,92 @@ func (c *ChatHistoriesClient) mutate(ctx context.Context, m *ChatHistoriesMutati
 	}
 }
 
-// SavedSlackTokenClient is a client for the SavedSlackToken schema.
-type SavedSlackTokenClient struct {
+// SlackOAuthCredentialsClient is a client for the SlackOAuthCredentials schema.
+type SlackOAuthCredentialsClient struct {
 	config
 }
 
-// NewSavedSlackTokenClient returns a client for the SavedSlackToken from the given config.
-func NewSavedSlackTokenClient(c config) *SavedSlackTokenClient {
-	return &SavedSlackTokenClient{config: c}
+// NewSlackOAuthCredentialsClient returns a client for the SlackOAuthCredentials from the given config.
+func NewSlackOAuthCredentialsClient(c config) *SlackOAuthCredentialsClient {
+	return &SlackOAuthCredentialsClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `savedslacktoken.Hooks(f(g(h())))`.
-func (c *SavedSlackTokenClient) Use(hooks ...Hook) {
-	c.hooks.SavedSlackToken = append(c.hooks.SavedSlackToken, hooks...)
+// A call to `Use(f, g, h)` equals to `slackoauthcredentials.Hooks(f(g(h())))`.
+func (c *SlackOAuthCredentialsClient) Use(hooks ...Hook) {
+	c.hooks.SlackOAuthCredentials = append(c.hooks.SlackOAuthCredentials, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `savedslacktoken.Intercept(f(g(h())))`.
-func (c *SavedSlackTokenClient) Intercept(interceptors ...Interceptor) {
-	c.inters.SavedSlackToken = append(c.inters.SavedSlackToken, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `slackoauthcredentials.Intercept(f(g(h())))`.
+func (c *SlackOAuthCredentialsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SlackOAuthCredentials = append(c.inters.SlackOAuthCredentials, interceptors...)
 }
 
-// Create returns a builder for creating a SavedSlackToken entity.
-func (c *SavedSlackTokenClient) Create() *SavedSlackTokenCreate {
-	mutation := newSavedSlackTokenMutation(c.config, OpCreate)
-	return &SavedSlackTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a SlackOAuthCredentials entity.
+func (c *SlackOAuthCredentialsClient) Create() *SlackOAuthCredentialsCreate {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpCreate)
+	return &SlackOAuthCredentialsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of SavedSlackToken entities.
-func (c *SavedSlackTokenClient) CreateBulk(builders ...*SavedSlackTokenCreate) *SavedSlackTokenCreateBulk {
-	return &SavedSlackTokenCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of SlackOAuthCredentials entities.
+func (c *SlackOAuthCredentialsClient) CreateBulk(builders ...*SlackOAuthCredentialsCreate) *SlackOAuthCredentialsCreateBulk {
+	return &SlackOAuthCredentialsCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for SavedSlackToken.
-func (c *SavedSlackTokenClient) Update() *SavedSlackTokenUpdate {
-	mutation := newSavedSlackTokenMutation(c.config, OpUpdate)
-	return &SavedSlackTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for SlackOAuthCredentials.
+func (c *SlackOAuthCredentialsClient) Update() *SlackOAuthCredentialsUpdate {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdate)
+	return &SlackOAuthCredentialsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SavedSlackTokenClient) UpdateOne(sst *SavedSlackToken) *SavedSlackTokenUpdateOne {
-	mutation := newSavedSlackTokenMutation(c.config, OpUpdateOne, withSavedSlackToken(sst))
-	return &SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SlackOAuthCredentialsClient) UpdateOne(soc *SlackOAuthCredentials) *SlackOAuthCredentialsUpdateOne {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdateOne, withSlackOAuthCredentials(soc))
+	return &SlackOAuthCredentialsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *SavedSlackTokenClient) UpdateOneID(id uuid.UUID) *SavedSlackTokenUpdateOne {
-	mutation := newSavedSlackTokenMutation(c.config, OpUpdateOne, withSavedSlackTokenID(id))
-	return &SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *SlackOAuthCredentialsClient) UpdateOneID(id uuid.UUID) *SlackOAuthCredentialsUpdateOne {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdateOne, withSlackOAuthCredentialsID(id))
+	return &SlackOAuthCredentialsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for SavedSlackToken.
-func (c *SavedSlackTokenClient) Delete() *SavedSlackTokenDelete {
-	mutation := newSavedSlackTokenMutation(c.config, OpDelete)
-	return &SavedSlackTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for SlackOAuthCredentials.
+func (c *SlackOAuthCredentialsClient) Delete() *SlackOAuthCredentialsDelete {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpDelete)
+	return &SlackOAuthCredentialsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SavedSlackTokenClient) DeleteOne(sst *SavedSlackToken) *SavedSlackTokenDeleteOne {
-	return c.DeleteOneID(sst.ID)
+func (c *SlackOAuthCredentialsClient) DeleteOne(soc *SlackOAuthCredentials) *SlackOAuthCredentialsDeleteOne {
+	return c.DeleteOneID(soc.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *SavedSlackTokenClient) DeleteOneID(id uuid.UUID) *SavedSlackTokenDeleteOne {
-	builder := c.Delete().Where(savedslacktoken.ID(id))
+func (c *SlackOAuthCredentialsClient) DeleteOneID(id uuid.UUID) *SlackOAuthCredentialsDeleteOne {
+	builder := c.Delete().Where(slackoauthcredentials.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &SavedSlackTokenDeleteOne{builder}
+	return &SlackOAuthCredentialsDeleteOne{builder}
 }
 
-// Query returns a query builder for SavedSlackToken.
-func (c *SavedSlackTokenClient) Query() *SavedSlackTokenQuery {
-	return &SavedSlackTokenQuery{
+// Query returns a query builder for SlackOAuthCredentials.
+func (c *SlackOAuthCredentialsClient) Query() *SlackOAuthCredentialsQuery {
+	return &SlackOAuthCredentialsQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeSavedSlackToken},
+		ctx:    &QueryContext{Type: TypeSlackOAuthCredentials},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a SavedSlackToken entity by its id.
-func (c *SavedSlackTokenClient) Get(ctx context.Context, id uuid.UUID) (*SavedSlackToken, error) {
-	return c.Query().Where(savedslacktoken.ID(id)).Only(ctx)
+// Get returns a SlackOAuthCredentials entity by its id.
+func (c *SlackOAuthCredentialsClient) Get(ctx context.Context, id uuid.UUID) (*SlackOAuthCredentials, error) {
+	return c.Query().Where(slackoauthcredentials.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *SavedSlackTokenClient) GetX(ctx context.Context, id uuid.UUID) *SavedSlackToken {
+func (c *SlackOAuthCredentialsClient) GetX(ctx context.Context, id uuid.UUID) *SlackOAuthCredentials {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -424,27 +424,27 @@ func (c *SavedSlackTokenClient) GetX(ctx context.Context, id uuid.UUID) *SavedSl
 }
 
 // Hooks returns the client hooks.
-func (c *SavedSlackTokenClient) Hooks() []Hook {
-	return c.hooks.SavedSlackToken
+func (c *SlackOAuthCredentialsClient) Hooks() []Hook {
+	return c.hooks.SlackOAuthCredentials
 }
 
 // Interceptors returns the client interceptors.
-func (c *SavedSlackTokenClient) Interceptors() []Interceptor {
-	return c.inters.SavedSlackToken
+func (c *SlackOAuthCredentialsClient) Interceptors() []Interceptor {
+	return c.inters.SlackOAuthCredentials
 }
 
-func (c *SavedSlackTokenClient) mutate(ctx context.Context, m *SavedSlackTokenMutation) (Value, error) {
+func (c *SlackOAuthCredentialsClient) mutate(ctx context.Context, m *SlackOAuthCredentialsMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&SavedSlackTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&SlackOAuthCredentialsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&SavedSlackTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&SlackOAuthCredentialsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&SlackOAuthCredentialsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&SavedSlackTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&SlackOAuthCredentialsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown SavedSlackToken mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown SlackOAuthCredentials mutation op: %q", m.Op())
 	}
 }
 
@@ -569,10 +569,10 @@ func (c *TelegramChatFeatureFlagsClient) mutate(ctx context.Context, m *Telegram
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ChatHistories, SavedSlackToken, TelegramChatFeatureFlags []ent.Hook
+		ChatHistories, SlackOAuthCredentials, TelegramChatFeatureFlags []ent.Hook
 	}
 	inters struct {
-		ChatHistories, SavedSlackToken, TelegramChatFeatureFlags []ent.Interceptor
+		ChatHistories, SlackOAuthCredentials, TelegramChatFeatureFlags []ent.Interceptor
 	}
 )
 

@@ -9,11 +9,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
-	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
+	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 )
 
-// SavedSlackToken is the model entity for the SavedSlackToken schema.
-type SavedSlackToken struct {
+// SlackOAuthCredentials is the model entity for the SlackOAuthCredentials schema.
+type SlackOAuthCredentials struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
@@ -29,15 +29,15 @@ type SavedSlackToken struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*SavedSlackToken) scanValues(columns []string) ([]any, error) {
+func (*SlackOAuthCredentials) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case savedslacktoken.FieldCreatedAt, savedslacktoken.FieldUpdatedAt:
+		case slackoauthcredentials.FieldCreatedAt, slackoauthcredentials.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case savedslacktoken.FieldTeamID, savedslacktoken.FieldAccessToken:
+		case slackoauthcredentials.FieldTeamID, slackoauthcredentials.FieldAccessToken:
 			values[i] = new(sql.NullString)
-		case savedslacktoken.FieldID:
+		case slackoauthcredentials.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -47,93 +47,93 @@ func (*SavedSlackToken) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the SavedSlackToken fields.
-func (sst *SavedSlackToken) assignValues(columns []string, values []any) error {
+// to the SlackOAuthCredentials fields.
+func (soc *SlackOAuthCredentials) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case savedslacktoken.FieldID:
+		case slackoauthcredentials.FieldID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				sst.ID = *value
+				soc.ID = *value
 			}
-		case savedslacktoken.FieldTeamID:
+		case slackoauthcredentials.FieldTeamID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field team_id", values[i])
 			} else if value.Valid {
-				sst.TeamID = value.String
+				soc.TeamID = value.String
 			}
-		case savedslacktoken.FieldAccessToken:
+		case slackoauthcredentials.FieldAccessToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field access_token", values[i])
 			} else if value.Valid {
-				sst.AccessToken = value.String
+				soc.AccessToken = value.String
 			}
-		case savedslacktoken.FieldCreatedAt:
+		case slackoauthcredentials.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sst.CreatedAt = value.Int64
+				soc.CreatedAt = value.Int64
 			}
-		case savedslacktoken.FieldUpdatedAt:
+		case slackoauthcredentials.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sst.UpdatedAt = value.Int64
+				soc.UpdatedAt = value.Int64
 			}
 		default:
-			sst.selectValues.Set(columns[i], values[i])
+			soc.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the SavedSlackToken.
+// Value returns the ent.Value that was dynamically selected and assigned to the SlackOAuthCredentials.
 // This includes values selected through modifiers, order, etc.
-func (sst *SavedSlackToken) Value(name string) (ent.Value, error) {
-	return sst.selectValues.Get(name)
+func (soc *SlackOAuthCredentials) Value(name string) (ent.Value, error) {
+	return soc.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this SavedSlackToken.
-// Note that you need to call SavedSlackToken.Unwrap() before calling this method if this SavedSlackToken
+// Update returns a builder for updating this SlackOAuthCredentials.
+// Note that you need to call SlackOAuthCredentials.Unwrap() before calling this method if this SlackOAuthCredentials
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sst *SavedSlackToken) Update() *SavedSlackTokenUpdateOne {
-	return NewSavedSlackTokenClient(sst.config).UpdateOne(sst)
+func (soc *SlackOAuthCredentials) Update() *SlackOAuthCredentialsUpdateOne {
+	return NewSlackOAuthCredentialsClient(soc.config).UpdateOne(soc)
 }
 
-// Unwrap unwraps the SavedSlackToken entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the SlackOAuthCredentials entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sst *SavedSlackToken) Unwrap() *SavedSlackToken {
-	_tx, ok := sst.config.driver.(*txDriver)
+func (soc *SlackOAuthCredentials) Unwrap() *SlackOAuthCredentials {
+	_tx, ok := soc.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: SavedSlackToken is not a transactional entity")
+		panic("ent: SlackOAuthCredentials is not a transactional entity")
 	}
-	sst.config.driver = _tx.drv
-	return sst
+	soc.config.driver = _tx.drv
+	return soc
 }
 
 // String implements the fmt.Stringer.
-func (sst *SavedSlackToken) String() string {
+func (soc *SlackOAuthCredentials) String() string {
 	var builder strings.Builder
-	builder.WriteString("SavedSlackToken(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sst.ID))
+	builder.WriteString("SlackOAuthCredentials(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", soc.ID))
 	builder.WriteString("team_id=")
-	builder.WriteString(sst.TeamID)
+	builder.WriteString(soc.TeamID)
 	builder.WriteString(", ")
 	builder.WriteString("access_token=")
-	builder.WriteString(sst.AccessToken)
+	builder.WriteString(soc.AccessToken)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", sst.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", soc.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", sst.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", soc.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// SavedSlackTokens is a parsable slice of SavedSlackToken.
-type SavedSlackTokens []*SavedSlackToken
+// SlackOAuthCredentialsSlice is a parsable slice of SlackOAuthCredentials.
+type SlackOAuthCredentialsSlice []*SlackOAuthCredentials

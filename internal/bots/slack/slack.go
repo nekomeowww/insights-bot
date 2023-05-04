@@ -54,7 +54,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 	return func(param NewSlackBotParam) *SlackBot {
 		slackConfig := param.Config.Slack
 
-		if slackConfig.ClientId == "" || slackConfig.ClientSecret == "" {
+		if slackConfig.ClientID == "" || slackConfig.ClientSecret == "" {
 			param.Logger.Warn("slack client id or secret not provided, will not create bot instance")
 			return nil
 		}

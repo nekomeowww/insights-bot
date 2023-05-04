@@ -23,8 +23,8 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	}
 
 	s.logger.WithFields(logrus.Fields{
-		"user_id":    body.UserId,
-		"channel_id": body.ChannelId,
+		"user_id":    body.UserID,
+		"channel_id": body.ChannelID,
 	}).Infof("slack: command received: /smr %s", body.Text)
 
 	urlString := body.Text
@@ -49,7 +49,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 
 	// get access token
 	token, err := s.ent.SlackOAuthCredentials.Query().Where(
-		slackoauthcredentials.TeamID(body.TeamId),
+		slackoauthcredentials.TeamID(body.TeamID),
 	).First(context.Background())
 	if err != nil {
 		s.logger.WithField("error", err.Error()).Warn("slack: failed to get team's access token")
@@ -61,7 +61,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	s.processChan <- smrRequestInfo{
 		accessToken: token.AccessToken,
 		inputUrl:    body.Text,
-		channelId:   body.ChannelId,
+		channelID:   body.ChannelID,
 	}
 
 	// response
@@ -76,7 +76,7 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := slack.GetOAuthV2Response(&http.Client{}, b.config.Slack.ClientId, b.config.Slack.ClientSecret, code, "")
+	resp, err := slack.GetOAuthV2Response(&http.Client{}, b.config.Slack.ClientID, b.config.Slack.ClientSecret, code, "")
 	if err != nil {
 		b.logger.WithError(err).Error("slack: failed to get access token, interrupt")
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)

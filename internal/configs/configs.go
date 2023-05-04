@@ -7,7 +7,7 @@ import (
 const (
 	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN"
 
-	EnvSlackClientId     = "SLACK_CLIENT_ID"
+	EnvSlackClientID     = "SLACK_CLIENT_ID"
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
 	EnvSlackBotPort      = "SLACK_BOT_PORT"
 
@@ -34,7 +34,7 @@ type SectionPinecone struct {
 
 type SectionSlack struct {
 	Port         string
-	ClientId     string
+	ClientID     string
 	ClientSecret string
 }
 
@@ -58,7 +58,7 @@ func NewConfig() func() *Config {
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
 			Slack: SectionSlack{
 				Port:         os.Getenv(EnvSlackBotPort),
-				ClientId:     os.Getenv(EnvSlackClientId),
+				ClientID:     os.Getenv(EnvSlackClientID),
 				ClientSecret: os.Getenv(EnvSlackClientSecret),
 			},
 			OpenAIAPISecret: os.Getenv(EnvOpenAIAPISecret),

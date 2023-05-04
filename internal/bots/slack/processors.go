@@ -22,14 +22,14 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 		}
 		b.logger.WithField("error", err.Error()).Error("slack: summarization failed")
 
-		_, _, _, err = slackCli.SendMessage(info.channelId, slack.MsgOptionText(errMsg, false))
+		_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(errMsg, false))
 		if err != nil {
 			b.logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
 		}
 		return
 	}
 
-	_, _, _, err = slackCli.SendMessage(info.channelId, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
+	_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
 	if err != nil {
 		b.logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
 	}

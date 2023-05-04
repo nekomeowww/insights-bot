@@ -47,3 +47,6 @@ config.local.yaml
 
 # Temporary
 temp/
+
+# Local pgSQL db
+.postgres/

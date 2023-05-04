@@ -108,6 +108,6 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 	}
 
 	ctx.Header("content-type", "text/html")
-	ctx.Writer.Write([]byte("<h1 style=\"text-align:center\">Success! Now you can close this page<h1>"))
+	_, _ = ctx.Writer.Write([]byte("<h1 style=\"text-align:center\">Success! Now you can close this page<h1>"))
 	ctx.Status(http.StatusOK)
 }

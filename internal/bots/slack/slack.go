@@ -8,10 +8,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
-	"github.com/slack-go/slack"
 	"go.uber.org/fx"
 )
 
@@ -30,6 +30,8 @@ type NewSlackBotParam struct {
 	Logger *logger.Logger
 
 	SMR *smr.Model
+
+	Ent *datastore.Ent
 }
 
 type SlackBot struct {
@@ -38,21 +40,22 @@ type SlackBot struct {
 
 	smrModel *smr.Model
 
-	server   *http.Server
-	slackCli *slack.Client
+	server *http.Server
+
+	ent *datastore.Ent
 
 	alreadyClosed bool
 	closeChan     chan struct{}
 
-	processChan chan recivedCommandInfo
+	processChan chan smrRequestInfo
 }
 
 func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 	return func(param NewSlackBotParam) *SlackBot {
 		slackConfig := param.Config.Slack
 
-		if slackConfig.BotToken == "" {
-			param.Logger.Warn("slack bot token not provided, will not create bot instance")
+		if slackConfig.ClientId == "" || slackConfig.ClientSecret == "" {
+			param.Logger.Warn("slack client id or secret not provided, will not create bot instance")
 			return nil
 		}
 
@@ -60,19 +63,14 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 			config:      param.Config,
 			logger:      param.Logger,
 			closeChan:   make(chan struct{}, 1),
-			processChan: make(chan recivedCommandInfo, 10),
-			slackCli:    slack.New(slackConfig.BotToken),
+			processChan: make(chan smrRequestInfo, 10),
 			smrModel:    param.SMR,
-		}
-
-		_, err := slackBot.slackCli.AuthTest()
-		if err != nil {
-			param.Logger.WithError(err).Fatalf("slack bot token auth test failed")
-			return nil
+			ent:         param.Ent,
 		}
 
 		engine := gin.Default()
 		engine.POST("/slack/command/smr", slackBot.postCommandInfo)
+		engine.GET("/slack/install/auth", slackBot.getInstallAuth)
 		slackBot.server = &http.Server{Addr: lo.Ternary(slackConfig.Port == "", ":7070", slackConfig.Port), Handler: engine}
 
 		param.Lifecycle.Append(fx.Hook{

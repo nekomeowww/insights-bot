@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 
 	"github.com/nekomeowww/insights-bot/ent/internal"
@@ -27,6 +28,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
+	// SavedSlackToken is the client for interacting with the SavedSlackToken builders.
+	SavedSlackToken *SavedSlackTokenClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
 }
@@ -43,6 +46,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ChatHistories = NewChatHistoriesClient(c.config)
+	c.SavedSlackToken = NewSavedSlackTokenClient(c.config)
 	c.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(c.config)
 }
 
@@ -129,6 +133,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
+		SavedSlackToken:          NewSavedSlackTokenClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
@@ -150,6 +155,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
+		SavedSlackToken:          NewSavedSlackTokenClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
@@ -180,6 +186,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.ChatHistories.Use(hooks...)
+	c.SavedSlackToken.Use(hooks...)
 	c.TelegramChatFeatureFlags.Use(hooks...)
 }
 
@@ -187,6 +194,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.ChatHistories.Intercept(interceptors...)
+	c.SavedSlackToken.Intercept(interceptors...)
 	c.TelegramChatFeatureFlags.Intercept(interceptors...)
 }
 
@@ -195,6 +203,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *ChatHistoriesMutation:
 		return c.ChatHistories.mutate(ctx, m)
+	case *SavedSlackTokenMutation:
+		return c.SavedSlackToken.mutate(ctx, m)
 	case *TelegramChatFeatureFlagsMutation:
 		return c.TelegramChatFeatureFlags.mutate(ctx, m)
 	default:
@@ -320,6 +330,124 @@ func (c *ChatHistoriesClient) mutate(ctx context.Context, m *ChatHistoriesMutati
 	}
 }
 
+// SavedSlackTokenClient is a client for the SavedSlackToken schema.
+type SavedSlackTokenClient struct {
+	config
+}
+
+// NewSavedSlackTokenClient returns a client for the SavedSlackToken from the given config.
+func NewSavedSlackTokenClient(c config) *SavedSlackTokenClient {
+	return &SavedSlackTokenClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `savedslacktoken.Hooks(f(g(h())))`.
+func (c *SavedSlackTokenClient) Use(hooks ...Hook) {
+	c.hooks.SavedSlackToken = append(c.hooks.SavedSlackToken, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `savedslacktoken.Intercept(f(g(h())))`.
+func (c *SavedSlackTokenClient) Intercept(interceptors ...Interceptor) {
+	c.inters.SavedSlackToken = append(c.inters.SavedSlackToken, interceptors...)
+}
+
+// Create returns a builder for creating a SavedSlackToken entity.
+func (c *SavedSlackTokenClient) Create() *SavedSlackTokenCreate {
+	mutation := newSavedSlackTokenMutation(c.config, OpCreate)
+	return &SavedSlackTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of SavedSlackToken entities.
+func (c *SavedSlackTokenClient) CreateBulk(builders ...*SavedSlackTokenCreate) *SavedSlackTokenCreateBulk {
+	return &SavedSlackTokenCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for SavedSlackToken.
+func (c *SavedSlackTokenClient) Update() *SavedSlackTokenUpdate {
+	mutation := newSavedSlackTokenMutation(c.config, OpUpdate)
+	return &SavedSlackTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *SavedSlackTokenClient) UpdateOne(sst *SavedSlackToken) *SavedSlackTokenUpdateOne {
+	mutation := newSavedSlackTokenMutation(c.config, OpUpdateOne, withSavedSlackToken(sst))
+	return &SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *SavedSlackTokenClient) UpdateOneID(id uuid.UUID) *SavedSlackTokenUpdateOne {
+	mutation := newSavedSlackTokenMutation(c.config, OpUpdateOne, withSavedSlackTokenID(id))
+	return &SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for SavedSlackToken.
+func (c *SavedSlackTokenClient) Delete() *SavedSlackTokenDelete {
+	mutation := newSavedSlackTokenMutation(c.config, OpDelete)
+	return &SavedSlackTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *SavedSlackTokenClient) DeleteOne(sst *SavedSlackToken) *SavedSlackTokenDeleteOne {
+	return c.DeleteOneID(sst.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *SavedSlackTokenClient) DeleteOneID(id uuid.UUID) *SavedSlackTokenDeleteOne {
+	builder := c.Delete().Where(savedslacktoken.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &SavedSlackTokenDeleteOne{builder}
+}
+
+// Query returns a query builder for SavedSlackToken.
+func (c *SavedSlackTokenClient) Query() *SavedSlackTokenQuery {
+	return &SavedSlackTokenQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeSavedSlackToken},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a SavedSlackToken entity by its id.
+func (c *SavedSlackTokenClient) Get(ctx context.Context, id uuid.UUID) (*SavedSlackToken, error) {
+	return c.Query().Where(savedslacktoken.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *SavedSlackTokenClient) GetX(ctx context.Context, id uuid.UUID) *SavedSlackToken {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *SavedSlackTokenClient) Hooks() []Hook {
+	return c.hooks.SavedSlackToken
+}
+
+// Interceptors returns the client interceptors.
+func (c *SavedSlackTokenClient) Interceptors() []Interceptor {
+	return c.inters.SavedSlackToken
+}
+
+func (c *SavedSlackTokenClient) mutate(ctx context.Context, m *SavedSlackTokenMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&SavedSlackTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&SavedSlackTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&SavedSlackTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&SavedSlackTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown SavedSlackToken mutation op: %q", m.Op())
+	}
+}
+
 // TelegramChatFeatureFlagsClient is a client for the TelegramChatFeatureFlags schema.
 type TelegramChatFeatureFlagsClient struct {
 	config
@@ -441,10 +569,10 @@ func (c *TelegramChatFeatureFlagsClient) mutate(ctx context.Context, m *Telegram
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ChatHistories, TelegramChatFeatureFlags []ent.Hook
+		ChatHistories, SavedSlackToken, TelegramChatFeatureFlags []ent.Hook
 	}
 	inters struct {
-		ChatHistories, TelegramChatFeatureFlags []ent.Interceptor
+		ChatHistories, SavedSlackToken, TelegramChatFeatureFlags []ent.Interceptor
 	}
 )
 

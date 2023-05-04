@@ -5,6 +5,7 @@ package ent
 import (
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/savedslacktoken"
 	"github.com/nekomeowww/insights-bot/ent/schema"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 )
@@ -79,6 +80,28 @@ func init() {
 	chathistoriesDescID := chathistoriesFields[0].Descriptor()
 	// chathistories.DefaultID holds the default value on creation for the id field.
 	chathistories.DefaultID = chathistoriesDescID.Default.(func() uuid.UUID)
+	savedslacktokenFields := schema.SavedSlackToken{}.Fields()
+	_ = savedslacktokenFields
+	// savedslacktokenDescTeamID is the schema descriptor for team_id field.
+	savedslacktokenDescTeamID := savedslacktokenFields[1].Descriptor()
+	// savedslacktoken.TeamIDValidator is a validator for the "team_id" field. It is called by the builders before save.
+	savedslacktoken.TeamIDValidator = savedslacktokenDescTeamID.Validators[0].(func(string) error)
+	// savedslacktokenDescAccessToken is the schema descriptor for access_token field.
+	savedslacktokenDescAccessToken := savedslacktokenFields[2].Descriptor()
+	// savedslacktoken.AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.
+	savedslacktoken.AccessTokenValidator = savedslacktokenDescAccessToken.Validators[0].(func(string) error)
+	// savedslacktokenDescCreatedAt is the schema descriptor for created_at field.
+	savedslacktokenDescCreatedAt := savedslacktokenFields[3].Descriptor()
+	// savedslacktoken.DefaultCreatedAt holds the default value on creation for the created_at field.
+	savedslacktoken.DefaultCreatedAt = savedslacktokenDescCreatedAt.Default.(func() int64)
+	// savedslacktokenDescUpdatedAt is the schema descriptor for updated_at field.
+	savedslacktokenDescUpdatedAt := savedslacktokenFields[4].Descriptor()
+	// savedslacktoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	savedslacktoken.DefaultUpdatedAt = savedslacktokenDescUpdatedAt.Default.(func() int64)
+	// savedslacktokenDescID is the schema descriptor for id field.
+	savedslacktokenDescID := savedslacktokenFields[0].Descriptor()
+	// savedslacktoken.DefaultID holds the default value on creation for the id field.
+	savedslacktoken.DefaultID = savedslacktokenDescID.Default.(func() uuid.UUID)
 	telegramchatfeatureflagsFields := schema.TelegramChatFeatureFlags{}.Fields()
 	_ = telegramchatfeatureflagsFields
 	// telegramchatfeatureflagsDescCreatedAt is the schema descriptor for created_at field.

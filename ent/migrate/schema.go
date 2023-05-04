@@ -33,6 +33,20 @@ var (
 		Columns:    ChatHistoriesColumns,
 		PrimaryKey: []*schema.Column{ChatHistoriesColumns[0]},
 	}
+	// SavedSlackTokensColumns holds the columns for the "saved_slack_tokens" table.
+	SavedSlackTokensColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "team_id", Type: field.TypeString, Unique: true, Size: 2147483647},
+		{Name: "access_token", Type: field.TypeString, Size: 2147483647},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// SavedSlackTokensTable holds the schema information for the "saved_slack_tokens" table.
+	SavedSlackTokensTable = &schema.Table{
+		Name:       "saved_slack_tokens",
+		Columns:    SavedSlackTokensColumns,
+		PrimaryKey: []*schema.Column{SavedSlackTokensColumns[0]},
+	}
 	// TelegramChatFeatureFlagsColumns holds the columns for the "telegram_chat_feature_flags" table.
 	TelegramChatFeatureFlagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -51,6 +65,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ChatHistoriesTable,
+		SavedSlackTokensTable,
 		TelegramChatFeatureFlagsTable,
 	}
 )

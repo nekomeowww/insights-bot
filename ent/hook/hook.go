@@ -21,6 +21,18 @@ func (f ChatHistoriesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ChatHistoriesMutation", m)
 }
 
+// The SavedSlackTokenFunc type is an adapter to allow the use of ordinary
+// function as SavedSlackToken mutator.
+type SavedSlackTokenFunc func(context.Context, *ent.SavedSlackTokenMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f SavedSlackTokenFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.SavedSlackTokenMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SavedSlackTokenMutation", m)
+}
+
 // The TelegramChatFeatureFlagsFunc type is an adapter to allow the use of ordinary
 // function as TelegramChatFeatureFlags mutator.
 type TelegramChatFeatureFlagsFunc func(context.Context, *ent.TelegramChatFeatureFlagsMutation) (ent.Value, error)

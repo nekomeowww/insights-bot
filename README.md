@@ -136,6 +136,7 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | `CLOVER_DB_PATH` | `false` | `insights_bot_clover_data.db` | Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file. |
 | `SLACK_CLIENT_ID` | `false` | | Slack app client id, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
 | `SLACK_CLIENT_SECRET` | `false` | | Slack app client secret, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
+| `SLACK_PORT` | `false` | `7070` | Port for webhook server |
 
 ## Acknowledgements
 

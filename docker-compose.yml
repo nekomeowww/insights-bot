@@ -22,7 +22,7 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>
       - OPENAI_API_SECRET=<OpenAI API Secret Key>
-      - DB_CONNECTION_STR=<PostgresSQL database URL>
+      - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
       # - SLACK_CLIENT_ID=<Slack App Client ID> # optional, uncomment this if you want to enable slack integration
       # - SLACK_CLIENT_SECRET=<Slack App Client Secret> # optional, uncomment this if you want to enable slack integration
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host

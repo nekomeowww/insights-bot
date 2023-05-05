@@ -35,6 +35,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 
 	message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "请稍等，量子速读中...")
 	message.ReplyToMessageID = c.Update.Message.MessageID
+
 	processingMessage, err := c.Bot.Send(message)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err)
@@ -47,9 +48,9 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		}
 		if errors.Is(err, smr.ErrNetworkError) || errors.Is(err, smr.ErrRequestFailed) {
 			return nil, tgbot.NewMessageError("量子速读的链接读取失败了哦。可以再试试？").WithEdit(&processingMessage)
-		} else {
-			return nil, tgbot.NewMessageError("量子速读失败了。可以再试试？").WithEdit(&processingMessage)
 		}
+
+		return nil, tgbot.NewMessageError("量子速读失败了。可以再试试？").WithEdit(&processingMessage)
 	}
 
 	return c.NewMessageReplyTo(summarization.FormatSummarizationAsHTML(), c.Update.Message.MessageID).WithParseModeHTML(), nil

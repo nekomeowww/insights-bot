@@ -23,21 +23,21 @@ func NewModules() fx.Option {
 }
 
 var (
-	_ tgbot.CommandHandler = (*RecapCommandHandler)(nil)
+	_ tgbot.CommandHandler = (*CommandHandler)(nil)
 )
 
 type NewHandlersParams struct {
 	fx.In
 
-	RecapCommand        *RecapCommandHandler
-	RecapCallbackQuery  *RecapCallbackQueryHandler
+	RecapCommand        *CommandHandler
+	RecapCallbackQuery  *CallbackQueryHandler
 	EnableRecapCommand  *EnableRecapCommandHandler
 	DisableRecapCommand *DisableRecapCommandHandler
 }
 
 type Handlers struct {
-	recapCommand        *RecapCommandHandler
-	recapCallbackQuery  *RecapCallbackQueryHandler
+	recapCommand        *CommandHandler
+	recapCallbackQuery  *CallbackQueryHandler
 	enableRecapCommand  *EnableRecapCommandHandler
 	disableRecapCommand *DisableRecapCommandHandler
 }
@@ -61,44 +61,44 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 }
 
 var (
-	RecapSelectHourAvailables = []int64{
+	RecapSelectHourAvailable = []int64{
 		1, 2, 4, 6, 12,
 	}
-	RecapSelectHourAvailableText = lo.SliceToMap(RecapSelectHourAvailables, func(item int64) (int64, string) {
+	RecapSelectHourAvailableText = lo.SliceToMap(RecapSelectHourAvailable, func(item int64) (int64, string) {
 		return item, fmt.Sprintf("%d 小时", item)
 	})
-	RecapSelectHourAvailableValues = lo.SliceToMap(RecapSelectHourAvailables, func(item int64) (int64, string) {
+	RecapSelectHourAvailableValues = lo.SliceToMap(RecapSelectHourAvailable, func(item int64) (int64, string) {
 		return item, fmt.Sprintf("%d", item)
 	})
 )
 
-type NewRecapCommandHandlerParams struct {
+type NewCommandHandlerParams struct {
 	fx.In
 
 	TgChats *tgchats.Model
 }
 
-type RecapCommandHandler struct {
+type CommandHandler struct {
 	tgchats *tgchats.Model
 }
 
-func NewRecapCommandHandler() func(NewRecapCommandHandlerParams) *RecapCommandHandler {
-	return func(param NewRecapCommandHandlerParams) *RecapCommandHandler {
-		return &RecapCommandHandler{
+func NewRecapCommandHandler() func(NewCommandHandlerParams) *CommandHandler {
+	return func(param NewCommandHandlerParams) *CommandHandler {
+		return &CommandHandler{
 			tgchats: param.TgChats,
 		}
 	}
 }
 
-func (h RecapCommandHandler) Command() string {
+func (h CommandHandler) Command() string {
 	return "recap"
 }
 
-func (h RecapCommandHandler) CommandHelp() string {
+func (h CommandHandler) CommandHelp() string {
 	return "总结过去的聊天记录并生成回顾快报"
 }
 
-func (h *RecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+func (h *CommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	enabled, err := h.tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, telegram.ChatType(c.Update.Message.Chat.Type))
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("生成失败，请稍后再试。").WithReply(c.Update.Message)
@@ -109,7 +109,7 @@ func (h *RecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 
 	replyMarkupKeyboard := tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			lo.Map(RecapSelectHourAvailables, func(item int64, _ int) tgbotapi.InlineKeyboardButton {
+			lo.Map(RecapSelectHourAvailable, func(item int64, _ int) tgbotapi.InlineKeyboardButton {
 				return tgbotapi.NewInlineKeyboardButtonData(
 					RecapSelectHourAvailableText[item],
 					tgbot.NewCallbackQueryData("recap", "select_hour", url.Values{"hour": []string{RecapSelectHourAvailableValues[item]}}),

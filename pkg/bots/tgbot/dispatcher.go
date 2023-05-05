@@ -45,6 +45,7 @@ func NewDispatcher() func(param NewDispatcherParam) *Dispatcher {
 		}
 
 		d.OnCommand(d.helpCommand)
+
 		return d
 	}
 }
@@ -65,6 +66,7 @@ func (d *Dispatcher) OnMessage(h MessageHandler) {
 func (d *Dispatcher) dispatchMessage(c *Context) {
 	identityStrings := make([]string, 0)
 	identityStrings = append(identityStrings, FullNameFromFirstAndLastName(c.Update.Message.From.FirstName, c.Update.Message.From.LastName))
+
 	if c.Update.Message.From.UserName != "" {
 		identityStrings = append(identityStrings, "@"+c.Update.Message.From.UserName)
 	}
@@ -93,7 +95,6 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 				}
 			}
 		})
-
 	} else {
 		d.dispatchInGoroutine(func() {
 			for msg, f := range d.messageHandlers {
@@ -156,6 +157,7 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	identityStrings := make([]string, 0)
 	identityStrings = append(identityStrings, FullNameFromFirstAndLastName(c.Update.MyChatMember.From.FirstName, c.Update.MyChatMember.From.LastName))
+
 	if c.Update.MyChatMember.From.UserName != "" {
 		identityStrings = append(identityStrings, "@"+c.Update.MyChatMember.From.UserName)
 	}
@@ -172,6 +174,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 		MapMemberStatusToChineseText(oldMemberStatus),
 		MapMemberStatusToChineseText(newMemberStatus),
 	)
+
 	switch c.Update.MyChatMember.Chat.Type {
 	case "channel":
 		if newMemberStatus != "administrator" {

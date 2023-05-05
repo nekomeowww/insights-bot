@@ -39,6 +39,7 @@ func EscapeStringForMarkdownV2(src string) string {
 
 	// 对需要转义的字符进行转义
 	var lastMatchedIndex int
+
 	for i, match := range escapingIndexes {
 		if i == 0 {
 			result += src[lastMatchedIndex:match[0]]
@@ -56,12 +57,10 @@ func EscapeStringForMarkdownV2(src string) string {
 	return result
 }
 
-// NewCallbackQueryData
 func NewCallbackQueryData(component string, route string, queries url.Values) string {
 	return fmt.Sprintf("cbq://%s/%s?%s", component, route, queries.Encode())
 }
 
-// FullNameFromFirstAndLastName
 func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	if lastName == "" {
 		return firstName
@@ -82,7 +81,6 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	return firstName + " " + lastName
 }
 
-// ExtractTextFromMessage
 func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	if message.Caption != "" {
 		return message.Caption
@@ -100,6 +98,7 @@ func EscapeHTMLSymbols(str string) string {
 	str = strings.ReplaceAll(str, "<", "&lt;")
 	str = strings.ReplaceAll(str, ">", "&gt;")
 	str = strings.ReplaceAll(str, "&", "&amp;")
+
 	return str
 }
 
@@ -107,7 +106,6 @@ var (
 	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
 )
 
-// ReplaceMarkdownTitlesToTelegramBoldElement
 func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
 	return matchMdTitles.ReplaceAllStringFunc(text, func(s string) string {
 		// remove hashtag

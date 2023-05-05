@@ -14,6 +14,7 @@ func ReadFileAsBytesBuffer(path string) (*bytes.Buffer, error) {
 	defer file.Close()
 
 	buf := new(bytes.Buffer)
+
 	_, err = io.Copy(buf, file)
 	if err != nil {
 		return nil, err

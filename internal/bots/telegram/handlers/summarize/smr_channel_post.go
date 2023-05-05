@@ -21,6 +21,7 @@ func (h *Handlers) HandleChannelPost(c *tgbot.Context) (tgbot.Response, error) {
 	}
 
 	urlString := strings.TrimSpace(strings.TrimPrefix(c.Update.ChannelPost.Text, "/smr "))
+
 	summarization, err := h.smr.SummarizeInputURL(urlString)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err)

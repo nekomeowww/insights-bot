@@ -8,8 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestRandBytes 测试随机字节串工具函数
-func TestRanddomBytes(t *testing.T) {
+func TestRandomBytes(t *testing.T) {
 	t.Run("no args", func(t *testing.T) {
 		assert := assert.New(t)
 
@@ -33,8 +32,7 @@ func TestRanddomBytes(t *testing.T) {
 	})
 }
 
-// TestRandBase64 测试随机 Base64 字符串工具函数
-func TestRanddomBase64Token(t *testing.T) {
+func TestRandomBase64Token(t *testing.T) {
 	t.Run("no args", func(t *testing.T) {
 		assert := assert.New(t)
 

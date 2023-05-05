@@ -51,13 +51,14 @@ func NewClient(apiSecret string, apiHost string) (*Client, error) {
 	}
 
 	client := openai.NewClientWithConfig(config)
+
 	return &Client{
 		OpenAIClient:     client,
 		tiktokenEncoding: tokenizer,
 	}, nil
 }
 
-// truncateContentBasedOnTokens 基于 token 计算的方式截断文本
+// truncateContentBasedOnTokens 基于 token 计算的方式截断文本。
 func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) string {
 	tokens := c.tiktokenEncoding.Encode(textContent, nil, nil)
 	if len(tokens) <= limits {
@@ -67,35 +68,37 @@ func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) st
 	truncated := c.tiktokenEncoding.Decode(tokens[:limits])
 
 	for len(truncated) > 0 {
-
 		// 假设 textContent = "小溪河水清澈见底", Encode 结果为 "[31809,36117,103,31106,111,53610,80866,162,122,230,90070,11795,243]"
 		// 当 limits = 4, 那么 tokens[:limits] = "[31809,36117,103,31106]", Decode 结果为 "小溪\xe6\xb2"
 		// 这里的 \xe6\xb2 是一个不完整的 UTF-8 编码，无法正确解析为一个完整的字符。下面得代码处理这种情况把它去掉。
-
 		r, size := utf8.DecodeLastRuneInString(truncated)
 		if r != utf8.RuneError {
 			break
 		}
 		truncated = truncated[:len(truncated)-size]
 	}
+
 	return truncated
 }
 
-// SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本
+// SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本。
 func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) []string {
 	slices := make([]string, 0)
+
 	for {
 		s := c.TruncateContentBasedOnTokens(textContent, limits)
 		slices = append(slices, s)
 		textContent = textContent[len(s):]
+
 		if textContent == "" {
 			break
 		}
 	}
+
 	return slices
 }
 
-// SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题
+// SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题。
 func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
 	resp, err := c.OpenAIClient.CreateChatCompletion(
 		ctx,
@@ -167,9 +170,8 @@ func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyCha
 
 func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
 	sb := new(strings.Builder)
-	err := ChatHistorySummarizationPrompt.Execute(sb, ChatHistorySummarizationPromptInputs{
-		ChatHistory: llmFriendlyChatHistories,
-	})
+
+	err := ChatHistorySummarizationPrompt.Execute(sb, ChatHistorySummarizationPromptInputs{ChatHistory: llmFriendlyChatHistories})
 	if err != nil {
 		return nil, err
 	}

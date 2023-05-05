@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"net/http"
-	_ "net/http/pprof"
 	"time"
 
 	"go.uber.org/fx"
@@ -16,7 +14,8 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/internal/models"
 	"github.com/nekomeowww/insights-bot/internal/services"
-	"github.com/nekomeowww/insights-bot/internal/services/chat_history_recap"
+	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
+	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty"
 )
 
@@ -31,19 +30,16 @@ func main() {
 		fx.Options(telegram.NewModules()),
 		fx.Options(slack.NewModules()),
 		fx.Invoke(telegram.Run()),
-		fx.Invoke(chat_history_recap.Run()),
+		fx.Invoke(autorecap.Run()),
 		fx.Invoke(slack.Run()),
-		fx.Invoke(func() {
-			err := http.ListenAndServe(":6060", nil)
-			if err != nil {
-				log.Println(err)
-			}
-		}),
+		fx.Invoke(pprof.Run()),
 	))
 
 	app.Run()
+
 	stopCtx, stopCtxCancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer stopCtxCancel()
+
 	if err := app.Stop(stopCtx); err != nil {
 		log.Fatal(err)
 	}

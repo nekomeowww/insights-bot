@@ -17,6 +17,7 @@ func TestMain(m *testing.M) {
 	model = NewModel()(NewModelParams{
 		Logger: lib.NewLogger()(),
 	})
+
 	os.Exit(m.Run())
 }
 

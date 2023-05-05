@@ -8,7 +8,7 @@ import (
 )
 
 type InvokeOptions struct {
-	ctx context.Context
+	ctx context.Context //nolint:containedctx
 }
 
 func WithContext(ctx context.Context) options.CallOptions[InvokeOptions] {
@@ -20,8 +20,8 @@ func WithContext(ctx context.Context) options.CallOptions[InvokeOptions] {
 func Invoke0(funcToBeRan func() error, callOpts ...options.CallOptions[InvokeOptions]) error {
 	opts := options.ApplyCallOptions(callOpts, InvokeOptions{ctx: context.Background()})
 
-	resChan := make(chan struct{}, 1)
 	var err error
+	resChan := make(chan struct{}, 1)
 
 	go func() {
 		err = funcToBeRan()
@@ -29,7 +29,9 @@ func Invoke0(funcToBeRan func() error, callOpts ...options.CallOptions[InvokeOpt
 	}()
 
 	var wg sync.WaitGroup
+
 	wg.Add(1)
+
 	go func() {
 		select {
 		case <-opts.ctx.Done():
@@ -39,7 +41,7 @@ func Invoke0(funcToBeRan func() error, callOpts ...options.CallOptions[InvokeOpt
 
 		wg.Done()
 	}()
-
 	wg.Wait()
+
 	return err
 }

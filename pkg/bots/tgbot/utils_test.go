@@ -9,6 +9,7 @@ import (
 
 func TestReplaceMarkdownTitlesToBoldTexts(t *testing.T) {
 	prefix := ""
+
 	for i := 0; i < 6; i++ {
 		t.Run(fmt.Sprintf("TitleLevel%d", i+1), func(t *testing.T) {
 			a := assert.New(t)

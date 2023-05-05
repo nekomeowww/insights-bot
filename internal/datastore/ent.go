@@ -24,6 +24,7 @@ type Ent struct {
 func NewEnt() func(NewEntParams) (*Ent, error) {
 	return func(param NewEntParams) (*Ent, error) {
 		opts := make([]ent.Option, 0)
+
 		client, err := ent.Open(dialect.Postgres, param.Configs.DB.ConnectionString, opts...)
 		if err != nil {
 			return nil, err

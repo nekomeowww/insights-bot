@@ -10,6 +10,64 @@ import (
 	"go.uber.org/fx"
 )
 
+func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, bot *tgbot.Bot) error {
+	member, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
+		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
+			ChatID: chatID,
+			UserID: userID,
+		},
+	})
+	if err != nil {
+		return tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(update.Message)
+	}
+	if !lo.Contains([]telegram.MemberStatus{
+		telegram.MemberStatusCreator,
+		telegram.MemberStatusAdministrator,
+	}, telegram.MemberStatus(member.Status)) {
+		return tgbot.NewMessageError("你没有权限关闭聊天记录回顾功能哦！").WithReply(update.Message)
+	}
+
+	return nil
+}
+
+func checkBotMember(chatID int64, update tgbotapi.Update, bot *tgbot.Bot) error {
+	botMember, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
+		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
+			ChatID: chatID,
+			UserID: bot.Self.ID,
+		},
+	})
+	if err != nil {
+		return tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(update.Message)
+	}
+	if !lo.Contains([]telegram.MemberStatus{
+		telegram.MemberStatusAdministrator,
+	}, telegram.MemberStatus(botMember.Status)) {
+		return tgbot.NewMessageError("现在机器人不是群组管理员，已经不会记录任何聊天记录了。如果需要打开聊天记录回顾功能，请先将机器人设为群组管理员。").WithReply(update.Message)
+	}
+
+	return nil
+}
+
+func checkToggle(update tgbotapi.Update, bot *tgbot.Bot) error {
+	chatType := telegram.ChatType(update.Message.Chat.Type)
+	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
+		return tgbot.NewMessageError("聊天记录回顾功能只有群组和超级群组可以配置开启哦！").WithReply(update.Message)
+	}
+
+	err := checkTogglingRecapPermission(update.Message.Chat.ID, update.Message.From.ID, update, bot)
+	if err != nil {
+		return err
+	}
+
+	err = checkBotMember(update.Message.Chat.ID, update, bot)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 var (
 	_ tgbot.CommandHandler = (*EnableRecapCommandHandler)(nil)
 	_ tgbot.CommandHandler = (*DisableRecapCommandHandler)(nil)
@@ -46,31 +104,10 @@ func (h EnableRecapCommandHandler) CommandHelp() string {
 
 func (h *EnableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
-	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
-		return nil, tgbot.NewMessageError("聊天记录回顾功能只有群组和超级群组可以配置开启哦！").WithReply(c.Update.Message)
-	}
 
-	hasTogglingRecapPermission, err := checkTogglingRecapPermission(c.Bot, c.Update.Message.Chat.ID, c.Update.Message.From.ID)
+	err := checkToggle(c.Update, c.Bot)
 	if err != nil {
-		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
-	}
-	if !hasTogglingRecapPermission {
-		return nil, tgbot.NewMessageError("你没有权限开启聊天记录回顾功能哦！").WithReply(c.Update.Message)
-	}
-
-	botMember, err := c.Bot.GetChatMember(tgbotapi.GetChatMemberConfig{
-		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
-			ChatID: c.Update.Message.Chat.ID,
-			UserID: c.Bot.Self.ID,
-		},
-	})
-	if err != nil {
-		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
-	}
-	if !lo.Contains([]telegram.MemberStatus{
-		telegram.MemberStatusAdministrator,
-	}, telegram.MemberStatus(botMember.Status)) {
-		return nil, tgbot.NewMessageError("请先将机器人设为群组管理员，然后再开启聊天记录回顾功能哦！").WithReply(c.Update.Message)
+		return nil, err
 	}
 
 	err = h.tgchats.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
@@ -112,31 +149,10 @@ func (h DisableRecapCommandHandler) CommandHelp() string {
 
 func (h *DisableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
-	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
-		return nil, tgbot.NewMessageError("聊天记录回顾功能只有群组和超级群组可以配置关闭哦！").WithReply(c.Update.Message)
-	}
 
-	hasTogglingRecapPermission, err := checkTogglingRecapPermission(c.Bot, c.Update.Message.Chat.ID, c.Update.Message.From.ID)
+	err := checkToggle(c.Update, c.Bot)
 	if err != nil {
-		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
-	}
-	if !hasTogglingRecapPermission {
-		return nil, tgbot.NewMessageError("你没有权限关闭聊天记录回顾功能哦！").WithReply(c.Update.Message)
-	}
-
-	botMember, err := c.Bot.GetChatMember(tgbotapi.GetChatMemberConfig{
-		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
-			ChatID: c.Update.Message.Chat.ID,
-			UserID: c.Bot.Self.ID,
-		},
-	})
-	if err != nil {
-		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
-	}
-	if !lo.Contains([]telegram.MemberStatus{
-		telegram.MemberStatusAdministrator,
-	}, telegram.MemberStatus(botMember.Status)) {
-		return nil, tgbot.NewMessageError("现在机器人不是群组管理员，已经不会记录任何聊天记录了。如果需要打开聊天记录回顾功能，请先将机器人设为群组管理员。").WithReply(c.Update.Message)
+		return nil, err
 	}
 
 	err = h.tgchats.DisableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
@@ -145,24 +161,4 @@ func (h *DisableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, e
 	}
 
 	return c.NewMessageReplyTo("聊天记录回顾功能已关闭，关闭后将不会自动收集群组中的聊天记录并定时发送聊天回顾快报了。", c.Update.Message.MessageID), nil
-}
-
-func checkTogglingRecapPermission(bot *tgbot.Bot, chatID, userID int64) (bool, error) {
-	member, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
-		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
-			ChatID: chatID,
-			UserID: userID,
-		},
-	})
-	if err != nil {
-		return false, err
-	}
-	if !lo.Contains([]telegram.MemberStatus{
-		telegram.MemberStatusCreator,
-		telegram.MemberStatusAdministrator,
-	}, telegram.MemberStatus(member.Status)) {
-		return false, nil
-	}
-
-	return true, nil
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/middlewares"
 	"github.com/nekomeowww/insights-bot/internal/configs"
-	"github.com/nekomeowww/insights-bot/internal/models/chat_histories"
+	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
@@ -34,7 +34,7 @@ type NewBotParam struct {
 	Dispatcher *tgbot.Dispatcher
 	Handlers   *handlers.Handlers
 
-	ChatHistories *chat_histories.Model
+	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
 }
 
@@ -45,7 +45,7 @@ type Bot struct {
 	Logger     *logger.Logger
 	Dispatcher *tgbot.Dispatcher
 
-	ChatHistories *chat_histories.Model
+	ChatHistories *chathistories.Model
 
 	alreadyClose bool
 	closeChan    chan struct{}
@@ -80,6 +80,7 @@ func NewBot() func(param NewBotParam) (*Bot, error) {
 		param.Dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
 		param.Handlers.InstallAll()
 		param.Logger.Infof("Authorized as bot @%s", bot.Self.UserName)
+
 		return bot, nil
 	}
 }
@@ -104,6 +105,7 @@ func (b *Bot) pullUpdates() {
 	u.Timeout = 60
 
 	updates := b.GetUpdatesChan(u)
+
 	for {
 		if b.alreadyClose {
 			b.Logger.Info("stopped to receiving updates")

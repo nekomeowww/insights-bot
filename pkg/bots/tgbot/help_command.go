@@ -32,6 +32,7 @@ func (h helpCommandHandler) Handle(c *Context) (Response, error) {
 	helpMessage.WriteString("我当前支持这些命令：\n")
 
 	subCommandHelpMessages := make([]string, 0)
+
 	for _, c := range h.commands {
 		subCommandHelpMessage := strings.Builder{}
 		subCommandHelpMessage.WriteString("/")
@@ -43,6 +44,7 @@ func (h helpCommandHandler) Handle(c *Context) (Response, error) {
 
 		subCommandHelpMessages = append(subCommandHelpMessages, subCommandHelpMessage.String())
 	}
+
 	helpMessage.WriteString(strings.Join(subCommandHelpMessages, "\n"))
 
 	return c.NewMessageReplyTo(helpMessage.String(), c.Update.Message.MessageID).WithParseModeHTML(), nil

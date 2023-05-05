@@ -1,12 +1,14 @@
 package services
 
 import (
-	"github.com/nekomeowww/insights-bot/internal/services/chat_history_recap"
+	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
+	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"go.uber.org/fx"
 )
 
 func NewModules() fx.Option {
 	return fx.Options(
-		fx.Provide(chat_history_recap.NewChatHistoryRecapService()),
+		fx.Provide(autorecap.NewChatHistoryRecapService()),
+		fx.Provide(pprof.NewPprof()),
 	)
 }

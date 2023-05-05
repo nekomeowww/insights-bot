@@ -172,6 +172,7 @@ func NewHandler(h HandleFunc) Handler {
 		}
 
 		processResponse(ctx, resp)
+
 		return nil, nil
 	}
 

@@ -1,0 +1,57 @@
+linters:
+  enable:
+    # - contextcheck # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    - errcheck
+    - gosimple
+    # - govet # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+
+    # - bodyclose # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    - containedctx
+    - depguard
+    - dupl
+    - durationcheck
+    - errname
+    - exhaustive
+    - exportloopref
+    - forcetypeassert
+    - godot
+    - gofmt
+    - goheader
+    - goprintffuncname
+    - gosec
+    - musttag
+    - nestif
+    # - nilerr # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    # - noctx # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    - nolintlint
+    - nosprintfhostport
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - tenv
+    - testableexamples
+    - unconvert
+    # - unparam # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
+    - usestdlibvars
+    - whitespace
+    - wsl
+
+linters-settings:
+  wsl:
+    allow-assign-and-call: false
+  revive:
+    rules:
+      - name: blank-imports
+        disabled: true
+
+issues:
+  exclude:
+    - "if statements should only be cuddled with assignments" # from wsl
+    - "if statements should only be cuddled with assignments used in the if statement itself" # from wsl
+    - "assignments should only be cuddled with other assignments" # from wsl. false positive case: var a bool\nb := true
+

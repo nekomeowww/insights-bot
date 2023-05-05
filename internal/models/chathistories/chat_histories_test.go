@@ -1,4 +1,4 @@
-package chat_histories
+package chathistories
 
 import (
 	"context"

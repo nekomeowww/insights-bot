@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/internal/configs"
@@ -71,7 +72,11 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 		engine := gin.Default()
 		engine.POST("/slack/command/smr", slackBot.postCommandInfo)
 		engine.GET("/slack/install/auth", slackBot.getInstallAuth)
-		slackBot.server = &http.Server{Addr: lo.Ternary(slackConfig.Port == "", ":7070", slackConfig.Port), Handler: engine}
+		slackBot.server = &http.Server{
+			Addr:              lo.Ternary(slackConfig.Port == "", ":7070", slackConfig.Port),
+			Handler:           engine,
+			ReadHeaderTimeout: time.Second * 10,
+		}
 
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {

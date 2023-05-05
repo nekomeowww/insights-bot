@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   insights_bot:
-    image: nekomeowww/insights-bot:latest
+    image: ghcr.io/nekomeowww/insights-bot:latest
     restart: always
     environment:
       - TELEGRAM_BOT_TOKEN=<Telegram Bot API Token>

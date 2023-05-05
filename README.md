@@ -92,7 +92,7 @@ By sending `/recap` command, the bot will try to summarize the chat histories an
 ### Run with docker
 
 ```shell
-docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e DB_CONNECTION_STR="<PostgresSQL connection URL>" insights-bot nekomeowww/insights-bot:latest
+docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e DB_CONNECTION_STR="<PostgresSQL connection URL>" insights-bot ghcr.io/nekomeowww/insights-bot:latest
 ```
 
 ### Run with docker-compose
@@ -133,7 +133,7 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | `OPENAI_API_SECRET` | `true` | | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys). |
 | `DB_CONNECTION_STR` | `true` | | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema |
 | `OPENAI_API_HOST` | `false` | `https://api.openai.com` | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev` |
-| `CLOVER_DB_PATH` | `false` | `insights_bot_clover_data.db` | Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file. |
+| ~~`CLOVER_DB_PATH`~~ | ~~`false`~~ | ~~`insights_bot_clover_data.db`~~ | **Deprecated**. ~~Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file.~~ |
 
 ## Acknowledgements
 

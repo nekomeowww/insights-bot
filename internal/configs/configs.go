@@ -7,8 +7,9 @@ import (
 const (
 	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN" //nolint:gosec
 
-	EnvSlackBotToken = "SLACK_BOT_TOKEN" //nolint:gosec
-	EnvSlackBotPort  = "SLACK_BOT_PORT"
+	EnvSlackClientID     = "SLACK_CLIENT_ID"
+	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
+	EnvSlackWebhookPort  = "SLACK_WEBHOOK_PORT"
 
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET" //nolint:gosec
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
@@ -32,8 +33,9 @@ type SectionPinecone struct {
 }
 
 type SectionSlack struct {
-	Port     string
-	BotToken string
+	Port         string
+	ClientID     string
+	ClientSecret string
 }
 
 type SectionDB struct {
@@ -55,8 +57,9 @@ func NewConfig() func() *Config {
 		return &Config{
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
 			Slack: SectionSlack{
-				BotToken: os.Getenv(EnvSlackBotToken),
-				Port:     os.Getenv(EnvSlackBotPort),
+				Port:         os.Getenv(EnvSlackWebhookPort),
+				ClientID:     os.Getenv(EnvSlackClientID),
+				ClientSecret: os.Getenv(EnvSlackClientSecret),
 			},
 			OpenAIAPISecret: os.Getenv(EnvOpenAIAPISecret),
 			OpenAIAPIHost:   os.Getenv(EnvOpenAIAPIHost),

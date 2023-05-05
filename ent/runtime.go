@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/schema"
+	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 )
 
@@ -79,6 +80,28 @@ func init() {
 	chathistoriesDescID := chathistoriesFields[0].Descriptor()
 	// chathistories.DefaultID holds the default value on creation for the id field.
 	chathistories.DefaultID = chathistoriesDescID.Default.(func() uuid.UUID)
+	slackoauthcredentialsFields := schema.SlackOAuthCredentials{}.Fields()
+	_ = slackoauthcredentialsFields
+	// slackoauthcredentialsDescTeamID is the schema descriptor for team_id field.
+	slackoauthcredentialsDescTeamID := slackoauthcredentialsFields[1].Descriptor()
+	// slackoauthcredentials.TeamIDValidator is a validator for the "team_id" field. It is called by the builders before save.
+	slackoauthcredentials.TeamIDValidator = slackoauthcredentialsDescTeamID.Validators[0].(func(string) error)
+	// slackoauthcredentialsDescAccessToken is the schema descriptor for access_token field.
+	slackoauthcredentialsDescAccessToken := slackoauthcredentialsFields[2].Descriptor()
+	// slackoauthcredentials.AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.
+	slackoauthcredentials.AccessTokenValidator = slackoauthcredentialsDescAccessToken.Validators[0].(func(string) error)
+	// slackoauthcredentialsDescCreatedAt is the schema descriptor for created_at field.
+	slackoauthcredentialsDescCreatedAt := slackoauthcredentialsFields[3].Descriptor()
+	// slackoauthcredentials.DefaultCreatedAt holds the default value on creation for the created_at field.
+	slackoauthcredentials.DefaultCreatedAt = slackoauthcredentialsDescCreatedAt.Default.(func() int64)
+	// slackoauthcredentialsDescUpdatedAt is the schema descriptor for updated_at field.
+	slackoauthcredentialsDescUpdatedAt := slackoauthcredentialsFields[4].Descriptor()
+	// slackoauthcredentials.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	slackoauthcredentials.DefaultUpdatedAt = slackoauthcredentialsDescUpdatedAt.Default.(func() int64)
+	// slackoauthcredentialsDescID is the schema descriptor for id field.
+	slackoauthcredentialsDescID := slackoauthcredentialsFields[0].Descriptor()
+	// slackoauthcredentials.DefaultID holds the default value on creation for the id field.
+	slackoauthcredentials.DefaultID = slackoauthcredentialsDescID.Default.(func() uuid.UUID)
 	telegramchatfeatureflagsFields := schema.TelegramChatFeatureFlags{}.Fields()
 	_ = telegramchatfeatureflagsFields
 	// telegramchatfeatureflagsDescCreatedAt is the schema descriptor for created_at field.

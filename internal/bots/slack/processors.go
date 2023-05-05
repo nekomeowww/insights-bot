@@ -7,8 +7,9 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func (b *SlackBot) smr(info recivedCommandInfo) {
-	summarization, err := b.smrModel.SummarizeInputURL(info.Text)
+func (b *SlackBot) smr(info smrRequestInfo) {
+	summarization, err := b.smrModel.SummarizeInputURL(info.inputUrl)
+	slackCli := slack.New(info.accessToken)
 
 	if err != nil {
 		errMsg := ""
@@ -19,16 +20,18 @@ func (b *SlackBot) smr(info recivedCommandInfo) {
 		} else {
 			errMsg = "量子速读失败了。可以再试试？"
 		}
+
 		b.logger.WithField("error", err.Error()).Error("slack: summarization failed")
 
-		_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(errMsg, false))
+		_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(errMsg, false))
 		if err != nil {
 			b.logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
 		}
+
 		return
 	}
 
-	_, _, _, err = b.slackCli.SendMessage(info.ChannelId, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
+	_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
 	if err != nil {
 		b.logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
 	}
@@ -36,6 +39,7 @@ func (b *SlackBot) smr(info recivedCommandInfo) {
 
 func (b *SlackBot) runSmr() {
 	needToClose := false
+
 	for {
 		select {
 		case <-b.closeChan:

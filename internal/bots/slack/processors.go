@@ -20,12 +20,14 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 		} else {
 			errMsg = "量子速读失败了。可以再试试？"
 		}
+
 		b.logger.WithField("error", err.Error()).Error("slack: summarization failed")
 
 		_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(errMsg, false))
 		if err != nil {
 			b.logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
 		}
+
 		return
 	}
 
@@ -37,6 +39,7 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 
 func (b *SlackBot) runSmr() {
 	needToClose := false
+
 	for {
 		select {
 		case <-b.closeChan:

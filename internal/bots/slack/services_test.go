@@ -24,9 +24,11 @@ func newTestSlackBot() *SlackBot {
 		Configs:   config,
 		Lifecycle: lifeCycleMock{},
 	})
+
 	if err != nil {
 		log.Fatal("datastore init failed")
 	}
+
 	return &SlackBot{
 		ent:    ent,
 		logger: logger.NewLogger(logrus.InfoLevel, "insights-bot", "", make([]logrus.Hook, 0)),

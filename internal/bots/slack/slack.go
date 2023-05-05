@@ -118,6 +118,7 @@ func Run() func(bot *SlackBot) error {
 		}()
 
 		go bot.runSmr()
+
 		return nil
 	}
 }

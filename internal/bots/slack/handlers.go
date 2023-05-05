@@ -20,6 +20,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		s.logger.WithField("error", err.Error()).Warn("failed to bind request body, maybe slack request definition changed")
+
 		return
 	}
 
@@ -29,7 +30,9 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	}).Infof("slack: command received: /smr %s", body.Text)
 
 	urlString := body.Text
+
 	var err error
+
 	if urlString == "" {
 		err = errors.New("没有找到链接，可以发送一个有效的链接吗？用法：/smr <链接>")
 	} else {
@@ -58,7 +61,9 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
+
 		ctx.AbortWithStatus(http.StatusInternalServerError)
+
 		return
 	}
 
@@ -73,7 +78,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("请稍等，量子速读中..."))
 }
 
-// receive auth code and request for access token
+// Receive auth code and request for access token.
 func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 	code := ctx.Query("code")
 	if code == "" {
@@ -85,6 +90,7 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 	if err != nil {
 		b.logger.WithError(err).Error("slack: failed to get access token, interrupt")
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)
+
 		return
 	}
 
@@ -96,5 +102,6 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 
 	ctx.Header("content-type", "text/html")
 	_, _ = ctx.Writer.Write([]byte("<h1 style=\"text-align:center\">Success! Now you can close this page<h1>"))
+
 	ctx.Status(http.StatusOK)
 }

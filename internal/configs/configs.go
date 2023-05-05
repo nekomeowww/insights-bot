@@ -9,7 +9,7 @@ const (
 
 	EnvSlackClientID     = "SLACK_CLIENT_ID"
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
-	EnvSlackBotPort      = "SLACK_BOT_PORT"
+	EnvSlackWebhookPort  = "SLACK_WEBHOOK_PORT"
 
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET" //nolint:gosec
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
@@ -57,7 +57,7 @@ func NewConfig() func() *Config {
 		return &Config{
 			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
 			Slack: SectionSlack{
-				Port:         os.Getenv(EnvSlackBotPort),
+				Port:         os.Getenv(EnvSlackWebhookPort),
 				ClientID:     os.Getenv(EnvSlackClientID),
 				ClientSecret: os.Getenv(EnvSlackClientSecret),
 			},

@@ -6,13 +6,15 @@ import (
 	"runtime"
 )
 
-// RelativePathOf 获取基于调用函数的调用对象相对位置的相对路径
+// RelativePathOf 获取基于调用函数的调用对象相对位置的相对路径。
 func RelativePathOf(fp string) string {
 	_, file, _, ok := runtime.Caller(1)
 	if !ok {
 		return ""
 	}
+
 	callerDir := filepath.Dir(filepath.FromSlash(file))
+
 	return filepath.FromSlash(filepath.Join(callerDir, fp))
 }
 

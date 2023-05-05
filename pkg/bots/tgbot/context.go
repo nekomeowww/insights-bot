@@ -93,6 +93,7 @@ func (c *Context) CallbackQueryDataBindQuery(dst interface{}) error {
 	}
 
 	decoder := schema.NewDecoder()
+
 	err = decoder.Decode(dst, parsedURL.Query())
 	if err != nil {
 		return err

@@ -1,4 +1,4 @@
-package chat_histories
+package chathistories
 
 import (
 	"context"
@@ -124,6 +124,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
 	}).Debug("saved one telegram chat history")
+
 	return nil
 }
 
@@ -137,6 +138,7 @@ func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.ChatHistories
 
 func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.ChatHistories, error) {
 	m.logger.Infof("querying chat histories for %d", chatID)
+
 	telegramChatHistories, err := m.ent.ChatHistories.
 		Query().
 		Where(
@@ -192,9 +194,10 @@ var RecapOutputTemplate = lo.Must(template.
 
 {{ end }}{{ end }}`))
 
-func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
-	c.logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
-	resp, err := c.openAI.SummarizeWithChatHistories(context.Background(), s)
+func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
+	m.logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
+
+	resp, err := m.openAI.SummarizeWithChatHistories(context.Background(), s)
 	if err != nil {
 		return nil, err
 	}
@@ -202,7 +205,7 @@ func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, nil
 	}
 
-	c.logger.WithFields(logrus.Fields{
+	m.logger.WithFields(logrus.Fields{
 		"prompt_token_usage":     resp.Usage.PromptTokens,
 		"completion_token_usage": resp.Usage.CompletionTokens,
 		"total_token_usage":      resp.Usage.TotalTokens,
@@ -212,17 +215,19 @@ func (c *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 	}
 
 	var outputs []*openai.ChatHistorySummarizationOutputs
+
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 	if err != nil {
-		c.logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
+		m.logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
 		return nil, err
 	}
 
 	return outputs, nil
 }
 
-func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (string, error) {
+func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
+
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
@@ -244,14 +249,16 @@ func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
-	chatHistoriesSlices := c.openAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
+	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(chatHistories, 2800)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
+
 	for _, s := range chatHistoriesSlices {
 		var outputs []*openai.ChatHistorySummarizationOutputs
+
 		_, _, err := lo.AttemptWithDelay(3, time.Second, func(tried int, delay time.Duration) error {
-			o, err := c.summarizeChatHistoriesSlice(s)
+			o, err := m.summarizeChatHistoriesSlice(s)
 			if err != nil {
-				c.logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
+				m.logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
 				return err
 			}
 
@@ -273,6 +280,7 @@ func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				d.CriticalMessageIDs = lo.Filter(d.CriticalMessageIDs, func(item int64, _ int) bool {
 					return item != 0
 				})
+
 				if len(d.CriticalMessageIDs) > 5 {
 					d.CriticalMessageIDs = d.CriticalMessageIDs[:5]
 				}
@@ -283,6 +291,7 @@ func (c *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	}
 
 	sb := new(strings.Builder)
+
 	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(chatID),
 		Recaps: chatHistoriesSummarizations,

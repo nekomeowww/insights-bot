@@ -69,6 +69,7 @@ func NewExceptionError(err error) ExceptionError {
 
 	pc, file, line, _ := runtime.Caller(e.callFrameSkip)
 	funcDetails := runtime.FuncForPC(pc)
+
 	var funcName string
 	if funcDetails != nil {
 		funcName = funcDetails.Name()

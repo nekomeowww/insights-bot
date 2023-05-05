@@ -8,10 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestNewClient(t *testing.T) {
-	_, _ = NewClient("", "https://openai.example.com")
-}
-
 func TestTruncateContentBasedOnTokens(t *testing.T) {
 	tables := []struct {
 		textContent string
@@ -37,6 +33,7 @@ func TestTruncateContentBasedOnTokens(t *testing.T) {
 
 	c, err := NewClient("", "")
 	require.NoError(t, err)
+
 	for _, table := range tables {
 		t.Run(table.textContent, func(t *testing.T) {
 			actual := c.TruncateContentBasedOnTokens(table.textContent, table.limits)
@@ -65,6 +62,7 @@ func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 
 	c, err := NewClient("", "")
 	require.NoError(t, err)
+
 	for i, table := range tables {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			actual := c.SplitContentBasedByTokenLimitations(table.textContent, table.limits)

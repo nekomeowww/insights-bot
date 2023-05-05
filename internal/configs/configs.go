@@ -5,17 +5,17 @@ import (
 )
 
 const (
-	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN"
+	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN" //nolint:gosec
 
 	EnvSlackClientID     = "SLACK_CLIENT_ID"
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
 	EnvSlackBotPort      = "SLACK_BOT_PORT"
 
-	EnvOpenAIAPISecret              = "OPENAI_API_SECRET"
+	EnvOpenAIAPISecret              = "OPENAI_API_SECRET" //nolint:gosec
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
-	EnvPineconeAPIKey               = "PINECONE_API_KEY"
+	EnvPineconeAPIKey               = "PINECONE_API_KEY" //nolint:gosec
 	EnvPineconeChatHistoryIndexName = "PINECONE_CHAT_HISTORY_INDEX_NAME"
 	EnvDBConnectionString           = "DB_CONNECTION_STR"
 )

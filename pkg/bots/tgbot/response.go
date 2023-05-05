@@ -21,6 +21,7 @@ func NewMessageReplyTo(chatID int64, message string, replyToMessageID int) Messa
 	}
 
 	m.messageConfig.ReplyToMessageID = replyToMessageID
+
 	return m
 }
 

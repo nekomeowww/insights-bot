@@ -11,6 +11,7 @@ func TestPrintAndPrintJSON(t *testing.T) {
 		C int
 		D []string
 	}
+
 	type testStruct struct {
 		A        int
 		B        string

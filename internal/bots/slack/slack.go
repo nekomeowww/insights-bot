@@ -73,7 +73,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 		engine.POST("/slack/command/smr", slackBot.postCommandInfo)
 		engine.GET("/slack/install/auth", slackBot.getInstallAuth)
 		slackBot.server = &http.Server{
-			Addr:              lo.Ternary(slackConfig.Port == "", ":7070", slackConfig.Port),
+			Addr:              lo.Ternary(slackConfig.Port == "", ":7070", net.JoinHostPort("", slackConfig.Port)),
 			Handler:           engine,
 			ReadHeaderTimeout: time.Second * 10,
 		}

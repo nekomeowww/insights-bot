@@ -20,11 +20,11 @@ func (lifeCycleMock) Append(hook fx.Hook) {}
 
 func newTestSlackBot() *SlackBot {
 	config := configs.NewTestConfig()()
+
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
 		Configs:   config,
 		Lifecycle: lifeCycleMock{},
 	})
-
 	if err != nil {
 		log.Fatal("datastore init failed")
 	}

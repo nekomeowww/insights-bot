@@ -11,7 +11,6 @@ func (b *SlackBot) createNewSlackCredential(teamID, accessToken string) error {
 		Where(slackoauthcredentials.TeamID(teamID)).
 		SetAccessToken(accessToken).
 		Save(context.Background())
-
 	if err != nil {
 		b.logger.WithError(err).Warn("slack: failed to update access token")
 		return err

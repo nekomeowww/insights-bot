@@ -190,10 +190,10 @@ var RecapOutputTemplate = lo.Must(template.
 		"add":    func(a, b int) int { return a + b },
 		"escape": tgbot.EscapeHTMLSymbols,
 	}).
-	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceMsgID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceMsgID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
+	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ escape $d.Point }}{{ if len $d.CriticalIDs }} {{ range $cIndex, $c := $d.CriticalIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
@@ -282,15 +282,15 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 
 		for _, o := range outputs {
 			for _, d := range o.Discussion {
-				d.CriticalMessageIDs = lo.UniqBy(d.CriticalMessageIDs, func(item int64) int64 {
+				d.CriticalIDs = lo.UniqBy(d.CriticalIDs, func(item int64) int64 {
 					return item
 				})
-				d.CriticalMessageIDs = lo.Filter(d.CriticalMessageIDs, func(item int64, _ int) bool {
+				d.CriticalIDs = lo.Filter(d.CriticalIDs, func(item int64, _ int) bool {
 					return item != 0
 				})
 
-				if len(d.CriticalMessageIDs) > 5 {
-					d.CriticalMessageIDs = d.CriticalMessageIDs[:5]
+				if len(d.CriticalIDs) > 5 {
+					d.CriticalIDs = d.CriticalIDs[:5]
 				}
 			}
 		}

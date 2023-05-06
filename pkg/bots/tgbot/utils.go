@@ -87,27 +87,28 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 
 func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	text := lo.Ternary(message.Caption != "", message.Caption, message.Text)
+
 	type MarkdownLink struct {
 		Markdown []uint16
 		Start    int
 		End      int
 	}
 
-	text_utf16 := utf16.Encode([]rune(text))
+	textUtf16 := utf16.Encode([]rune(text))
 	links := lop.Map(message.Entities, func(entity tgbotapi.MessageEntity, i int) MarkdownLink {
-		start_i := entity.Offset
-		end_i := start_i + entity.Length
+		startIndex := entity.Offset
+		endIndex := startIndex + entity.Length
 		var title string
 		var href string
 		if entity.Type == "url" {
-			href = string(utf16.Decode(text_utf16[start_i:end_i]))
+			href = string(utf16.Decode(textUtf16[startIndex:endIndex]))
 			result, err := LinkPreview.PreviewLink(href, nil)
 			if err != nil {
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 			title = result.Title
 		} else if entity.Type == "text_link" {
-			title = string(utf16.Decode(text_utf16[start_i:end_i]))
+			title = string(utf16.Decode(textUtf16[startIndex:endIndex]))
 			href = entity.URL
 		} else {
 			return MarkdownLink{[]uint16{}, -1, -1}
@@ -117,18 +118,19 @@ func ExtractTextFromMessage(message *tgbotapi.Message) string {
 			href = strings.ReplaceAll(unescaped, " ", "+")
 		}
 		md := "[" + title + "](" + href + ")"
-		md_utf16 := utf16.Encode([]rune(md))
-		return MarkdownLink{md_utf16, start_i, end_i}
+		mdUtf16 := utf16.Encode([]rune(md))
+		return MarkdownLink{mdUtf16, startIndex, endIndex}
 	})
 
 	for i := len(links) - 1; i >= 0; i-- {
 		if links[i].Start == -1 {
 			continue
 		}
-		text_utf16 = append(text_utf16[:links[i].Start], append(links[i].Markdown, text_utf16[links[i].End:]...)...)
+		temp := append(links[i].Markdown, textUtf16[links[i].End:]...)
+		textUtf16 = append(textUtf16[:links[i].Start], temp...)
 	}
 
-	return string(utf16.Decode(text_utf16))
+	return string(utf16.Decode(textUtf16))
 }
 
 // EscapeHTMLSymbols

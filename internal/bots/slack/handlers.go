@@ -94,7 +94,7 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 		return
 	}
 
-	err = b.createNewSlackCredential(resp.Team.ID, resp.AccessToken)
+	err = b.createNewSlackCredential(resp.Team.ID, resp.AccessToken, resp.RefreshToken)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

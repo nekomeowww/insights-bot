@@ -75,6 +75,11 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 
+	if strings.Contains(message.Text, "#recap") {
+		m.logger.Warn("message appears to be a recap sent by an insights-bot instance")
+		return nil
+	}
+
 	telegramChatHistoryCreate := m.ent.ChatHistories.
 		Create().
 		SetChatID(message.Chat.ID).

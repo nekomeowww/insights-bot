@@ -94,9 +94,9 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistoryCreate.SetText(fmt.Sprintf("转发了来自 %s 的消息：%s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
 	} else if message.ForwardFromChat != nil {
-		telegramChatHistoryCreate.SetText(fmt.Sprintf("转发了来自 %s 的消息：%s", message.ForwardFromChat.Title, text))
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", message.ForwardFromChat.Title, text))
 	} else {
 		telegramChatHistoryCreate.SetText(text)
 	}

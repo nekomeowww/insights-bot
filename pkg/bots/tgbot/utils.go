@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"unicode/utf16"
 
 	"github.com/Junzki/link-preview"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -87,45 +88,47 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	text := lo.Ternary(message.Caption != "", message.Caption, message.Text)
 	type MarkdownLink struct {
-		Markdown string
+		Markdown []uint16
 		Start    int
 		End      int
 	}
 
+	text_utf16 := utf16.Encode([]rune(text))
 	links := lop.Map(message.Entities, func(entity tgbotapi.MessageEntity, i int) MarkdownLink {
 		start_i := entity.Offset
 		end_i := start_i + entity.Length
 		var title string
 		var href string
 		if entity.Type == "url" {
-			href = text[start_i:end_i]
+			href = string(utf16.Decode(text_utf16[start_i:end_i]))
 			result, err := LinkPreview.PreviewLink(href, nil)
 			if err != nil {
-				return MarkdownLink{"", -1, -1}
+				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 			title = result.Title
 		} else if entity.Type == "text_link" {
-			title = text[entity.Offset : entity.Offset+entity.Length]
+			title = string(utf16.Decode(text_utf16[start_i:end_i]))
 			href = entity.URL
 		} else {
-			return MarkdownLink{"", -1, -1}
+			return MarkdownLink{[]uint16{}, -1, -1}
 		}
 		unescaped, err := url.QueryUnescape(href)
 		if err == nil {
 			href = strings.ReplaceAll(unescaped, " ", "+")
 		}
 		md := "[" + title + "](" + href + ")"
-		return MarkdownLink{md, start_i, end_i}
+		md_utf16 := utf16.Encode([]rune(md))
+		return MarkdownLink{md_utf16, start_i, end_i}
 	})
 
 	for i := len(links) - 1; i >= 0; i-- {
 		if links[i].Start == -1 {
 			continue
 		}
-		text = text[:links[i].Start] + links[i].Markdown + text[links[i].End:]
+		text_utf16 = append(text_utf16[:links[i].Start], append(links[i].Markdown, text_utf16[links[i].End:]...)...)
 	}
 
-	return text
+	return string(utf16.Decode(text_utf16))
 }
 
 // EscapeHTMLSymbols

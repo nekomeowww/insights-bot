@@ -23,6 +23,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
+	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type NewModelParams struct {
@@ -93,9 +94,9 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistoryCreate.SetText("转发了来自" + tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text)
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
 	} else if message.ForwardFromChat != nil {
-		telegramChatHistoryCreate.SetText("转发了来自" + message.ForwardFromChat.Title + "的消息：" + text)
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", message.ForwardFromChat.Title, text))
 	} else {
 		telegramChatHistoryCreate.SetText(text)
 	}
@@ -164,6 +165,10 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
+func formatChatHistoryTextContent(text string) string {
+	return fmt.Sprintf(`"""%s"""`, text)
+}
+
 type RecapOutputTemplateInputs struct {
 	ChatID string
 	Recaps []*openai.ChatHistorySummarizationOutputs
@@ -186,10 +191,10 @@ var RecapOutputTemplate = lo.Must(template.
 		"add":    func(a, b int) int { return a + b },
 		"escape": tgbot.EscapeHTMLSymbols,
 	}).
-	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceMsgID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceMsgID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
+	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.CriticalMessageIDs }} {{ range $cIndex, $c := $d.CriticalMessageIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalMessageIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ escape $d.Point }}{{ if len $d.CriticalIDs }} {{ range $cIndex, $c := $d.CriticalIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
@@ -222,6 +227,8 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, err
 	}
 
+	m.logger.Infof("✅ unmarshaled chat history summarization output: %s", utils.SprintJSON(outputs))
+
 	return outputs, nil
 }
 
@@ -231,19 +238,23 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"msgId:%d: %s 发送：%s",
+				"msgId:%d: %s sent: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
-				message.Text,
+				formatChatHistoryTextContent(message.Text),
 			))
 		} else {
-			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的 msgId:%d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
+			repliedToPartialContextMessage := fmt.Sprintf(
+				"%s sent msgId:%d",
+				formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername),
+				message.RepliedToMessageID,
+			)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"msgId:%d: %s 回复 %s：%s",
+				"msgId:%d: %s replying to [%s]: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
-				message.Text,
+				formatChatHistoryTextContent(message.Text),
 			))
 		}
 	}
@@ -274,15 +285,15 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 
 		for _, o := range outputs {
 			for _, d := range o.Discussion {
-				d.CriticalMessageIDs = lo.UniqBy(d.CriticalMessageIDs, func(item int64) int64 {
+				d.CriticalIDs = lo.UniqBy(d.CriticalIDs, func(item int64) int64 {
 					return item
 				})
-				d.CriticalMessageIDs = lo.Filter(d.CriticalMessageIDs, func(item int64, _ int) bool {
+				d.CriticalIDs = lo.Filter(d.CriticalIDs, func(item int64, _ int) bool {
 					return item != 0
 				})
 
-				if len(d.CriticalMessageIDs) > 5 {
-					d.CriticalMessageIDs = d.CriticalMessageIDs[:5]
+				if len(d.CriticalIDs) > 5 {
+					d.CriticalIDs = d.CriticalIDs[:5]
 				}
 			}
 		}
@@ -299,6 +310,8 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	if err != nil {
 		return "", err
 	}
+
+	m.logger.Infof("✅ summarized chat histories: %s", sb.String())
 
 	return sb.String(), nil
 }

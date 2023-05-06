@@ -23,6 +23,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
+	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type NewModelParams struct {
@@ -226,6 +227,8 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, err
 	}
 
+	m.logger.Infof("✅ unmarshaled chat history summarization output: %s", utils.SprintJSON(outputs))
+
 	return outputs, nil
 }
 
@@ -235,19 +238,19 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"msgId:%d: %s 发送：%s",
+				"msgId:%d: %s sent: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				formatChatHistoryTextContent(message.Text),
 			))
 		} else {
 			repliedToPartialContextMessage := fmt.Sprintf(
-				"%s 发送的 msgId:%d 消息",
+				"%s sent msgId:%d",
 				formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername),
 				message.RepliedToMessageID,
 			)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
-				"msgId:%d: %s 回复 %s：%s",
+				"msgId:%d: %s replying to [%s]: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
@@ -307,6 +310,8 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 	if err != nil {
 		return "", err
 	}
+
+	m.logger.Infof("✅ summarized chat histories: %s", sb.String())
 
 	return sb.String(), nil
 }

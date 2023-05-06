@@ -28,6 +28,12 @@ func (socu *SlackOAuthCredentialsUpdate) Where(ps ...predicate.SlackOAuthCredent
 	return socu
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (socu *SlackOAuthCredentialsUpdate) SetRefreshToken(s string) *SlackOAuthCredentialsUpdate {
+	socu.mutation.SetRefreshToken(s)
+	return socu
+}
+
 // SetAccessToken sets the "access_token" field.
 func (socu *SlackOAuthCredentialsUpdate) SetAccessToken(s string) *SlackOAuthCredentialsUpdate {
 	socu.mutation.SetAccessToken(s)
@@ -110,6 +116,11 @@ func (socu *SlackOAuthCredentialsUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (socu *SlackOAuthCredentialsUpdate) check() error {
+	if v, ok := socu.mutation.RefreshToken(); ok {
+		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
+			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
+		}
+	}
 	if v, ok := socu.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}
@@ -129,6 +140,9 @@ func (socu *SlackOAuthCredentialsUpdate) sqlSave(ctx context.Context) (n int, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := socu.mutation.RefreshToken(); ok {
+		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
 	}
 	if value, ok := socu.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)
@@ -165,6 +179,12 @@ type SlackOAuthCredentialsUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *SlackOAuthCredentialsMutation
+}
+
+// SetRefreshToken sets the "refresh_token" field.
+func (socuo *SlackOAuthCredentialsUpdateOne) SetRefreshToken(s string) *SlackOAuthCredentialsUpdateOne {
+	socuo.mutation.SetRefreshToken(s)
+	return socuo
 }
 
 // SetAccessToken sets the "access_token" field.
@@ -262,6 +282,11 @@ func (socuo *SlackOAuthCredentialsUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (socuo *SlackOAuthCredentialsUpdateOne) check() error {
+	if v, ok := socuo.mutation.RefreshToken(); ok {
+		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
+			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
+		}
+	}
 	if v, ok := socuo.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}
@@ -298,6 +323,9 @@ func (socuo *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := socuo.mutation.RefreshToken(); ok {
+		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
 	}
 	if value, ok := socuo.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)

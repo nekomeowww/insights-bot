@@ -26,6 +26,12 @@ func (socc *SlackOAuthCredentialsCreate) SetTeamID(s string) *SlackOAuthCredenti
 	return socc
 }
 
+// SetRefreshToken sets the "refresh_token" field.
+func (socc *SlackOAuthCredentialsCreate) SetRefreshToken(s string) *SlackOAuthCredentialsCreate {
+	socc.mutation.SetRefreshToken(s)
+	return socc
+}
+
 // SetAccessToken sets the "access_token" field.
 func (socc *SlackOAuthCredentialsCreate) SetAccessToken(s string) *SlackOAuthCredentialsCreate {
 	socc.mutation.SetAccessToken(s)
@@ -133,6 +139,14 @@ func (socc *SlackOAuthCredentialsCreate) check() error {
 			return &ValidationError{Name: "team_id", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.team_id": %w`, err)}
 		}
 	}
+	if _, ok := socc.mutation.RefreshToken(); !ok {
+		return &ValidationError{Name: "refresh_token", err: errors.New(`ent: missing required field "SlackOAuthCredentials.refresh_token"`)}
+	}
+	if v, ok := socc.mutation.RefreshToken(); ok {
+		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
+			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
+		}
+	}
 	if _, ok := socc.mutation.AccessToken(); !ok {
 		return &ValidationError{Name: "access_token", err: errors.New(`ent: missing required field "SlackOAuthCredentials.access_token"`)}
 	}
@@ -186,6 +200,10 @@ func (socc *SlackOAuthCredentialsCreate) createSpec() (*SlackOAuthCredentials, *
 	if value, ok := socc.mutation.TeamID(); ok {
 		_spec.SetField(slackoauthcredentials.FieldTeamID, field.TypeString, value)
 		_node.TeamID = value
+	}
+	if value, ok := socc.mutation.RefreshToken(); ok {
+		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
+		_node.RefreshToken = value
 	}
 	if value, ok := socc.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)

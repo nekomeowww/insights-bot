@@ -86,16 +86,20 @@ func init() {
 	slackoauthcredentialsDescTeamID := slackoauthcredentialsFields[1].Descriptor()
 	// slackoauthcredentials.TeamIDValidator is a validator for the "team_id" field. It is called by the builders before save.
 	slackoauthcredentials.TeamIDValidator = slackoauthcredentialsDescTeamID.Validators[0].(func(string) error)
+	// slackoauthcredentialsDescRefreshToken is the schema descriptor for refresh_token field.
+	slackoauthcredentialsDescRefreshToken := slackoauthcredentialsFields[2].Descriptor()
+	// slackoauthcredentials.RefreshTokenValidator is a validator for the "refresh_token" field. It is called by the builders before save.
+	slackoauthcredentials.RefreshTokenValidator = slackoauthcredentialsDescRefreshToken.Validators[0].(func(string) error)
 	// slackoauthcredentialsDescAccessToken is the schema descriptor for access_token field.
-	slackoauthcredentialsDescAccessToken := slackoauthcredentialsFields[2].Descriptor()
+	slackoauthcredentialsDescAccessToken := slackoauthcredentialsFields[3].Descriptor()
 	// slackoauthcredentials.AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.
 	slackoauthcredentials.AccessTokenValidator = slackoauthcredentialsDescAccessToken.Validators[0].(func(string) error)
 	// slackoauthcredentialsDescCreatedAt is the schema descriptor for created_at field.
-	slackoauthcredentialsDescCreatedAt := slackoauthcredentialsFields[3].Descriptor()
+	slackoauthcredentialsDescCreatedAt := slackoauthcredentialsFields[4].Descriptor()
 	// slackoauthcredentials.DefaultCreatedAt holds the default value on creation for the created_at field.
 	slackoauthcredentials.DefaultCreatedAt = slackoauthcredentialsDescCreatedAt.Default.(func() int64)
 	// slackoauthcredentialsDescUpdatedAt is the schema descriptor for updated_at field.
-	slackoauthcredentialsDescUpdatedAt := slackoauthcredentialsFields[4].Descriptor()
+	slackoauthcredentialsDescUpdatedAt := slackoauthcredentialsFields[5].Descriptor()
 	// slackoauthcredentials.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	slackoauthcredentials.DefaultUpdatedAt = slackoauthcredentialsDescUpdatedAt.Default.(func() int64)
 	// slackoauthcredentialsDescID is the schema descriptor for id field.

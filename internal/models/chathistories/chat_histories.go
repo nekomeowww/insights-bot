@@ -93,9 +93,9 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 	if message.ForwardFrom != nil {
-		telegramChatHistoryCreate.SetText("转发了来自" + tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName) + "的消息：" + text)
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("转发了来自 %s 的消息：%s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
 	} else if message.ForwardFromChat != nil {
-		telegramChatHistoryCreate.SetText("转发了来自" + message.ForwardFromChat.Title + "的消息：" + text)
+		telegramChatHistoryCreate.SetText(fmt.Sprintf("转发了来自 %s 的消息：%s", message.ForwardFromChat.Title, text))
 	} else {
 		telegramChatHistoryCreate.SetText(text)
 	}
@@ -162,6 +162,10 @@ func formatFullNameAndUsername(fullName, username string) string {
 	}
 
 	return strings.ReplaceAll(fullName, "#", "")
+}
+
+func formatChatHistoryTextContent(text string) string {
+	return fmt.Sprintf(`"""%s"""`, text)
 }
 
 type RecapOutputTemplateInputs struct {
@@ -234,16 +238,20 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				"msgId:%d: %s 发送：%s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
-				message.Text,
+				formatChatHistoryTextContent(message.Text),
 			))
 		} else {
-			repliedToPartialContextMessage := fmt.Sprintf("%s 发送的 msgId:%d 的消息", formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername), message.RepliedToMessageID)
+			repliedToPartialContextMessage := fmt.Sprintf(
+				"%s 发送的 msgId:%d 消息",
+				formatFullNameAndUsername(message.RepliedToFullName, message.RepliedToUsername),
+				message.RepliedToMessageID,
+			)
 			historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
 				"msgId:%d: %s 回复 %s：%s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
-				message.Text,
+				formatChatHistoryTextContent(message.Text),
 			))
 		}
 	}

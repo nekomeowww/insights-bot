@@ -217,3 +217,39 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 结论：Conclusion 2`
 	assert.Equal(t, expected, sb.String())
 }
+
+func TestFormatFullNameAndUsername(t *testing.T) {
+	tests := []struct {
+		name     string
+		fullName string
+		username string
+		result   string
+	}{
+		{
+			name:     `full name shorter than 10 chars`,
+			fullName: "Full Name",
+			username: "example_username",
+			result:   "Full Name",
+		},
+		{
+			name:     `full name longer than 10 chars`,
+			fullName: "A Very Long Full Name",
+			username: "example_username",
+			result:   "example_username",
+		},
+		{
+			name: `full name longer than 10 chars
+			AND username is empty`,
+			fullName: "A Very Long Full Name",
+			username: "",
+			result:   "A Very Long Full Name",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := formatFullNameAndUsername(tt.fullName, tt.username)
+			assert.Equal(t, tt.result, result)
+		})
+	}
+}

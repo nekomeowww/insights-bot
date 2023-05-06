@@ -158,7 +158,7 @@ func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration
 }
 
 func formatFullNameAndUsername(fullName, username string) string {
-	if utf8.RuneCountInString(fullName) >= 10 {
+	if utf8.RuneCountInString(fullName) >= 10 && username != "" {
 		return username
 	}
 

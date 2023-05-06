@@ -93,30 +93,29 @@ func ExtractTextFromMessage(message *tgbotapi.Message) string {
 	}
 
 	links := lop.Map(message.Entities, func(entity tgbotapi.MessageEntity, i int) MarkdownLink {
+		start_i := entity.Offset
+		end_i := start_i + entity.Length
+		var title string
+		var href string
 		if entity.Type == "url" {
-			start_i := entity.Offset
-			end_i := start_i + entity.Length
-			href := text[start_i:end_i]
+			href = text[start_i:end_i]
 			result, err := LinkPreview.PreviewLink(href, nil)
 			if err != nil {
-				return MarkdownLink{href, start_i, end_i}
+				return MarkdownLink{"", -1, -1}
 			}
-			href = result.Link
-			if len(href) > 30 {
-				href = href[:30] + "…"
-			}
-			md := "[" + result.Title + "](" + href + ")"
-			return MarkdownLink{md, start_i, end_i}
+			title = result.Title
 		} else if entity.Type == "text_link" {
-			title := text[entity.Offset : entity.Offset+entity.Length]
-			href := entity.URL
-			if len(href) > 30 {
-				href = href[:30] + "…"
-			}
-			md := "[" + title + "](" + href + ")"
-			return MarkdownLink{md, entity.Offset, entity.Offset + entity.Length}
+			title = text[entity.Offset : entity.Offset+entity.Length]
+			href = entity.URL
+		} else {
+			return MarkdownLink{"", -1, -1}
 		}
-		return MarkdownLink{"", -1, -1}
+		unescaped, err := url.QueryUnescape(href)
+		if err == nil {
+			href = strings.ReplaceAll(unescaped, " ", "+")
+		}
+		md := "[" + title + "](" + href + ")"
+		return MarkdownLink{md, start_i, end_i}
 	})
 
 	for i := len(links) - 1; i >= 0; i-- {

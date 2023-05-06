@@ -6,7 +6,10 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/Junzki/link-preview"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/samber/lo"
+	lop "github.com/samber/lo/parallel"
 
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
@@ -82,11 +85,48 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 }
 
 func ExtractTextFromMessage(message *tgbotapi.Message) string {
-	if message.Caption != "" {
-		return message.Caption
+	text := lo.Ternary(message.Caption != "", message.Caption, message.Text)
+	type MarkdownLink struct {
+		Markdown string
+		Start    int
+		End      int
 	}
 
-	return message.Text
+	links := lop.Map(message.Entities, func(entity tgbotapi.MessageEntity, i int) MarkdownLink {
+		if entity.Type == "url" {
+			start_i := entity.Offset
+			end_i := start_i + entity.Length
+			href := text[start_i:end_i]
+			result, err := LinkPreview.PreviewLink(href, nil)
+			if err != nil {
+				return MarkdownLink{href, start_i, end_i}
+			}
+			href = result.Link
+			if len(href) > 30 {
+				href = href[:30] + "…"
+			}
+			md := "[" + result.Title + "](" + href + ")"
+			return MarkdownLink{md, start_i, end_i}
+		} else if entity.Type == "text_link" {
+			title := text[entity.Offset : entity.Offset+entity.Length]
+			href := entity.URL
+			if len(href) > 30 {
+				href = href[:30] + "…"
+			}
+			md := "[" + title + "](" + href + ")"
+			return MarkdownLink{md, entity.Offset, entity.Offset + entity.Length}
+		}
+		return MarkdownLink{"", -1, -1}
+	})
+
+	for i := len(links) - 1; i >= 0; i-- {
+		if links[i].Start == -1 {
+			continue
+		}
+		text = text[:links[i].Start] + links[i].Markdown + text[links[i].End:]
+	}
+
+	return text
 }
 
 // EscapeHTMLSymbols

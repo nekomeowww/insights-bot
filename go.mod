@@ -26,6 +26,8 @@ require (
 
 require (
 	ariga.io/atlas v0.10.0 // indirect
+	github.com/Junzki/link-preview v0.0.0-20190616153136-4d94cb3f9ebf // indirect
+	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect

@@ -89,6 +89,33 @@ By sending `/recap` command, the bot will try to summarize the chat histories an
 
 ## Deployment
 
+### Run with binary
+
+You will have to clone this repository and then build the binary by yourself.
+
+```shell
+git clone https://github.com/nekomeowww/insights-bot
+```
+
+```shell
+go build -a -o "build/insights-bot" "github.com/nekomeowww/insights-bot/cmd/insights-bot"
+```
+
+Then copy the `.env.example` file to `build` directory and rename it to `.env`, and then fill in the environment variables.
+
+```shell
+cd build
+cp ../.env.example .env
+vim .env
+```
+
+```shell
+# assign executable permission to the binary
+$ chmod +x ./insights-bot
+# run the binary
+$ ./insights-bot
+```
+
 ### Run with docker
 
 ```shell
@@ -130,12 +157,14 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | Name | Required | Default | Description |
 | ---- | -------- | ------- | ----------- |
 | `TELEGRAM_BOT_TOKEN` | `true` | | Telegram Bot API token, you can create one and obtain the token through [@BotFather](https://t.me/BotFather) |
+| `TELEGRAM_BOT_WEBHOOK_URL` | `false` | | Telegram Bot webhook URL and port, you can use [https://ngrok.com/](https://ngrok.com/) or Cloudflare tunnel to expose your local server to the internet. |
+| `TELEGRAM_BOT_WEBHOOK_PORT` | `false` | `7071` | Telegram Bot Webhook server port, default is 7071 |
 | `OPENAI_API_SECRET` | `true` | | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys). |
-| `DB_CONNECTION_STR` | `true` | | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema |
 | `OPENAI_API_HOST` | `false` | `https://api.openai.com` | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev` |
+| `DB_CONNECTION_STR` | `true` | | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema |
 | `SLACK_CLIENT_ID` | `false` | | Slack app client id, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
 | `SLACK_CLIENT_SECRET` | `false` | | Slack app client secret, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
-| `SLACK_WEBHOOK_PORT` | `false` | `7070` | Port for webhook server |
+| `SLACK_WEBHOOK_PORT` | `false` | `7070` | Port for Slack Bot/App Webhook server, default is 7070 |
 | ~~`CLOVER_DB_PATH`~~ | ~~`false`~~ | ~~`insights_bot_clover_data.db`~~ | **Deprecated**. ~~Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file.~~ |
 
 ## Acknowledgements

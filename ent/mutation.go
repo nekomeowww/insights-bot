@@ -1393,7 +1393,6 @@ type SlackOAuthCredentialsMutation struct {
 	typ           string
 	id            *uuid.UUID
 	team_id       *string
-	refresh_token *string
 	access_token  *string
 	created_at    *int64
 	addcreated_at *int64
@@ -1543,42 +1542,6 @@ func (m *SlackOAuthCredentialsMutation) OldTeamID(ctx context.Context) (v string
 // ResetTeamID resets all changes to the "team_id" field.
 func (m *SlackOAuthCredentialsMutation) ResetTeamID() {
 	m.team_id = nil
-}
-
-// SetRefreshToken sets the "refresh_token" field.
-func (m *SlackOAuthCredentialsMutation) SetRefreshToken(s string) {
-	m.refresh_token = &s
-}
-
-// RefreshToken returns the value of the "refresh_token" field in the mutation.
-func (m *SlackOAuthCredentialsMutation) RefreshToken() (r string, exists bool) {
-	v := m.refresh_token
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRefreshToken returns the old "refresh_token" field's value of the SlackOAuthCredentials entity.
-// If the SlackOAuthCredentials object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *SlackOAuthCredentialsMutation) OldRefreshToken(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldRefreshToken is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldRefreshToken requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRefreshToken: %w", err)
-	}
-	return oldValue.RefreshToken, nil
-}
-
-// ResetRefreshToken resets all changes to the "refresh_token" field.
-func (m *SlackOAuthCredentialsMutation) ResetRefreshToken() {
-	m.refresh_token = nil
 }
 
 // SetAccessToken sets the "access_token" field.
@@ -1763,12 +1726,9 @@ func (m *SlackOAuthCredentialsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *SlackOAuthCredentialsMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 4)
 	if m.team_id != nil {
 		fields = append(fields, slackoauthcredentials.FieldTeamID)
-	}
-	if m.refresh_token != nil {
-		fields = append(fields, slackoauthcredentials.FieldRefreshToken)
 	}
 	if m.access_token != nil {
 		fields = append(fields, slackoauthcredentials.FieldAccessToken)
@@ -1789,8 +1749,6 @@ func (m *SlackOAuthCredentialsMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case slackoauthcredentials.FieldTeamID:
 		return m.TeamID()
-	case slackoauthcredentials.FieldRefreshToken:
-		return m.RefreshToken()
 	case slackoauthcredentials.FieldAccessToken:
 		return m.AccessToken()
 	case slackoauthcredentials.FieldCreatedAt:
@@ -1808,8 +1766,6 @@ func (m *SlackOAuthCredentialsMutation) OldField(ctx context.Context, name strin
 	switch name {
 	case slackoauthcredentials.FieldTeamID:
 		return m.OldTeamID(ctx)
-	case slackoauthcredentials.FieldRefreshToken:
-		return m.OldRefreshToken(ctx)
 	case slackoauthcredentials.FieldAccessToken:
 		return m.OldAccessToken(ctx)
 	case slackoauthcredentials.FieldCreatedAt:
@@ -1831,13 +1787,6 @@ func (m *SlackOAuthCredentialsMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTeamID(v)
-		return nil
-	case slackoauthcredentials.FieldRefreshToken:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRefreshToken(v)
 		return nil
 	case slackoauthcredentials.FieldAccessToken:
 		v, ok := value.(string)
@@ -1938,9 +1887,6 @@ func (m *SlackOAuthCredentialsMutation) ResetField(name string) error {
 	switch name {
 	case slackoauthcredentials.FieldTeamID:
 		m.ResetTeamID()
-		return nil
-	case slackoauthcredentials.FieldRefreshToken:
-		m.ResetRefreshToken()
 		return nil
 	case slackoauthcredentials.FieldAccessToken:
 		m.ResetAccessToken()

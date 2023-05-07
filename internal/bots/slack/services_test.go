@@ -49,7 +49,7 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(bot.createNewSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
 
 		// query
 		cre, err := bot.ent.SlackOAuthCredentials.Query().First(context.Background())
@@ -69,8 +69,8 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(bot.createNewSlackCredential(expectTeamId, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
-		r.Empty(bot.createNewSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
+		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
 
 		// query
 		cre, err := bot.ent.SlackOAuthCredentials.Query().First(context.Background())

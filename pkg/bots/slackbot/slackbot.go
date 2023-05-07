@@ -14,20 +14,20 @@ func NewSlackWebhookMessage(msg string) *slack.WebhookMessage {
 	}
 }
 
-type HttpClientForSlack interface {
+type HttpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-type SlackCli struct {
+type Client struct {
 	*slack.Client
 
-	httpclient   HttpClientForSlack
+	httpClient   HttpClient
 	clientID     string
 	clientSecret string
 	refreshToken string
 }
 
-func newOriginSlackCli(httpCli HttpClientForSlack, accessToken string) *slack.Client {
+func newOriginSlackCli(httpCli HttpClient, accessToken string) *slack.Client {
 	var opt []slack.Option
 	if httpCli != nil {
 		opt = append(opt, slack.OptionHTTPClient(httpCli))
@@ -36,13 +36,13 @@ func newOriginSlackCli(httpCli HttpClientForSlack, accessToken string) *slack.Cl
 	return slack.New(accessToken, opt...)
 }
 
-func NewSlackCli(httpCli HttpClientForSlack, clientID, clientSecret, refreshToken, accessToken string) *SlackCli {
-	return &SlackCli{
+func NewSlackCli(httpCli HttpClient, clientID, clientSecret, refreshToken, accessToken string) *Client {
+	return &Client{
 		Client:       newOriginSlackCli(httpCli, accessToken),
 		clientID:     clientID,
 		clientSecret: clientSecret,
 		refreshToken: refreshToken,
-		httpclient:   httpCli,
+		httpClient:   httpCli,
 	}
 }
 
@@ -50,13 +50,13 @@ type StoreNewTokenFunc func(accessToken string, refreshToken string) error
 
 // SendMessageWithTokenExpirationCheck will checks if the error is "token_expired" error,
 // if so, will get new token and try again.
-func (cli *SlackCli) SendMessageWithTokenExpirationCheck(channel string, storeFn StoreNewTokenFunc, options ...slack.MsgOption) (channelID string, msgTimestamp string, respText string, err error) {
+func (cli *Client) SendMessageWithTokenExpirationCheck(channel string, storeFn StoreNewTokenFunc, options ...slack.MsgOption) (channelID string, msgTimestamp string, respText string, err error) {
 	channelID, msgTimestamp, respText, err = cli.SendMessage(channel, options...)
 	if err == nil || err.Error() != "token_expired" {
 		return
 	}
 
-	resp, err := slack.RefreshOAuthV2Token(cli.httpclient, cli.clientID, cli.clientSecret, cli.refreshToken)
+	resp, err := slack.RefreshOAuthV2Token(cli.httpClient, cli.clientID, cli.clientSecret, cli.refreshToken)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (cli *SlackCli) SendMessageWithTokenExpirationCheck(channel string, storeFn
 		return
 	}
 	// create new slack client
-	cli.Client = newOriginSlackCli(cli.httpclient, resp.AccessToken)
+	cli.Client = newOriginSlackCli(cli.httpClient, resp.AccessToken)
 
 	return cli.SendMessageWithTokenExpirationCheck(channel, storeFn, options...)
 }

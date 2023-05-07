@@ -3,23 +3,9 @@ package utils
 import (
 	"context"
 	"sync"
-
-	"github.com/nekomeowww/insights-bot/pkg/options"
 )
 
-type InvokeOptions struct {
-	ctx context.Context //nolint:containedctx
-}
-
-func WithContext(ctx context.Context) options.CallOptions[InvokeOptions] {
-	return options.NewCallOptions(func(o *InvokeOptions) {
-		o.ctx = ctx
-	})
-}
-
-func Invoke0(funcToBeRan func() error, callOpts ...options.CallOptions[InvokeOptions]) error {
-	opts := options.ApplyCallOptions(callOpts, InvokeOptions{ctx: context.Background()})
-
+func Invoke0(ctx context.Context, funcToBeRan func() error) error {
 	var err error
 	resChan := make(chan struct{}, 1)
 
@@ -34,8 +20,8 @@ func Invoke0(funcToBeRan func() error, callOpts ...options.CallOptions[InvokeOpt
 
 	go func() {
 		select {
-		case <-opts.ctx.Done():
-			err = opts.ctx.Err()
+		case <-ctx.Done():
+			err = ctx.Err()
 		case <-resChan:
 		}
 

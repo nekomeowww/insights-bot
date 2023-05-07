@@ -2,10 +2,14 @@ package configs
 
 import (
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 const (
-	EnvTelegramBotToken = "TELEGRAM_BOT_TOKEN" //nolint:gosec
+	EnvTelegramBotToken       = "TELEGRAM_BOT_TOKEN" //nolint:gosec
+	EnvTelegramBotWebhookURL  = "TELEGRAM_BOT_WEBHOOK_URL"
+	EnvTelegramBotWebhookPort = "TELEGRAM_BOT_WEBHOOK_PORT"
 
 	EnvSlackClientID     = "SLACK_CLIENT_ID"
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
@@ -41,40 +45,63 @@ type SectionSlack struct {
 type SectionDB struct {
 	ConnectionString string
 }
-
-type Config struct {
-	TelegramBotToken string
-	OpenAIAPISecret  string
-	OpenAIAPIHost    string
-	Pinecone         SectionPinecone
-	CloverDBPath     string
-	DB               SectionDB
-	Slack            SectionSlack
+type SectionTelegram struct {
+	BotToken       string
+	BotWebhookURL  string
+	BotWebhookPort string
 }
 
-func NewConfig() func() *Config {
-	return func() *Config {
+type Config struct {
+	Telegram        SectionTelegram
+	OpenAIAPISecret string
+	OpenAIAPIHost   string
+	Pinecone        SectionPinecone
+	CloverDBPath    string
+	DB              SectionDB
+	Slack           SectionSlack
+}
+
+func NewConfig() func() (*Config, error) {
+	return func() (*Config, error) {
+		envs, err := godotenv.Read()
+		if err != nil {
+			return nil, err
+		}
+
+		getEnv := func(varName string) string {
+			v, ok := envs[varName]
+			if !ok || v == "" {
+				return os.Getenv(varName)
+			}
+
+			return v
+		}
+
 		return &Config{
-			TelegramBotToken: os.Getenv(EnvTelegramBotToken),
-			Slack: SectionSlack{
-				Port:         os.Getenv(EnvSlackWebhookPort),
-				ClientID:     os.Getenv(EnvSlackClientID),
-				ClientSecret: os.Getenv(EnvSlackClientSecret),
+			Telegram: SectionTelegram{
+				BotToken:       getEnv(EnvTelegramBotToken),
+				BotWebhookURL:  getEnv(EnvTelegramBotWebhookURL),
+				BotWebhookPort: getEnv(EnvTelegramBotWebhookPort),
 			},
-			OpenAIAPISecret: os.Getenv(EnvOpenAIAPISecret),
-			OpenAIAPIHost:   os.Getenv(EnvOpenAIAPIHost),
+			Slack: SectionSlack{
+				Port:         getEnv(EnvSlackWebhookPort),
+				ClientID:     getEnv(EnvSlackClientID),
+				ClientSecret: getEnv(EnvSlackClientSecret),
+			},
+			OpenAIAPISecret: getEnv(EnvOpenAIAPISecret),
+			OpenAIAPIHost:   getEnv(EnvOpenAIAPIHost),
 			Pinecone: SectionPinecone{
-				ProjectName: os.Getenv(EnvPineconeProjectName),
-				Environment: os.Getenv(EnvPineconeEnvironment),
-				APIKey:      os.Getenv(EnvPineconeAPIKey),
+				ProjectName: getEnv(EnvPineconeProjectName),
+				Environment: getEnv(EnvPineconeEnvironment),
+				APIKey:      getEnv(EnvPineconeAPIKey),
 				Indexes: SectionPineconeIndexes{
-					ChatHistoryIndexName: os.Getenv(EnvPineconeChatHistoryIndexName),
+					ChatHistoryIndexName: getEnv(EnvPineconeChatHistoryIndexName),
 				},
 			},
 			DB: SectionDB{
-				ConnectionString: os.Getenv(EnvDBConnectionString),
+				ConnectionString: getEnv(EnvDBConnectionString),
 			},
-		}
+		}, nil
 	}
 }
 

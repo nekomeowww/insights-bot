@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldTeamID holds the string denoting the team_id field in the database.
 	FieldTeamID = "team_id"
+	// FieldRefreshToken holds the string denoting the refresh_token field in the database.
+	FieldRefreshToken = "refresh_token"
 	// FieldAccessToken holds the string denoting the access_token field in the database.
 	FieldAccessToken = "access_token"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -28,6 +30,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldTeamID,
+	FieldRefreshToken,
 	FieldAccessToken,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -46,6 +49,8 @@ func ValidColumn(column string) bool {
 var (
 	// TeamIDValidator is a validator for the "team_id" field. It is called by the builders before save.
 	TeamIDValidator func(string) error
+	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
+	DefaultRefreshToken string
 	// AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.
 	AccessTokenValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -67,6 +72,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByTeamID orders the results by the team_id field.
 func ByTeamID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTeamID, opts...).ToFunc()
+}
+
+// ByRefreshToken orders the results by the refresh_token field.
+func ByRefreshToken(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRefreshToken, opts...).ToFunc()
 }
 
 // ByAccessToken orders the results by the access_token field.

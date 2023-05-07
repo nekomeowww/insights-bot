@@ -58,6 +58,11 @@ func TeamID(v string) predicate.SlackOAuthCredentials {
 	return predicate.SlackOAuthCredentials(sql.FieldEQ(FieldTeamID, v))
 }
 
+// RefreshToken applies equality check predicate on the "refresh_token" field. It's identical to RefreshTokenEQ.
+func RefreshToken(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldEQ(FieldRefreshToken, v))
+}
+
 // AccessToken applies equality check predicate on the "access_token" field. It's identical to AccessTokenEQ.
 func AccessToken(v string) predicate.SlackOAuthCredentials {
 	return predicate.SlackOAuthCredentials(sql.FieldEQ(FieldAccessToken, v))
@@ -136,6 +141,71 @@ func TeamIDEqualFold(v string) predicate.SlackOAuthCredentials {
 // TeamIDContainsFold applies the ContainsFold predicate on the "team_id" field.
 func TeamIDContainsFold(v string) predicate.SlackOAuthCredentials {
 	return predicate.SlackOAuthCredentials(sql.FieldContainsFold(FieldTeamID, v))
+}
+
+// RefreshTokenEQ applies the EQ predicate on the "refresh_token" field.
+func RefreshTokenEQ(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldEQ(FieldRefreshToken, v))
+}
+
+// RefreshTokenNEQ applies the NEQ predicate on the "refresh_token" field.
+func RefreshTokenNEQ(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldNEQ(FieldRefreshToken, v))
+}
+
+// RefreshTokenIn applies the In predicate on the "refresh_token" field.
+func RefreshTokenIn(vs ...string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldIn(FieldRefreshToken, vs...))
+}
+
+// RefreshTokenNotIn applies the NotIn predicate on the "refresh_token" field.
+func RefreshTokenNotIn(vs ...string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldNotIn(FieldRefreshToken, vs...))
+}
+
+// RefreshTokenGT applies the GT predicate on the "refresh_token" field.
+func RefreshTokenGT(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldGT(FieldRefreshToken, v))
+}
+
+// RefreshTokenGTE applies the GTE predicate on the "refresh_token" field.
+func RefreshTokenGTE(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldGTE(FieldRefreshToken, v))
+}
+
+// RefreshTokenLT applies the LT predicate on the "refresh_token" field.
+func RefreshTokenLT(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldLT(FieldRefreshToken, v))
+}
+
+// RefreshTokenLTE applies the LTE predicate on the "refresh_token" field.
+func RefreshTokenLTE(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldLTE(FieldRefreshToken, v))
+}
+
+// RefreshTokenContains applies the Contains predicate on the "refresh_token" field.
+func RefreshTokenContains(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldContains(FieldRefreshToken, v))
+}
+
+// RefreshTokenHasPrefix applies the HasPrefix predicate on the "refresh_token" field.
+func RefreshTokenHasPrefix(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldHasPrefix(FieldRefreshToken, v))
+}
+
+// RefreshTokenHasSuffix applies the HasSuffix predicate on the "refresh_token" field.
+func RefreshTokenHasSuffix(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldHasSuffix(FieldRefreshToken, v))
+}
+
+// RefreshTokenEqualFold applies the EqualFold predicate on the "refresh_token" field.
+func RefreshTokenEqualFold(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldEqualFold(FieldRefreshToken, v))
+}
+
+// RefreshTokenContainsFold applies the ContainsFold predicate on the "refresh_token" field.
+func RefreshTokenContainsFold(v string) predicate.SlackOAuthCredentials {
+	return predicate.SlackOAuthCredentials(sql.FieldContainsFold(FieldRefreshToken, v))
 }
 
 // AccessTokenEQ applies the EQ predicate on the "access_token" field.

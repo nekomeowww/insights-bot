@@ -37,7 +37,6 @@ var (
 	SlackOauthCredentialsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "team_id", Type: field.TypeString, Unique: true, Size: 2147483647},
-		{Name: "refresh_token", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "access_token", Type: field.TypeString, Size: 2147483647},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},

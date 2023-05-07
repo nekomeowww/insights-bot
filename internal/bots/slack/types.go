@@ -10,9 +10,7 @@ type recivedCommandInfo struct {
 }
 
 type smrRequestInfo struct {
-	inputUrl     string
-	channelID    string
-	accessToken  string
-	refreshToken string
-	teamID       string
+	inputUrl    string
+	channelID   string
+	accessToken string
 }

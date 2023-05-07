@@ -28,20 +28,6 @@ func (socu *SlackOAuthCredentialsUpdate) Where(ps ...predicate.SlackOAuthCredent
 	return socu
 }
 
-// SetRefreshToken sets the "refresh_token" field.
-func (socu *SlackOAuthCredentialsUpdate) SetRefreshToken(s string) *SlackOAuthCredentialsUpdate {
-	socu.mutation.SetRefreshToken(s)
-	return socu
-}
-
-// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (socu *SlackOAuthCredentialsUpdate) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdate {
-	if s != nil {
-		socu.SetRefreshToken(*s)
-	}
-	return socu
-}
-
 // SetAccessToken sets the "access_token" field.
 func (socu *SlackOAuthCredentialsUpdate) SetAccessToken(s string) *SlackOAuthCredentialsUpdate {
 	socu.mutation.SetAccessToken(s)
@@ -144,9 +130,6 @@ func (socu *SlackOAuthCredentialsUpdate) sqlSave(ctx context.Context) (n int, er
 			}
 		}
 	}
-	if value, ok := socu.mutation.RefreshToken(); ok {
-		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
-	}
 	if value, ok := socu.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)
 	}
@@ -182,20 +165,6 @@ type SlackOAuthCredentialsUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *SlackOAuthCredentialsMutation
-}
-
-// SetRefreshToken sets the "refresh_token" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetRefreshToken(s string) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.SetRefreshToken(s)
-	return socuo
-}
-
-// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdateOne {
-	if s != nil {
-		socuo.SetRefreshToken(*s)
-	}
-	return socuo
 }
 
 // SetAccessToken sets the "access_token" field.
@@ -329,9 +298,6 @@ func (socuo *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node
 				ps[i](selector)
 			}
 		}
-	}
-	if value, ok := socuo.mutation.RefreshToken(); ok {
-		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
 	}
 	if value, ok := socuo.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)

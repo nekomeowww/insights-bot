@@ -69,10 +69,9 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 
 	// send to channel
 	s.processChan <- smrRequestInfo{
-		accessToken:  token.AccessToken,
-		refreshToken: token.RefreshToken,
-		inputUrl:     body.Text,
-		channelID:    body.ChannelID,
+		accessToken: token.AccessToken,
+		inputUrl:    body.Text,
+		channelID:   body.ChannelID,
 	}
 
 	// response
@@ -95,7 +94,7 @@ func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
 		return
 	}
 
-	err = b.createOrUpdateSlackCredential(resp.Team.ID, resp.AccessToken, resp.RefreshToken)
+	err = b.createNewSlackCredential(resp.Team.ID, resp.AccessToken)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		return

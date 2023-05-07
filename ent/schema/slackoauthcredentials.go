@@ -18,7 +18,7 @@ func (SlackOAuthCredentials) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique().Immutable(),
 		field.Text("team_id").NotEmpty().Unique().Immutable(),
-		field.Text("refresh_token").NotEmpty(),
+		field.Text("refresh_token").Default(""),
 		field.Text("access_token").NotEmpty(),
 		field.Int64("created_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 		field.Int64("updated_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),

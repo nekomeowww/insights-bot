@@ -32,6 +32,14 @@ func (socc *SlackOAuthCredentialsCreate) SetRefreshToken(s string) *SlackOAuthCr
 	return socc
 }
 
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (socc *SlackOAuthCredentialsCreate) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsCreate {
+	if s != nil {
+		socc.SetRefreshToken(*s)
+	}
+	return socc
+}
+
 // SetAccessToken sets the "access_token" field.
 func (socc *SlackOAuthCredentialsCreate) SetAccessToken(s string) *SlackOAuthCredentialsCreate {
 	socc.mutation.SetAccessToken(s)
@@ -115,6 +123,10 @@ func (socc *SlackOAuthCredentialsCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (socc *SlackOAuthCredentialsCreate) defaults() {
+	if _, ok := socc.mutation.RefreshToken(); !ok {
+		v := slackoauthcredentials.DefaultRefreshToken
+		socc.mutation.SetRefreshToken(v)
+	}
 	if _, ok := socc.mutation.CreatedAt(); !ok {
 		v := slackoauthcredentials.DefaultCreatedAt()
 		socc.mutation.SetCreatedAt(v)
@@ -141,11 +153,6 @@ func (socc *SlackOAuthCredentialsCreate) check() error {
 	}
 	if _, ok := socc.mutation.RefreshToken(); !ok {
 		return &ValidationError{Name: "refresh_token", err: errors.New(`ent: missing required field "SlackOAuthCredentials.refresh_token"`)}
-	}
-	if v, ok := socc.mutation.RefreshToken(); ok {
-		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
-			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
-		}
 	}
 	if _, ok := socc.mutation.AccessToken(); !ok {
 		return &ValidationError{Name: "access_token", err: errors.New(`ent: missing required field "SlackOAuthCredentials.access_token"`)}

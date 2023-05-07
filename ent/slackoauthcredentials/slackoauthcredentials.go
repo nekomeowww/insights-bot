@@ -49,8 +49,8 @@ func ValidColumn(column string) bool {
 var (
 	// TeamIDValidator is a validator for the "team_id" field. It is called by the builders before save.
 	TeamIDValidator func(string) error
-	// RefreshTokenValidator is a validator for the "refresh_token" field. It is called by the builders before save.
-	RefreshTokenValidator func(string) error
+	// DefaultRefreshToken holds the default value on creation for the "refresh_token" field.
+	DefaultRefreshToken string
 	// AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.
 	AccessTokenValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.

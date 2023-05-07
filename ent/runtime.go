@@ -88,8 +88,8 @@ func init() {
 	slackoauthcredentials.TeamIDValidator = slackoauthcredentialsDescTeamID.Validators[0].(func(string) error)
 	// slackoauthcredentialsDescRefreshToken is the schema descriptor for refresh_token field.
 	slackoauthcredentialsDescRefreshToken := slackoauthcredentialsFields[2].Descriptor()
-	// slackoauthcredentials.RefreshTokenValidator is a validator for the "refresh_token" field. It is called by the builders before save.
-	slackoauthcredentials.RefreshTokenValidator = slackoauthcredentialsDescRefreshToken.Validators[0].(func(string) error)
+	// slackoauthcredentials.DefaultRefreshToken holds the default value on creation for the refresh_token field.
+	slackoauthcredentials.DefaultRefreshToken = slackoauthcredentialsDescRefreshToken.Default.(string)
 	// slackoauthcredentialsDescAccessToken is the schema descriptor for access_token field.
 	slackoauthcredentialsDescAccessToken := slackoauthcredentialsFields[3].Descriptor()
 	// slackoauthcredentials.AccessTokenValidator is a validator for the "access_token" field. It is called by the builders before save.

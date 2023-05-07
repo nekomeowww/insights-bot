@@ -34,6 +34,14 @@ func (socu *SlackOAuthCredentialsUpdate) SetRefreshToken(s string) *SlackOAuthCr
 	return socu
 }
 
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (socu *SlackOAuthCredentialsUpdate) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdate {
+	if s != nil {
+		socu.SetRefreshToken(*s)
+	}
+	return socu
+}
+
 // SetAccessToken sets the "access_token" field.
 func (socu *SlackOAuthCredentialsUpdate) SetAccessToken(s string) *SlackOAuthCredentialsUpdate {
 	socu.mutation.SetAccessToken(s)
@@ -116,11 +124,6 @@ func (socu *SlackOAuthCredentialsUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (socu *SlackOAuthCredentialsUpdate) check() error {
-	if v, ok := socu.mutation.RefreshToken(); ok {
-		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
-			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
-		}
-	}
 	if v, ok := socu.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}
@@ -184,6 +187,14 @@ type SlackOAuthCredentialsUpdateOne struct {
 // SetRefreshToken sets the "refresh_token" field.
 func (socuo *SlackOAuthCredentialsUpdateOne) SetRefreshToken(s string) *SlackOAuthCredentialsUpdateOne {
 	socuo.mutation.SetRefreshToken(s)
+	return socuo
+}
+
+// SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
+func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdateOne {
+	if s != nil {
+		socuo.SetRefreshToken(*s)
+	}
 	return socuo
 }
 
@@ -282,11 +293,6 @@ func (socuo *SlackOAuthCredentialsUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (socuo *SlackOAuthCredentialsUpdateOne) check() error {
-	if v, ok := socuo.mutation.RefreshToken(); ok {
-		if err := slackoauthcredentials.RefreshTokenValidator(v); err != nil {
-			return &ValidationError{Name: "refresh_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.refresh_token": %w`, err)}
-		}
-	}
 	if v, ok := socuo.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}

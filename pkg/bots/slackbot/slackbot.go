@@ -52,11 +52,7 @@ type StoreNewTokenFunc func(accessToken string, refreshToken string) error
 // if so, will get new token and try again.
 func (cli *SlackCli) SendMessageWithTokenExpirationCheck(channel string, storeFn StoreNewTokenFunc, options ...slack.MsgOption) (channelID string, msgTimestamp string, respText string, err error) {
 	channelID, msgTimestamp, respText, err = cli.SendMessage(channel, options...)
-
-	if err == nil {
-		return
-	}
-	if err.Error() != "token_expired" {
+	if err == nil || err.Error() != "token_expired" {
 		return
 	}
 

@@ -19,6 +19,8 @@ type SlackOAuthCredentials struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// TeamID holds the value of the "team_id" field.
 	TeamID string `json:"team_id,omitempty"`
+	// RefreshToken holds the value of the "refresh_token" field.
+	RefreshToken string `json:"refresh_token,omitempty"`
 	// AccessToken holds the value of the "access_token" field.
 	AccessToken string `json:"access_token,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -35,7 +37,7 @@ func (*SlackOAuthCredentials) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case slackoauthcredentials.FieldCreatedAt, slackoauthcredentials.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case slackoauthcredentials.FieldTeamID, slackoauthcredentials.FieldAccessToken:
+		case slackoauthcredentials.FieldTeamID, slackoauthcredentials.FieldRefreshToken, slackoauthcredentials.FieldAccessToken:
 			values[i] = new(sql.NullString)
 		case slackoauthcredentials.FieldID:
 			values[i] = new(uuid.UUID)
@@ -65,6 +67,12 @@ func (soc *SlackOAuthCredentials) assignValues(columns []string, values []any) e
 				return fmt.Errorf("unexpected type %T for field team_id", values[i])
 			} else if value.Valid {
 				soc.TeamID = value.String
+			}
+		case slackoauthcredentials.FieldRefreshToken:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
+			} else if value.Valid {
+				soc.RefreshToken = value.String
 			}
 		case slackoauthcredentials.FieldAccessToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -122,6 +130,9 @@ func (soc *SlackOAuthCredentials) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", soc.ID))
 	builder.WriteString("team_id=")
 	builder.WriteString(soc.TeamID)
+	builder.WriteString(", ")
+	builder.WriteString("refresh_token=")
+	builder.WriteString(soc.RefreshToken)
 	builder.WriteString(", ")
 	builder.WriteString("access_token=")
 	builder.WriteString(soc.AccessToken)

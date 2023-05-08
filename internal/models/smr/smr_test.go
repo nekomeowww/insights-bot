@@ -1,6 +1,7 @@
 package smr
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -26,7 +27,7 @@ func TestExtractContentFromURL(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		article, err := model.extractContentFromURL("https://a.b.c")
+		article, err := model.extractContentFromURL(context.Background(), "https://a.b.c")
 		require.Error(err)
 		require.Nil(article)
 
@@ -40,7 +41,7 @@ func TestExtractContentFromURL(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		article, err := model.extractContentFromURL(fmt.Sprintf("https://mp.weixin.qq.com/s/%s", ""))
+		article, err := model.extractContentFromURL(context.Background(), fmt.Sprintf("https://mp.weixin.qq.com/s/%s", ""))
 		require.NoError(err)
 
 		assert.NotEmpty(article.Title)

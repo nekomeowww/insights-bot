@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	entgo.io/ent v0.12.2
-	github.com/Junzki/link-preview v0.0.0-20190616153136-4d94cb3f9ebf
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b
@@ -28,7 +28,6 @@ require (
 
 require (
 	ariga.io/atlas v0.10.0 // indirect
-	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect

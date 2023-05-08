@@ -1,7 +1,9 @@
 package summarize
 
 import (
+	"context"
 	"strings"
+	"time"
 
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 )
@@ -22,7 +24,10 @@ func (h *Handlers) HandleChannelPost(c *tgbot.Context) (tgbot.Response, error) {
 
 	urlString := strings.TrimSpace(strings.TrimPrefix(c.Update.ChannelPost.Text, "/smr "))
 
-	summarization, err := h.smr.SummarizeInputURL(urlString)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
+	defer cancel()
+
+	summarization, err := h.smr.SummarizeInputURL(ctx, urlString)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err)
 	}

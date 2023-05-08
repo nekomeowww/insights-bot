@@ -13,7 +13,6 @@ import (
 	"unicode/utf8"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/Junzki/link-preview"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
@@ -25,6 +24,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/linkprev"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
@@ -39,17 +39,19 @@ type NewModelParams struct {
 }
 
 type Model struct {
-	logger *logger.Logger
-	ent    *datastore.Ent
-	openAI *openai.Client
+	logger   *logger.Logger
+	ent      *datastore.Ent
+	openAI   *openai.Client
+	linkprev *linkprev.Client
 }
 
 func NewModel() func(NewModelParams) (*Model, error) {
 	return func(param NewModelParams) (*Model, error) {
 		return &Model{
-			logger: param.Logger,
-			ent:    param.Ent,
-			openAI: param.OpenAI,
+			logger:   param.Logger,
+			ent:      param.Ent,
+			openAI:   param.OpenAI,
+			linkprev: linkprev.NewClient(),
 		}, nil
 	}
 }
@@ -71,12 +73,17 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		var href string
 		if entity.Type == "url" {
 			href = string(utf16.Decode(textUTF16[startIndex:endIndex]))
-			result, err := LinkPreview.PreviewLink(href, nil)
+
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+
+			meta, err := m.linkprev.Preview(ctx, href)
 			if err != nil {
 				m.logger.Infof("🔗Failed to generate link preview for %s, error %+v", href, err)
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
-			title = result.Title
+
+			title = lo.Ternary(meta.Title != "", meta.Title, meta.OpenGraph.Title)
 		} else if entity.Type == "text_link" {
 			title = string(utf16.Decode(textUTF16[startIndex:endIndex]))
 			href = entity.URL
@@ -89,7 +96,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 			href = strings.ReplaceAll(unescaped, " ", "+")
 		}
 
-		md := "[" + title + "](" + href + ")"
+		md := fmt.Sprintf("[%s](%s)", title, href)
 		mdUTF16 := utf16.Encode([]rune(md))
 
 		return MarkdownLink{mdUTF16, startIndex, endIndex}

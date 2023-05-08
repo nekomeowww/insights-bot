@@ -13,6 +13,7 @@ require (
 	github.com/gookit/color v1.5.3
 	github.com/gorilla/schema v1.2.0
 	github.com/imroc/req/v3 v3.33.2
+	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/nekomeowww/go-pinecone v0.0.1
 	github.com/pkoukk/tiktoken-go v0.1.0

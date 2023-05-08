@@ -4,12 +4,15 @@ import (
 	"errors"
 
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/slack-go/slack"
 )
 
 func (b *SlackBot) smr(info smrRequestInfo) {
 	summarization, err := b.smrModel.SummarizeInputURL(info.inputUrl)
-	slackCli := slack.New(info.accessToken)
+	slackCfg := b.config.Slack
+	slackCli := slackbot.NewSlackCli(nil, slackCfg.ClientID, slackCfg.ClientSecret, info.refreshToken, info.accessToken)
+	tokenStoreFunc := b.newStoreFuncForRefresh(info.teamID)
 
 	if err != nil {
 		errMsg := ""
@@ -23,7 +26,11 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 
 		b.logger.WithField("error", err.Error()).Error("slack: summarization failed")
 
-		_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(errMsg, false))
+		_, _, _, err = slackCli.SendMessageWithTokenExpirationCheck(
+			info.channelID,
+			tokenStoreFunc,
+			slack.MsgOptionText(errMsg, false),
+		)
 		if err != nil {
 			b.logger.WithField("error", err.Error()).Warn("slack: failed to send error message")
 		}
@@ -31,7 +38,11 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 		return
 	}
 
-	_, _, _, err = slackCli.SendMessage(info.channelID, slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false))
+	_, _, _, err = slackCli.SendMessageWithTokenExpirationCheck(
+		info.channelID,
+		tokenStoreFunc,
+		slack.MsgOptionText(summarization.FormatSummarizationAsSlackMarkdown(), false),
+	)
 	if err != nil {
 		b.logger.WithField("error", err.Error()).Warn("slack: failed to send summarization")
 	}

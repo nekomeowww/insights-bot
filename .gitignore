@@ -41,6 +41,7 @@ insights-bot
 # Configurations
 config.yaml
 config.yml
+.env
 
 # Local Configuration
 config.local.yaml

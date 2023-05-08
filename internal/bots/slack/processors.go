@@ -1,7 +1,9 @@
 package slack
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
@@ -9,7 +11,10 @@ import (
 )
 
 func (b *SlackBot) smr(info smrRequestInfo) {
-	summarization, err := b.smrModel.SummarizeInputURL(info.inputUrl)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
+	defer cancel()
+
+	summarization, err := b.smrModel.SummarizeInputURL(ctx, info.inputUrl)
 	slackCfg := b.config.Slack
 	slackCli := slackbot.NewSlackCli(nil, slackCfg.ClientID, slackCfg.ClientSecret, info.refreshToken, info.accessToken)
 	tokenStoreFunc := b.newStoreFuncForRefresh(info.teamID)

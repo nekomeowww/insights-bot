@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"strings"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/imroc/req/v3"
@@ -25,15 +24,10 @@ type Client struct {
 
 func NewClient() *Client {
 	return &Client{
-		reqClient: req.C().
-			SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
-			SetTimeout(time.Minute),
+		reqClient: req.
+			C().
+			SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54"),
 	}
-}
-
-func (c *Client) Debug() *Client {
-	c.reqClient = c.reqClient.EnableDumpAll()
-	return c
 }
 
 func (c *Client) Preview(ctx context.Context, url string) (Meta, error) {
@@ -55,6 +49,7 @@ func (c *Client) Preview(ctx context.Context, url string) (Meta, error) {
 func (c *Client) request(ctx context.Context, url string) (io.Reader, error) {
 	resp, err := c.reqClient.
 		R().
+		EnableDump().
 		SetContext(ctx).
 		Get(url)
 	if err != nil {

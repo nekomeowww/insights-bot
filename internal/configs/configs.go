@@ -1,6 +1,7 @@
 package configs
 
 import (
+	"errors"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -64,7 +65,7 @@ type Config struct {
 func NewConfig() func() (*Config, error) {
 	return func() (*Config, error) {
 		envs, err := godotenv.Read()
-		if err != nil {
+		if err != nil && !errors.Is(err, os.ErrNotExist) {
 			return nil, err
 		}
 

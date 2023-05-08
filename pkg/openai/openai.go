@@ -171,7 +171,13 @@ func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyCha
 func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
 	sb := new(strings.Builder)
 
-	err := ChatHistorySummarizationPrompt.Execute(sb, ChatHistorySummarizationPromptInputs{ChatHistory: llmFriendlyChatHistories})
+	err := ChatHistorySummarizationPrompt.Execute(
+		sb,
+		NewChatHistorySummarizationPromptInputs(
+			llmFriendlyChatHistories,
+			"Simplified Chinese",
+		),
+	)
 	if err != nil {
 		return nil, err
 	}

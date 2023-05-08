@@ -257,7 +257,7 @@ var RecapOutputTemplate = lo.Must(template.
 	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.CriticalIDs }} {{ range $cIndex, $c := $d.CriticalIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
@@ -348,15 +348,15 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 
 		for _, o := range outputs {
 			for _, d := range o.Discussion {
-				d.CriticalIDs = lo.UniqBy(d.CriticalIDs, func(item int64) int64 {
+				d.KeyIDs = lo.UniqBy(d.KeyIDs, func(item int64) int64 {
 					return item
 				})
-				d.CriticalIDs = lo.Filter(d.CriticalIDs, func(item int64, _ int) bool {
+				d.KeyIDs = lo.Filter(d.KeyIDs, func(item int64, _ int) bool {
 					return item != 0
 				})
 
-				if len(d.CriticalIDs) > 5 {
-					d.CriticalIDs = d.CriticalIDs[:5]
+				if len(d.KeyIDs) > 5 {
+					d.KeyIDs = d.KeyIDs[:5]
 				}
 			}
 		}

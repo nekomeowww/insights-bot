@@ -55,4 +55,5 @@ issues:
     - "if statements should only be cuddled with assignments" # from wsl
     - "if statements should only be cuddled with assignments used in the if statement itself" # from wsl
     - "assignments should only be cuddled with other assignments" # from wsl. false positive case: var a bool\nb := true
+    - "declarations should never be cuddled" # from wsl
 

@@ -135,6 +135,7 @@ func (m *Model) extractContentFromURL(urlString string) (*readability.Article, e
 		return nil, fmt.Errorf("url fetched, but content-type not supported yet, %w, content-type: %s", ErrContentNotSupported, resp.Header.Get("Content-Type"))
 	}
 
+	defer resp.Body.Close()
 	buffer := new(bytes.Buffer)
 
 	_, err = io.Copy(buffer, resp.Body)

@@ -44,6 +44,7 @@ linters:
 linters-settings:
   wsl:
     allow-assign-and-call: false
+    strict-append: false
   revive:
     rules:
       - name: blank-imports

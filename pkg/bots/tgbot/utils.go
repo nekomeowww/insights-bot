@@ -6,8 +6,6 @@ import (
 	"regexp"
 	"strings"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
@@ -79,14 +77,6 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	}
 
 	return firstName + " " + lastName
-}
-
-func ExtractTextFromMessage(message *tgbotapi.Message) string {
-	if message.Caption != "" {
-		return message.Caption
-	}
-
-	return message.Text
 }
 
 // EscapeHTMLSymbols

@@ -178,8 +178,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
 				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{
-						Point:       "Point 1",
-						CriticalIDs: []int64{1, 2},
+						Point:  "Point 1",
+						KeyIDs: []int64{1, 2},
 					},
 					{
 						Point: "Point 2",
@@ -195,8 +195,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 						Point: "Point 1",
 					},
 					{
-						Point:       "Point 2",
-						CriticalIDs: []int64{1, 2},
+						Point:  "Point 2",
+						KeyIDs: []int64{1, 2},
 					},
 				},
 			},
@@ -206,8 +206,8 @@ func TestRecapOutputTemplateExecute(t *testing.T) {
 				ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
 				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{
-						Point:       "Point 1",
-						CriticalIDs: []int64{1, 2},
+						Point:  "Point 1",
+						KeyIDs: []int64{1, 2},
 					},
 					{
 						Point: "Point 2",

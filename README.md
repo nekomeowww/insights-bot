@@ -144,7 +144,9 @@ docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API
 
 ### Run with docker-compose
 
-**Remember to replace your OpenAI token and other environment variables in `docker-compose.yml`**, and then run:
+Create your `.env` by making a copy of the contents from `.env.example` file. The .env file should be placed at the root of the project directory next to your `docker-compose.yml` file.
+
+Replace your OpenAI token and other environment variables in `.env`, and then run:
 
 ```shell
 docker-compose --profile hub up -d

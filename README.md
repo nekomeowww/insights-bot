@@ -14,12 +14,23 @@
   <a href="https://hub.docker.com/r/nekomeowww/insights-bot">
     <img src="https://img.shields.io/docker/v/nekomeowww/insights-bot" />
   </a>
+</p>
+
+<p align="center">
   <a href="https://t.me/ayaka_insights_bot_group">
     <img src="https://img.shields.io/badge/Chat%20on-Telegram-%235AA9E6?logo=telegram" />
   </a>
+  <a href="https://slack.com/oauth/v2/authorize?client_id=2628877438886.5144808095409&scope=chat:write,commands&user_scope=">
+    <img src="https://img.shields.io/badge/Add_to_Slack-4A154B?logo=slack" />
+  </a>
 </p>
 
-A bot works with OpenAI GPT models to provide insights for your Telegram info flows.
+A bot works with OpenAI GPT models to provide insights for your info flows.
+
+---
+## Support IMs
+- Telegram
+- Slack
 
 ---
 
@@ -59,6 +70,9 @@ Arguments: None
 > **Warning**
 > **This command will also enable the bot to rapidly send a chat history recap automatically for each 6 hours.**
 
+> **Warning**
+> **This command is not available in Slack integration currently.**
+
 By sending `/enable_recap` command, the bot will start to capture the chat histories and try to summarize them when you send `/recap` command afterwards.
 
 #### Disable chat history recapturing
@@ -77,6 +91,9 @@ Arguments: None
 > **Warning**
 > **This command will also disable the functionalities of `/recap` command**
 
+> **Warning**
+> **This command is not available in Slack integration currently.**
+
 By sending `/disable_recap` command, the bot will stop capturing the chat histories and no longer respond to `/recap` command.
 
 #### Summarize chat histories or Recap
@@ -86,6 +103,9 @@ By sending `/recap` command, the bot will try to summarize the chat histories an
 ```txt
 /recap
 ```
+
+> **Warning**
+> **This command is not available in Slack integration currently.**
 
 ## Deployment
 

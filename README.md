@@ -147,7 +147,7 @@ docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API
 **Remember to replace your OpenAI token and other environment variables in `docker-compose.yml`**, and then run:
 
 ```shell
-docker-compose up -d
+docker-compose --profile hub up -d
 ```
 
 If you prefer run docker image from local codes, then run:

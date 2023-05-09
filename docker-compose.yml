@@ -13,6 +13,8 @@ services:
       # - OPENAI_API_HOST=https://<Some Host> # uncomment this if you want to use your own OpenAI API host
     ports:
       - 7070:7070
+    profiles:
+      - hub
 
   insights_bot_local:
     image: insights-bot

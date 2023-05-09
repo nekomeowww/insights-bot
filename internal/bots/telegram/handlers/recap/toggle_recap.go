@@ -24,7 +24,7 @@ func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, 
 		telegram.MemberStatusCreator,
 		telegram.MemberStatusAdministrator,
 	}, telegram.MemberStatus(member.Status)) {
-		return tgbot.NewMessageError("你没有权限关闭聊天记录回顾功能哦！").WithReply(update.Message)
+		return tgbot.NewMessageError("你没有权限开启聊天记录回顾功能哦！").WithReply(update.Message)
 	}
 
 	return nil

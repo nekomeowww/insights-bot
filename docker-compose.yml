@@ -5,11 +5,11 @@ services:
     image: ghcr.io/nekomeowww/insights-bot:latest
     restart: always
     environment:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - OPENAI_API_SECRET=${OPENAI_API_SECRET}
-      - OPENAI_API_HOST=${OPENAI_API_HOST}
-      - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
-      - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
+      - TELEGRAM_BOT_TOKEN
+      - OPENAI_API_SECRET
+      - OPENAI_API_HOST
+      - SLACK_CLIENT_ID
+      - SLACK_CLIENT_SECRET
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
@@ -20,11 +20,11 @@ services:
     image: insights-bot
     restart: always
     environment:
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
-      - OPENAI_API_SECRET=${OPENAI_API_SECRET}
-      - OPENAI_API_HOST=${OPENAI_API_HOST}
-      - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
-      - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
+      - TELEGRAM_BOT_TOKEN
+      - OPENAI_API_SECRET
+      - OPENAI_API_HOST
+      - SLACK_CLIENT_ID
+      - SLACK_CLIENT_SECRET
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070

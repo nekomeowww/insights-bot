@@ -1,6 +1,8 @@
 package recap
 
 import (
+	"fmt"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
@@ -10,7 +12,7 @@ import (
 	"go.uber.org/fx"
 )
 
-func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, bot *tgbot.Bot) error {
+func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, bot *tgbot.Bot, enable bool) error {
 	member, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
 		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
 			ChatID: chatID,
@@ -18,19 +20,24 @@ func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, 
 		},
 	})
 	if err != nil {
-		return tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(update.Message)
+		return tgbot.
+			NewExceptionError(err).
+			WithMessage(fmt.Sprintf("聊天记录回顾功能%s失败，请稍后再试！", lo.Ternary(enable, "开启", "关闭"))).
+			WithReply(update.Message)
 	}
 	if !lo.Contains([]telegram.MemberStatus{
 		telegram.MemberStatusCreator,
 		telegram.MemberStatusAdministrator,
 	}, telegram.MemberStatus(member.Status)) {
-		return tgbot.NewMessageError("你没有权限开启聊天记录回顾功能哦！").WithReply(update.Message)
+		return tgbot.
+			NewMessageError(fmt.Sprintf("你没有权限%s聊天记录回顾功能哦！", lo.Ternary(enable, "开启", "关闭"))).
+			WithReply(update.Message)
 	}
 
 	return nil
 }
 
-func checkBotMember(chatID int64, update tgbotapi.Update, bot *tgbot.Bot) error {
+func checkBotMember(chatID int64, update tgbotapi.Update, bot *tgbot.Bot, enable bool) error {
 	botMember, err := bot.GetChatMember(tgbotapi.GetChatMemberConfig{
 		ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
 			ChatID: chatID,
@@ -38,29 +45,38 @@ func checkBotMember(chatID int64, update tgbotapi.Update, bot *tgbot.Bot) error 
 		},
 	})
 	if err != nil {
-		return tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(update.Message)
+		return tgbot.
+			NewExceptionError(err).
+			WithMessage(fmt.Sprintf("聊天记录回顾功能%s失败，请稍后再试！", lo.Ternary(enable, "开启", "关闭"))).
+			WithReply(update.Message)
 	}
 	if !lo.Contains([]telegram.MemberStatus{
 		telegram.MemberStatusAdministrator,
 	}, telegram.MemberStatus(botMember.Status)) {
-		return tgbot.NewMessageError("现在机器人不是群组管理员，已经不会记录任何聊天记录了。如果需要打开聊天记录回顾功能，请先将机器人设为群组管理员。").WithReply(update.Message)
+		return tgbot.
+			NewMessageError(lo.Ternary(
+				enable,
+				"现在机器人不是群组管理员，已经不会记录任何聊天记录了。如果需要打开聊天记录回顾功能，请先将机器人设为群组管理员。",
+				"现在机器人不是群组管理员，已经不会记录任何聊天记录了。如果需要关闭聊天记录回顾功能，请先将机器人设为群组管理员。然后执行 /enable_recap 命令后再试",
+			)).
+			WithReply(update.Message)
 	}
 
 	return nil
 }
 
-func checkToggle(update tgbotapi.Update, bot *tgbot.Bot) error {
+func checkToggle(update tgbotapi.Update, bot *tgbot.Bot, enable bool) error {
 	chatType := telegram.ChatType(update.Message.Chat.Type)
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return tgbot.NewMessageError("聊天记录回顾功能只有群组和超级群组可以配置开启哦！").WithReply(update.Message)
 	}
 
-	err := checkTogglingRecapPermission(update.Message.Chat.ID, update.Message.From.ID, update, bot)
+	err := checkTogglingRecapPermission(update.Message.Chat.ID, update.Message.From.ID, update, bot, enable)
 	if err != nil {
 		return err
 	}
 
-	err = checkBotMember(update.Message.Chat.ID, update, bot)
+	err = checkBotMember(update.Message.Chat.ID, update, bot, enable)
 	if err != nil {
 		return err
 	}
@@ -105,7 +121,7 @@ func (h EnableRecapCommandHandler) CommandHelp() string {
 func (h *EnableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 
-	err := checkToggle(c.Update, c.Bot)
+	err := checkToggle(c.Update, c.Bot, true)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +166,7 @@ func (h DisableRecapCommandHandler) CommandHelp() string {
 func (h *DisableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 
-	err := checkToggle(c.Update, c.Bot)
+	err := checkToggle(c.Update, c.Bot, false)
 	if err != nil {
 		return nil, err
 	}

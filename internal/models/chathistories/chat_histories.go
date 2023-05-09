@@ -210,7 +210,7 @@ func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration
 			chathistories.ChattedAtGT(time.Now().Add(-before).UnixMilli()),
 		).
 		Order(
-			chathistories.ByMessageID(sql.OrderDesc()),
+			chathistories.ByMessageID(sql.OrderAsc()),
 		).
 		All(context.TODO())
 	if err != nil {

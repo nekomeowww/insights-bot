@@ -117,6 +117,8 @@ func Run() func(bot *SlackBot) error {
 			}
 		}()
 
+		bot.logger.Infof("Slack Bot/App webhook server is listening on %s", bot.server.Addr)
+
 		go bot.runSmr()
 
 		return nil

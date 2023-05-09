@@ -188,6 +188,8 @@ func (b *Bot) stop(ctx context.Context) error {
 		if err := b.webhookServer.Shutdown(closeCtx); err != nil && err != http.ErrServerClosed {
 			return fmt.Errorf("failed to shutdown webhook server: %w", err)
 		}
+
+		close(b.webhookUpdateChan)
 	} else {
 		b.StopReceivingUpdates()
 	}
@@ -230,6 +232,8 @@ func (b *Bot) start() error {
 				b.logger.Fatal(err)
 			}
 		}()
+
+		b.logger.Infof("Telegram Bot webhook server is listening on %s", b.webhookServer.Addr)
 	}
 
 	go b.startPullUpdates()

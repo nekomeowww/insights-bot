@@ -25,7 +25,9 @@ import (
 var model *Model
 
 func TestMain(m *testing.M) {
-	logger := lib.NewLogger()()
+	logger := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: configs.NewTestConfig()(),
+	})
 
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
 		Lifecycle: tutils.NewEmtpyLifecycle(),

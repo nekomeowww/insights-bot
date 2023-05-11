@@ -18,6 +18,7 @@ func (ChatHistories) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique().Immutable(),
 		field.Int64("chat_id").Default(0),
+		field.Text("chat_title").Default(""),
 		field.Int64("message_id").Default(0),
 		field.Int64("user_id").Default(0),
 		field.Text("username").Default(""),

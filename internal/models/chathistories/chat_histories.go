@@ -142,6 +142,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	telegramChatHistoryCreate := m.ent.ChatHistories.
 		Create().
 		SetChatID(message.Chat.ID).
+		SetChatTitle(message.Chat.Title).
 		SetMessageID(int64(message.MessageID)).
 		SetUserID(message.From.ID).
 		SetUsername(message.From.UserName).

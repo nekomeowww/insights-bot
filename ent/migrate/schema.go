@@ -12,6 +12,7 @@ var (
 	ChatHistoriesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "chat_title", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "message_id", Type: field.TypeInt64, Default: 0},
 		{Name: "user_id", Type: field.TypeInt64, Default: 0},
 		{Name: "username", Type: field.TypeString, Size: 2147483647, Default: ""},
@@ -53,6 +54,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "chat_id", Type: field.TypeInt64, Unique: true},
 		{Name: "chat_type", Type: field.TypeString, Size: 2147483647},
+		{Name: "chat_title", Type: field.TypeString, Size: 2147483647},
 		{Name: "feature_chat_histories_recap", Type: field.TypeBool},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},

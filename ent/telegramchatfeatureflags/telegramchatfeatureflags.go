@@ -16,6 +16,8 @@ const (
 	FieldChatID = "chat_id"
 	// FieldChatType holds the string denoting the chat_type field in the database.
 	FieldChatType = "chat_type"
+	// FieldChatTitle holds the string denoting the chat_title field in the database.
+	FieldChatTitle = "chat_title"
 	// FieldFeatureChatHistoriesRecap holds the string denoting the feature_chat_histories_recap field in the database.
 	FieldFeatureChatHistoriesRecap = "feature_chat_histories_recap"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -31,6 +33,7 @@ var Columns = []string{
 	FieldID,
 	FieldChatID,
 	FieldChatType,
+	FieldChatTitle,
 	FieldFeatureChatHistoriesRecap,
 	FieldCreatedAt,
 	FieldUpdatedAt,
@@ -71,6 +74,11 @@ func ByChatID(opts ...sql.OrderTermOption) OrderOption {
 // ByChatType orders the results by the chat_type field.
 func ByChatType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChatType, opts...).ToFunc()
+}
+
+// ByChatTitle orders the results by the chat_title field.
+func ByChatTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldChatTitle, opts...).ToFunc()
 }
 
 // ByFeatureChatHistoriesRecap orders the results by the feature_chat_histories_recap field.

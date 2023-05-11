@@ -32,6 +32,12 @@ func (tcffc *TelegramChatFeatureFlagsCreate) SetChatType(s string) *TelegramChat
 	return tcffc
 }
 
+// SetChatTitle sets the "chat_title" field.
+func (tcffc *TelegramChatFeatureFlagsCreate) SetChatTitle(s string) *TelegramChatFeatureFlagsCreate {
+	tcffc.mutation.SetChatTitle(s)
+	return tcffc
+}
+
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
 func (tcffc *TelegramChatFeatureFlagsCreate) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsCreate {
 	tcffc.mutation.SetFeatureChatHistoriesRecap(b)
@@ -137,6 +143,9 @@ func (tcffc *TelegramChatFeatureFlagsCreate) check() error {
 	if _, ok := tcffc.mutation.ChatType(); !ok {
 		return &ValidationError{Name: "chat_type", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.chat_type"`)}
 	}
+	if _, ok := tcffc.mutation.ChatTitle(); !ok {
+		return &ValidationError{Name: "chat_title", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.chat_title"`)}
+	}
 	if _, ok := tcffc.mutation.FeatureChatHistoriesRecap(); !ok {
 		return &ValidationError{Name: "feature_chat_histories_recap", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.feature_chat_histories_recap"`)}
 	}
@@ -189,6 +198,10 @@ func (tcffc *TelegramChatFeatureFlagsCreate) createSpec() (*TelegramChatFeatureF
 	if value, ok := tcffc.mutation.ChatType(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatType, field.TypeString, value)
 		_node.ChatType = value
+	}
+	if value, ok := tcffc.mutation.ChatTitle(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldChatTitle, field.TypeString, value)
+		_node.ChatTitle = value
 	}
 	if value, ok := tcffc.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)

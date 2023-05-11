@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldChatID holds the string denoting the chat_id field in the database.
 	FieldChatID = "chat_id"
+	// FieldChatTitle holds the string denoting the chat_title field in the database.
+	FieldChatTitle = "chat_title"
 	// FieldMessageID holds the string denoting the message_id field in the database.
 	FieldMessageID = "message_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
@@ -50,6 +52,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldChatID,
+	FieldChatTitle,
 	FieldMessageID,
 	FieldUserID,
 	FieldUsername,
@@ -79,6 +82,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultChatID holds the default value on creation for the "chat_id" field.
 	DefaultChatID int64
+	// DefaultChatTitle holds the default value on creation for the "chat_title" field.
+	DefaultChatTitle string
 	// DefaultMessageID holds the default value on creation for the "message_id" field.
 	DefaultMessageID int64
 	// DefaultUserID holds the default value on creation for the "user_id" field.
@@ -122,6 +127,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByChatID orders the results by the chat_id field.
 func ByChatID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChatID, opts...).ToFunc()
+}
+
+// ByChatTitle orders the results by the chat_title field.
+func ByChatTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldChatTitle, opts...).ToFunc()
 }
 
 // ByMessageID orders the results by the message_id field.

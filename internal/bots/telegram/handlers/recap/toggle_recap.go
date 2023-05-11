@@ -126,7 +126,7 @@ func (h *EnableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, er
 		return nil, err
 	}
 
-	err = h.tgchats.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
+	err = h.tgchats.EnableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType, c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
 	}
@@ -171,7 +171,7 @@ func (h *DisableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, e
 		return nil, err
 	}
 
-	err = h.tgchats.DisableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType)
+	err = h.tgchats.DisableChatHistoriesRecap(c.Update.Message.Chat.ID, chatType, c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能关闭失败，请稍后再试！").WithReply(c.Update.Message)
 	}

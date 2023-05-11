@@ -29,7 +29,7 @@ func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType) (*e
 	return featureFlags, nil
 }
 
-func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
+func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatType, chatTitle string) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil
 	}
@@ -42,6 +42,7 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		_, err = m.ent.TelegramChatFeatureFlags.
 			Create().
 			SetChatID(chatID).
+			SetChatTitle(chatTitle).
 			SetChatType(string(chatType)).
 			SetFeatureChatHistoriesRecap(true).
 			Save(context.Background())
@@ -50,6 +51,15 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		}
 
 		return nil
+	}
+	if featureFlags.ChatTitle == "" {
+		_, err = m.ent.TelegramChatFeatureFlags.
+			UpdateOne(featureFlags).
+			SetChatTitle(chatTitle).
+			Save(context.Background())
+		if err != nil {
+			return err
+		}
 	}
 	if featureFlags.FeatureChatHistoriesRecap {
 		return nil
@@ -66,7 +76,7 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 	return nil
 }
 
-func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatType) error {
+func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatType, chatTitle string) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil
 	}
@@ -79,6 +89,7 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 		_, err = m.ent.TelegramChatFeatureFlags.
 			Create().
 			SetChatID(chatID).
+			SetChatTitle(chatTitle).
 			SetChatType(string(chatType)).
 			SetFeatureChatHistoriesRecap(false).
 			Save(context.Background())
@@ -87,6 +98,15 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 		}
 
 		return nil
+	}
+	if featureFlags.ChatTitle == "" {
+		_, err = m.ent.TelegramChatFeatureFlags.
+			UpdateOne(featureFlags).
+			SetChatTitle(chatTitle).
+			Save(context.Background())
+		if err != nil {
+			return err
+		}
 	}
 	if !featureFlags.FeatureChatHistoriesRecap {
 		return nil

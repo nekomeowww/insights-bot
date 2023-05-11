@@ -49,6 +49,20 @@ func (chu *ChatHistoriesUpdate) AddChatID(i int64) *ChatHistoriesUpdate {
 	return chu
 }
 
+// SetChatTitle sets the "chat_title" field.
+func (chu *ChatHistoriesUpdate) SetChatTitle(s string) *ChatHistoriesUpdate {
+	chu.mutation.SetChatTitle(s)
+	return chu
+}
+
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (chu *ChatHistoriesUpdate) SetNillableChatTitle(s *string) *ChatHistoriesUpdate {
+	if s != nil {
+		chu.SetChatTitle(*s)
+	}
+	return chu
+}
+
 // SetMessageID sets the "message_id" field.
 func (chu *ChatHistoriesUpdate) SetMessageID(i int64) *ChatHistoriesUpdate {
 	chu.mutation.ResetMessageID()
@@ -341,6 +355,9 @@ func (chu *ChatHistoriesUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if value, ok := chu.mutation.AddedChatID(); ok {
 		_spec.AddField(chathistories.FieldChatID, field.TypeInt64, value)
 	}
+	if value, ok := chu.mutation.ChatTitle(); ok {
+		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
+	}
 	if value, ok := chu.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)
 	}
@@ -444,6 +461,20 @@ func (chuo *ChatHistoriesUpdateOne) SetNillableChatID(i *int64) *ChatHistoriesUp
 // AddChatID adds i to the "chat_id" field.
 func (chuo *ChatHistoriesUpdateOne) AddChatID(i int64) *ChatHistoriesUpdateOne {
 	chuo.mutation.AddChatID(i)
+	return chuo
+}
+
+// SetChatTitle sets the "chat_title" field.
+func (chuo *ChatHistoriesUpdateOne) SetChatTitle(s string) *ChatHistoriesUpdateOne {
+	chuo.mutation.SetChatTitle(s)
+	return chuo
+}
+
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (chuo *ChatHistoriesUpdateOne) SetNillableChatTitle(s *string) *ChatHistoriesUpdateOne {
+	if s != nil {
+		chuo.SetChatTitle(*s)
+	}
 	return chuo
 }
 
@@ -768,6 +799,9 @@ func (chuo *ChatHistoriesUpdateOne) sqlSave(ctx context.Context) (_node *ChatHis
 	}
 	if value, ok := chuo.mutation.AddedChatID(); ok {
 		_spec.AddField(chathistories.FieldChatID, field.TypeInt64, value)
+	}
+	if value, ok := chuo.mutation.ChatTitle(); ok {
+		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
 	}
 	if value, ok := chuo.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)

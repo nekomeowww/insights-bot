@@ -47,6 +47,12 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatType(s string) *TelegramChat
 	return tcffu
 }
 
+// SetChatTitle sets the "chat_title" field.
+func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatTitle(s string) *TelegramChatFeatureFlagsUpdate {
+	tcffu.mutation.SetChatTitle(s)
+	return tcffu
+}
+
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
 func (tcffu *TelegramChatFeatureFlagsUpdate) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsUpdate {
 	tcffu.mutation.SetFeatureChatHistoriesRecap(b)
@@ -145,6 +151,9 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) sqlSave(ctx context.Context) (n int
 	if value, ok := tcffu.mutation.ChatType(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatType, field.TypeString, value)
 	}
+	if value, ok := tcffu.mutation.ChatTitle(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldChatTitle, field.TypeString, value)
+	}
 	if value, ok := tcffu.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
 	}
@@ -198,6 +207,12 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) AddChatID(i int64) *TelegramCha
 // SetChatType sets the "chat_type" field.
 func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatType(s string) *TelegramChatFeatureFlagsUpdateOne {
 	tcffuo.mutation.SetChatType(s)
+	return tcffuo
+}
+
+// SetChatTitle sets the "chat_title" field.
+func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatTitle(s string) *TelegramChatFeatureFlagsUpdateOne {
+	tcffuo.mutation.SetChatTitle(s)
 	return tcffuo
 }
 
@@ -328,6 +343,9 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if value, ok := tcffuo.mutation.ChatType(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatType, field.TypeString, value)
+	}
+	if value, ok := tcffuo.mutation.ChatTitle(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldChatTitle, field.TypeString, value)
 	}
 	if value, ok := tcffuo.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)

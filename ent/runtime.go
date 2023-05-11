@@ -20,60 +20,64 @@ func init() {
 	chathistoriesDescChatID := chathistoriesFields[1].Descriptor()
 	// chathistories.DefaultChatID holds the default value on creation for the chat_id field.
 	chathistories.DefaultChatID = chathistoriesDescChatID.Default.(int64)
+	// chathistoriesDescChatTitle is the schema descriptor for chat_title field.
+	chathistoriesDescChatTitle := chathistoriesFields[2].Descriptor()
+	// chathistories.DefaultChatTitle holds the default value on creation for the chat_title field.
+	chathistories.DefaultChatTitle = chathistoriesDescChatTitle.Default.(string)
 	// chathistoriesDescMessageID is the schema descriptor for message_id field.
-	chathistoriesDescMessageID := chathistoriesFields[2].Descriptor()
+	chathistoriesDescMessageID := chathistoriesFields[3].Descriptor()
 	// chathistories.DefaultMessageID holds the default value on creation for the message_id field.
 	chathistories.DefaultMessageID = chathistoriesDescMessageID.Default.(int64)
 	// chathistoriesDescUserID is the schema descriptor for user_id field.
-	chathistoriesDescUserID := chathistoriesFields[3].Descriptor()
+	chathistoriesDescUserID := chathistoriesFields[4].Descriptor()
 	// chathistories.DefaultUserID holds the default value on creation for the user_id field.
 	chathistories.DefaultUserID = chathistoriesDescUserID.Default.(int64)
 	// chathistoriesDescUsername is the schema descriptor for username field.
-	chathistoriesDescUsername := chathistoriesFields[4].Descriptor()
+	chathistoriesDescUsername := chathistoriesFields[5].Descriptor()
 	// chathistories.DefaultUsername holds the default value on creation for the username field.
 	chathistories.DefaultUsername = chathistoriesDescUsername.Default.(string)
 	// chathistoriesDescFullName is the schema descriptor for full_name field.
-	chathistoriesDescFullName := chathistoriesFields[5].Descriptor()
+	chathistoriesDescFullName := chathistoriesFields[6].Descriptor()
 	// chathistories.DefaultFullName holds the default value on creation for the full_name field.
 	chathistories.DefaultFullName = chathistoriesDescFullName.Default.(string)
 	// chathistoriesDescText is the schema descriptor for text field.
-	chathistoriesDescText := chathistoriesFields[6].Descriptor()
+	chathistoriesDescText := chathistoriesFields[7].Descriptor()
 	// chathistories.DefaultText holds the default value on creation for the text field.
 	chathistories.DefaultText = chathistoriesDescText.Default.(string)
 	// chathistoriesDescRepliedToMessageID is the schema descriptor for replied_to_message_id field.
-	chathistoriesDescRepliedToMessageID := chathistoriesFields[7].Descriptor()
+	chathistoriesDescRepliedToMessageID := chathistoriesFields[8].Descriptor()
 	// chathistories.DefaultRepliedToMessageID holds the default value on creation for the replied_to_message_id field.
 	chathistories.DefaultRepliedToMessageID = chathistoriesDescRepliedToMessageID.Default.(int64)
 	// chathistoriesDescRepliedToUserID is the schema descriptor for replied_to_user_id field.
-	chathistoriesDescRepliedToUserID := chathistoriesFields[8].Descriptor()
+	chathistoriesDescRepliedToUserID := chathistoriesFields[9].Descriptor()
 	// chathistories.DefaultRepliedToUserID holds the default value on creation for the replied_to_user_id field.
 	chathistories.DefaultRepliedToUserID = chathistoriesDescRepliedToUserID.Default.(int64)
 	// chathistoriesDescRepliedToFullName is the schema descriptor for replied_to_full_name field.
-	chathistoriesDescRepliedToFullName := chathistoriesFields[9].Descriptor()
+	chathistoriesDescRepliedToFullName := chathistoriesFields[10].Descriptor()
 	// chathistories.DefaultRepliedToFullName holds the default value on creation for the replied_to_full_name field.
 	chathistories.DefaultRepliedToFullName = chathistoriesDescRepliedToFullName.Default.(string)
 	// chathistoriesDescRepliedToUsername is the schema descriptor for replied_to_username field.
-	chathistoriesDescRepliedToUsername := chathistoriesFields[10].Descriptor()
+	chathistoriesDescRepliedToUsername := chathistoriesFields[11].Descriptor()
 	// chathistories.DefaultRepliedToUsername holds the default value on creation for the replied_to_username field.
 	chathistories.DefaultRepliedToUsername = chathistoriesDescRepliedToUsername.Default.(string)
 	// chathistoriesDescRepliedToText is the schema descriptor for replied_to_text field.
-	chathistoriesDescRepliedToText := chathistoriesFields[11].Descriptor()
+	chathistoriesDescRepliedToText := chathistoriesFields[12].Descriptor()
 	// chathistories.DefaultRepliedToText holds the default value on creation for the replied_to_text field.
 	chathistories.DefaultRepliedToText = chathistoriesDescRepliedToText.Default.(string)
 	// chathistoriesDescChattedAt is the schema descriptor for chatted_at field.
-	chathistoriesDescChattedAt := chathistoriesFields[12].Descriptor()
+	chathistoriesDescChattedAt := chathistoriesFields[13].Descriptor()
 	// chathistories.DefaultChattedAt holds the default value on creation for the chatted_at field.
 	chathistories.DefaultChattedAt = chathistoriesDescChattedAt.Default.(func() int64)
 	// chathistoriesDescEmbedded is the schema descriptor for embedded field.
-	chathistoriesDescEmbedded := chathistoriesFields[13].Descriptor()
+	chathistoriesDescEmbedded := chathistoriesFields[14].Descriptor()
 	// chathistories.DefaultEmbedded holds the default value on creation for the embedded field.
 	chathistories.DefaultEmbedded = chathistoriesDescEmbedded.Default.(bool)
 	// chathistoriesDescCreatedAt is the schema descriptor for created_at field.
-	chathistoriesDescCreatedAt := chathistoriesFields[14].Descriptor()
+	chathistoriesDescCreatedAt := chathistoriesFields[15].Descriptor()
 	// chathistories.DefaultCreatedAt holds the default value on creation for the created_at field.
 	chathistories.DefaultCreatedAt = chathistoriesDescCreatedAt.Default.(func() int64)
 	// chathistoriesDescUpdatedAt is the schema descriptor for updated_at field.
-	chathistoriesDescUpdatedAt := chathistoriesFields[15].Descriptor()
+	chathistoriesDescUpdatedAt := chathistoriesFields[16].Descriptor()
 	// chathistories.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	chathistories.DefaultUpdatedAt = chathistoriesDescUpdatedAt.Default.(func() int64)
 	// chathistoriesDescID is the schema descriptor for id field.
@@ -109,11 +113,11 @@ func init() {
 	telegramchatfeatureflagsFields := schema.TelegramChatFeatureFlags{}.Fields()
 	_ = telegramchatfeatureflagsFields
 	// telegramchatfeatureflagsDescCreatedAt is the schema descriptor for created_at field.
-	telegramchatfeatureflagsDescCreatedAt := telegramchatfeatureflagsFields[4].Descriptor()
+	telegramchatfeatureflagsDescCreatedAt := telegramchatfeatureflagsFields[5].Descriptor()
 	// telegramchatfeatureflags.DefaultCreatedAt holds the default value on creation for the created_at field.
 	telegramchatfeatureflags.DefaultCreatedAt = telegramchatfeatureflagsDescCreatedAt.Default.(func() int64)
 	// telegramchatfeatureflagsDescUpdatedAt is the schema descriptor for updated_at field.
-	telegramchatfeatureflagsDescUpdatedAt := telegramchatfeatureflagsFields[5].Descriptor()
+	telegramchatfeatureflagsDescUpdatedAt := telegramchatfeatureflagsFields[6].Descriptor()
 	// telegramchatfeatureflags.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	telegramchatfeatureflags.DefaultUpdatedAt = telegramchatfeatureflagsDescUpdatedAt.Default.(func() int64)
 	// telegramchatfeatureflagsDescID is the schema descriptor for id field.

@@ -229,10 +229,6 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
-func formatChatHistoryTextContent(text string) string {
-	return fmt.Sprintf(`"""%s"""`, text)
-}
-
 type RecapOutputTemplateInputs struct {
 	ChatID string
 	Recaps []*openai.ChatHistorySummarizationOutputs
@@ -305,7 +301,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				"msgId:%d: %s sent: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
-				formatChatHistoryTextContent(message.Text),
+				message.Text,
 			))
 		} else {
 			repliedToPartialContextMessage := fmt.Sprintf(
@@ -318,7 +314,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
-				formatChatHistoryTextContent(message.Text),
+				message.Text,
 			))
 		}
 	}

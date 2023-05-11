@@ -112,6 +112,10 @@ func init() {
 	slackoauthcredentials.DefaultID = slackoauthcredentialsDescID.Default.(func() uuid.UUID)
 	telegramchatfeatureflagsFields := schema.TelegramChatFeatureFlags{}.Fields()
 	_ = telegramchatfeatureflagsFields
+	// telegramchatfeatureflagsDescChatTitle is the schema descriptor for chat_title field.
+	telegramchatfeatureflagsDescChatTitle := telegramchatfeatureflagsFields[3].Descriptor()
+	// telegramchatfeatureflags.DefaultChatTitle holds the default value on creation for the chat_title field.
+	telegramchatfeatureflags.DefaultChatTitle = telegramchatfeatureflagsDescChatTitle.Default.(string)
 	// telegramchatfeatureflagsDescCreatedAt is the schema descriptor for created_at field.
 	telegramchatfeatureflagsDescCreatedAt := telegramchatfeatureflagsFields[5].Descriptor()
 	// telegramchatfeatureflags.DefaultCreatedAt holds the default value on creation for the created_at field.

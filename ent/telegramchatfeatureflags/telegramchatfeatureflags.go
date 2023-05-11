@@ -50,6 +50,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultChatTitle holds the default value on creation for the "chat_title" field.
+	DefaultChatTitle string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.

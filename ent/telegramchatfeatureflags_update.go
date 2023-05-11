@@ -53,6 +53,14 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatTitle(s string) *TelegramCha
 	return tcffu
 }
 
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableChatTitle(s *string) *TelegramChatFeatureFlagsUpdate {
+	if s != nil {
+		tcffu.SetChatTitle(*s)
+	}
+	return tcffu
+}
+
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
 func (tcffu *TelegramChatFeatureFlagsUpdate) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsUpdate {
 	tcffu.mutation.SetFeatureChatHistoriesRecap(b)
@@ -213,6 +221,14 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatType(s string) *Telegram
 // SetChatTitle sets the "chat_title" field.
 func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatTitle(s string) *TelegramChatFeatureFlagsUpdateOne {
 	tcffuo.mutation.SetChatTitle(s)
+	return tcffuo
+}
+
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableChatTitle(s *string) *TelegramChatFeatureFlagsUpdateOne {
+	if s != nil {
+		tcffuo.SetChatTitle(*s)
+	}
 	return tcffuo
 }
 

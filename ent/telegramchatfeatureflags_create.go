@@ -38,6 +38,14 @@ func (tcffc *TelegramChatFeatureFlagsCreate) SetChatTitle(s string) *TelegramCha
 	return tcffc
 }
 
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (tcffc *TelegramChatFeatureFlagsCreate) SetNillableChatTitle(s *string) *TelegramChatFeatureFlagsCreate {
+	if s != nil {
+		tcffc.SetChatTitle(*s)
+	}
+	return tcffc
+}
+
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
 func (tcffc *TelegramChatFeatureFlagsCreate) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsCreate {
 	tcffc.mutation.SetFeatureChatHistoriesRecap(b)
@@ -121,6 +129,10 @@ func (tcffc *TelegramChatFeatureFlagsCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (tcffc *TelegramChatFeatureFlagsCreate) defaults() {
+	if _, ok := tcffc.mutation.ChatTitle(); !ok {
+		v := telegramchatfeatureflags.DefaultChatTitle
+		tcffc.mutation.SetChatTitle(v)
+	}
 	if _, ok := tcffc.mutation.CreatedAt(); !ok {
 		v := telegramchatfeatureflags.DefaultCreatedAt()
 		tcffc.mutation.SetCreatedAt(v)

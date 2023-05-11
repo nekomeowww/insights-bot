@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -16,7 +17,9 @@ var model *Model
 
 func TestMain(m *testing.M) {
 	model = NewModel()(NewModelParams{
-		Logger: lib.NewLogger()(),
+		Logger: lib.NewLogger()(lib.NewLoggerParams{
+			Configs: configs.NewTestConfig()(),
+		}),
 	})
 
 	os.Exit(m.Run())

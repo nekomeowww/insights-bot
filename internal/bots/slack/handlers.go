@@ -15,7 +15,7 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
+func (s *Bot) postCommandInfo(ctx *gin.Context) {
 	var body recivedCommandInfo
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
@@ -80,7 +80,7 @@ func (s *SlackBot) postCommandInfo(ctx *gin.Context) {
 }
 
 // Receive auth code and request for access token.
-func (b *SlackBot) getInstallAuth(ctx *gin.Context) {
+func (b *Bot) getInstallAuth(ctx *gin.Context) {
 	code := ctx.Query("code")
 	if code == "" {
 		ctx.AbortWithStatus(http.StatusBadRequest)

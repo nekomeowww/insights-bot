@@ -5,8 +5,6 @@ FROM golang:1.20 as builder
 
 ARG VERSION
 
-RUN apt update && apt upgrade -y && apt install -y ca-certificates
-
 # 设定 Go 使用 模块化依赖 管理方式：GO111MODULE
 RUN GO111MODULE=on
 
@@ -31,6 +29,9 @@ FROM debian as runner
 RUN apt update && apt upgrade -y && apt install -y ca-certificates
 
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
+
+# Health check endpoint
+EXPOSE 7069
 
 # 入点是编译好的应用程序
 CMD [ "/usr/local/bin/insights-bot" ]

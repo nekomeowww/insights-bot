@@ -8,7 +8,9 @@ import (
 	"net/http/pprof"
 	"time"
 
+	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/samber/lo"
 	"go.uber.org/fx"
 )
 
@@ -19,9 +21,12 @@ type NewPprofParams struct {
 	Logger    *logger.Logger
 }
 
+var _ healthchecker.HealthChecker = (*Pprof)(nil)
+
 type Pprof struct {
-	srv    *http.Server
-	logger *logger.Logger
+	srv        *http.Server
+	srvStarted bool
+	logger     *logger.Logger
 }
 
 func NewPprof() func(NewPprofParams) *Pprof {
@@ -60,6 +65,10 @@ func NewPprof() func(NewPprofParams) *Pprof {
 	}
 }
 
+func (p *Pprof) Check(ctx context.Context) error {
+	return lo.Ternary(p.srvStarted, nil, fmt.Errorf("pprof server is not started yet"))
+}
+
 func Run() func(*Pprof) error {
 	return func(srv *Pprof) error {
 		listener, err := net.Listen("tcp", srv.srv.Addr)
@@ -73,6 +82,7 @@ func Run() func(*Pprof) error {
 			}
 		}()
 
+		srv.srvStarted = true
 		return nil
 	}
 }

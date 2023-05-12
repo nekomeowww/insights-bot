@@ -83,6 +83,7 @@ func Run() func(*Pprof) error {
 		}()
 
 		srv.srvStarted = true
+
 		return nil
 	}
 }

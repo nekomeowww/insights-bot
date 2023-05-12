@@ -15,6 +15,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/models"
 	"github.com/nekomeowww/insights-bot/internal/services"
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
+	"github.com/nekomeowww/insights-bot/internal/services/health"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty"
 )
@@ -29,10 +30,11 @@ func main() {
 		fx.Options(services.NewModules()),
 		fx.Options(telegram.NewModules()),
 		fx.Options(slack.NewModules()),
-		fx.Invoke(telegram.Run()),
+		fx.Invoke(health.Run()),
+		fx.Invoke(pprof.Run()),
 		fx.Invoke(autorecap.Run()),
 		fx.Invoke(slack.Run()),
-		fx.Invoke(pprof.Run()),
+		fx.Invoke(telegram.Run()),
 	))
 
 	app.Run()

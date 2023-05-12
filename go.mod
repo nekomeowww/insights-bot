@@ -5,6 +5,7 @@ go 1.19
 require (
 	entgo.io/ent v0.12.2
 	github.com/PuerkitoBio/goquery v1.8.1
+	github.com/alexliesenfeld/health v0.7.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-shiori/go-readability v0.0.0-20220215145315-dd6828d2f09b

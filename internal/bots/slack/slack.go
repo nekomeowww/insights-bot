@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
@@ -35,7 +36,9 @@ type NewSlackBotParam struct {
 	Ent *datastore.Ent
 }
 
-type SlackBot struct {
+var _ healthchecker.HealthChecker = (*Bot)(nil)
+
+type Bot struct {
 	config *configs.Config
 	logger *logger.Logger
 
@@ -47,12 +50,13 @@ type SlackBot struct {
 
 	alreadyClosed bool
 	closeChan     chan struct{}
+	started       bool
 
 	processChan chan smrRequestInfo
 }
 
-func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
-	return func(param NewSlackBotParam) *SlackBot {
+func NewSlackBot() func(param NewSlackBotParam) *Bot {
+	return func(param NewSlackBotParam) *Bot {
 		slackConfig := param.Config.Slack
 
 		if slackConfig.ClientID == "" || slackConfig.ClientSecret == "" {
@@ -60,7 +64,7 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 			return nil
 		}
 
-		slackBot := &SlackBot{
+		slackBot := &Bot{
 			config:      param.Config,
 			logger:      param.Logger,
 			closeChan:   make(chan struct{}, 1),
@@ -99,8 +103,12 @@ func NewSlackBot() func(param NewSlackBotParam) *SlackBot {
 	}
 }
 
-func Run() func(bot *SlackBot) error {
-	return func(bot *SlackBot) error {
+func (s *Bot) Check(ctx context.Context) error {
+	return lo.Ternary(s.started, nil, errors.New("slack bot not started yet"))
+}
+
+func Run() func(bot *Bot) error {
+	return func(bot *Bot) error {
 		if bot == nil {
 			return nil
 		}
@@ -120,6 +128,7 @@ func Run() func(bot *SlackBot) error {
 		bot.logger.Infof("Slack Bot/App webhook server is listening on %s", bot.server.Addr)
 
 		go bot.runSmr()
+		bot.started = true
 
 		return nil
 	}

@@ -108,7 +108,7 @@ func NewConfig() func() (*Config, error) {
 			DB: SectionDB{
 				ConnectionString: getEnv(EnvDBConnectionString),
 			},
-			LogLevel: lo.Ternary(envLogLevel == "", envLogLevel, "info"),
+			LogLevel: lo.Ternary(envLogLevel == "", "info", envLogLevel),
 		}, nil
 	}
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
@@ -34,6 +35,8 @@ type NewSlackBotParam struct {
 
 	Ent *datastore.Ent
 }
+
+var _ healthchecker.HealthChecker = (*Bot)(nil)
 
 type Bot struct {
 	config *configs.Config

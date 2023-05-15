@@ -114,6 +114,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3.4.0
 
   unittest:
+    name: Unit Test
     runs-on: ubuntu-latest
 
     services:

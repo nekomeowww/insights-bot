@@ -113,43 +113,55 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3.4.0
 
-  # unittest:
-  #   # 运行目标
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     # 代码签出
-  #     - uses: actions/checkout@v3
+  unittest:
+    runs-on: ubuntu-latest
 
-  #     # 设定 Go 环境
-  #     - name: Setup Go
-  #       uses: actions/setup-go@v3
-  #       with:
-  #         go-version: "^1.19.0"
-  #         cache: true
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: '123456'
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-  #     # Get values for cache paths to be used in later steps
-  #     - name: Setup Go Cache PATH
-  #       id: go-cache-paths
-  #       run: |
-  #         echo "go-build=$(go env GOCACHE)"  >> $GITHUB_OUTPUT
-  #         echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
+    steps:
+      - uses: actions/checkout@v3
 
-  #     # Cache go build cache, used to speedup go test
-  #     - name: Go Build Cache
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ${{ steps.go-cache-paths.outputs.go-build }}
-  #         key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.20.0"
+          cache: true
 
-  #     # Cache go mod cache, used to speedup builds
-  #     - name: Go Mod Cache
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ${{ steps.go-cache-paths.outputs.go-mod }}
-  #         key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+      # Get values for cache paths to be used in later steps
+      - name: Setup Go Cache PATH
+        id: go-cache-paths
+        run: |
+          echo "go-build=$(go env GOCACHE)"  >> $GITHUB_OUTPUT
+          echo "go-mod=$(go env GOMODCACHE)" >> $GITHUB_OUTPUT
 
-  #     # 单元测试
-  #     - name: Unit tests
-  #       run: |
-  #         go test ./... -coverprofile=coverage.out -covermode=atomic -p=1
-  #         go tool cover -func coverage.out
+      # Cache go build cache, used to speedup go test
+      - name: Go Build Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+
+      # Cache go mod cache, used to speedup builds
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
+
+      - name: Unit tests
+        run: |
+          go test ./... -coverprofile=coverage.out -covermode=atomic -p=1
+          go tool cover -func coverage.out

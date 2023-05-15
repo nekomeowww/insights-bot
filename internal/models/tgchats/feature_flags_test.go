@@ -80,6 +80,11 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 	err = model.EnableChatHistoriesRecap(chatID3, telegram.ChatTypeGroup, chatTitle3)
 	require.NoError(err)
 
+	defer func() {
+		_, err := model.ent.TelegramChatFeatureFlags.Delete().Exec(context.Background())
+		assert.NoError(err)
+	}()
+
 	chatIDs, err := model.ListChatHistoriesRecapEnabledChats()
 	require.NoError(err)
 	require.Len(chatIDs, 3)

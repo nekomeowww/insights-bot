@@ -35,13 +35,13 @@ type NewModelParams struct {
 
 	Logger *logger.Logger
 	Ent    *datastore.Ent
-	OpenAI *openai.Client
+	OpenAI openai.Client
 }
 
 type Model struct {
 	logger   *logger.Logger
 	ent      *datastore.Ent
-	openAI   *openai.Client
+	openAI   openai.Client
 	linkprev *linkprev.Client
 }
 
@@ -71,7 +71,8 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		endIndex := startIndex + entity.Length
 		var title string
 		var href string
-		if entity.Type == "url" {
+		switch entity.Type {
+		case "url":
 			href = string(utf16.Decode(textUTF16[startIndex:endIndex]))
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -79,16 +80,30 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 
 			meta, err := m.linkprev.Preview(ctx, href)
 			if err != nil {
-				m.logger.Infof("🔗Failed to generate link preview for %s, error %+v", href, err)
+				m.logger.Errorf("🔗Failed to generate link preview for %s, error %+v", href, err)
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 
 			title = lo.Ternary(meta.Title != "", meta.Title, meta.OpenGraph.Title)
-		} else if entity.Type == "text_link" {
-			title = string(utf16.Decode(textUTF16[startIndex:endIndex]))
+		case "text_link":
 			href = entity.URL
-		} else {
+			title = string(utf16.Decode(textUTF16[startIndex:endIndex]))
+		default:
 			return MarkdownLink{[]uint16{}, -1, -1}
+		}
+
+		if utf8.RuneCountInString(title) > 200 {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+			defer cancel()
+
+			resp, err := m.openAI.SummarizeAny(ctx, title)
+			if err != nil {
+				m.logger.Errorf("🔗Failed to summarize title for %s, error %+v", href, err)
+				return MarkdownLink{[]uint16{}, -1, -1}
+			}
+			if len(resp.Choices) != 0 {
+				title = resp.Choices[0].Message.Content
+			}
 		}
 
 		unescaped, err := url.QueryUnescape(href)
@@ -106,6 +121,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		if links[i].Start == -1 {
 			continue
 		}
+
 		temp := append(links[i].Markdown, textUTF16[links[i].End:]...)
 		textUTF16 = append(textUTF16[:links[i].Start], temp...)
 	}
@@ -118,7 +134,7 @@ func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string,
 	if text == "" {
 		return "", nil
 	}
-	if utf8.RuneCountInString(text) >= 200 {
+	if utf8.RuneCountInString(text) >= 300 {
 		resp, err := m.openAI.SummarizeWithOneChatHistory(context.Background(), text)
 		if err != nil {
 			return "", err
@@ -139,6 +155,15 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 
+	text, err := m.extractTextWithSummarization(message)
+	if err != nil {
+		return err
+	}
+	if text == "" {
+		m.logger.Warn("message text is empty")
+		return nil
+	}
+
 	telegramChatHistoryCreate := m.ent.ChatHistories.
 		Create().
 		SetChatID(message.Chat.ID).
@@ -149,14 +174,6 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		SetFullName(tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName)).
 		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli())
 
-	text, err := m.extractTextWithSummarization(message)
-	if err != nil {
-		return err
-	}
-	if text == "" {
-		m.logger.Warn("message text is empty")
-		return nil
-	}
 	if message.ForwardFrom != nil {
 		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
 	} else if message.ForwardFromChat != nil {

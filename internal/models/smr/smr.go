@@ -23,12 +23,12 @@ import (
 type NewModelParams struct {
 	fx.In
 
-	OpenAIClient *openai.Client
+	OpenAIClient openai.Client
 	Logger       *logger.Logger
 }
 
 type Model struct {
-	openai *openai.Client
+	openai openai.Client
 	logger *logger.Logger
 	req    *req.Client
 }

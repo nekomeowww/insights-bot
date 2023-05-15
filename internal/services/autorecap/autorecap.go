@@ -26,7 +26,7 @@ type NewAutoRecapServiceParam struct {
 	Logger        *logger.Logger
 	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
-	OpenAI        *openai.Client
+	OpenAI        openai.Client
 }
 
 var _ healthchecker.HealthChecker = (*AutoRecapService)(nil)
@@ -39,7 +39,7 @@ type AutoRecapService struct {
 	logger        *logger.Logger
 	chatHistories *chathistories.Model
 	tgchats       *tgchats.Model
-	openai        *openai.Client
+	openai        openai.Client
 }
 
 func NewAutoRecapService() func(NewAutoRecapServiceParam) (*AutoRecapService, error) {

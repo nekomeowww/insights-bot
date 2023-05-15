@@ -11,7 +11,18 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-type Client struct {
+type Client interface {
+	SplitContentBasedByTokenLimitations(textContent string, limits int) []string
+	SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error)
+	SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error)
+	SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error)
+	SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title string, by string, content string) (*openai.ChatCompletionResponse, error)
+	TruncateContentBasedOnTokens(textContent string, limits int) string
+}
+
+var _ Client = (*OpenAIClient)(nil)
+
+type OpenAIClient struct {
 	tiktokenEncoding *tiktoken.Tiktoken
 	OpenAIClient     *openai.Client
 }
@@ -34,7 +45,7 @@ func parseOpenAIAPIHost(apiHost string) (string, error) {
 	return "", fmt.Errorf("invalid API host: %s", apiHost)
 }
 
-func NewClient(apiSecret string, apiHost string) (*Client, error) {
+func NewClient(apiSecret string, apiHost string) (*OpenAIClient, error) {
 	tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
 	if err != nil {
 		return nil, err
@@ -52,14 +63,14 @@ func NewClient(apiSecret string, apiHost string) (*Client, error) {
 
 	client := openai.NewClientWithConfig(config)
 
-	return &Client{
+	return &OpenAIClient{
 		OpenAIClient:     client,
 		tiktokenEncoding: tokenizer,
 	}, nil
 }
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本。
-func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) string {
+func (c *OpenAIClient) TruncateContentBasedOnTokens(textContent string, limits int) string {
 	tokens := c.tiktokenEncoding.Encode(textContent, nil, nil)
 	if len(tokens) <= limits {
 		return textContent
@@ -82,7 +93,7 @@ func (c *Client) TruncateContentBasedOnTokens(textContent string, limits int) st
 }
 
 // SplitContentBasedByTokenLimitations 基于 token 计算的方式分割文本。
-func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits int) []string {
+func (c *OpenAIClient) SplitContentBasedByTokenLimitations(textContent string, limits int) []string {
 	slices := make([]string, 0)
 
 	for {
@@ -99,7 +110,7 @@ func (c *Client) SplitContentBasedByTokenLimitations(textContent string, limits 
 }
 
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题。
-func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
+func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
 	resp, err := c.OpenAIClient.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
@@ -136,7 +147,7 @@ func (c *Client) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, 
 	return &resp, nil
 }
 
-func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
+func (c *OpenAIClient) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
 	resp, err := c.OpenAIClient.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
@@ -168,7 +179,37 @@ func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyCha
 	return &resp, nil
 }
 
-func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
+// SummarizeAny 通过 OpenAI 的 Chat API 来为任意内容生成摘要。
+func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error) {
+	sb := new(strings.Builder)
+
+	err := AnySummarizationPrompt.Execute(sb, AnySummarizationInputs{
+		Content: content,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.OpenAIClient.CreateChatCompletion(
+		ctx,
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role:    openai.ChatMessageRoleSystem,
+					Content: sb.String(),
+				},
+			},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+func (c *OpenAIClient) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
 	sb := new(strings.Builder)
 
 	err := ChatHistorySummarizationPrompt.Execute(

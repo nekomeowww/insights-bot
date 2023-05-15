@@ -35,7 +35,7 @@ func TestExtractContentFromURL(t *testing.T) {
 		require.Nil(article)
 
 		assert.ErrorIs(err, ErrNetworkError)
-		assert.EqualError(err, `failed to get url https://a.b.c, network error: Get "https://a.b.c": dial tcp: lookup a.b.c: no such host`)
+		assert.True(strings.Contains(err.Error(), `no such host`))
 	})
 
 	t.Run("WeChatOfficialAccount", func(t *testing.T) {

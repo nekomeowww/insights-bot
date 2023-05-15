@@ -92,8 +92,8 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		}
 
 		unescaped, err := url.QueryUnescape(href)
-		if err != nil {
-			href = strings.ReplaceAll(unescaped, " ", "+")
+		if err == nil {
+			href = unescaped
 		}
 
 		md := fmt.Sprintf("[%s](%s)", title, href)

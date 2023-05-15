@@ -65,7 +65,8 @@ func TestExtractTextFromMessage(t *testing.T) {
 			},
 			Photo: []tgbotapi.PhotoSize{},
 		}
-		expect := "看看这些链接：[Documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/stringsandcharacters/#Extended-Grapheme-Clusters) 、[GPT-4 Developer Livestream](https://www.youtube.com/watch?v=outcGtbnMuQ) [GitHub - nekomeowww/insights-bot: A bot works with OpenAI GPT models to provide insights for your info flows.](https://github.com/nekomeowww/insights-bot) 还有 [这个](https://matters.town/@1435Club/322889-这几天-web3在大理发生了什么)"
+
+		expect := "看看这些链接：[Documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/stringsandcharacters/#Extended-Grapheme-Clusters) 、[GPT-4 Developer Livestream - YouTube](https://www.youtube.com/watch?v=outcGtbnMuQ) [GitHub - nekomeowww/insights-bot: A bot works with OpenAI GPT models to provide insights for your info flows.](https://github.com/nekomeowww/insights-bot) 还有 [这个](https://matters.town/@1435Club/322889-这几天-web3在大理发生了什么)"
 		assert.Equal(expect, model.ExtractTextFromMessage(message))
 	})
 }
@@ -164,7 +165,7 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	require.NoError(err)
 	require.Len(histories, 3)
 
-	assert.Equal([]int{1, 2, 3}, lo.Map(histories, func(item *ent.ChatHistories, _ int) int64 {
+	assert.Equal([]int64{1, 2, 3}, lo.Map(histories, func(item *ent.ChatHistories, _ int) int64 {
 		return item.MessageID
 	}))
 }

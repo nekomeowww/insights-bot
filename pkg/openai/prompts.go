@@ -3,9 +3,16 @@ package openai
 import (
 	"text/template"
 
-	"github.com/google/uuid"
 	"github.com/samber/lo"
 )
+
+type AnySummarizationInputs struct {
+	Content string
+}
+
+var AnySummarizationPrompt = lo.Must(template.New("anything summarization prompt").Parse("" +
+	`内容：{{ .Content }}
+你是我的总结助手。我将为你提供一段话，我需要你在不丢失原文主旨和情感的情况下帮我用不超过100字总结一下这段话说了什么。`))
 
 type ChatHistorySummarizationPromptInputs struct {
 	ChatHistory string
@@ -32,7 +39,7 @@ type ChatHistorySummarizationOutputs struct {
 	Conclusion                       string                                       `json:"conclusion"`
 }
 
-var ChatHistorySummarizationPrompt = lo.Must(template.New(uuid.New().String()).Parse("" +
+var ChatHistorySummarizationPrompt = lo.Must(template.New("chat histories summarization prompt").Parse("" +
 	`Chat histories:"""
 {{ .ChatHistory }}
 """

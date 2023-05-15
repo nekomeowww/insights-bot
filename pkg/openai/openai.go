@@ -168,6 +168,36 @@ func (c *Client) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyCha
 	return &resp, nil
 }
 
+// SummarizeAny 通过 OpenAI 的 Chat API 来为任意内容生成摘要。
+func (c *Client) SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error) {
+	sb := new(strings.Builder)
+
+	err := AnySummarizationPrompt.Execute(sb, AnySummarizationInputs{
+		Content: content,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.OpenAIClient.CreateChatCompletion(
+		ctx,
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role:    openai.ChatMessageRoleSystem,
+					Content: sb.String(),
+				},
+			},
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
 func (c *Client) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
 	sb := new(strings.Builder)
 

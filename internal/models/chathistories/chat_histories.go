@@ -35,13 +35,13 @@ type NewModelParams struct {
 
 	Logger *logger.Logger
 	Ent    *datastore.Ent
-	OpenAI *openai.Client
+	OpenAI openai.Client
 }
 
 type Model struct {
 	logger   *logger.Logger
 	ent      *datastore.Ent
-	openAI   *openai.Client
+	openAI   openai.Client
 	linkprev *linkprev.Client
 }
 

@@ -9,6 +9,7 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/samber/lo"
+	goopenai "github.com/sashabaranov/go-openai"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -40,6 +41,7 @@ func TestMain(m *testing.M) {
 	model, err = NewModel()(NewModelParams{
 		Ent:    ent,
 		Logger: logger,
+		OpenAI: openai.NewMockClient(),
 	})
 	if err != nil {
 		panic(err)
@@ -51,6 +53,8 @@ func TestMain(m *testing.M) {
 func TestExtractTextFromMessage(t *testing.T) {
 	t.Run("MixedUrlsAndTextLinks", func(t *testing.T) {
 		assert := assert.New(t)
+		require := require.New(t)
+
 		message := &tgbotapi.Message{
 			MessageID: 666,
 			From:      &tgbotapi.User{ID: 23333333},
@@ -67,7 +71,17 @@ func TestExtractTextFromMessage(t *testing.T) {
 			Photo: []tgbotapi.PhotoSize{},
 		}
 
-		expect := "看看这些链接：[Documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/stringsandcharacters/#Extended-Grapheme-Clusters) 、[GPT-4 Developer Livestream - YouTube](https://www.youtube.com/watch?v=outcGtbnMuQ) [GitHub - nekomeowww/insights-bot: A bot works with OpenAI GPT models to provide insights for your info flows.](https://github.com/nekomeowww/insights-bot) 还有 [这个](https://matters.town/@1435Club/322889-这几天-web3在大理发生了什么)，和这个 [Google Developers Europe on Twitter: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / Twitter](https://twitter.com/GoogleDevEurope/status/1640667303158198272)"
+		openaiClient, ok := model.openAI.(*openai.MockClient)
+		require.True(ok)
+
+		openaiClient.SummarizeAnyReturns = &goopenai.ChatCompletionResponse{
+			Choices: []goopenai.ChatCompletionChoice{{Message: goopenai.ChatCompletionMessage{Content: "11年前，Go 1发布了。Google Developers Europe呼吁大家庆祝这一天，加入当地见面会和试用Go Playground。如果你和他们一样是一位Gopher，请分享这条推文。"}}},
+		}
+		defer func() {
+			openaiClient.SummarizeAnyReturns = nil
+		}()
+
+		expect := "看看这些链接：[Documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/stringsandcharacters/#Extended-Grapheme-Clusters) 、[GPT-4 Developer Livestream - YouTube](https://www.youtube.com/watch?v=outcGtbnMuQ) [GitHub - nekomeowww/insights-bot: A bot works with OpenAI GPT models to provide insights for your info flows.](https://github.com/nekomeowww/insights-bot) 还有 [这个](https://matters.town/@1435Club/322889-这几天-web3在大理发生了什么)，和这个 [11年前，Go 1发布了。Google Developers Europe呼吁大家庆祝这一天，加入当地见面会和试用Go Playground。如果你和他们一样是一位Gopher，请分享这条推文。](https://twitter.com/GoogleDevEurope/status/1640667303158198272)"
 		assert.Equal(expect, model.ExtractTextFromMessage(message))
 	})
 }

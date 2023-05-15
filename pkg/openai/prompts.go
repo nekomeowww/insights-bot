@@ -12,7 +12,7 @@ type AnySummarizationInputs struct {
 
 var AnySummarizationPrompt = lo.Must(template.New("anything summarization prompt").Parse("" +
 	`内容：{{ .Content }}
-你是我的总结助手。我将为你提供一段话，我需要你在不丢失原文主旨和情感的情况下帮我用不超过100字总结一下这段话说了什么。`))
+你是我的总结助手。我将为你提供一段话，我需要你在不丢失原文主旨和情感、不做更多的解释和说明的情况下帮我用不超过100字总结一下这段话说了什么。`))
 
 type ChatHistorySummarizationPromptInputs struct {
 	ChatHistory string

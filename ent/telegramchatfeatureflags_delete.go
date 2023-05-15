@@ -28,7 +28,7 @@ func (tcffd *TelegramChatFeatureFlagsDelete) Where(ps ...predicate.TelegramChatF
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (tcffd *TelegramChatFeatureFlagsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, TelegramChatFeatureFlagsMutation](ctx, tcffd.sqlExec, tcffd.mutation, tcffd.hooks)
+	return withHooks(ctx, tcffd.sqlExec, tcffd.mutation, tcffd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

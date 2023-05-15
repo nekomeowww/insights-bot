@@ -28,7 +28,7 @@ func (chd *ChatHistoriesDelete) Where(ps ...predicate.ChatHistories) *ChatHistor
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (chd *ChatHistoriesDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, ChatHistoriesMutation](ctx, chd.sqlExec, chd.mutation, chd.hooks)
+	return withHooks(ctx, chd.sqlExec, chd.mutation, chd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

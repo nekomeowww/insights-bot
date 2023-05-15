@@ -315,7 +315,7 @@ func (chu *ChatHistoriesUpdate) Mutation() *ChatHistoriesMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (chu *ChatHistoriesUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, ChatHistoriesMutation](ctx, chu.sqlSave, chu.mutation, chu.hooks)
+	return withHooks(ctx, chu.sqlSave, chu.mutation, chu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -743,7 +743,7 @@ func (chuo *ChatHistoriesUpdateOne) Select(field string, fields ...string) *Chat
 
 // Save executes the query and returns the updated ChatHistories entity.
 func (chuo *ChatHistoriesUpdateOne) Save(ctx context.Context) (*ChatHistories, error) {
-	return withHooks[*ChatHistories, ChatHistoriesMutation](ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
+	return withHooks(ctx, chuo.sqlSave, chuo.mutation, chuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

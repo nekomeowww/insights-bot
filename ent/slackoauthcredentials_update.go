@@ -97,7 +97,7 @@ func (socu *SlackOAuthCredentialsUpdate) Mutation() *SlackOAuthCredentialsMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (socu *SlackOAuthCredentialsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, SlackOAuthCredentialsMutation](ctx, socu.sqlSave, socu.mutation, socu.hooks)
+	return withHooks(ctx, socu.sqlSave, socu.mutation, socu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -266,7 +266,7 @@ func (socuo *SlackOAuthCredentialsUpdateOne) Select(field string, fields ...stri
 
 // Save executes the query and returns the updated SlackOAuthCredentials entity.
 func (socuo *SlackOAuthCredentialsUpdateOne) Save(ctx context.Context) (*SlackOAuthCredentials, error) {
-	return withHooks[*SlackOAuthCredentials, SlackOAuthCredentialsMutation](ctx, socuo.sqlSave, socuo.mutation, socuo.hooks)
+	return withHooks(ctx, socuo.sqlSave, socuo.mutation, socuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

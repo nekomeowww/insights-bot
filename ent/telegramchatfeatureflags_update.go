@@ -116,7 +116,7 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) Mutation() *TelegramChatFeatureFlag
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (tcffu *TelegramChatFeatureFlagsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks[int, TelegramChatFeatureFlagsMutation](ctx, tcffu.sqlSave, tcffu.mutation, tcffu.hooks)
+	return withHooks(ctx, tcffu.sqlSave, tcffu.mutation, tcffu.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
@@ -300,7 +300,7 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Select(field string, fields ...
 
 // Save executes the query and returns the updated TelegramChatFeatureFlags entity.
 func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Save(ctx context.Context) (*TelegramChatFeatureFlags, error) {
-	return withHooks[*TelegramChatFeatureFlags, TelegramChatFeatureFlagsMutation](ctx, tcffuo.sqlSave, tcffuo.mutation, tcffuo.hooks)
+	return withHooks(ctx, tcffuo.sqlSave, tcffuo.mutation, tcffuo.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.

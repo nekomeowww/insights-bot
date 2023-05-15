@@ -102,7 +102,7 @@ func (tcffc *TelegramChatFeatureFlagsCreate) Mutation() *TelegramChatFeatureFlag
 // Save creates the TelegramChatFeatureFlags in the database.
 func (tcffc *TelegramChatFeatureFlagsCreate) Save(ctx context.Context) (*TelegramChatFeatureFlags, error) {
 	tcffc.defaults()
-	return withHooks[*TelegramChatFeatureFlags, TelegramChatFeatureFlagsMutation](ctx, tcffc.sqlSave, tcffc.mutation, tcffc.hooks)
+	return withHooks(ctx, tcffc.sqlSave, tcffc.mutation, tcffc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.

@@ -266,7 +266,7 @@ func (chc *ChatHistoriesCreate) Mutation() *ChatHistoriesMutation {
 // Save creates the ChatHistories in the database.
 func (chc *ChatHistoriesCreate) Save(ctx context.Context) (*ChatHistories, error) {
 	chc.defaults()
-	return withHooks[*ChatHistories, ChatHistoriesMutation](ctx, chc.sqlSave, chc.mutation, chc.hooks)
+	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.

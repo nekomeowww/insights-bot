@@ -6,11 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/imroc/req/v3"
 	"github.com/nekomeowww/insights-bot/pkg/opengraph"
+	"github.com/samber/lo"
 )
 
 var (
@@ -30,8 +32,15 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) Preview(ctx context.Context, url string) (Meta, error) {
-	body, err := c.request(ctx, url)
+func (c *Client) Debug() *Client {
+	c.reqClient.EnableDumpAll()
+	return c
+}
+
+func (c *Client) Preview(ctx context.Context, urlStr string) (Meta, error) {
+	r := c.newRequest(ctx, urlStr)
+
+	body, err := c.request(r, urlStr)
 	if err != nil {
 		return Meta{}, err
 	}
@@ -46,17 +55,48 @@ func (c *Client) Preview(ctx context.Context, url string) (Meta, error) {
 	return preview, nil
 }
 
-func (c *Client) request(ctx context.Context, url string) (io.Reader, error) {
-	resp, err := c.reqClient.
+func (c *Client) newRequest(ctx context.Context, urlStr string) *req.Request {
+	request := c.reqClient.
 		R().
 		EnableDump().
-		SetContext(ctx).
-		Get(url)
+		SetContext(ctx)
+
+	c.alterRequestForTwitter(request, urlStr)
+
+	return request
+}
+
+// requestForTwitter is a special request for Twitter.
+//
+// We need to ask Twitter server to generate a SSR rendered HTML for us to get the metadatas
+// Learn more at:
+//  1. https://stackoverflow.com/a/64332370/19954520
+//  2. https://stackoverflow.com/a/64164115/19954520
+//
+// Other alternative User-Agent for Twitter:
+//  1. Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+//  2. Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)
+//  3. facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
+//  4. Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)
+func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *req.Request {
+	parsedURL, err := url.Parse(urlStr)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", url, ErrNetworkError, err)
+		return request
+	}
+	if !lo.Contains([]string{"twitter.com", "vxtwitter.com", "fxtwitter.com"}, parsedURL.Host) {
+		return request
+	}
+
+	return request.SetHeader("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+}
+
+func (c *Client) request(r *req.Request, urlStr string) (io.Reader, error) {
+	resp, err := r.Get(urlStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", urlStr, ErrNetworkError, err)
 	}
 	if !resp.IsSuccessState() {
-		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", url, ErrRequestFailed, resp.StatusCode, resp.Dump())
+		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", urlStr, ErrRequestFailed, resp.StatusCode, resp.Dump())
 	}
 
 	defer resp.Body.Close()

@@ -1,5 +1,6 @@
 # IDE
 .vscode/
+.idea/
 
 # Build / Release
 *.exe

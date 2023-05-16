@@ -21,6 +21,8 @@ type TelegramChatFeatureFlags struct {
 	ChatID int64 `json:"chat_id,omitempty"`
 	// ChatType holds the value of the "chat_type" field.
 	ChatType string `json:"chat_type,omitempty"`
+	// ChatTitle holds the value of the "chat_title" field.
+	ChatTitle string `json:"chat_title,omitempty"`
 	// FeatureChatHistoriesRecap holds the value of the "feature_chat_histories_recap" field.
 	FeatureChatHistoriesRecap bool `json:"feature_chat_histories_recap,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -39,7 +41,7 @@ func (*TelegramChatFeatureFlags) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case telegramchatfeatureflags.FieldChatID, telegramchatfeatureflags.FieldCreatedAt, telegramchatfeatureflags.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case telegramchatfeatureflags.FieldChatType:
+		case telegramchatfeatureflags.FieldChatType, telegramchatfeatureflags.FieldChatTitle:
 			values[i] = new(sql.NullString)
 		case telegramchatfeatureflags.FieldID:
 			values[i] = new(uuid.UUID)
@@ -75,6 +77,12 @@ func (tcff *TelegramChatFeatureFlags) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field chat_type", values[i])
 			} else if value.Valid {
 				tcff.ChatType = value.String
+			}
+		case telegramchatfeatureflags.FieldChatTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field chat_title", values[i])
+			} else if value.Valid {
+				tcff.ChatTitle = value.String
 			}
 		case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -135,6 +143,9 @@ func (tcff *TelegramChatFeatureFlags) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("chat_type=")
 	builder.WriteString(tcff.ChatType)
+	builder.WriteString(", ")
+	builder.WriteString("chat_title=")
+	builder.WriteString(tcff.ChatTitle)
 	builder.WriteString(", ")
 	builder.WriteString("feature_chat_histories_recap=")
 	builder.WriteString(fmt.Sprintf("%v", tcff.FeatureChatHistoriesRecap))

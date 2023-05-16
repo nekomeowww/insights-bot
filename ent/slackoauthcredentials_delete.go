@@ -28,7 +28,7 @@ func (socd *SlackOAuthCredentialsDelete) Where(ps ...predicate.SlackOAuthCredent
 
 // Exec executes the deletion query and returns how many vertices were deleted.
 func (socd *SlackOAuthCredentialsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks[int, SlackOAuthCredentialsMutation](ctx, socd.sqlExec, socd.mutation, socd.hooks)
+	return withHooks(ctx, socd.sqlExec, socd.mutation, socd.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.

@@ -10,7 +10,7 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func (b *SlackBot) smr(info smrRequestInfo) {
+func (b *Bot) smr(info smrRequestInfo) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
@@ -53,7 +53,7 @@ func (b *SlackBot) smr(info smrRequestInfo) {
 	}
 }
 
-func (b *SlackBot) runSmr() {
+func (b *Bot) runSmr() {
 	needToClose := false
 
 	for {

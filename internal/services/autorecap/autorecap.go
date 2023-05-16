@@ -6,41 +6,45 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	cron "github.com/robfig/cron/v3"
+	"github.com/samber/lo"
 	"go.uber.org/fx"
 
-	"github.com/nekomeowww/insights-bot/internal/bots/telegram"
 	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
 )
 
-type NewChatHistoryRecapServiceParam struct {
+type NewAutoRecapServiceParam struct {
 	fx.In
 
 	Lifecycle fx.Lifecycle
 
-	Bot           *telegram.Bot
+	Bot           *tgbot.BotService
 	Logger        *logger.Logger
 	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
-	OpenAI        *openai.Client
+	OpenAI        openai.Client
 }
 
-type ChatHistoryRecapService struct {
-	Cron *cron.Cron
+var _ healthchecker.HealthChecker = (*AutoRecapService)(nil)
 
-	bot           *telegram.Bot
+type AutoRecapService struct {
+	Cron    *cron.Cron
+	started bool
+
+	bot           *tgbot.BotService
 	logger        *logger.Logger
 	chatHistories *chathistories.Model
 	tgchats       *tgchats.Model
-	openai        *openai.Client
+	openai        openai.Client
 }
 
-func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) (*ChatHistoryRecapService, error) {
-	return func(param NewChatHistoryRecapServiceParam) (*ChatHistoryRecapService, error) {
-		service := &ChatHistoryRecapService{
+func NewAutoRecapService() func(NewAutoRecapServiceParam) (*AutoRecapService, error) {
+	return func(param NewAutoRecapServiceParam) (*AutoRecapService, error) {
+		service := &AutoRecapService{
 			Cron:          cron.New(),
 			bot:           param.Bot,
 			logger:        param.Logger,
@@ -67,13 +71,18 @@ func NewChatHistoryRecapService() func(NewChatHistoryRecapServiceParam) (*ChatHi
 	}
 }
 
-func Run() func(service *ChatHistoryRecapService) {
-	return func(service *ChatHistoryRecapService) {
+func (s *AutoRecapService) Check(ctx context.Context) error {
+	return lo.Ternary(s.started, nil, fmt.Errorf("auto recap not started yet"))
+}
+
+func Run() func(service *AutoRecapService) {
+	return func(service *AutoRecapService) {
 		service.Cron.Start()
+		service.started = true
 	}
 }
 
-func (s *ChatHistoryRecapService) SendChatHistoriesRecap() {
+func (s *AutoRecapService) SendChatHistoriesRecap() {
 	chatIDs, err := s.tgchats.ListChatHistoriesRecapEnabledChats()
 	if err != nil {
 		s.logger.Errorf("failed to list chat histories recap enabled chats: %v", err)

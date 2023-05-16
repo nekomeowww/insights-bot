@@ -39,6 +39,7 @@ type ChatHistoriesMutation struct {
 	id                       *uuid.UUID
 	chat_id                  *int64
 	addchat_id               *int64
+	chat_title               *string
 	message_id               *int64
 	addmessage_id            *int64
 	user_id                  *int64
@@ -224,6 +225,42 @@ func (m *ChatHistoriesMutation) AddedChatID() (r int64, exists bool) {
 func (m *ChatHistoriesMutation) ResetChatID() {
 	m.chat_id = nil
 	m.addchat_id = nil
+}
+
+// SetChatTitle sets the "chat_title" field.
+func (m *ChatHistoriesMutation) SetChatTitle(s string) {
+	m.chat_title = &s
+}
+
+// ChatTitle returns the value of the "chat_title" field in the mutation.
+func (m *ChatHistoriesMutation) ChatTitle() (r string, exists bool) {
+	v := m.chat_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatTitle returns the old "chat_title" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldChatTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatTitle: %w", err)
+	}
+	return oldValue.ChatTitle, nil
+}
+
+// ResetChatTitle resets all changes to the "chat_title" field.
+func (m *ChatHistoriesMutation) ResetChatTitle() {
+	m.chat_title = nil
 }
 
 // SetMessageID sets the "message_id" field.
@@ -904,9 +941,12 @@ func (m *ChatHistoriesMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChatHistoriesMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 16)
 	if m.chat_id != nil {
 		fields = append(fields, chathistories.FieldChatID)
+	}
+	if m.chat_title != nil {
+		fields = append(fields, chathistories.FieldChatTitle)
 	}
 	if m.message_id != nil {
 		fields = append(fields, chathistories.FieldMessageID)
@@ -960,6 +1000,8 @@ func (m *ChatHistoriesMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case chathistories.FieldChatID:
 		return m.ChatID()
+	case chathistories.FieldChatTitle:
+		return m.ChatTitle()
 	case chathistories.FieldMessageID:
 		return m.MessageID()
 	case chathistories.FieldUserID:
@@ -999,6 +1041,8 @@ func (m *ChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.
 	switch name {
 	case chathistories.FieldChatID:
 		return m.OldChatID(ctx)
+	case chathistories.FieldChatTitle:
+		return m.OldChatTitle(ctx)
 	case chathistories.FieldMessageID:
 		return m.OldMessageID(ctx)
 	case chathistories.FieldUserID:
@@ -1042,6 +1086,13 @@ func (m *ChatHistoriesMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetChatID(v)
+		return nil
+	case chathistories.FieldChatTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatTitle(v)
 		return nil
 	case chathistories.FieldMessageID:
 		v, ok := value.(int64)
@@ -1291,6 +1342,9 @@ func (m *ChatHistoriesMutation) ResetField(name string) error {
 	switch name {
 	case chathistories.FieldChatID:
 		m.ResetChatID()
+		return nil
+	case chathistories.FieldChatTitle:
+		m.ResetChatTitle()
 		return nil
 	case chathistories.FieldMessageID:
 		m.ResetMessageID()
@@ -2012,6 +2066,7 @@ type TelegramChatFeatureFlagsMutation struct {
 	chat_id                      *int64
 	addchat_id                   *int64
 	chat_type                    *string
+	chat_title                   *string
 	feature_chat_histories_recap *bool
 	created_at                   *int64
 	addcreated_at                *int64
@@ -2219,6 +2274,42 @@ func (m *TelegramChatFeatureFlagsMutation) ResetChatType() {
 	m.chat_type = nil
 }
 
+// SetChatTitle sets the "chat_title" field.
+func (m *TelegramChatFeatureFlagsMutation) SetChatTitle(s string) {
+	m.chat_title = &s
+}
+
+// ChatTitle returns the value of the "chat_title" field in the mutation.
+func (m *TelegramChatFeatureFlagsMutation) ChatTitle() (r string, exists bool) {
+	v := m.chat_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatTitle returns the old "chat_title" field's value of the TelegramChatFeatureFlags entity.
+// If the TelegramChatFeatureFlags object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TelegramChatFeatureFlagsMutation) OldChatTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatTitle: %w", err)
+	}
+	return oldValue.ChatTitle, nil
+}
+
+// ResetChatTitle resets all changes to the "chat_title" field.
+func (m *TelegramChatFeatureFlagsMutation) ResetChatTitle() {
+	m.chat_title = nil
+}
+
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
 func (m *TelegramChatFeatureFlagsMutation) SetFeatureChatHistoriesRecap(b bool) {
 	m.feature_chat_histories_recap = &b
@@ -2401,12 +2492,15 @@ func (m *TelegramChatFeatureFlagsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TelegramChatFeatureFlagsMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.chat_id != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldChatID)
 	}
 	if m.chat_type != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldChatType)
+	}
+	if m.chat_title != nil {
+		fields = append(fields, telegramchatfeatureflags.FieldChatTitle)
 	}
 	if m.feature_chat_histories_recap != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldFeatureChatHistoriesRecap)
@@ -2429,6 +2523,8 @@ func (m *TelegramChatFeatureFlagsMutation) Field(name string) (ent.Value, bool) 
 		return m.ChatID()
 	case telegramchatfeatureflags.FieldChatType:
 		return m.ChatType()
+	case telegramchatfeatureflags.FieldChatTitle:
+		return m.ChatTitle()
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		return m.FeatureChatHistoriesRecap()
 	case telegramchatfeatureflags.FieldCreatedAt:
@@ -2448,6 +2544,8 @@ func (m *TelegramChatFeatureFlagsMutation) OldField(ctx context.Context, name st
 		return m.OldChatID(ctx)
 	case telegramchatfeatureflags.FieldChatType:
 		return m.OldChatType(ctx)
+	case telegramchatfeatureflags.FieldChatTitle:
+		return m.OldChatTitle(ctx)
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		return m.OldFeatureChatHistoriesRecap(ctx)
 	case telegramchatfeatureflags.FieldCreatedAt:
@@ -2476,6 +2574,13 @@ func (m *TelegramChatFeatureFlagsMutation) SetField(name string, value ent.Value
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetChatType(v)
+		return nil
+	case telegramchatfeatureflags.FieldChatTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatTitle(v)
 		return nil
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		v, ok := value.(bool)
@@ -2591,6 +2696,9 @@ func (m *TelegramChatFeatureFlagsMutation) ResetField(name string) error {
 		return nil
 	case telegramchatfeatureflags.FieldChatType:
 		m.ResetChatType()
+		return nil
+	case telegramchatfeatureflags.FieldChatTitle:
+		m.ResetChatTitle()
 		return nil
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		m.ResetFeatureChatHistoriesRecap()

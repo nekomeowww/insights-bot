@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/samber/lo"
 )
 
 const (
@@ -27,6 +28,8 @@ const (
 	EnvPineconeAPIKey               = "PINECONE_API_KEY" //nolint:gosec
 	EnvPineconeChatHistoryIndexName = "PINECONE_CHAT_HISTORY_INDEX_NAME"
 	EnvDBConnectionString           = "DB_CONNECTION_STR"
+
+	EnvLogLevel = "LOG_LEVEL"
 )
 
 type SectionPineconeIndexes struct {
@@ -71,6 +74,7 @@ type Config struct {
 	DB              SectionDB
 	Slack           SectionSlack
 	Discord         SectionDiscord
+	LogLevel        string
 }
 
 func NewConfig() func() (*Config, error) {
@@ -88,6 +92,8 @@ func NewConfig() func() (*Config, error) {
 
 			return v
 		}
+
+		envLogLevel := getEnv(EnvLogLevel)
 
 		return &Config{
 			Telegram: SectionTelegram{
@@ -118,6 +124,7 @@ func NewConfig() func() (*Config, error) {
 				Token:     getEnv(EnvDiscordBotToken),
 				PublicKey: getEnv(EnvDiscordBotPublicKey),
 			},
+			LogLevel: lo.Ternary(envLogLevel == "", "info", envLogLevel),
 		}, nil
 	}
 }
@@ -126,8 +133,13 @@ func NewTestConfig() func() *Config {
 	return func() *Config {
 		return &Config{
 			DB: SectionDB{
-				ConnectionString: "postgresql://postgres:123456@localhost:5432/postgres?search_path=public&sslmode=disable",
+				ConnectionString: lo.Ternary(
+					os.Getenv(EnvDBConnectionString) == "",
+					"postgresql://postgres:123456@localhost:5432/postgres?search_path=public&sslmode=disable",
+					os.Getenv(EnvDBConnectionString),
+				),
 			},
+			LogLevel: "debug",
 		}
 	}
 }

@@ -18,7 +18,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup)
+		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, utils.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -41,7 +41,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup)
+		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, utils.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -65,17 +65,25 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 	require := require.New(t)
 
 	chatID1 := utils.RandomInt64()
+	chatTitle1 := utils.RandomHashString(6)
 	chatID2 := utils.RandomInt64()
+	chatTitle2 := utils.RandomHashString(6)
 	chatID3 := utils.RandomInt64()
+	chatTitle3 := utils.RandomHashString(6)
 
-	err := model.EnableChatHistoriesRecap(chatID1, telegram.ChatTypeGroup)
+	err := model.EnableChatHistoriesRecap(chatID1, telegram.ChatTypeGroup, chatTitle1)
 	require.NoError(err)
 
-	err = model.EnableChatHistoriesRecap(chatID2, telegram.ChatTypeGroup)
+	err = model.EnableChatHistoriesRecap(chatID2, telegram.ChatTypeGroup, chatTitle2)
 	require.NoError(err)
 
-	err = model.EnableChatHistoriesRecap(chatID3, telegram.ChatTypeGroup)
+	err = model.EnableChatHistoriesRecap(chatID3, telegram.ChatTypeGroup, chatTitle3)
 	require.NoError(err)
+
+	defer func() {
+		_, err := model.ent.TelegramChatFeatureFlags.Delete().Exec(context.Background())
+		assert.NoError(err)
+	}()
 
 	chatIDs, err := model.ListChatHistoriesRecapEnabledChats()
 	require.NoError(err)

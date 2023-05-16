@@ -19,6 +19,8 @@ type ChatHistories struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// ChatID holds the value of the "chat_id" field.
 	ChatID int64 `json:"chat_id,omitempty"`
+	// ChatTitle holds the value of the "chat_title" field.
+	ChatTitle string `json:"chat_title,omitempty"`
 	// MessageID holds the value of the "message_id" field.
 	MessageID int64 `json:"message_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
@@ -59,7 +61,7 @@ func (*ChatHistories) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case chathistories.FieldChatID, chathistories.FieldMessageID, chathistories.FieldUserID, chathistories.FieldRepliedToMessageID, chathistories.FieldRepliedToUserID, chathistories.FieldChattedAt, chathistories.FieldCreatedAt, chathistories.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText:
+		case chathistories.FieldChatTitle, chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText:
 			values[i] = new(sql.NullString)
 		case chathistories.FieldID:
 			values[i] = new(uuid.UUID)
@@ -89,6 +91,12 @@ func (ch *ChatHistories) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
 				ch.ChatID = value.Int64
+			}
+		case chathistories.FieldChatTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field chat_title", values[i])
+			} else if value.Valid {
+				ch.ChatTitle = value.String
 			}
 		case chathistories.FieldMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -212,6 +220,9 @@ func (ch *ChatHistories) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", ch.ID))
 	builder.WriteString("chat_id=")
 	builder.WriteString(fmt.Sprintf("%v", ch.ChatID))
+	builder.WriteString(", ")
+	builder.WriteString("chat_title=")
+	builder.WriteString(ch.ChatTitle)
 	builder.WriteString(", ")
 	builder.WriteString("message_id=")
 	builder.WriteString(fmt.Sprintf("%v", ch.MessageID))

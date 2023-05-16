@@ -35,13 +35,13 @@ type NewModelParams struct {
 
 	Logger *logger.Logger
 	Ent    *datastore.Ent
-	OpenAI *openai.Client
+	OpenAI openai.Client
 }
 
 type Model struct {
 	logger   *logger.Logger
 	ent      *datastore.Ent
-	openAI   *openai.Client
+	openAI   openai.Client
 	linkprev *linkprev.Client
 }
 
@@ -71,7 +71,8 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		endIndex := startIndex + entity.Length
 		var title string
 		var href string
-		if entity.Type == "url" {
+		switch entity.Type {
+		case "url":
 			href = string(utf16.Decode(textUTF16[startIndex:endIndex]))
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -79,21 +80,35 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 
 			meta, err := m.linkprev.Preview(ctx, href)
 			if err != nil {
-				m.logger.Infof("🔗Failed to generate link preview for %s, error %+v", href, err)
+				m.logger.Errorf("🔗Failed to generate link preview for %s, error %+v", href, err)
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 
 			title = lo.Ternary(meta.Title != "", meta.Title, meta.OpenGraph.Title)
-		} else if entity.Type == "text_link" {
-			title = string(utf16.Decode(textUTF16[startIndex:endIndex]))
+		case "text_link":
 			href = entity.URL
-		} else {
+			title = string(utf16.Decode(textUTF16[startIndex:endIndex]))
+		default:
 			return MarkdownLink{[]uint16{}, -1, -1}
 		}
 
+		if utf8.RuneCountInString(title) > 200 {
+			ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+			defer cancel()
+
+			resp, err := m.openAI.SummarizeAny(ctx, title)
+			if err != nil {
+				m.logger.Errorf("🔗Failed to summarize title for %s, error %+v", href, err)
+				return MarkdownLink{[]uint16{}, -1, -1}
+			}
+			if len(resp.Choices) != 0 {
+				title = resp.Choices[0].Message.Content
+			}
+		}
+
 		unescaped, err := url.QueryUnescape(href)
-		if err != nil {
-			href = strings.ReplaceAll(unescaped, " ", "+")
+		if err == nil {
+			href = unescaped
 		}
 
 		md := fmt.Sprintf("[%s](%s)", title, href)
@@ -106,6 +121,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		if links[i].Start == -1 {
 			continue
 		}
+
 		temp := append(links[i].Markdown, textUTF16[links[i].End:]...)
 		textUTF16 = append(textUTF16[:links[i].Start], temp...)
 	}
@@ -118,7 +134,7 @@ func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string,
 	if text == "" {
 		return "", nil
 	}
-	if utf8.RuneCountInString(text) >= 200 {
+	if utf8.RuneCountInString(text) >= 300 {
 		resp, err := m.openAI.SummarizeWithOneChatHistory(context.Background(), text)
 		if err != nil {
 			return "", err
@@ -139,15 +155,6 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return nil
 	}
 
-	telegramChatHistoryCreate := m.ent.ChatHistories.
-		Create().
-		SetChatID(message.Chat.ID).
-		SetMessageID(int64(message.MessageID)).
-		SetUserID(message.From.ID).
-		SetUsername(message.From.UserName).
-		SetFullName(tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName)).
-		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli())
-
 	text, err := m.extractTextWithSummarization(message)
 	if err != nil {
 		return err
@@ -156,6 +163,17 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		m.logger.Warn("message text is empty")
 		return nil
 	}
+
+	telegramChatHistoryCreate := m.ent.ChatHistories.
+		Create().
+		SetChatID(message.Chat.ID).
+		SetChatTitle(message.Chat.Title).
+		SetMessageID(int64(message.MessageID)).
+		SetUserID(message.From.ID).
+		SetUsername(message.From.UserName).
+		SetFullName(tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName)).
+		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli())
+
 	if message.ForwardFrom != nil {
 		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
 	} else if message.ForwardFromChat != nil {
@@ -228,10 +246,6 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
-func formatChatHistoryTextContent(text string) string {
-	return fmt.Sprintf(`"""%s"""`, text)
-}
-
 type RecapOutputTemplateInputs struct {
 	ChatID string
 	Recaps []*openai.ChatHistorySummarizationOutputs
@@ -257,7 +271,7 @@ var RecapOutputTemplate = lo.Must(template.
 	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
 参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.CriticalIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
+ - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
 结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
 
 {{ end }}{{ end }}`))
@@ -304,7 +318,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				"msgId:%d: %s sent: %s",
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
-				formatChatHistoryTextContent(message.Text),
+				message.Text,
 			))
 		} else {
 			repliedToPartialContextMessage := fmt.Sprintf(
@@ -317,7 +331,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				message.MessageID,
 				formatFullNameAndUsername(message.FullName, message.Username),
 				repliedToPartialContextMessage,
-				formatChatHistoryTextContent(message.Text),
+				message.Text,
 			))
 		}
 	}

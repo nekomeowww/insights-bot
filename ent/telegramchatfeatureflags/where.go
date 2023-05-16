@@ -63,6 +63,11 @@ func ChatType(v string) predicate.TelegramChatFeatureFlags {
 	return predicate.TelegramChatFeatureFlags(sql.FieldEQ(FieldChatType, v))
 }
 
+// ChatTitle applies equality check predicate on the "chat_title" field. It's identical to ChatTitleEQ.
+func ChatTitle(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldEQ(FieldChatTitle, v))
+}
+
 // FeatureChatHistoriesRecap applies equality check predicate on the "feature_chat_histories_recap" field. It's identical to FeatureChatHistoriesRecapEQ.
 func FeatureChatHistoriesRecap(v bool) predicate.TelegramChatFeatureFlags {
 	return predicate.TelegramChatFeatureFlags(sql.FieldEQ(FieldFeatureChatHistoriesRecap, v))
@@ -181,6 +186,71 @@ func ChatTypeEqualFold(v string) predicate.TelegramChatFeatureFlags {
 // ChatTypeContainsFold applies the ContainsFold predicate on the "chat_type" field.
 func ChatTypeContainsFold(v string) predicate.TelegramChatFeatureFlags {
 	return predicate.TelegramChatFeatureFlags(sql.FieldContainsFold(FieldChatType, v))
+}
+
+// ChatTitleEQ applies the EQ predicate on the "chat_title" field.
+func ChatTitleEQ(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldEQ(FieldChatTitle, v))
+}
+
+// ChatTitleNEQ applies the NEQ predicate on the "chat_title" field.
+func ChatTitleNEQ(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldNEQ(FieldChatTitle, v))
+}
+
+// ChatTitleIn applies the In predicate on the "chat_title" field.
+func ChatTitleIn(vs ...string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldIn(FieldChatTitle, vs...))
+}
+
+// ChatTitleNotIn applies the NotIn predicate on the "chat_title" field.
+func ChatTitleNotIn(vs ...string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldNotIn(FieldChatTitle, vs...))
+}
+
+// ChatTitleGT applies the GT predicate on the "chat_title" field.
+func ChatTitleGT(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldGT(FieldChatTitle, v))
+}
+
+// ChatTitleGTE applies the GTE predicate on the "chat_title" field.
+func ChatTitleGTE(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldGTE(FieldChatTitle, v))
+}
+
+// ChatTitleLT applies the LT predicate on the "chat_title" field.
+func ChatTitleLT(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldLT(FieldChatTitle, v))
+}
+
+// ChatTitleLTE applies the LTE predicate on the "chat_title" field.
+func ChatTitleLTE(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldLTE(FieldChatTitle, v))
+}
+
+// ChatTitleContains applies the Contains predicate on the "chat_title" field.
+func ChatTitleContains(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldContains(FieldChatTitle, v))
+}
+
+// ChatTitleHasPrefix applies the HasPrefix predicate on the "chat_title" field.
+func ChatTitleHasPrefix(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldHasPrefix(FieldChatTitle, v))
+}
+
+// ChatTitleHasSuffix applies the HasSuffix predicate on the "chat_title" field.
+func ChatTitleHasSuffix(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldHasSuffix(FieldChatTitle, v))
+}
+
+// ChatTitleEqualFold applies the EqualFold predicate on the "chat_title" field.
+func ChatTitleEqualFold(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldEqualFold(FieldChatTitle, v))
+}
+
+// ChatTitleContainsFold applies the ContainsFold predicate on the "chat_title" field.
+func ChatTitleContainsFold(v string) predicate.TelegramChatFeatureFlags {
+	return predicate.TelegramChatFeatureFlags(sql.FieldContainsFold(FieldChatTitle, v))
 }
 
 // FeatureChatHistoriesRecapEQ applies the EQ predicate on the "feature_chat_histories_recap" field.

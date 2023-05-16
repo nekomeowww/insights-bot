@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func newTestSlackBot() *SlackBot {
+func newTestSlackBot() *Bot {
 	config := configs.NewTestConfig()()
 
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
@@ -25,13 +25,13 @@ func newTestSlackBot() *SlackBot {
 		log.Fatal("datastore init failed")
 	}
 
-	return &SlackBot{
+	return &Bot{
 		ent:    ent,
 		logger: logger.NewLogger(logrus.InfoLevel, "insights-bot", "", make([]logrus.Hook, 0)),
 	}
 }
 
-func cleanSlackCredential(bot *SlackBot, r *require.Assertions) {
+func cleanSlackCredential(bot *Bot, r *require.Assertions) {
 	_, err := bot.ent.SlackOAuthCredentials.Delete().Exec(context.Background())
 	r.Empty(err)
 }

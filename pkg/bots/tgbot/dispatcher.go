@@ -71,14 +71,14 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 		identityStrings = append(identityStrings, "@"+c.Update.Message.From.UserName)
 	}
 	if c.Update.Message.Chat.Type == "private" {
-		d.Logger.Infof("[消息｜%s] %s (%s): %s",
+		d.Logger.Tracef("[消息｜%s] %s (%s): %s",
 			MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
 			strings.Join(identityStrings, " "),
 			color.FgYellow.Render(c.Update.Message.From.ID),
 			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text),
 		)
 	} else {
-		d.Logger.Infof("[消息｜%s] [%s (%s)] %s (%s): %s",
+		d.Logger.Tracef("[消息｜%s] [%s (%s)] %s (%s): %s",
 			MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
 			color.FgGreen.Render(c.Update.Message.Chat.Title),
 			color.FgYellow.Render(c.Update.Message.Chat.ID),
@@ -114,7 +114,7 @@ func (d *Dispatcher) OnChannelPost(handler Handler) {
 }
 
 func (d *Dispatcher) dispatchChannelPost(c *Context) {
-	d.Logger.Infof("[频道消息｜%s] [%s (%s)]: %s",
+	d.Logger.Tracef("[频道消息｜%s] [%s (%s)]: %s",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.ChannelPost.Chat.Type)),
 		color.FgGreen.Render(c.Update.ChannelPost.Chat.Title),
 		color.FgYellow.Render(c.Update.ChannelPost.Chat.ID),
@@ -133,7 +133,7 @@ func (d *Dispatcher) OnCallbackQuery(h CallbackQueryHandler) {
 }
 
 func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
-	d.Logger.Infof("[回调查询｜%s] [%s (%s)]: %s",
+	d.Logger.Tracef("[回调查询｜%s] [%s (%s)]: %s",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 		color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 		color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
@@ -165,7 +165,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	oldMemberStatus := telegram.MemberStatus(c.Update.MyChatMember.OldChatMember.Status)
 	newMemberStatus := telegram.MemberStatus(c.Update.MyChatMember.NewChatMember.Status)
 
-	d.Logger.Infof("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
+	d.Logger.Tracef("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.MyChatMember.Chat.Type)),
 		color.FgGreen.Render(c.Update.MyChatMember.Chat.Title),
 		color.FgYellow.Render(c.Update.MyChatMember.Chat.ID),
@@ -178,7 +178,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	switch c.Update.MyChatMember.Chat.Type {
 	case "channel":
 		if newMemberStatus != "administrator" {
-			d.Logger.Infof("已退出频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
+			d.Logger.Tracef("已退出频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
 			return
 		}
 
@@ -192,7 +192,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 			return
 		}
 
-		d.Logger.Infof("已加入频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
+		d.Logger.Tracef("已加入频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
 	}
 }
 

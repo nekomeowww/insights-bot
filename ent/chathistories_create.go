@@ -34,6 +34,20 @@ func (chc *ChatHistoriesCreate) SetNillableChatID(i *int64) *ChatHistoriesCreate
 	return chc
 }
 
+// SetChatTitle sets the "chat_title" field.
+func (chc *ChatHistoriesCreate) SetChatTitle(s string) *ChatHistoriesCreate {
+	chc.mutation.SetChatTitle(s)
+	return chc
+}
+
+// SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
+func (chc *ChatHistoriesCreate) SetNillableChatTitle(s *string) *ChatHistoriesCreate {
+	if s != nil {
+		chc.SetChatTitle(*s)
+	}
+	return chc
+}
+
 // SetMessageID sets the "message_id" field.
 func (chc *ChatHistoriesCreate) SetMessageID(i int64) *ChatHistoriesCreate {
 	chc.mutation.SetMessageID(i)
@@ -252,7 +266,7 @@ func (chc *ChatHistoriesCreate) Mutation() *ChatHistoriesMutation {
 // Save creates the ChatHistories in the database.
 func (chc *ChatHistoriesCreate) Save(ctx context.Context) (*ChatHistories, error) {
 	chc.defaults()
-	return withHooks[*ChatHistories, ChatHistoriesMutation](ctx, chc.sqlSave, chc.mutation, chc.hooks)
+	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
@@ -282,6 +296,10 @@ func (chc *ChatHistoriesCreate) defaults() {
 	if _, ok := chc.mutation.ChatID(); !ok {
 		v := chathistories.DefaultChatID
 		chc.mutation.SetChatID(v)
+	}
+	if _, ok := chc.mutation.ChatTitle(); !ok {
+		v := chathistories.DefaultChatTitle
+		chc.mutation.SetChatTitle(v)
 	}
 	if _, ok := chc.mutation.MessageID(); !ok {
 		v := chathistories.DefaultMessageID
@@ -349,6 +367,9 @@ func (chc *ChatHistoriesCreate) defaults() {
 func (chc *ChatHistoriesCreate) check() error {
 	if _, ok := chc.mutation.ChatID(); !ok {
 		return &ValidationError{Name: "chat_id", err: errors.New(`ent: missing required field "ChatHistories.chat_id"`)}
+	}
+	if _, ok := chc.mutation.ChatTitle(); !ok {
+		return &ValidationError{Name: "chat_title", err: errors.New(`ent: missing required field "ChatHistories.chat_title"`)}
 	}
 	if _, ok := chc.mutation.MessageID(); !ok {
 		return &ValidationError{Name: "message_id", err: errors.New(`ent: missing required field "ChatHistories.message_id"`)}
@@ -431,6 +452,10 @@ func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSp
 	if value, ok := chc.mutation.ChatID(); ok {
 		_spec.SetField(chathistories.FieldChatID, field.TypeInt64, value)
 		_node.ChatID = value
+	}
+	if value, ok := chc.mutation.ChatTitle(); ok {
+		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
+		_node.ChatTitle = value
 	}
 	if value, ok := chc.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)

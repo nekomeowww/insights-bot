@@ -96,7 +96,7 @@ func (socc *SlackOAuthCredentialsCreate) Mutation() *SlackOAuthCredentialsMutati
 // Save creates the SlackOAuthCredentials in the database.
 func (socc *SlackOAuthCredentialsCreate) Save(ctx context.Context) (*SlackOAuthCredentials, error) {
 	socc.defaults()
-	return withHooks[*SlackOAuthCredentials, SlackOAuthCredentialsMutation](ctx, socc.sqlSave, socc.mutation, socc.hooks)
+	return withHooks(ctx, socc.sqlSave, socc.mutation, socc.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.

@@ -16,6 +16,12 @@ services:
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
+    healthcheck:
+      test: curl --fail http://localhost:7069/health || exit 1
+      interval: 1s
+      retries: 5
+      start_period: 1s
+      timeout: 1s
     profiles:
       - hub
 
@@ -34,6 +40,11 @@ services:
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
+    healthcheck:
+      test: curl --fail http://localhost:7069/health || exit 1
+      interval: 10s
+      retries: 5
+      timeout: 5s
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -49,3 +60,8 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - ./.postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

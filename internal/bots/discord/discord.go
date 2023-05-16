@@ -15,8 +15,9 @@ import (
 	"go.uber.org/fx"
 )
 
-type DiscordBotParam struct {
+type NewDiscordBotParam struct {
 	fx.In
+
 	Lifecycle fx.Lifecycle
 
 	Logger *logger.Logger
@@ -39,8 +40,8 @@ func NewModules() fx.Option {
 	)
 }
 
-func NewDiscordBot() func(p DiscordBotParam) *DiscordBot {
-	return func(p DiscordBotParam) *DiscordBot {
+func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
+	return func(p NewDiscordBotParam) *DiscordBot {
 		cfg := p.Config.Discord
 
 		if cfg.PublicKey == "" || cfg.Token == "" {

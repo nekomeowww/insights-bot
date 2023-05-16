@@ -83,10 +83,10 @@ func (b *DiscordBot) smrCmd(event *events.ApplicationCommandInteractionCreate, d
 	}
 }
 
-func (d *DiscordBot) commandListener(event *events.ApplicationCommandInteractionCreate) {
+func (b *DiscordBot) commandListener(event *events.ApplicationCommandInteractionCreate) {
 	data := event.SlashCommandInteractionData()
 	switch data.CommandName() {
 	case "smr":
-		d.smrCmd(event, data)
+		b.smrCmd(event, data)
 	}
 }

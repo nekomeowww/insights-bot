@@ -3,6 +3,7 @@ package discord
 import (
 	"context"
 	"crypto/ed25519"
+	"errors"
 	"github.com/samber/lo"
 	"net"
 
@@ -32,6 +33,12 @@ type DiscordBot struct {
 
 	smr       *smr.Model
 	botClient bot.Client
+
+	webhookStarted bool
+}
+
+func (b *DiscordBot) Check(ctx context.Context) error {
+	return lo.Ternary(b.webhookStarted, nil, errors.New("discord bot service is not started yet"))
 }
 
 func NewModules() fx.Option {
@@ -74,6 +81,7 @@ func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
 			OnStop: func(ctx context.Context) error {
 				p.Logger.Info("discord: shutting down...")
 				client.Close(ctx)
+				discordBot.webhookStarted = false
 				return nil
 			},
 		})
@@ -105,6 +113,8 @@ func Run() func(b *DiscordBot) error {
 		if err != nil {
 			return err
 		}
+
+		b.webhookStarted = true
 
 		return nil
 	}

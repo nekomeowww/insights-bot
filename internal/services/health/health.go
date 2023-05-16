@@ -3,6 +3,7 @@ package health
 import (
 	"context"
 	"fmt"
+	"github.com/nekomeowww/insights-bot/internal/bots/discord"
 	"net"
 	"net/http"
 	"time"
@@ -25,6 +26,7 @@ type NewHealthParams struct {
 
 	TelegramBot *tgbot.BotService
 	SlackBot    *slack.Bot
+	DiscordBot  *discord.DiscordBot
 	AutoRecap   *autorecap.AutoRecapService
 	Pprof       *pprof.Pprof
 }
@@ -43,6 +45,10 @@ func NewHealth() func(NewHealthParams) (*Health, error) {
 			health.WithCheck(health.Check{
 				Name:  "telegram_bot",
 				Check: params.TelegramBot.Check,
+			}),
+			health.WithCheck(health.Check{
+				Name:  "discord_bot",
+				Check: params.DiscordBot.Check,
 			}),
 			health.WithCheck(health.Check{
 				Name:  "auto_recap",

@@ -8,18 +8,11 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/gookit/color"
 	"github.com/samber/lo"
-	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
-
-type NewDispatcherParam struct {
-	fx.In
-
-	Logger *logger.Logger
-}
 
 type Dispatcher struct {
 	Logger *logger.Logger
@@ -32,22 +25,20 @@ type Dispatcher struct {
 	callbackQueryHandlers map[string]HandleFunc
 }
 
-func NewDispatcher() func(param NewDispatcherParam) *Dispatcher {
-	return func(param NewDispatcherParam) *Dispatcher {
-		d := &Dispatcher{
-			Logger:                param.Logger,
-			helpCommand:           newHelpCommandHandler(),
-			middlewares:           make([]MiddlewareFunc, 0),
-			commandHandlers:       make(map[string]HandleFunc),
-			messageHandlers:       make(map[string]HandleFunc),
-			channelPostHandlers:   make([]Handler, 0),
-			callbackQueryHandlers: make(map[string]HandleFunc),
-		}
-
-		d.OnCommand(d.helpCommand)
-
-		return d
+func NewDispatcher(logger *logger.Logger) *Dispatcher {
+	d := &Dispatcher{
+		Logger:                logger,
+		helpCommand:           newHelpCommandHandler(),
+		middlewares:           make([]MiddlewareFunc, 0),
+		commandHandlers:       make(map[string]HandleFunc),
+		messageHandlers:       make(map[string]HandleFunc),
+		channelPostHandlers:   make([]Handler, 0),
+		callbackQueryHandlers: make(map[string]HandleFunc),
 	}
+
+	d.OnCommand(d.helpCommand)
+
+	return d
 }
 
 func (d *Dispatcher) Use(middleware MiddlewareFunc) {

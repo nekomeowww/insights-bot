@@ -96,7 +96,7 @@ var (
 	matchMdTitles = regexp.MustCompile(`(?m)^(#){1,6} (.)*(\n)?`)
 )
 
-func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
+func ReplaceMarkdownTitlesToTelegramBoldElement(text string) string {
 	return matchMdTitles.ReplaceAllStringFunc(text, func(s string) string {
 		// remove hashtag
 		for strings.HasPrefix(s, "#") {
@@ -115,7 +115,7 @@ func ReplaceMarkdownTitlesToTelegramBoldElement(text string) (string, error) {
 
 		// otherwise, just return the bold element
 		return ret + string(sRunes[len(sRunes)-1]) + "</b>"
-	}), nil
+	})
 }
 
 func MapChatTypeToChineseText(chatType telegram.ChatType) string {

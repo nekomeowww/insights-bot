@@ -18,7 +18,6 @@ import (
 func NewModules() fx.Option {
 	return fx.Options(
 		fx.Provide(NewBot()),
-		fx.Provide(tgbot.NewDispatcher()),
 		fx.Options(handlers.NewModules()),
 	)
 }
@@ -28,10 +27,9 @@ type NewBotParam struct {
 
 	Lifecycle fx.Lifecycle
 
-	Config     *configs.Config
-	Logger     *logger.Logger
-	Dispatcher *tgbot.Dispatcher
-	Handlers   *handlers.Handlers
+	Config   *configs.Config
+	Logger   *logger.Logger
+	Handlers *handlers.Handlers
 
 	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
@@ -39,14 +37,15 @@ type NewBotParam struct {
 
 func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 	return func(param NewBotParam) (*tgbot.BotService, error) {
-		param.Dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
+		dispatcher := tgbot.NewDispatcher(param.Logger)
+		dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
 		param.Handlers.InstallAll()
 
 		bot, err := tgbot.NewBotService(
 			tgbot.WithToken(param.Config.Telegram.BotToken),
 			tgbot.WithWebhookURL(param.Config.Telegram.BotWebhookURL),
 			tgbot.WithWebhookPort(param.Config.Telegram.BotWebhookPort),
-			tgbot.WithDispatcher(param.Dispatcher),
+			tgbot.WithDispatcher(dispatcher),
 			tgbot.WithLogger(param.Logger),
 		)
 		if err != nil {

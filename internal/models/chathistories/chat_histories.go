@@ -14,7 +14,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/google/uuid"
 	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
 	"github.com/sirupsen/logrus"
@@ -248,7 +247,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 
 type RecapOutputTemplateInputs struct {
 	ChatID string
-	Recaps []*openai.ChatHistorySummarizationOutputs
+	Recap  *openai.ChatHistorySummarizationOutputs
 }
 
 func formatChatID(chatID int64) string {
@@ -261,20 +260,18 @@ func formatChatID(chatID int64) string {
 }
 
 var RecapOutputTemplate = lo.Must(template.
-	New(uuid.New().String()).
+	New("recap output markdown template").
 	Funcs(template.FuncMap{
 		"join":   strings.Join,
 		"sub":    func(a, b int) int { return a - b },
 		"add":    func(a, b int) int { return a + b },
 		"escape": tgbot.EscapeHTMLSymbols,
 	}).
-	Parse(`{{ $chatID := .ChatID }}{{ $recapLen := len .Recaps }}{{ range $i, $r := .Recaps }}{{ if $r.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ $r.SinceID }}">{{ escape $r.TopicName }}</a>{{ else }}## {{ escape $r.TopicName }}{{ end }}
-参与人：{{ join $r.ParticipantsNamesWithoutUsername "，" }}
-讨论：{{ range $di, $d := $r.Discussion }}
- - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if $r.Conclusion }}
-结论：{{ escape $r.Conclusion }}{{ end }}{{ if eq $i (sub $recapLen 1) }}{{ else }}
-
-{{ end }}{{ end }}`))
+	Parse(`{{ $chatID := .ChatID }}{{ if .Recap.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ .Recap.SinceID }}">{{ escape .Recap.TopicName }}</a>{{ else }}## {{ escape .Recap.TopicName }}{{ end }}
+参与人：{{ join .Recap.ParticipantsNamesWithoutUsername "，" }}
+讨论：{{ range $di, $d := .Recap.Discussion }}
+ - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if .Recap.Conclusion }}
+结论：{{ escape .Recap.Conclusion }}{{ end }}`))
 
 func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, error) {
 	m.logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
@@ -309,7 +306,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 	return outputs, nil
 }
 
-func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (string, error) {
+func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) ([]string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 
 	for _, message := range histories {
@@ -354,7 +351,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 			return nil
 		})
 		if err != nil {
-			return "", err
+			return make([]string, 0), err
 		}
 		if outputs == nil {
 			continue
@@ -378,17 +375,21 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		chatHistoriesSummarizations = append(chatHistoriesSummarizations, outputs...)
 	}
 
-	sb := new(strings.Builder)
+	ss := make([]string, 0)
 
-	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
-		ChatID: formatChatID(chatID),
-		Recaps: chatHistoriesSummarizations,
-	})
-	if err != nil {
-		return "", err
+	for _, r := range chatHistoriesSummarizations {
+		sb := new(strings.Builder)
+
+		err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
+			ChatID: formatChatID(chatID),
+			Recap:  r,
+		})
+		if err != nil {
+			return make([]string, 0), err
+		}
+
+		ss = append(ss, sb.String())
 	}
 
-	m.logger.Infof("✅ summarized chat histories: %s", sb.String())
-
-	return sb.String(), nil
+	return ss, nil
 }

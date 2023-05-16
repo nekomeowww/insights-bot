@@ -4,8 +4,9 @@ import (
 	"context"
 	"crypto/ed25519"
 	"errors"
-	"github.com/samber/lo"
 	"net"
+
+	"github.com/samber/lo"
 
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
@@ -93,6 +94,10 @@ func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
 
 func Run() func(b *DiscordBot) error {
 	return func(b *DiscordBot) error {
+		if b != nil {
+			return nil
+		}
+
 		// use custom ed25519 verify implementation.
 		// this code is from examples of disgoorg/disgo.
 		httpserver.Verify = func(publicKey httpserver.PublicKey, message, sig []byte) bool {

@@ -55,7 +55,7 @@ func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
 			smr:    p.Smr,
 		}
 
-		port := lo.Ternary(cfg.Port == "", "6060", cfg.Port)
+		port := lo.Ternary(cfg.Port == "", "7072", cfg.Port)
 
 		client, err := disgo.New(cfg.Token,
 			bot.WithHTTPServerConfigOpts(cfg.PublicKey,

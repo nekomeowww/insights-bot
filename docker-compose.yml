@@ -16,6 +16,7 @@ services:
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
+      - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT}
     healthcheck:
       test: curl --fail http://localhost:7069/health || exit 1
       interval: 1s
@@ -40,6 +41,7 @@ services:
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
+      - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT}
     healthcheck:
       test: curl --fail http://localhost:7069/health || exit 1
       interval: 10s

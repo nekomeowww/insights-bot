@@ -47,10 +47,6 @@ func NewHealth() func(NewHealthParams) (*Health, error) {
 				Check: params.TelegramBot.Check,
 			}),
 			health.WithCheck(health.Check{
-				Name:  "discord_bot",
-				Check: params.DiscordBot.Check,
-			}),
-			health.WithCheck(health.Check{
 				Name:  "auto_recap",
 				Check: params.AutoRecap.Check,
 			}),
@@ -64,6 +60,13 @@ func NewHealth() func(NewHealthParams) (*Health, error) {
 			opts = append(opts, health.WithCheck(health.Check{
 				Name:  "slack_bot",
 				Check: params.SlackBot.Check,
+			}))
+		}
+
+		if params.DiscordBot != nil {
+			opts = append(opts, health.WithCheck(health.Check{
+				Name:  "discord_bot",
+				Check: params.DiscordBot.Check,
 			}))
 		}
 

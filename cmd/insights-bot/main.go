@@ -31,13 +31,13 @@ func main() {
 		fx.Options(services.NewModules()),
 		fx.Options(telegram.NewModules()),
 		fx.Options(slack.NewModules()),
-    fx.Options(discord.NewModules()),
+		fx.Options(discord.NewModules()),
 		fx.Invoke(health.Run()),
 		fx.Invoke(pprof.Run()),
 		fx.Invoke(autorecap.Run()),
 		fx.Invoke(slack.Run()),
 		fx.Invoke(telegram.Run()),
-    fx.Invoke(discord.Run()),
+		fx.Invoke(discord.Run()),
 	))
 
 	app.Run()

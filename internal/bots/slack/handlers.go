@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Bot) postCommandInfo(ctx *gin.Context) {
-	var body recivedCommandInfo
+	var body receivedCommandInfo
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		s.logger.WithField("error", err.Error()).Warn("failed to bind request body, maybe slack request definition changed")

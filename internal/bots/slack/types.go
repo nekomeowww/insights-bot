@@ -1,6 +1,6 @@
 package slack
 
-type recivedCommandInfo struct {
+type receivedCommandInfo struct {
 	Command     string `form:"command"`
 	Text        string `form:"text"`
 	ResponseUrl string `form:"response_url"`

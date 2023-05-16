@@ -94,7 +94,7 @@ func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
 
 func Run() func(b *DiscordBot) error {
 	return func(b *DiscordBot) error {
-		if b != nil {
+		if b == nil {
 			return nil
 		}
 

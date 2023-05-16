@@ -25,20 +25,22 @@ type Dispatcher struct {
 	callbackQueryHandlers map[string]HandleFunc
 }
 
-func NewDispatcher(logger *logger.Logger) *Dispatcher {
-	d := &Dispatcher{
-		Logger:                logger,
-		helpCommand:           newHelpCommandHandler(),
-		middlewares:           make([]MiddlewareFunc, 0),
-		commandHandlers:       make(map[string]HandleFunc),
-		messageHandlers:       make(map[string]HandleFunc),
-		channelPostHandlers:   make([]Handler, 0),
-		callbackQueryHandlers: make(map[string]HandleFunc),
+func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
+	return func(logger *logger.Logger) *Dispatcher {
+		d := &Dispatcher{
+			Logger:                logger,
+			helpCommand:           newHelpCommandHandler(),
+			middlewares:           make([]MiddlewareFunc, 0),
+			commandHandlers:       make(map[string]HandleFunc),
+			messageHandlers:       make(map[string]HandleFunc),
+			channelPostHandlers:   make([]Handler, 0),
+			callbackQueryHandlers: make(map[string]HandleFunc),
+		}
+
+		d.OnCommand(d.helpCommand)
+
+		return d
 	}
-
-	d.OnCommand(d.helpCommand)
-
-	return d
 }
 
 func (d *Dispatcher) Use(middleware MiddlewareFunc) {

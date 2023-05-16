@@ -18,6 +18,7 @@ import (
 func NewModules() fx.Option {
 	return fx.Options(
 		fx.Provide(NewBot()),
+		fx.Provide(tgbot.NewDispatcher()),
 		fx.Options(handlers.NewModules()),
 	)
 }
@@ -27,9 +28,10 @@ type NewBotParam struct {
 
 	Lifecycle fx.Lifecycle
 
-	Config   *configs.Config
-	Logger   *logger.Logger
-	Handlers *handlers.Handlers
+	Config     *configs.Config
+	Logger     *logger.Logger
+	Handlers   *handlers.Handlers
+	Dispatcher *tgbot.Dispatcher
 
 	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
@@ -37,7 +39,7 @@ type NewBotParam struct {
 
 func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 	return func(param NewBotParam) (*tgbot.BotService, error) {
-		dispatcher := tgbot.NewDispatcher(param.Logger)
+		dispatcher := param.Dispatcher
 		dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
 		param.Handlers.InstallAll()
 

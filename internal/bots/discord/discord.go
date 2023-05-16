@@ -57,12 +57,15 @@ func NewDiscordBot() func(p NewDiscordBotParam) *DiscordBot {
 
 		port := lo.Ternary(cfg.Port == "", "7072", cfg.Port)
 
-		client, err := disgo.New(cfg.Token,
-			bot.WithHTTPServerConfigOpts(cfg.PublicKey,
+		client, err := disgo.New(
+			cfg.Token,
+			bot.WithHTTPServerConfigOpts(
+				cfg.PublicKey,
 				httpserver.WithAddress(net.JoinHostPort("", port)),
 				httpserver.WithURL("/discord/command/smr"),
 			),
-			bot.WithEventListenerFunc(discordBot.commandListener))
+			bot.WithEventListenerFunc(discordBot.commandListener),
+		)
 		if err != nil {
 			p.Logger.WithField("error", err.Error()).Fatal("discord: failed to create bot instance")
 		}

@@ -7,6 +7,7 @@ import (
 
 	"go.uber.org/fx"
 
+	"github.com/nekomeowww/insights-bot/internal/bots/discord"
 	"github.com/nekomeowww/insights-bot/internal/bots/slack"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram"
 	"github.com/nekomeowww/insights-bot/internal/configs"
@@ -29,9 +30,11 @@ func main() {
 		fx.Options(services.NewModules()),
 		fx.Options(telegram.NewModules()),
 		fx.Options(slack.NewModules()),
+		fx.Options(discord.NewModules()),
 		fx.Invoke(telegram.Run()),
 		fx.Invoke(autorecap.Run()),
 		fx.Invoke(slack.Run()),
+		fx.Invoke(discord.Run()),
 		fx.Invoke(pprof.Run()),
 	))
 

@@ -31,6 +31,7 @@ A bot works with OpenAI GPT models to provide insights for your info flows.
 ## Support IMs
 - Telegram
 - Slack
+- Discord
 
 ---
 
@@ -71,7 +72,7 @@ Arguments: None
 > **This command will also enable the bot to rapidly send a chat history recap automatically for each 6 hours.**
 
 > **Warning**
-> **This command is not available in Slack integration currently.**
+> **This command is not available in Slack/Discord integration currently.**
 
 By sending `/enable_recap` command, the bot will start to capture the chat histories and try to summarize them when you send `/recap` command afterwards.
 
@@ -92,7 +93,7 @@ Arguments: None
 > **This command will also disable the functionalities of `/recap` command**
 
 > **Warning**
-> **This command is not available in Slack integration currently.**
+> **This command is not available in Slack/Discord integration currently.**
 
 By sending `/disable_recap` command, the bot will stop capturing the chat histories and no longer respond to `/recap` command.
 
@@ -105,7 +106,7 @@ By sending `/recap` command, the bot will try to summarize the chat histories an
 ```
 
 > **Warning**
-> **This command is not available in Slack integration currently.**
+> **This command is not available in Slack/Discord integration currently.**
 
 ## Deployment
 
@@ -176,18 +177,21 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 
 ### Environment variables
 
-| Name | Required | Default | Description |
-| ---- | -------- | ------- | ----------- |
-| `TELEGRAM_BOT_TOKEN` | `true` | | Telegram Bot API token, you can create one and obtain the token through [@BotFather](https://t.me/BotFather) |
-| `TELEGRAM_BOT_WEBHOOK_URL` | `false` | | Telegram Bot webhook URL and port, you can use [https://ngrok.com/](https://ngrok.com/) or Cloudflare tunnel to expose your local server to the internet. |
-| `TELEGRAM_BOT_WEBHOOK_PORT` | `false` | `7071` | Telegram Bot Webhook server port, default is 7071 |
-| `OPENAI_API_SECRET` | `true` | | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys). |
-| `OPENAI_API_HOST` | `false` | `https://api.openai.com` | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev` |
-| `DB_CONNECTION_STR` | `true` | | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema |
-| `SLACK_CLIENT_ID` | `false` | | Slack app client id, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
-| `SLACK_CLIENT_SECRET` | `false` | | Slack app client secret, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman) |
-| `SLACK_WEBHOOK_PORT` | `false` | `7070` | Port for Slack Bot/App Webhook server, default is 7070 |
-| ~~`CLOVER_DB_PATH`~~ | ~~`false`~~ | ~~`insights_bot_clover_data.db`~~ | **Deprecated**. ~~Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file.~~ |
+| Name                        | Required    | Default                           | Description                                                                                                                                                                                                                                                                                                                                                                                                             |
+|-----------------------------|-------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TELEGRAM_BOT_TOKEN`        | `true`      |                                   | Telegram Bot API token, you can create one and obtain the token through [@BotFather](https://t.me/BotFather)                                                                                                                                                                                                                                                                                                            |
+| `TELEGRAM_BOT_WEBHOOK_URL`  | `false`     |                                   | Telegram Bot webhook URL and port, you can use [https://ngrok.com/](https://ngrok.com/) or Cloudflare tunnel to expose your local server to the internet.                                                                                                                                                                                                                                                               |
+| `TELEGRAM_BOT_WEBHOOK_PORT` | `false`     | `7071`                            | Telegram Bot Webhook server port, default is 7071                                                                                                                                                                                                                                                                                                                                                                       |
+| `OPENAI_API_SECRET`         | `true`      |                                   | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys).                                                                                                                                                          |
+| `OPENAI_API_HOST`           | `false`     | `https://api.openai.com`          | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev`                                                                                                                                                                                                                                                                                     |
+| `DB_CONNECTION_STR`         | `true`      |                                   | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema                                                                                                                                                                                                                                        |
+| `SLACK_CLIENT_ID`           | `false`     |                                   | Slack app client id, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman)                                                                                                                                                                                                                                                                                     |
+| `SLACK_CLIENT_SECRET`       | `false`     |                                   | Slack app client secret, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman)                                                                                                                                                                                                                                                                                 |
+| `SLACK_WEBHOOK_PORT`        | `false`     | `7070`                            | Port for Slack Bot/App Webhook server, default is 7070                                                                                                                                                                                                                                                                                                                                                                  |
+| `DISCORD_BOT_TOKEN`         | `false`     |                                   | Discord bot token, you can create a discord app and get it, see: [Get started document](https://discord.com/developers/docs/getting-started)                                                                                                                                                                                                                                                                            |
+| `DISCORD_BOT_PUBLIC_KEY`    | `false`     |                                   | Discord bot public key, you can create a discord app and get it, see: [Get started document](https://discord.com/developers/docs/getting-started), required if `DISCORD_BOT_TOKEN` provided.                                                                                                                                                                                                                            |
+| `DISCORD_BOT_WEBHOOK_PORT`  | `false`     | `6060`                            | Port for Discord Bot Webhook server, default is 6060                                                                                                                                                                                                                                                                                                                                                                    |
+| ~~`CLOVER_DB_PATH`~~        | ~~`false`~~ | ~~`insights_bot_clover_data.db`~~ | **Deprecated**. ~~Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file.~~ |
 
 ## Acknowledgements
 

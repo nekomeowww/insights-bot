@@ -16,6 +16,10 @@ const (
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
 	EnvSlackWebhookPort  = "SLACK_WEBHOOK_PORT"
 
+	EnvDiscordBotToken       = "DISCORD_BOT_TOKEN" //nolint:gosec
+	EnvDiscordBotPublicKey   = "DISCORD_BOT_PUBLIC_KEY"
+	EnvDiscordBotWebhookPort = "DISCORD_BOT_WEBHOOK_PORT"
+
 	EnvOpenAIAPISecret              = "OPENAI_API_SECRET" //nolint:gosec
 	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
@@ -43,6 +47,12 @@ type SectionSlack struct {
 	ClientSecret string
 }
 
+type SectionDiscord struct {
+	Port      string
+	Token     string
+	PublicKey string
+}
+
 type SectionDB struct {
 	ConnectionString string
 }
@@ -60,6 +70,7 @@ type Config struct {
 	CloverDBPath    string
 	DB              SectionDB
 	Slack           SectionSlack
+	Discord         SectionDiscord
 }
 
 func NewConfig() func() (*Config, error) {
@@ -101,6 +112,11 @@ func NewConfig() func() (*Config, error) {
 			},
 			DB: SectionDB{
 				ConnectionString: getEnv(EnvDBConnectionString),
+			},
+			Discord: SectionDiscord{
+				Port:      getEnv(EnvDiscordBotWebhookPort),
+				Token:     getEnv(EnvDiscordBotToken),
+				PublicKey: getEnv(EnvDiscordBotPublicKey),
 			},
 		}, nil
 	}

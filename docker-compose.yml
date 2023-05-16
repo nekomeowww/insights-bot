@@ -10,6 +10,9 @@ services:
       - OPENAI_API_HOST
       - SLACK_CLIENT_ID
       - SLACK_CLIENT_SECRET
+      - DISCORD_BOT_TOKEN
+      - DISCORD_BOT_PUBLIC_KEY
+      - DISCORD_BOT_WEBHOOK_PORT
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070
@@ -25,6 +28,9 @@ services:
       - OPENAI_API_HOST
       - SLACK_CLIENT_ID
       - SLACK_CLIENT_SECRET
+      - DISCORD_BOT_TOKEN
+      - DISCORD_BOT_PUBLIC_KEY
+      - DISCORD_BOT_WEBHOOK_PORT
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
     ports:
       - 7070:7070

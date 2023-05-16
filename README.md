@@ -28,7 +28,7 @@
 A bot works with OpenAI GPT models to provide insights for your info flows.
 
 ---
-## Support IMs
+## Supported IMs
 - Telegram
 - Slack
 - Discord

@@ -7,6 +7,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alexliesenfeld/health v0.7.0
 	github.com/davecgh/go-spew v1.1.1
+	github.com/disgoorg/disgo v0.16.4
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-shiori/go-readability v0.0.0-20230421032831-c66949dfc0ad
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
@@ -34,7 +35,6 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/bytedance/sonic v1.8.8 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
-	github.com/disgoorg/disgo v0.16.4 // indirect
 	github.com/disgoorg/json v1.0.0 // indirect
 	github.com/disgoorg/log v1.2.0 // indirect
 	github.com/disgoorg/snowflake/v2 v2.0.1 // indirect

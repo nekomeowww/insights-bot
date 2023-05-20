@@ -357,6 +357,16 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 			continue
 		}
 
+		// filter out empty outputs
+		outputs = lo.Filter(outputs, func(item *openai.ChatHistorySummarizationOutputs, _ int) bool {
+			return item != nil &&
+				item.TopicName != "" && // filter out empty topic name
+				item.SinceID != 0 && // filter out empty since id
+				len(item.ParticipantsNamesWithoutUsername) > 0 && // filter out empty participants
+				len(item.Discussion) > 0 // filter out empty discussion
+		})
+
+		// limit key ids to 5
 		for _, o := range outputs {
 			for _, d := range o.Discussion {
 				d.KeyIDs = lo.UniqBy(d.KeyIDs, func(item int64) int64 {

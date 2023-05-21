@@ -5,6 +5,8 @@ package ent
 import (
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
+	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/schema"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -72,18 +74,90 @@ func init() {
 	chathistoriesDescEmbedded := chathistoriesFields[14].Descriptor()
 	// chathistories.DefaultEmbedded holds the default value on creation for the embedded field.
 	chathistories.DefaultEmbedded = chathistoriesDescEmbedded.Default.(bool)
+	// chathistoriesDescFromPlatform is the schema descriptor for from_platform field.
+	chathistoriesDescFromPlatform := chathistoriesFields[15].Descriptor()
+	// chathistories.DefaultFromPlatform holds the default value on creation for the from_platform field.
+	chathistories.DefaultFromPlatform = chathistoriesDescFromPlatform.Default.(int)
 	// chathistoriesDescCreatedAt is the schema descriptor for created_at field.
-	chathistoriesDescCreatedAt := chathistoriesFields[15].Descriptor()
+	chathistoriesDescCreatedAt := chathistoriesFields[16].Descriptor()
 	// chathistories.DefaultCreatedAt holds the default value on creation for the created_at field.
 	chathistories.DefaultCreatedAt = chathistoriesDescCreatedAt.Default.(func() int64)
 	// chathistoriesDescUpdatedAt is the schema descriptor for updated_at field.
-	chathistoriesDescUpdatedAt := chathistoriesFields[16].Descriptor()
+	chathistoriesDescUpdatedAt := chathistoriesFields[17].Descriptor()
 	// chathistories.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	chathistories.DefaultUpdatedAt = chathistoriesDescUpdatedAt.Default.(func() int64)
 	// chathistoriesDescID is the schema descriptor for id field.
 	chathistoriesDescID := chathistoriesFields[0].Descriptor()
 	// chathistories.DefaultID holds the default value on creation for the id field.
 	chathistories.DefaultID = chathistoriesDescID.Default.(func() uuid.UUID)
+	logchathistoriesrecapFields := schema.LogChatHistoriesRecap{}.Fields()
+	_ = logchathistoriesrecapFields
+	// logchathistoriesrecapDescChatID is the schema descriptor for chat_id field.
+	logchathistoriesrecapDescChatID := logchathistoriesrecapFields[1].Descriptor()
+	// logchathistoriesrecap.DefaultChatID holds the default value on creation for the chat_id field.
+	logchathistoriesrecap.DefaultChatID = logchathistoriesrecapDescChatID.Default.(int64)
+	// logchathistoriesrecapDescRecapInputs is the schema descriptor for recap_inputs field.
+	logchathistoriesrecapDescRecapInputs := logchathistoriesrecapFields[2].Descriptor()
+	// logchathistoriesrecap.DefaultRecapInputs holds the default value on creation for the recap_inputs field.
+	logchathistoriesrecap.DefaultRecapInputs = logchathistoriesrecapDescRecapInputs.Default.(string)
+	// logchathistoriesrecapDescRecapOutputs is the schema descriptor for recap_outputs field.
+	logchathistoriesrecapDescRecapOutputs := logchathistoriesrecapFields[3].Descriptor()
+	// logchathistoriesrecap.DefaultRecapOutputs holds the default value on creation for the recap_outputs field.
+	logchathistoriesrecap.DefaultRecapOutputs = logchathistoriesrecapDescRecapOutputs.Default.(string)
+	// logchathistoriesrecapDescFromPlatform is the schema descriptor for from_platform field.
+	logchathistoriesrecapDescFromPlatform := logchathistoriesrecapFields[4].Descriptor()
+	// logchathistoriesrecap.DefaultFromPlatform holds the default value on creation for the from_platform field.
+	logchathistoriesrecap.DefaultFromPlatform = logchathistoriesrecapDescFromPlatform.Default.(int)
+	// logchathistoriesrecapDescCreatedAt is the schema descriptor for created_at field.
+	logchathistoriesrecapDescCreatedAt := logchathistoriesrecapFields[5].Descriptor()
+	// logchathistoriesrecap.DefaultCreatedAt holds the default value on creation for the created_at field.
+	logchathistoriesrecap.DefaultCreatedAt = logchathistoriesrecapDescCreatedAt.Default.(func() int64)
+	// logchathistoriesrecapDescUpdatedAt is the schema descriptor for updated_at field.
+	logchathistoriesrecapDescUpdatedAt := logchathistoriesrecapFields[6].Descriptor()
+	// logchathistoriesrecap.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	logchathistoriesrecap.DefaultUpdatedAt = logchathistoriesrecapDescUpdatedAt.Default.(func() int64)
+	// logchathistoriesrecapDescID is the schema descriptor for id field.
+	logchathistoriesrecapDescID := logchathistoriesrecapFields[0].Descriptor()
+	// logchathistoriesrecap.DefaultID holds the default value on creation for the id field.
+	logchathistoriesrecap.DefaultID = logchathistoriesrecapDescID.Default.(func() uuid.UUID)
+	logsummarizationsFields := schema.LogSummarizations{}.Fields()
+	_ = logsummarizationsFields
+	// logsummarizationsDescContentURL is the schema descriptor for content_url field.
+	logsummarizationsDescContentURL := logsummarizationsFields[1].Descriptor()
+	// logsummarizations.DefaultContentURL holds the default value on creation for the content_url field.
+	logsummarizations.DefaultContentURL = logsummarizationsDescContentURL.Default.(string)
+	// logsummarizationsDescContentTitle is the schema descriptor for content_title field.
+	logsummarizationsDescContentTitle := logsummarizationsFields[2].Descriptor()
+	// logsummarizations.DefaultContentTitle holds the default value on creation for the content_title field.
+	logsummarizations.DefaultContentTitle = logsummarizationsDescContentTitle.Default.(string)
+	// logsummarizationsDescContentAuthor is the schema descriptor for content_author field.
+	logsummarizationsDescContentAuthor := logsummarizationsFields[3].Descriptor()
+	// logsummarizations.DefaultContentAuthor holds the default value on creation for the content_author field.
+	logsummarizations.DefaultContentAuthor = logsummarizationsDescContentAuthor.Default.(string)
+	// logsummarizationsDescContentText is the schema descriptor for content_text field.
+	logsummarizationsDescContentText := logsummarizationsFields[4].Descriptor()
+	// logsummarizations.DefaultContentText holds the default value on creation for the content_text field.
+	logsummarizations.DefaultContentText = logsummarizationsDescContentText.Default.(string)
+	// logsummarizationsDescContentSummarizedOutputs is the schema descriptor for content_summarized_outputs field.
+	logsummarizationsDescContentSummarizedOutputs := logsummarizationsFields[5].Descriptor()
+	// logsummarizations.DefaultContentSummarizedOutputs holds the default value on creation for the content_summarized_outputs field.
+	logsummarizations.DefaultContentSummarizedOutputs = logsummarizationsDescContentSummarizedOutputs.Default.(string)
+	// logsummarizationsDescFromPlatform is the schema descriptor for from_platform field.
+	logsummarizationsDescFromPlatform := logsummarizationsFields[6].Descriptor()
+	// logsummarizations.DefaultFromPlatform holds the default value on creation for the from_platform field.
+	logsummarizations.DefaultFromPlatform = logsummarizationsDescFromPlatform.Default.(int)
+	// logsummarizationsDescCreatedAt is the schema descriptor for created_at field.
+	logsummarizationsDescCreatedAt := logsummarizationsFields[7].Descriptor()
+	// logsummarizations.DefaultCreatedAt holds the default value on creation for the created_at field.
+	logsummarizations.DefaultCreatedAt = logsummarizationsDescCreatedAt.Default.(func() int64)
+	// logsummarizationsDescUpdatedAt is the schema descriptor for updated_at field.
+	logsummarizationsDescUpdatedAt := logsummarizationsFields[8].Descriptor()
+	// logsummarizations.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	logsummarizations.DefaultUpdatedAt = logsummarizationsDescUpdatedAt.Default.(func() int64)
+	// logsummarizationsDescID is the schema descriptor for id field.
+	logsummarizationsDescID := logsummarizationsFields[0].Descriptor()
+	// logsummarizations.DefaultID holds the default value on creation for the id field.
+	logsummarizations.DefaultID = logsummarizationsDescID.Default.(func() uuid.UUID)
 	slackoauthcredentialsFields := schema.SlackOAuthCredentials{}.Fields()
 	_ = slackoauthcredentialsFields
 	// slackoauthcredentialsDescTeamID is the schema descriptor for team_id field.

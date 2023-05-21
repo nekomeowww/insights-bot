@@ -266,6 +266,27 @@ func (chu *ChatHistoriesUpdate) SetNillableEmbedded(b *bool) *ChatHistoriesUpdat
 	return chu
 }
 
+// SetFromPlatform sets the "from_platform" field.
+func (chu *ChatHistoriesUpdate) SetFromPlatform(i int) *ChatHistoriesUpdate {
+	chu.mutation.ResetFromPlatform()
+	chu.mutation.SetFromPlatform(i)
+	return chu
+}
+
+// SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
+func (chu *ChatHistoriesUpdate) SetNillableFromPlatform(i *int) *ChatHistoriesUpdate {
+	if i != nil {
+		chu.SetFromPlatform(*i)
+	}
+	return chu
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (chu *ChatHistoriesUpdate) AddFromPlatform(i int) *ChatHistoriesUpdate {
+	chu.mutation.AddFromPlatform(i)
+	return chu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chu *ChatHistoriesUpdate) SetCreatedAt(i int64) *ChatHistoriesUpdate {
 	chu.mutation.ResetCreatedAt()
@@ -408,6 +429,12 @@ func (chu *ChatHistoriesUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if value, ok := chu.mutation.Embedded(); ok {
 		_spec.SetField(chathistories.FieldEmbedded, field.TypeBool, value)
+	}
+	if value, ok := chu.mutation.FromPlatform(); ok {
+		_spec.SetField(chathistories.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := chu.mutation.AddedFromPlatform(); ok {
+		_spec.AddField(chathistories.FieldFromPlatform, field.TypeInt, value)
 	}
 	if value, ok := chu.mutation.CreatedAt(); ok {
 		_spec.SetField(chathistories.FieldCreatedAt, field.TypeInt64, value)
@@ -681,6 +708,27 @@ func (chuo *ChatHistoriesUpdateOne) SetNillableEmbedded(b *bool) *ChatHistoriesU
 	return chuo
 }
 
+// SetFromPlatform sets the "from_platform" field.
+func (chuo *ChatHistoriesUpdateOne) SetFromPlatform(i int) *ChatHistoriesUpdateOne {
+	chuo.mutation.ResetFromPlatform()
+	chuo.mutation.SetFromPlatform(i)
+	return chuo
+}
+
+// SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
+func (chuo *ChatHistoriesUpdateOne) SetNillableFromPlatform(i *int) *ChatHistoriesUpdateOne {
+	if i != nil {
+		chuo.SetFromPlatform(*i)
+	}
+	return chuo
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (chuo *ChatHistoriesUpdateOne) AddFromPlatform(i int) *ChatHistoriesUpdateOne {
+	chuo.mutation.AddFromPlatform(i)
+	return chuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chuo *ChatHistoriesUpdateOne) SetCreatedAt(i int64) *ChatHistoriesUpdateOne {
 	chuo.mutation.ResetCreatedAt()
@@ -853,6 +901,12 @@ func (chuo *ChatHistoriesUpdateOne) sqlSave(ctx context.Context) (_node *ChatHis
 	}
 	if value, ok := chuo.mutation.Embedded(); ok {
 		_spec.SetField(chathistories.FieldEmbedded, field.TypeBool, value)
+	}
+	if value, ok := chuo.mutation.FromPlatform(); ok {
+		_spec.SetField(chathistories.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := chuo.mutation.AddedFromPlatform(); ok {
+		_spec.AddField(chathistories.FieldFromPlatform, field.TypeInt, value)
 	}
 	if value, ok := chuo.mutation.CreatedAt(); ok {
 		_spec.SetField(chathistories.FieldCreatedAt, field.TypeInt64, value)

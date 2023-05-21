@@ -45,6 +45,8 @@ type ChatHistories struct {
 	ChattedAt int64 `json:"chatted_at,omitempty"`
 	// Embedded holds the value of the "embedded" field.
 	Embedded bool `json:"embedded,omitempty"`
+	// FromPlatform holds the value of the "from_platform" field.
+	FromPlatform int `json:"from_platform,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -59,7 +61,7 @@ func (*ChatHistories) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case chathistories.FieldEmbedded:
 			values[i] = new(sql.NullBool)
-		case chathistories.FieldChatID, chathistories.FieldMessageID, chathistories.FieldUserID, chathistories.FieldRepliedToMessageID, chathistories.FieldRepliedToUserID, chathistories.FieldChattedAt, chathistories.FieldCreatedAt, chathistories.FieldUpdatedAt:
+		case chathistories.FieldChatID, chathistories.FieldMessageID, chathistories.FieldUserID, chathistories.FieldRepliedToMessageID, chathistories.FieldRepliedToUserID, chathistories.FieldChattedAt, chathistories.FieldFromPlatform, chathistories.FieldCreatedAt, chathistories.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
 		case chathistories.FieldChatTitle, chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText:
 			values[i] = new(sql.NullString)
@@ -170,6 +172,12 @@ func (ch *ChatHistories) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ch.Embedded = value.Bool
 			}
+		case chathistories.FieldFromPlatform:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
+			} else if value.Valid {
+				ch.FromPlatform = int(value.Int64)
+			}
 		case chathistories.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -259,6 +267,9 @@ func (ch *ChatHistories) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("embedded=")
 	builder.WriteString(fmt.Sprintf("%v", ch.Embedded))
+	builder.WriteString(", ")
+	builder.WriteString("from_platform=")
+	builder.WriteString(fmt.Sprintf("%v", ch.FromPlatform))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", ch.CreatedAt))

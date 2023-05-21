@@ -14,6 +14,10 @@ type Tx struct {
 	config
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
+	// LogChatHistoriesRecap is the client for interacting with the LogChatHistoriesRecap builders.
+	LogChatHistoriesRecap *LogChatHistoriesRecapClient
+	// LogSummarizations is the client for interacting with the LogSummarizations builders.
+	LogSummarizations *LogSummarizationsClient
 	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
 	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
@@ -150,6 +154,8 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.ChatHistories = NewChatHistoriesClient(tx.config)
+	tx.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(tx.config)
+	tx.LogSummarizations = NewLogSummarizationsClient(tx.config)
 	tx.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(tx.config)
 	tx.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(tx.config)
 }

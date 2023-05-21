@@ -14,7 +14,7 @@ func (b *Bot) smr(info smrRequestInfo) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	summarization, err := b.smrModel.SummarizeInputURL(ctx, info.inputUrl)
+	summarization, err := b.smrModel.SummarizeInputURL(ctx, info.inputUrl, smr.FromPlatformSlack)
 	slackCfg := b.config.Slack
 	slackCli := slackbot.NewSlackCli(nil, slackCfg.ClientID, slackCfg.ClientSecret, info.refreshToken, info.accessToken)
 	tokenStoreFunc := b.newStoreFuncForRefresh(info.teamID)

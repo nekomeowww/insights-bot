@@ -9,6 +9,12 @@ import (
 // ChatHistories is the predicate function for chathistories builders.
 type ChatHistories func(*sql.Selector)
 
+// LogChatHistoriesRecap is the predicate function for logchathistoriesrecap builders.
+type LogChatHistoriesRecap func(*sql.Selector)
+
+// LogSummarizations is the predicate function for logsummarizations builders.
+type LogSummarizations func(*sql.Selector)
+
 // SlackOAuthCredentials is the predicate function for slackoauthcredentials builders.
 type SlackOAuthCredentials func(*sql.Selector)
 

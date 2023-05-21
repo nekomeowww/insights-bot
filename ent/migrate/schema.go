@@ -25,6 +25,7 @@ var (
 		{Name: "replied_to_text", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "chatted_at", Type: field.TypeInt64},
 		{Name: "embedded", Type: field.TypeBool, Default: false},
+		{Name: "from_platform", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}
@@ -33,6 +34,40 @@ var (
 		Name:       "chat_histories",
 		Columns:    ChatHistoriesColumns,
 		PrimaryKey: []*schema.Column{ChatHistoriesColumns[0]},
+	}
+	// LogChatHistoriesRecapsColumns holds the columns for the "log_chat_histories_recaps" table.
+	LogChatHistoriesRecapsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "recap_inputs", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "recap_outputs", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "from_platform", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// LogChatHistoriesRecapsTable holds the schema information for the "log_chat_histories_recaps" table.
+	LogChatHistoriesRecapsTable = &schema.Table{
+		Name:       "log_chat_histories_recaps",
+		Columns:    LogChatHistoriesRecapsColumns,
+		PrimaryKey: []*schema.Column{LogChatHistoriesRecapsColumns[0]},
+	}
+	// LogSummarizationsColumns holds the columns for the "log_summarizations" table.
+	LogSummarizationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "content_url", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "content_title", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "content_author", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "content_text", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "content_summarized_outputs", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "from_platform", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// LogSummarizationsTable holds the schema information for the "log_summarizations" table.
+	LogSummarizationsTable = &schema.Table{
+		Name:       "log_summarizations",
+		Columns:    LogSummarizationsColumns,
+		PrimaryKey: []*schema.Column{LogSummarizationsColumns[0]},
 	}
 	// SlackOauthCredentialsColumns holds the columns for the "slack_oauth_credentials" table.
 	SlackOauthCredentialsColumns = []*schema.Column{
@@ -68,6 +103,8 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ChatHistoriesTable,
+		LogChatHistoriesRecapsTable,
+		LogSummarizationsTable,
 		SlackOauthCredentialsTable,
 		TelegramChatFeatureFlagsTable,
 	}

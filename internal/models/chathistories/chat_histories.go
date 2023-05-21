@@ -29,6 +29,12 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
+type FromPlatform int
+
+const (
+	FromPlatformTelegram FromPlatform = iota
+)
+
 type NewModelParams struct {
 	fx.In
 
@@ -171,7 +177,8 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		SetUserID(message.From.ID).
 		SetUsername(message.From.UserName).
 		SetFullName(tgbot.FullNameFromFirstAndLastName(message.From.FirstName, message.From.LastName)).
-		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli())
+		SetChattedAt(time.Unix(int64(message.Date), 0).UnixMilli()).
+		SetFromPlatform(int(FromPlatformTelegram))
 
 	if message.ForwardFrom != nil {
 		telegramChatHistoryCreate.SetText(fmt.Sprintf("[forwarded from %s]: %s", tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName), text))
@@ -399,6 +406,16 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		}
 
 		ss = append(ss, sb.String())
+	}
+
+	err := m.ent.LogChatHistoriesRecap.
+		Create().
+		SetChatID(chatID).
+		SetRecapInputs(chatHistories).
+		SetRecapOutputs(strings.Join(ss, "\n")).
+		Exec(context.Background())
+	if err != nil {
+		return make([]string, 0), err
 	}
 
 	return ss, nil

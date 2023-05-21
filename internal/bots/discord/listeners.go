@@ -3,8 +3,9 @@ package discord
 import (
 	"context"
 	"errors"
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"net/url"
+
+	"github.com/nekomeowww/insights-bot/internal/models/smr"
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
@@ -51,7 +52,7 @@ func (b *DiscordBot) smrCmd(event *events.ApplicationCommandInteractionCreate, d
 		b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
 	}
 
-	output, err := b.smr.SummarizeInputURL(context.Background(), urlString)
+	output, err := b.smr.SummarizeInputURL(context.Background(), urlString, smr.FromPlatformSlack)
 	if err != nil {
 		errMsg := ""
 		if errors.Is(err, smr.ErrContentNotSupported) {

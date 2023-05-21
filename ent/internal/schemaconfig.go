@@ -8,6 +8,8 @@ import "context"
 // that can be passed at runtime.
 type SchemaConfig struct {
 	ChatHistories            string // ChatHistories table.
+	LogChatHistoriesRecap    string // LogChatHistoriesRecap table.
+	LogSummarizations        string // LogSummarizations table.
 	SlackOAuthCredentials    string // SlackOAuthCredentials table.
 	TelegramChatFeatureFlags string // TelegramChatFeatureFlags table.
 }

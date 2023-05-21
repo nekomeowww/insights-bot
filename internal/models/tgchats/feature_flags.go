@@ -10,7 +10,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 )
 
-func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType) (*ent.TelegramChatFeatureFlags, error) {
+func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType, chatTitle string) (*ent.TelegramChatFeatureFlags, error) {
 	featureFlags, err := m.ent.TelegramChatFeatureFlags.
 		Query().
 		Where(
@@ -26,6 +26,16 @@ func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType) (*e
 		return nil, err
 	}
 
+	if featureFlags.ChatTitle == "" {
+		_, err = m.ent.TelegramChatFeatureFlags.
+			UpdateOne(featureFlags).
+			SetChatTitle(chatTitle).
+			Save(context.Background())
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return featureFlags, nil
 }
 
@@ -34,7 +44,7 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		return nil
 	}
 
-	featureFlags, err := m.findOneFeatureFlag(chatID, chatType)
+	featureFlags, err := m.findOneFeatureFlag(chatID, chatType, chatTitle)
 	if err != nil {
 		return err
 	}
@@ -51,15 +61,6 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		}
 
 		return nil
-	}
-	if featureFlags.ChatTitle == "" {
-		_, err = m.ent.TelegramChatFeatureFlags.
-			UpdateOne(featureFlags).
-			SetChatTitle(chatTitle).
-			Save(context.Background())
-		if err != nil {
-			return err
-		}
 	}
 	if featureFlags.FeatureChatHistoriesRecap {
 		return nil
@@ -81,7 +82,7 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 		return nil
 	}
 
-	featureFlags, err := m.findOneFeatureFlag(chatID, chatType)
+	featureFlags, err := m.findOneFeatureFlag(chatID, chatType, chatTitle)
 	if err != nil {
 		return err
 	}
@@ -98,15 +99,6 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 		}
 
 		return nil
-	}
-	if featureFlags.ChatTitle == "" {
-		_, err = m.ent.TelegramChatFeatureFlags.
-			UpdateOne(featureFlags).
-			SetChatTitle(chatTitle).
-			Save(context.Background())
-		if err != nil {
-			return err
-		}
 	}
 	if !featureFlags.FeatureChatHistoriesRecap {
 		return nil
@@ -126,8 +118,8 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 	return nil
 }
 
-func (m *Model) HasChatHistoriesRecapEnabled(chatID int64, chatType telegram.ChatType) (bool, error) {
-	featureFlags, err := m.findOneFeatureFlag(chatID, chatType)
+func (m *Model) HasChatHistoriesRecapEnabled(chatID int64, chatType telegram.ChatType, chatTitle string) (bool, error) {
+	featureFlags, err := m.findOneFeatureFlag(chatID, chatType, chatTitle)
 	if err != nil {
 		return false, err
 	}

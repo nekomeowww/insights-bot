@@ -99,7 +99,7 @@ func (h CommandHandler) CommandHelp() string {
 }
 
 func (h *CommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
-	enabled, err := h.tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, telegram.ChatType(c.Update.Message.Chat.Type))
+	enabled, err := h.tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, telegram.ChatType(c.Update.Message.Chat.Type), c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("生成失败，请稍后再试。").WithReply(c.Update.Message)
 	}

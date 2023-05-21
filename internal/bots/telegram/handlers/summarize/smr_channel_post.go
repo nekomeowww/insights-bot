@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 )
 
@@ -27,7 +28,7 @@ func (h *Handlers) HandleChannelPost(c *tgbot.Context) (tgbot.Response, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	summarization, err := h.smr.SummarizeInputURL(ctx, urlString)
+	summarization, err := h.smr.SummarizeInputURL(ctx, urlString, smr.FromPlatformTelegram)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err)
 	}

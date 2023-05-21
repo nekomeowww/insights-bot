@@ -46,7 +46,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	summarization, err := h.smr.SummarizeInputURL(ctx, urlString)
+	summarization, err := h.smr.SummarizeInputURL(ctx, urlString, smr.FromPlatformTelegram)
 	if err != nil {
 		if errors.Is(err, smr.ErrContentNotSupported) {
 			return nil, tgbot.NewMessageError("暂时不支持量子速读这样的内容呢，可以换个别的链接试试。").WithEdit(&processingMessage)

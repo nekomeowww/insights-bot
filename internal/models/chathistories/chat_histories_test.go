@@ -19,6 +19,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/pkg/openai"
+	"github.com/nekomeowww/insights-bot/pkg/openai/openaimock"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
@@ -41,7 +42,7 @@ func TestMain(m *testing.M) {
 	model, err = NewModel()(NewModelParams{
 		Ent:    ent,
 		Logger: logger,
-		OpenAI: openai.NewMockClient(),
+		OpenAI: &openaimock.MockClient{},
 	})
 	if err != nil {
 		panic(err)
@@ -71,15 +72,14 @@ func TestExtractTextFromMessage(t *testing.T) {
 			Photo: []tgbotapi.PhotoSize{},
 		}
 
-		openaiClient, ok := model.openAI.(*openai.MockClient)
+		openaiClient, ok := model.openAI.(*openaimock.MockClient)
 		require.True(ok)
 
-		openaiClient.SummarizeAnyReturns = &goopenai.ChatCompletionResponse{
-			Choices: []goopenai.ChatCompletionChoice{{Message: goopenai.ChatCompletionMessage{Content: "11年前，Go 1发布了。Google Developers Europe呼吁大家庆祝这一天，加入当地见面会和试用Go Playground。如果你和他们一样是一位Gopher，请分享这条推文。"}}},
+		openaiClient.SummarizeAnyStub = func(ctx context.Context, s string) (*goopenai.ChatCompletionResponse, error) {
+			return &goopenai.ChatCompletionResponse{
+				Choices: []goopenai.ChatCompletionChoice{{Message: goopenai.ChatCompletionMessage{Content: "11年前，Go 1发布了。Google Developers Europe呼吁大家庆祝这一天，加入当地见面会和试用Go Playground。如果你和他们一样是一位Gopher，请分享这条推文。"}}},
+			}, nil
 		}
-		defer func() {
-			openaiClient.SummarizeAnyReturns = nil
-		}()
 
 		expect := "看看这些链接：[Documentation](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/stringsandcharacters/#Extended-Grapheme-Clusters) 、[GPT-4 Developer Livestream - YouTube](https://www.youtube.com/watch?v=outcGtbnMuQ) [GitHub - nekomeowww/insights-bot: A bot works with OpenAI GPT models to provide insights for your info flows.](https://github.com/nekomeowww/insights-bot) 还有 [这个](https://matters.town/@1435Club/322889-这几天-web3在大理发生了什么)，和这个 [11年前，Go 1发布了。Google Developers Europe呼吁大家庆祝这一天，加入当地见面会和试用Go Playground。如果你和他们一样是一位Gopher，请分享这条推文。](https://twitter.com/GoogleDevEurope/status/1640667303158198272)"
 		assert.Equal(expect, model.ExtractTextFromMessage(message))

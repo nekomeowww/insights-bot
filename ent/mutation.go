@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
+	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/predicate"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -27,6 +29,8 @@ const (
 
 	// Node types.
 	TypeChatHistories            = "ChatHistories"
+	TypeLogChatHistoriesRecap    = "LogChatHistoriesRecap"
+	TypeLogSummarizations        = "LogSummarizations"
 	TypeSlackOAuthCredentials    = "SlackOAuthCredentials"
 	TypeTelegramChatFeatureFlags = "TelegramChatFeatureFlags"
 )
@@ -57,6 +61,8 @@ type ChatHistoriesMutation struct {
 	chatted_at               *int64
 	addchatted_at            *int64
 	embedded                 *bool
+	from_platform            *int
+	addfrom_platform         *int
 	created_at               *int64
 	addcreated_at            *int64
 	updated_at               *int64
@@ -795,6 +801,62 @@ func (m *ChatHistoriesMutation) ResetEmbedded() {
 	m.embedded = nil
 }
 
+// SetFromPlatform sets the "from_platform" field.
+func (m *ChatHistoriesMutation) SetFromPlatform(i int) {
+	m.from_platform = &i
+	m.addfrom_platform = nil
+}
+
+// FromPlatform returns the value of the "from_platform" field in the mutation.
+func (m *ChatHistoriesMutation) FromPlatform() (r int, exists bool) {
+	v := m.from_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFromPlatform returns the old "from_platform" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldFromPlatform(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFromPlatform is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFromPlatform requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFromPlatform: %w", err)
+	}
+	return oldValue.FromPlatform, nil
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (m *ChatHistoriesMutation) AddFromPlatform(i int) {
+	if m.addfrom_platform != nil {
+		*m.addfrom_platform += i
+	} else {
+		m.addfrom_platform = &i
+	}
+}
+
+// AddedFromPlatform returns the value that was added to the "from_platform" field in this mutation.
+func (m *ChatHistoriesMutation) AddedFromPlatform() (r int, exists bool) {
+	v := m.addfrom_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFromPlatform resets all changes to the "from_platform" field.
+func (m *ChatHistoriesMutation) ResetFromPlatform() {
+	m.from_platform = nil
+	m.addfrom_platform = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *ChatHistoriesMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -941,7 +1003,7 @@ func (m *ChatHistoriesMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChatHistoriesMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 17)
 	if m.chat_id != nil {
 		fields = append(fields, chathistories.FieldChatID)
 	}
@@ -983,6 +1045,9 @@ func (m *ChatHistoriesMutation) Fields() []string {
 	}
 	if m.embedded != nil {
 		fields = append(fields, chathistories.FieldEmbedded)
+	}
+	if m.from_platform != nil {
+		fields = append(fields, chathistories.FieldFromPlatform)
 	}
 	if m.created_at != nil {
 		fields = append(fields, chathistories.FieldCreatedAt)
@@ -1026,6 +1091,8 @@ func (m *ChatHistoriesMutation) Field(name string) (ent.Value, bool) {
 		return m.ChattedAt()
 	case chathistories.FieldEmbedded:
 		return m.Embedded()
+	case chathistories.FieldFromPlatform:
+		return m.FromPlatform()
 	case chathistories.FieldCreatedAt:
 		return m.CreatedAt()
 	case chathistories.FieldUpdatedAt:
@@ -1067,6 +1134,8 @@ func (m *ChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldChattedAt(ctx)
 	case chathistories.FieldEmbedded:
 		return m.OldEmbedded(ctx)
+	case chathistories.FieldFromPlatform:
+		return m.OldFromPlatform(ctx)
 	case chathistories.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case chathistories.FieldUpdatedAt:
@@ -1178,6 +1247,13 @@ func (m *ChatHistoriesMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEmbedded(v)
 		return nil
+	case chathistories.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFromPlatform(v)
+		return nil
 	case chathistories.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
@@ -1218,6 +1294,9 @@ func (m *ChatHistoriesMutation) AddedFields() []string {
 	if m.addchatted_at != nil {
 		fields = append(fields, chathistories.FieldChattedAt)
 	}
+	if m.addfrom_platform != nil {
+		fields = append(fields, chathistories.FieldFromPlatform)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, chathistories.FieldCreatedAt)
 	}
@@ -1244,6 +1323,8 @@ func (m *ChatHistoriesMutation) AddedField(name string) (ent.Value, bool) {
 		return m.AddedRepliedToUserID()
 	case chathistories.FieldChattedAt:
 		return m.AddedChattedAt()
+	case chathistories.FieldFromPlatform:
+		return m.AddedFromPlatform()
 	case chathistories.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case chathistories.FieldUpdatedAt:
@@ -1298,6 +1379,13 @@ func (m *ChatHistoriesMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddChattedAt(v)
+		return nil
+	case chathistories.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFromPlatform(v)
 		return nil
 	case chathistories.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -1382,6 +1470,9 @@ func (m *ChatHistoriesMutation) ResetField(name string) error {
 	case chathistories.FieldEmbedded:
 		m.ResetEmbedded()
 		return nil
+	case chathistories.FieldFromPlatform:
+		m.ResetFromPlatform()
+		return nil
 	case chathistories.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -1438,6 +1529,1555 @@ func (m *ChatHistoriesMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ChatHistoriesMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ChatHistories edge %s", name)
+}
+
+// LogChatHistoriesRecapMutation represents an operation that mutates the LogChatHistoriesRecap nodes in the graph.
+type LogChatHistoriesRecapMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	chat_id          *int64
+	addchat_id       *int64
+	recap_inputs     *string
+	recap_outputs    *string
+	from_platform    *int
+	addfrom_platform *int
+	created_at       *int64
+	addcreated_at    *int64
+	updated_at       *int64
+	addupdated_at    *int64
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*LogChatHistoriesRecap, error)
+	predicates       []predicate.LogChatHistoriesRecap
+}
+
+var _ ent.Mutation = (*LogChatHistoriesRecapMutation)(nil)
+
+// logchathistoriesrecapOption allows management of the mutation configuration using functional options.
+type logchathistoriesrecapOption func(*LogChatHistoriesRecapMutation)
+
+// newLogChatHistoriesRecapMutation creates new mutation for the LogChatHistoriesRecap entity.
+func newLogChatHistoriesRecapMutation(c config, op Op, opts ...logchathistoriesrecapOption) *LogChatHistoriesRecapMutation {
+	m := &LogChatHistoriesRecapMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeLogChatHistoriesRecap,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withLogChatHistoriesRecapID sets the ID field of the mutation.
+func withLogChatHistoriesRecapID(id uuid.UUID) logchathistoriesrecapOption {
+	return func(m *LogChatHistoriesRecapMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *LogChatHistoriesRecap
+		)
+		m.oldValue = func(ctx context.Context) (*LogChatHistoriesRecap, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().LogChatHistoriesRecap.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withLogChatHistoriesRecap sets the old LogChatHistoriesRecap of the mutation.
+func withLogChatHistoriesRecap(node *LogChatHistoriesRecap) logchathistoriesrecapOption {
+	return func(m *LogChatHistoriesRecapMutation) {
+		m.oldValue = func(context.Context) (*LogChatHistoriesRecap, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m LogChatHistoriesRecapMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m LogChatHistoriesRecapMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of LogChatHistoriesRecap entities.
+func (m *LogChatHistoriesRecapMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *LogChatHistoriesRecapMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *LogChatHistoriesRecapMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().LogChatHistoriesRecap.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChatID sets the "chat_id" field.
+func (m *LogChatHistoriesRecapMutation) SetChatID(i int64) {
+	m.chat_id = &i
+	m.addchat_id = nil
+}
+
+// ChatID returns the value of the "chat_id" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) ChatID() (r int64, exists bool) {
+	v := m.chat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatID returns the old "chat_id" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldChatID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
+	}
+	return oldValue.ChatID, nil
+}
+
+// AddChatID adds i to the "chat_id" field.
+func (m *LogChatHistoriesRecapMutation) AddChatID(i int64) {
+	if m.addchat_id != nil {
+		*m.addchat_id += i
+	} else {
+		m.addchat_id = &i
+	}
+}
+
+// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedChatID() (r int64, exists bool) {
+	v := m.addchat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChatID resets all changes to the "chat_id" field.
+func (m *LogChatHistoriesRecapMutation) ResetChatID() {
+	m.chat_id = nil
+	m.addchat_id = nil
+}
+
+// SetRecapInputs sets the "recap_inputs" field.
+func (m *LogChatHistoriesRecapMutation) SetRecapInputs(s string) {
+	m.recap_inputs = &s
+}
+
+// RecapInputs returns the value of the "recap_inputs" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) RecapInputs() (r string, exists bool) {
+	v := m.recap_inputs
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecapInputs returns the old "recap_inputs" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldRecapInputs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecapInputs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecapInputs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecapInputs: %w", err)
+	}
+	return oldValue.RecapInputs, nil
+}
+
+// ResetRecapInputs resets all changes to the "recap_inputs" field.
+func (m *LogChatHistoriesRecapMutation) ResetRecapInputs() {
+	m.recap_inputs = nil
+}
+
+// SetRecapOutputs sets the "recap_outputs" field.
+func (m *LogChatHistoriesRecapMutation) SetRecapOutputs(s string) {
+	m.recap_outputs = &s
+}
+
+// RecapOutputs returns the value of the "recap_outputs" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) RecapOutputs() (r string, exists bool) {
+	v := m.recap_outputs
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecapOutputs returns the old "recap_outputs" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldRecapOutputs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecapOutputs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecapOutputs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecapOutputs: %w", err)
+	}
+	return oldValue.RecapOutputs, nil
+}
+
+// ResetRecapOutputs resets all changes to the "recap_outputs" field.
+func (m *LogChatHistoriesRecapMutation) ResetRecapOutputs() {
+	m.recap_outputs = nil
+}
+
+// SetFromPlatform sets the "from_platform" field.
+func (m *LogChatHistoriesRecapMutation) SetFromPlatform(i int) {
+	m.from_platform = &i
+	m.addfrom_platform = nil
+}
+
+// FromPlatform returns the value of the "from_platform" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) FromPlatform() (r int, exists bool) {
+	v := m.from_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFromPlatform returns the old "from_platform" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldFromPlatform(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFromPlatform is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFromPlatform requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFromPlatform: %w", err)
+	}
+	return oldValue.FromPlatform, nil
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (m *LogChatHistoriesRecapMutation) AddFromPlatform(i int) {
+	if m.addfrom_platform != nil {
+		*m.addfrom_platform += i
+	} else {
+		m.addfrom_platform = &i
+	}
+}
+
+// AddedFromPlatform returns the value that was added to the "from_platform" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedFromPlatform() (r int, exists bool) {
+	v := m.addfrom_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFromPlatform resets all changes to the "from_platform" field.
+func (m *LogChatHistoriesRecapMutation) ResetFromPlatform() {
+	m.from_platform = nil
+	m.addfrom_platform = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *LogChatHistoriesRecapMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *LogChatHistoriesRecapMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *LogChatHistoriesRecapMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *LogChatHistoriesRecapMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *LogChatHistoriesRecapMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *LogChatHistoriesRecapMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the LogChatHistoriesRecapMutation builder.
+func (m *LogChatHistoriesRecapMutation) Where(ps ...predicate.LogChatHistoriesRecap) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the LogChatHistoriesRecapMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *LogChatHistoriesRecapMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.LogChatHistoriesRecap, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *LogChatHistoriesRecapMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *LogChatHistoriesRecapMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (LogChatHistoriesRecap).
+func (m *LogChatHistoriesRecapMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *LogChatHistoriesRecapMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.chat_id != nil {
+		fields = append(fields, logchathistoriesrecap.FieldChatID)
+	}
+	if m.recap_inputs != nil {
+		fields = append(fields, logchathistoriesrecap.FieldRecapInputs)
+	}
+	if m.recap_outputs != nil {
+		fields = append(fields, logchathistoriesrecap.FieldRecapOutputs)
+	}
+	if m.from_platform != nil {
+		fields = append(fields, logchathistoriesrecap.FieldFromPlatform)
+	}
+	if m.created_at != nil {
+		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, logchathistoriesrecap.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *LogChatHistoriesRecapMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		return m.ChatID()
+	case logchathistoriesrecap.FieldRecapInputs:
+		return m.RecapInputs()
+	case logchathistoriesrecap.FieldRecapOutputs:
+		return m.RecapOutputs()
+	case logchathistoriesrecap.FieldFromPlatform:
+		return m.FromPlatform()
+	case logchathistoriesrecap.FieldCreatedAt:
+		return m.CreatedAt()
+	case logchathistoriesrecap.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *LogChatHistoriesRecapMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		return m.OldChatID(ctx)
+	case logchathistoriesrecap.FieldRecapInputs:
+		return m.OldRecapInputs(ctx)
+	case logchathistoriesrecap.FieldRecapOutputs:
+		return m.OldRecapOutputs(ctx)
+	case logchathistoriesrecap.FieldFromPlatform:
+		return m.OldFromPlatform(ctx)
+	case logchathistoriesrecap.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case logchathistoriesrecap.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown LogChatHistoriesRecap field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LogChatHistoriesRecapMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatID(v)
+		return nil
+	case logchathistoriesrecap.FieldRecapInputs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecapInputs(v)
+		return nil
+	case logchathistoriesrecap.FieldRecapOutputs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecapOutputs(v)
+		return nil
+	case logchathistoriesrecap.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFromPlatform(v)
+		return nil
+	case logchathistoriesrecap.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case logchathistoriesrecap.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LogChatHistoriesRecap field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedFields() []string {
+	var fields []string
+	if m.addchat_id != nil {
+		fields = append(fields, logchathistoriesrecap.FieldChatID)
+	}
+	if m.addfrom_platform != nil {
+		fields = append(fields, logchathistoriesrecap.FieldFromPlatform)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, logchathistoriesrecap.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *LogChatHistoriesRecapMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		return m.AddedChatID()
+	case logchathistoriesrecap.FieldFromPlatform:
+		return m.AddedFromPlatform()
+	case logchathistoriesrecap.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case logchathistoriesrecap.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LogChatHistoriesRecapMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChatID(v)
+		return nil
+	case logchathistoriesrecap.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFromPlatform(v)
+		return nil
+	case logchathistoriesrecap.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case logchathistoriesrecap.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LogChatHistoriesRecap numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *LogChatHistoriesRecapMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *LogChatHistoriesRecapMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *LogChatHistoriesRecapMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown LogChatHistoriesRecap nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *LogChatHistoriesRecapMutation) ResetField(name string) error {
+	switch name {
+	case logchathistoriesrecap.FieldChatID:
+		m.ResetChatID()
+		return nil
+	case logchathistoriesrecap.FieldRecapInputs:
+		m.ResetRecapInputs()
+		return nil
+	case logchathistoriesrecap.FieldRecapOutputs:
+		m.ResetRecapOutputs()
+		return nil
+	case logchathistoriesrecap.FieldFromPlatform:
+		m.ResetFromPlatform()
+		return nil
+	case logchathistoriesrecap.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case logchathistoriesrecap.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown LogChatHistoriesRecap field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *LogChatHistoriesRecapMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *LogChatHistoriesRecapMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *LogChatHistoriesRecapMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *LogChatHistoriesRecapMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *LogChatHistoriesRecapMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown LogChatHistoriesRecap unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *LogChatHistoriesRecapMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown LogChatHistoriesRecap edge %s", name)
+}
+
+// LogSummarizationsMutation represents an operation that mutates the LogSummarizations nodes in the graph.
+type LogSummarizationsMutation struct {
+	config
+	op                         Op
+	typ                        string
+	id                         *uuid.UUID
+	content_url                *string
+	content_title              *string
+	content_author             *string
+	content_text               *string
+	content_summarized_outputs *string
+	from_platform              *int
+	addfrom_platform           *int
+	created_at                 *int64
+	addcreated_at              *int64
+	updated_at                 *int64
+	addupdated_at              *int64
+	clearedFields              map[string]struct{}
+	done                       bool
+	oldValue                   func(context.Context) (*LogSummarizations, error)
+	predicates                 []predicate.LogSummarizations
+}
+
+var _ ent.Mutation = (*LogSummarizationsMutation)(nil)
+
+// logsummarizationsOption allows management of the mutation configuration using functional options.
+type logsummarizationsOption func(*LogSummarizationsMutation)
+
+// newLogSummarizationsMutation creates new mutation for the LogSummarizations entity.
+func newLogSummarizationsMutation(c config, op Op, opts ...logsummarizationsOption) *LogSummarizationsMutation {
+	m := &LogSummarizationsMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeLogSummarizations,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withLogSummarizationsID sets the ID field of the mutation.
+func withLogSummarizationsID(id uuid.UUID) logsummarizationsOption {
+	return func(m *LogSummarizationsMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *LogSummarizations
+		)
+		m.oldValue = func(ctx context.Context) (*LogSummarizations, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().LogSummarizations.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withLogSummarizations sets the old LogSummarizations of the mutation.
+func withLogSummarizations(node *LogSummarizations) logsummarizationsOption {
+	return func(m *LogSummarizationsMutation) {
+		m.oldValue = func(context.Context) (*LogSummarizations, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m LogSummarizationsMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m LogSummarizationsMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of LogSummarizations entities.
+func (m *LogSummarizationsMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *LogSummarizationsMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *LogSummarizationsMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().LogSummarizations.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetContentURL sets the "content_url" field.
+func (m *LogSummarizationsMutation) SetContentURL(s string) {
+	m.content_url = &s
+}
+
+// ContentURL returns the value of the "content_url" field in the mutation.
+func (m *LogSummarizationsMutation) ContentURL() (r string, exists bool) {
+	v := m.content_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentURL returns the old "content_url" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldContentURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentURL: %w", err)
+	}
+	return oldValue.ContentURL, nil
+}
+
+// ResetContentURL resets all changes to the "content_url" field.
+func (m *LogSummarizationsMutation) ResetContentURL() {
+	m.content_url = nil
+}
+
+// SetContentTitle sets the "content_title" field.
+func (m *LogSummarizationsMutation) SetContentTitle(s string) {
+	m.content_title = &s
+}
+
+// ContentTitle returns the value of the "content_title" field in the mutation.
+func (m *LogSummarizationsMutation) ContentTitle() (r string, exists bool) {
+	v := m.content_title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentTitle returns the old "content_title" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldContentTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentTitle: %w", err)
+	}
+	return oldValue.ContentTitle, nil
+}
+
+// ResetContentTitle resets all changes to the "content_title" field.
+func (m *LogSummarizationsMutation) ResetContentTitle() {
+	m.content_title = nil
+}
+
+// SetContentAuthor sets the "content_author" field.
+func (m *LogSummarizationsMutation) SetContentAuthor(s string) {
+	m.content_author = &s
+}
+
+// ContentAuthor returns the value of the "content_author" field in the mutation.
+func (m *LogSummarizationsMutation) ContentAuthor() (r string, exists bool) {
+	v := m.content_author
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentAuthor returns the old "content_author" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldContentAuthor(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentAuthor is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentAuthor requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentAuthor: %w", err)
+	}
+	return oldValue.ContentAuthor, nil
+}
+
+// ResetContentAuthor resets all changes to the "content_author" field.
+func (m *LogSummarizationsMutation) ResetContentAuthor() {
+	m.content_author = nil
+}
+
+// SetContentText sets the "content_text" field.
+func (m *LogSummarizationsMutation) SetContentText(s string) {
+	m.content_text = &s
+}
+
+// ContentText returns the value of the "content_text" field in the mutation.
+func (m *LogSummarizationsMutation) ContentText() (r string, exists bool) {
+	v := m.content_text
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentText returns the old "content_text" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldContentText(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentText is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentText requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentText: %w", err)
+	}
+	return oldValue.ContentText, nil
+}
+
+// ResetContentText resets all changes to the "content_text" field.
+func (m *LogSummarizationsMutation) ResetContentText() {
+	m.content_text = nil
+}
+
+// SetContentSummarizedOutputs sets the "content_summarized_outputs" field.
+func (m *LogSummarizationsMutation) SetContentSummarizedOutputs(s string) {
+	m.content_summarized_outputs = &s
+}
+
+// ContentSummarizedOutputs returns the value of the "content_summarized_outputs" field in the mutation.
+func (m *LogSummarizationsMutation) ContentSummarizedOutputs() (r string, exists bool) {
+	v := m.content_summarized_outputs
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContentSummarizedOutputs returns the old "content_summarized_outputs" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldContentSummarizedOutputs(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContentSummarizedOutputs is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContentSummarizedOutputs requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContentSummarizedOutputs: %w", err)
+	}
+	return oldValue.ContentSummarizedOutputs, nil
+}
+
+// ResetContentSummarizedOutputs resets all changes to the "content_summarized_outputs" field.
+func (m *LogSummarizationsMutation) ResetContentSummarizedOutputs() {
+	m.content_summarized_outputs = nil
+}
+
+// SetFromPlatform sets the "from_platform" field.
+func (m *LogSummarizationsMutation) SetFromPlatform(i int) {
+	m.from_platform = &i
+	m.addfrom_platform = nil
+}
+
+// FromPlatform returns the value of the "from_platform" field in the mutation.
+func (m *LogSummarizationsMutation) FromPlatform() (r int, exists bool) {
+	v := m.from_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFromPlatform returns the old "from_platform" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldFromPlatform(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFromPlatform is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFromPlatform requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFromPlatform: %w", err)
+	}
+	return oldValue.FromPlatform, nil
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (m *LogSummarizationsMutation) AddFromPlatform(i int) {
+	if m.addfrom_platform != nil {
+		*m.addfrom_platform += i
+	} else {
+		m.addfrom_platform = &i
+	}
+}
+
+// AddedFromPlatform returns the value that was added to the "from_platform" field in this mutation.
+func (m *LogSummarizationsMutation) AddedFromPlatform() (r int, exists bool) {
+	v := m.addfrom_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFromPlatform resets all changes to the "from_platform" field.
+func (m *LogSummarizationsMutation) ResetFromPlatform() {
+	m.from_platform = nil
+	m.addfrom_platform = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *LogSummarizationsMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *LogSummarizationsMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *LogSummarizationsMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *LogSummarizationsMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *LogSummarizationsMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *LogSummarizationsMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *LogSummarizationsMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *LogSummarizationsMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *LogSummarizationsMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *LogSummarizationsMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the LogSummarizationsMutation builder.
+func (m *LogSummarizationsMutation) Where(ps ...predicate.LogSummarizations) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the LogSummarizationsMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *LogSummarizationsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.LogSummarizations, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *LogSummarizationsMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *LogSummarizationsMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (LogSummarizations).
+func (m *LogSummarizationsMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *LogSummarizationsMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.content_url != nil {
+		fields = append(fields, logsummarizations.FieldContentURL)
+	}
+	if m.content_title != nil {
+		fields = append(fields, logsummarizations.FieldContentTitle)
+	}
+	if m.content_author != nil {
+		fields = append(fields, logsummarizations.FieldContentAuthor)
+	}
+	if m.content_text != nil {
+		fields = append(fields, logsummarizations.FieldContentText)
+	}
+	if m.content_summarized_outputs != nil {
+		fields = append(fields, logsummarizations.FieldContentSummarizedOutputs)
+	}
+	if m.from_platform != nil {
+		fields = append(fields, logsummarizations.FieldFromPlatform)
+	}
+	if m.created_at != nil {
+		fields = append(fields, logsummarizations.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, logsummarizations.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *LogSummarizationsMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case logsummarizations.FieldContentURL:
+		return m.ContentURL()
+	case logsummarizations.FieldContentTitle:
+		return m.ContentTitle()
+	case logsummarizations.FieldContentAuthor:
+		return m.ContentAuthor()
+	case logsummarizations.FieldContentText:
+		return m.ContentText()
+	case logsummarizations.FieldContentSummarizedOutputs:
+		return m.ContentSummarizedOutputs()
+	case logsummarizations.FieldFromPlatform:
+		return m.FromPlatform()
+	case logsummarizations.FieldCreatedAt:
+		return m.CreatedAt()
+	case logsummarizations.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *LogSummarizationsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case logsummarizations.FieldContentURL:
+		return m.OldContentURL(ctx)
+	case logsummarizations.FieldContentTitle:
+		return m.OldContentTitle(ctx)
+	case logsummarizations.FieldContentAuthor:
+		return m.OldContentAuthor(ctx)
+	case logsummarizations.FieldContentText:
+		return m.OldContentText(ctx)
+	case logsummarizations.FieldContentSummarizedOutputs:
+		return m.OldContentSummarizedOutputs(ctx)
+	case logsummarizations.FieldFromPlatform:
+		return m.OldFromPlatform(ctx)
+	case logsummarizations.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case logsummarizations.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown LogSummarizations field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LogSummarizationsMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case logsummarizations.FieldContentURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentURL(v)
+		return nil
+	case logsummarizations.FieldContentTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentTitle(v)
+		return nil
+	case logsummarizations.FieldContentAuthor:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentAuthor(v)
+		return nil
+	case logsummarizations.FieldContentText:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentText(v)
+		return nil
+	case logsummarizations.FieldContentSummarizedOutputs:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContentSummarizedOutputs(v)
+		return nil
+	case logsummarizations.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFromPlatform(v)
+		return nil
+	case logsummarizations.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case logsummarizations.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LogSummarizations field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *LogSummarizationsMutation) AddedFields() []string {
+	var fields []string
+	if m.addfrom_platform != nil {
+		fields = append(fields, logsummarizations.FieldFromPlatform)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, logsummarizations.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, logsummarizations.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *LogSummarizationsMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case logsummarizations.FieldFromPlatform:
+		return m.AddedFromPlatform()
+	case logsummarizations.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case logsummarizations.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *LogSummarizationsMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case logsummarizations.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFromPlatform(v)
+		return nil
+	case logsummarizations.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case logsummarizations.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown LogSummarizations numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *LogSummarizationsMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *LogSummarizationsMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *LogSummarizationsMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown LogSummarizations nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *LogSummarizationsMutation) ResetField(name string) error {
+	switch name {
+	case logsummarizations.FieldContentURL:
+		m.ResetContentURL()
+		return nil
+	case logsummarizations.FieldContentTitle:
+		m.ResetContentTitle()
+		return nil
+	case logsummarizations.FieldContentAuthor:
+		m.ResetContentAuthor()
+		return nil
+	case logsummarizations.FieldContentText:
+		m.ResetContentText()
+		return nil
+	case logsummarizations.FieldContentSummarizedOutputs:
+		m.ResetContentSummarizedOutputs()
+		return nil
+	case logsummarizations.FieldFromPlatform:
+		m.ResetFromPlatform()
+		return nil
+	case logsummarizations.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case logsummarizations.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown LogSummarizations field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *LogSummarizationsMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *LogSummarizationsMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *LogSummarizationsMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *LogSummarizationsMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *LogSummarizationsMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *LogSummarizationsMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *LogSummarizationsMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown LogSummarizations unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *LogSummarizationsMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown LogSummarizations edge %s", name)
 }
 
 // SlackOAuthCredentialsMutation represents an operation that mutates the SlackOAuthCredentials nodes in the graph.

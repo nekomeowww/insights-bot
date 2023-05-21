@@ -216,6 +216,20 @@ func (chc *ChatHistoriesCreate) SetNillableEmbedded(b *bool) *ChatHistoriesCreat
 	return chc
 }
 
+// SetFromPlatform sets the "from_platform" field.
+func (chc *ChatHistoriesCreate) SetFromPlatform(i int) *ChatHistoriesCreate {
+	chc.mutation.SetFromPlatform(i)
+	return chc
+}
+
+// SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
+func (chc *ChatHistoriesCreate) SetNillableFromPlatform(i *int) *ChatHistoriesCreate {
+	if i != nil {
+		chc.SetFromPlatform(*i)
+	}
+	return chc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (chc *ChatHistoriesCreate) SetCreatedAt(i int64) *ChatHistoriesCreate {
 	chc.mutation.SetCreatedAt(i)
@@ -349,6 +363,10 @@ func (chc *ChatHistoriesCreate) defaults() {
 		v := chathistories.DefaultEmbedded
 		chc.mutation.SetEmbedded(v)
 	}
+	if _, ok := chc.mutation.FromPlatform(); !ok {
+		v := chathistories.DefaultFromPlatform
+		chc.mutation.SetFromPlatform(v)
+	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
 		v := chathistories.DefaultCreatedAt()
 		chc.mutation.SetCreatedAt(v)
@@ -406,6 +424,9 @@ func (chc *ChatHistoriesCreate) check() error {
 	}
 	if _, ok := chc.mutation.Embedded(); !ok {
 		return &ValidationError{Name: "embedded", err: errors.New(`ent: missing required field "ChatHistories.embedded"`)}
+	}
+	if _, ok := chc.mutation.FromPlatform(); !ok {
+		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "ChatHistories.from_platform"`)}
 	}
 	if _, ok := chc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ChatHistories.created_at"`)}
@@ -504,6 +525,10 @@ func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSp
 	if value, ok := chc.mutation.Embedded(); ok {
 		_spec.SetField(chathistories.FieldEmbedded, field.TypeBool, value)
 		_node.Embedded = value
+	}
+	if value, ok := chc.mutation.FromPlatform(); ok {
+		_spec.SetField(chathistories.FieldFromPlatform, field.TypeInt, value)
+		_node.FromPlatform = value
 	}
 	if value, ok := chc.mutation.CreatedAt(); ok {
 		_spec.SetField(chathistories.FieldCreatedAt, field.TypeInt64, value)

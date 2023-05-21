@@ -15,6 +15,8 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
+	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 
@@ -28,6 +30,10 @@ type Client struct {
 	Schema *migrate.Schema
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
+	// LogChatHistoriesRecap is the client for interacting with the LogChatHistoriesRecap builders.
+	LogChatHistoriesRecap *LogChatHistoriesRecapClient
+	// LogSummarizations is the client for interacting with the LogSummarizations builders.
+	LogSummarizations *LogSummarizationsClient
 	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
 	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
@@ -46,6 +52,8 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ChatHistories = NewChatHistoriesClient(c.config)
+	c.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(c.config)
+	c.LogSummarizations = NewLogSummarizationsClient(c.config)
 	c.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(c.config)
 	c.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(c.config)
 }
@@ -133,6 +141,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
+		LogChatHistoriesRecap:    NewLogChatHistoriesRecapClient(cfg),
+		LogSummarizations:        NewLogSummarizationsClient(cfg),
 		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
@@ -155,6 +165,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                      ctx,
 		config:                   cfg,
 		ChatHistories:            NewChatHistoriesClient(cfg),
+		LogChatHistoriesRecap:    NewLogChatHistoriesRecapClient(cfg),
+		LogSummarizations:        NewLogSummarizationsClient(cfg),
 		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
 		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
@@ -186,6 +198,8 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	c.ChatHistories.Use(hooks...)
+	c.LogChatHistoriesRecap.Use(hooks...)
+	c.LogSummarizations.Use(hooks...)
 	c.SlackOAuthCredentials.Use(hooks...)
 	c.TelegramChatFeatureFlags.Use(hooks...)
 }
@@ -194,6 +208,8 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	c.ChatHistories.Intercept(interceptors...)
+	c.LogChatHistoriesRecap.Intercept(interceptors...)
+	c.LogSummarizations.Intercept(interceptors...)
 	c.SlackOAuthCredentials.Intercept(interceptors...)
 	c.TelegramChatFeatureFlags.Intercept(interceptors...)
 }
@@ -203,6 +219,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *ChatHistoriesMutation:
 		return c.ChatHistories.mutate(ctx, m)
+	case *LogChatHistoriesRecapMutation:
+		return c.LogChatHistoriesRecap.mutate(ctx, m)
+	case *LogSummarizationsMutation:
+		return c.LogSummarizations.mutate(ctx, m)
 	case *SlackOAuthCredentialsMutation:
 		return c.SlackOAuthCredentials.mutate(ctx, m)
 	case *TelegramChatFeatureFlagsMutation:
@@ -327,6 +347,242 @@ func (c *ChatHistoriesClient) mutate(ctx context.Context, m *ChatHistoriesMutati
 		return (&ChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ChatHistories mutation op: %q", m.Op())
+	}
+}
+
+// LogChatHistoriesRecapClient is a client for the LogChatHistoriesRecap schema.
+type LogChatHistoriesRecapClient struct {
+	config
+}
+
+// NewLogChatHistoriesRecapClient returns a client for the LogChatHistoriesRecap from the given config.
+func NewLogChatHistoriesRecapClient(c config) *LogChatHistoriesRecapClient {
+	return &LogChatHistoriesRecapClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `logchathistoriesrecap.Hooks(f(g(h())))`.
+func (c *LogChatHistoriesRecapClient) Use(hooks ...Hook) {
+	c.hooks.LogChatHistoriesRecap = append(c.hooks.LogChatHistoriesRecap, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `logchathistoriesrecap.Intercept(f(g(h())))`.
+func (c *LogChatHistoriesRecapClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LogChatHistoriesRecap = append(c.inters.LogChatHistoriesRecap, interceptors...)
+}
+
+// Create returns a builder for creating a LogChatHistoriesRecap entity.
+func (c *LogChatHistoriesRecapClient) Create() *LogChatHistoriesRecapCreate {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpCreate)
+	return &LogChatHistoriesRecapCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LogChatHistoriesRecap entities.
+func (c *LogChatHistoriesRecapClient) CreateBulk(builders ...*LogChatHistoriesRecapCreate) *LogChatHistoriesRecapCreateBulk {
+	return &LogChatHistoriesRecapCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LogChatHistoriesRecap.
+func (c *LogChatHistoriesRecapClient) Update() *LogChatHistoriesRecapUpdate {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpUpdate)
+	return &LogChatHistoriesRecapUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LogChatHistoriesRecapClient) UpdateOne(lchr *LogChatHistoriesRecap) *LogChatHistoriesRecapUpdateOne {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpUpdateOne, withLogChatHistoriesRecap(lchr))
+	return &LogChatHistoriesRecapUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LogChatHistoriesRecapClient) UpdateOneID(id uuid.UUID) *LogChatHistoriesRecapUpdateOne {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpUpdateOne, withLogChatHistoriesRecapID(id))
+	return &LogChatHistoriesRecapUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LogChatHistoriesRecap.
+func (c *LogChatHistoriesRecapClient) Delete() *LogChatHistoriesRecapDelete {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpDelete)
+	return &LogChatHistoriesRecapDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LogChatHistoriesRecapClient) DeleteOne(lchr *LogChatHistoriesRecap) *LogChatHistoriesRecapDeleteOne {
+	return c.DeleteOneID(lchr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LogChatHistoriesRecapClient) DeleteOneID(id uuid.UUID) *LogChatHistoriesRecapDeleteOne {
+	builder := c.Delete().Where(logchathistoriesrecap.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LogChatHistoriesRecapDeleteOne{builder}
+}
+
+// Query returns a query builder for LogChatHistoriesRecap.
+func (c *LogChatHistoriesRecapClient) Query() *LogChatHistoriesRecapQuery {
+	return &LogChatHistoriesRecapQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogChatHistoriesRecap},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LogChatHistoriesRecap entity by its id.
+func (c *LogChatHistoriesRecapClient) Get(ctx context.Context, id uuid.UUID) (*LogChatHistoriesRecap, error) {
+	return c.Query().Where(logchathistoriesrecap.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LogChatHistoriesRecapClient) GetX(ctx context.Context, id uuid.UUID) *LogChatHistoriesRecap {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LogChatHistoriesRecapClient) Hooks() []Hook {
+	return c.hooks.LogChatHistoriesRecap
+}
+
+// Interceptors returns the client interceptors.
+func (c *LogChatHistoriesRecapClient) Interceptors() []Interceptor {
+	return c.inters.LogChatHistoriesRecap
+}
+
+func (c *LogChatHistoriesRecapClient) mutate(ctx context.Context, m *LogChatHistoriesRecapMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LogChatHistoriesRecapCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LogChatHistoriesRecapUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LogChatHistoriesRecapUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LogChatHistoriesRecapDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LogChatHistoriesRecap mutation op: %q", m.Op())
+	}
+}
+
+// LogSummarizationsClient is a client for the LogSummarizations schema.
+type LogSummarizationsClient struct {
+	config
+}
+
+// NewLogSummarizationsClient returns a client for the LogSummarizations from the given config.
+func NewLogSummarizationsClient(c config) *LogSummarizationsClient {
+	return &LogSummarizationsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `logsummarizations.Hooks(f(g(h())))`.
+func (c *LogSummarizationsClient) Use(hooks ...Hook) {
+	c.hooks.LogSummarizations = append(c.hooks.LogSummarizations, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `logsummarizations.Intercept(f(g(h())))`.
+func (c *LogSummarizationsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.LogSummarizations = append(c.inters.LogSummarizations, interceptors...)
+}
+
+// Create returns a builder for creating a LogSummarizations entity.
+func (c *LogSummarizationsClient) Create() *LogSummarizationsCreate {
+	mutation := newLogSummarizationsMutation(c.config, OpCreate)
+	return &LogSummarizationsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of LogSummarizations entities.
+func (c *LogSummarizationsClient) CreateBulk(builders ...*LogSummarizationsCreate) *LogSummarizationsCreateBulk {
+	return &LogSummarizationsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for LogSummarizations.
+func (c *LogSummarizationsClient) Update() *LogSummarizationsUpdate {
+	mutation := newLogSummarizationsMutation(c.config, OpUpdate)
+	return &LogSummarizationsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *LogSummarizationsClient) UpdateOne(ls *LogSummarizations) *LogSummarizationsUpdateOne {
+	mutation := newLogSummarizationsMutation(c.config, OpUpdateOne, withLogSummarizations(ls))
+	return &LogSummarizationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *LogSummarizationsClient) UpdateOneID(id uuid.UUID) *LogSummarizationsUpdateOne {
+	mutation := newLogSummarizationsMutation(c.config, OpUpdateOne, withLogSummarizationsID(id))
+	return &LogSummarizationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for LogSummarizations.
+func (c *LogSummarizationsClient) Delete() *LogSummarizationsDelete {
+	mutation := newLogSummarizationsMutation(c.config, OpDelete)
+	return &LogSummarizationsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *LogSummarizationsClient) DeleteOne(ls *LogSummarizations) *LogSummarizationsDeleteOne {
+	return c.DeleteOneID(ls.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *LogSummarizationsClient) DeleteOneID(id uuid.UUID) *LogSummarizationsDeleteOne {
+	builder := c.Delete().Where(logsummarizations.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &LogSummarizationsDeleteOne{builder}
+}
+
+// Query returns a query builder for LogSummarizations.
+func (c *LogSummarizationsClient) Query() *LogSummarizationsQuery {
+	return &LogSummarizationsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeLogSummarizations},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a LogSummarizations entity by its id.
+func (c *LogSummarizationsClient) Get(ctx context.Context, id uuid.UUID) (*LogSummarizations, error) {
+	return c.Query().Where(logsummarizations.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *LogSummarizationsClient) GetX(ctx context.Context, id uuid.UUID) *LogSummarizations {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *LogSummarizationsClient) Hooks() []Hook {
+	return c.hooks.LogSummarizations
+}
+
+// Interceptors returns the client interceptors.
+func (c *LogSummarizationsClient) Interceptors() []Interceptor {
+	return c.inters.LogSummarizations
+}
+
+func (c *LogSummarizationsClient) mutate(ctx context.Context, m *LogSummarizationsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&LogSummarizationsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&LogSummarizationsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&LogSummarizationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&LogSummarizationsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown LogSummarizations mutation op: %q", m.Op())
 	}
 }
 
@@ -569,10 +825,12 @@ func (c *TelegramChatFeatureFlagsClient) mutate(ctx context.Context, m *Telegram
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ChatHistories, SlackOAuthCredentials, TelegramChatFeatureFlags []ent.Hook
+		ChatHistories, LogChatHistoriesRecap, LogSummarizations, SlackOAuthCredentials,
+		TelegramChatFeatureFlags []ent.Hook
 	}
 	inters struct {
-		ChatHistories, SlackOAuthCredentials, TelegramChatFeatureFlags []ent.Interceptor
+		ChatHistories, LogChatHistoriesRecap, LogSummarizations, SlackOAuthCredentials,
+		TelegramChatFeatureFlags []ent.Interceptor
 	}
 )
 

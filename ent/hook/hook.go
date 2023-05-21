@@ -21,6 +21,30 @@ func (f ChatHistoriesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ChatHistoriesMutation", m)
 }
 
+// The LogChatHistoriesRecapFunc type is an adapter to allow the use of ordinary
+// function as LogChatHistoriesRecap mutator.
+type LogChatHistoriesRecapFunc func(context.Context, *ent.LogChatHistoriesRecapMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LogChatHistoriesRecapFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LogChatHistoriesRecapMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogChatHistoriesRecapMutation", m)
+}
+
+// The LogSummarizationsFunc type is an adapter to allow the use of ordinary
+// function as LogSummarizations mutator.
+type LogSummarizationsFunc func(context.Context, *ent.LogSummarizationsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f LogSummarizationsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.LogSummarizationsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogSummarizationsMutation", m)
+}
+
 // The SlackOAuthCredentialsFunc type is an adapter to allow the use of ordinary
 // function as SlackOAuthCredentials mutator.
 type SlackOAuthCredentialsFunc func(context.Context, *ent.SlackOAuthCredentialsMutation) (ent.Value, error)

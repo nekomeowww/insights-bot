@@ -40,6 +40,8 @@ const (
 	FieldChattedAt = "chatted_at"
 	// FieldEmbedded holds the string denoting the embedded field in the database.
 	FieldEmbedded = "embedded"
+	// FieldFromPlatform holds the string denoting the from_platform field in the database.
+	FieldFromPlatform = "from_platform"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -65,6 +67,7 @@ var Columns = []string{
 	FieldRepliedToText,
 	FieldChattedAt,
 	FieldEmbedded,
+	FieldFromPlatform,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -108,6 +111,8 @@ var (
 	DefaultChattedAt func() int64
 	// DefaultEmbedded holds the default value on creation for the "embedded" field.
 	DefaultEmbedded bool
+	// DefaultFromPlatform holds the default value on creation for the "from_platform" field.
+	DefaultFromPlatform int
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -192,6 +197,11 @@ func ByChattedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByEmbedded orders the results by the embedded field.
 func ByEmbedded(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmbedded, opts...).ToFunc()
+}
+
+// ByFromPlatform orders the results by the from_platform field.
+func ByFromPlatform(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFromPlatform, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

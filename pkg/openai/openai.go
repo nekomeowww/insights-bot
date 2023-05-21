@@ -1,5 +1,7 @@
 package openai
 
+//go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 -generate
+
 import (
 	"context"
 	"fmt"
@@ -11,6 +13,7 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
+//counterfeiter:generate -o openaimock/mock_client.go --fake-name MockClient . Client
 type Client interface {
 	SplitContentBasedByTokenLimitations(textContent string, limits int) []string
 	SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error)

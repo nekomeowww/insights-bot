@@ -123,6 +123,11 @@ func Embedded(v bool) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldEQ(FieldEmbedded, v))
 }
 
+// FromPlatform applies equality check predicate on the "from_platform" field. It's identical to FromPlatformEQ.
+func FromPlatform(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldFromPlatform, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldEQ(FieldCreatedAt, v))
@@ -836,6 +841,46 @@ func EmbeddedEQ(v bool) predicate.ChatHistories {
 // EmbeddedNEQ applies the NEQ predicate on the "embedded" field.
 func EmbeddedNEQ(v bool) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldNEQ(FieldEmbedded, v))
+}
+
+// FromPlatformEQ applies the EQ predicate on the "from_platform" field.
+func FromPlatformEQ(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldFromPlatform, v))
+}
+
+// FromPlatformNEQ applies the NEQ predicate on the "from_platform" field.
+func FromPlatformNEQ(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNEQ(FieldFromPlatform, v))
+}
+
+// FromPlatformIn applies the In predicate on the "from_platform" field.
+func FromPlatformIn(vs ...int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldIn(FieldFromPlatform, vs...))
+}
+
+// FromPlatformNotIn applies the NotIn predicate on the "from_platform" field.
+func FromPlatformNotIn(vs ...int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNotIn(FieldFromPlatform, vs...))
+}
+
+// FromPlatformGT applies the GT predicate on the "from_platform" field.
+func FromPlatformGT(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGT(FieldFromPlatform, v))
+}
+
+// FromPlatformGTE applies the GTE predicate on the "from_platform" field.
+func FromPlatformGTE(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGTE(FieldFromPlatform, v))
+}
+
+// FromPlatformLT applies the LT predicate on the "from_platform" field.
+func FromPlatformLT(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLT(FieldFromPlatform, v))
+}
+
+// FromPlatformLTE applies the LTE predicate on the "from_platform" field.
+func FromPlatformLTE(v int) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLTE(FieldFromPlatform, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

@@ -32,7 +32,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 
 		assert.True(featureFlag.FeatureChatHistoriesRecap)
 
-		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, telegram.ChatTypeGroup)
+		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, telegram.ChatTypeGroup, "")
 		require.NoError(err)
 		assert.True(enabled)
 	})
@@ -54,7 +54,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		require.NotNil(featureFlag)
 		assert.False(featureFlag.FeatureChatHistoriesRecap)
 
-		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, telegram.ChatTypeGroup)
+		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, telegram.ChatTypeGroup, "")
 		require.NoError(err)
 		assert.False(enabled)
 	})

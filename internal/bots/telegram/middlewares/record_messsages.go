@@ -19,7 +19,7 @@ func RecordMessage(chatHistories *chathistories.Model, tgchats *tgchats.Model) f
 			return
 		}
 
-		enabled, err := tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, chatType)
+		enabled, err := tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, chatType, c.Update.Message.Chat.Title)
 		if err != nil {
 			c.Logger.Error(err)
 			return

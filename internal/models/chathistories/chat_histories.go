@@ -221,7 +221,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	return nil
 }
 
-func (m *Model) UpdateOneMessage(message *tgbotapi.Message) error {
+func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if message == nil {
 		return nil
 	}

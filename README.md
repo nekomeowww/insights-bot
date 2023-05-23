@@ -173,6 +173,16 @@ go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cmd/in
 docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 ```
 
+## Ports we use
+
+| Port | Description |
+|------|-------------|
+| 6060 | pprof Debug server |
+| 7069 | Health check server |
+| 7070 | Slack App/Bot webhook server |
+| 7071 | Telegram Bot webhook server |
+| 7072 | Discord Bot webhook server |
+
 ## Configurations
 
 ### Environment variables

@@ -57,7 +57,7 @@ func NewAutoRecapService() func(NewAutoRecapParams) (*AutoRecapService, error) {
 	}
 }
 
-func (s AutoRecapService) Check(ctx context.Context) error {
+func (s *AutoRecapService) Check(ctx context.Context) error {
 	return lo.Ternary(s.started, nil, fmt.Errorf("auto recap not started yet"))
 }
 

@@ -119,6 +119,69 @@ func (lsu *LogSummarizationsUpdate) AddFromPlatform(i int) *LogSummarizationsUpd
 	return lsu
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lsu *LogSummarizationsUpdate) SetPromptTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.ResetPromptTokenUsage()
+	lsu.mutation.SetPromptTokenUsage(i)
+	return lsu
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lsu *LogSummarizationsUpdate) SetNillablePromptTokenUsage(i *int) *LogSummarizationsUpdate {
+	if i != nil {
+		lsu.SetPromptTokenUsage(*i)
+	}
+	return lsu
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (lsu *LogSummarizationsUpdate) AddPromptTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.AddPromptTokenUsage(i)
+	return lsu
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lsu *LogSummarizationsUpdate) SetCompletionTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.ResetCompletionTokenUsage()
+	lsu.mutation.SetCompletionTokenUsage(i)
+	return lsu
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lsu *LogSummarizationsUpdate) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsUpdate {
+	if i != nil {
+		lsu.SetCompletionTokenUsage(*i)
+	}
+	return lsu
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (lsu *LogSummarizationsUpdate) AddCompletionTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.AddCompletionTokenUsage(i)
+	return lsu
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lsu *LogSummarizationsUpdate) SetTotalTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.ResetTotalTokenUsage()
+	lsu.mutation.SetTotalTokenUsage(i)
+	return lsu
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lsu *LogSummarizationsUpdate) SetNillableTotalTokenUsage(i *int) *LogSummarizationsUpdate {
+	if i != nil {
+		lsu.SetTotalTokenUsage(*i)
+	}
+	return lsu
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (lsu *LogSummarizationsUpdate) AddTotalTokenUsage(i int) *LogSummarizationsUpdate {
+	lsu.mutation.AddTotalTokenUsage(i)
+	return lsu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lsu *LogSummarizationsUpdate) SetCreatedAt(i int64) *LogSummarizationsUpdate {
 	lsu.mutation.ResetCreatedAt()
@@ -222,6 +285,24 @@ func (lsu *LogSummarizationsUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if value, ok := lsu.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.AddedPromptTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.AddedCompletionTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.AddedTotalTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
 	if value, ok := lsu.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
@@ -345,6 +426,69 @@ func (lsuo *LogSummarizationsUpdateOne) SetNillableFromPlatform(i *int) *LogSumm
 // AddFromPlatform adds i to the "from_platform" field.
 func (lsuo *LogSummarizationsUpdateOne) AddFromPlatform(i int) *LogSummarizationsUpdateOne {
 	lsuo.mutation.AddFromPlatform(i)
+	return lsuo
+}
+
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) SetPromptTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.ResetPromptTokenUsage()
+	lsuo.mutation.SetPromptTokenUsage(i)
+	return lsuo
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lsuo *LogSummarizationsUpdateOne) SetNillablePromptTokenUsage(i *int) *LogSummarizationsUpdateOne {
+	if i != nil {
+		lsuo.SetPromptTokenUsage(*i)
+	}
+	return lsuo
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) AddPromptTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.AddPromptTokenUsage(i)
+	return lsuo
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) SetCompletionTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.ResetCompletionTokenUsage()
+	lsuo.mutation.SetCompletionTokenUsage(i)
+	return lsuo
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lsuo *LogSummarizationsUpdateOne) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsUpdateOne {
+	if i != nil {
+		lsuo.SetCompletionTokenUsage(*i)
+	}
+	return lsuo
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) AddCompletionTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.AddCompletionTokenUsage(i)
+	return lsuo
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) SetTotalTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.ResetTotalTokenUsage()
+	lsuo.mutation.SetTotalTokenUsage(i)
+	return lsuo
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lsuo *LogSummarizationsUpdateOne) SetNillableTotalTokenUsage(i *int) *LogSummarizationsUpdateOne {
+	if i != nil {
+		lsuo.SetTotalTokenUsage(*i)
+	}
+	return lsuo
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (lsuo *LogSummarizationsUpdateOne) AddTotalTokenUsage(i int) *LogSummarizationsUpdateOne {
+	lsuo.mutation.AddTotalTokenUsage(i)
 	return lsuo
 }
 
@@ -481,6 +625,24 @@ func (lsuo *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *Log
 	}
 	if value, ok := lsuo.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.AddedPromptTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.AddedCompletionTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.AddedTotalTokenUsage(); ok {
+		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
 	if value, ok := lsuo.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)

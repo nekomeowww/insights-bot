@@ -29,6 +29,12 @@ type LogSummarizations struct {
 	ContentSummarizedOutputs string `json:"content_summarized_outputs,omitempty"`
 	// FromPlatform holds the value of the "from_platform" field.
 	FromPlatform int `json:"from_platform,omitempty"`
+	// PromptTokenUsage holds the value of the "prompt_token_usage" field.
+	PromptTokenUsage int `json:"prompt_token_usage,omitempty"`
+	// CompletionTokenUsage holds the value of the "completion_token_usage" field.
+	CompletionTokenUsage int `json:"completion_token_usage,omitempty"`
+	// TotalTokenUsage holds the value of the "total_token_usage" field.
+	TotalTokenUsage int `json:"total_token_usage,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -41,7 +47,7 @@ func (*LogSummarizations) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case logsummarizations.FieldFromPlatform, logsummarizations.FieldCreatedAt, logsummarizations.FieldUpdatedAt:
+		case logsummarizations.FieldFromPlatform, logsummarizations.FieldPromptTokenUsage, logsummarizations.FieldCompletionTokenUsage, logsummarizations.FieldTotalTokenUsage, logsummarizations.FieldCreatedAt, logsummarizations.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
 		case logsummarizations.FieldContentURL, logsummarizations.FieldContentTitle, logsummarizations.FieldContentAuthor, logsummarizations.FieldContentText, logsummarizations.FieldContentSummarizedOutputs:
 			values[i] = new(sql.NullString)
@@ -103,6 +109,24 @@ func (ls *LogSummarizations) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
 			} else if value.Valid {
 				ls.FromPlatform = int(value.Int64)
+			}
+		case logsummarizations.FieldPromptTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field prompt_token_usage", values[i])
+			} else if value.Valid {
+				ls.PromptTokenUsage = int(value.Int64)
+			}
+		case logsummarizations.FieldCompletionTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field completion_token_usage", values[i])
+			} else if value.Valid {
+				ls.CompletionTokenUsage = int(value.Int64)
+			}
+		case logsummarizations.FieldTotalTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
+			} else if value.Valid {
+				ls.TotalTokenUsage = int(value.Int64)
 			}
 		case logsummarizations.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -169,6 +193,15 @@ func (ls *LogSummarizations) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("from_platform=")
 	builder.WriteString(fmt.Sprintf("%v", ls.FromPlatform))
+	builder.WriteString(", ")
+	builder.WriteString("prompt_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", ls.PromptTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("completion_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", ls.CompletionTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("total_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", ls.TotalTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", ls.CreatedAt))

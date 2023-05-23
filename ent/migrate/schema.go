@@ -42,6 +42,9 @@ var (
 		{Name: "recap_inputs", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "recap_outputs", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "from_platform", Type: field.TypeInt, Default: 0},
+		{Name: "prompt_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}
@@ -60,6 +63,9 @@ var (
 		{Name: "content_text", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "content_summarized_outputs", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "from_platform", Type: field.TypeInt, Default: 0},
+		{Name: "prompt_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}

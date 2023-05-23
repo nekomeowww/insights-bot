@@ -1534,23 +1534,29 @@ func (m *ChatHistoriesMutation) ResetEdge(name string) error {
 // LogChatHistoriesRecapMutation represents an operation that mutates the LogChatHistoriesRecap nodes in the graph.
 type LogChatHistoriesRecapMutation struct {
 	config
-	op               Op
-	typ              string
-	id               *uuid.UUID
-	chat_id          *int64
-	addchat_id       *int64
-	recap_inputs     *string
-	recap_outputs    *string
-	from_platform    *int
-	addfrom_platform *int
-	created_at       *int64
-	addcreated_at    *int64
-	updated_at       *int64
-	addupdated_at    *int64
-	clearedFields    map[string]struct{}
-	done             bool
-	oldValue         func(context.Context) (*LogChatHistoriesRecap, error)
-	predicates       []predicate.LogChatHistoriesRecap
+	op                        Op
+	typ                       string
+	id                        *uuid.UUID
+	chat_id                   *int64
+	addchat_id                *int64
+	recap_inputs              *string
+	recap_outputs             *string
+	from_platform             *int
+	addfrom_platform          *int
+	prompt_token_usage        *int
+	addprompt_token_usage     *int
+	completion_token_usage    *int
+	addcompletion_token_usage *int
+	total_token_usage         *int
+	addtotal_token_usage      *int
+	created_at                *int64
+	addcreated_at             *int64
+	updated_at                *int64
+	addupdated_at             *int64
+	clearedFields             map[string]struct{}
+	done                      bool
+	oldValue                  func(context.Context) (*LogChatHistoriesRecap, error)
+	predicates                []predicate.LogChatHistoriesRecap
 }
 
 var _ ent.Mutation = (*LogChatHistoriesRecapMutation)(nil)
@@ -1841,6 +1847,174 @@ func (m *LogChatHistoriesRecapMutation) ResetFromPlatform() {
 	m.addfrom_platform = nil
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) SetPromptTokenUsage(i int) {
+	m.prompt_token_usage = &i
+	m.addprompt_token_usage = nil
+}
+
+// PromptTokenUsage returns the value of the "prompt_token_usage" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) PromptTokenUsage() (r int, exists bool) {
+	v := m.prompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPromptTokenUsage returns the old "prompt_token_usage" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldPromptTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPromptTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPromptTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPromptTokenUsage: %w", err)
+	}
+	return oldValue.PromptTokenUsage, nil
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) AddPromptTokenUsage(i int) {
+	if m.addprompt_token_usage != nil {
+		*m.addprompt_token_usage += i
+	} else {
+		m.addprompt_token_usage = &i
+	}
+}
+
+// AddedPromptTokenUsage returns the value that was added to the "prompt_token_usage" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedPromptTokenUsage() (r int, exists bool) {
+	v := m.addprompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPromptTokenUsage resets all changes to the "prompt_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) ResetPromptTokenUsage() {
+	m.prompt_token_usage = nil
+	m.addprompt_token_usage = nil
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) SetCompletionTokenUsage(i int) {
+	m.completion_token_usage = &i
+	m.addcompletion_token_usage = nil
+}
+
+// CompletionTokenUsage returns the value of the "completion_token_usage" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) CompletionTokenUsage() (r int, exists bool) {
+	v := m.completion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompletionTokenUsage returns the old "completion_token_usage" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldCompletionTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompletionTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompletionTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompletionTokenUsage: %w", err)
+	}
+	return oldValue.CompletionTokenUsage, nil
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) AddCompletionTokenUsage(i int) {
+	if m.addcompletion_token_usage != nil {
+		*m.addcompletion_token_usage += i
+	} else {
+		m.addcompletion_token_usage = &i
+	}
+}
+
+// AddedCompletionTokenUsage returns the value that was added to the "completion_token_usage" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedCompletionTokenUsage() (r int, exists bool) {
+	v := m.addcompletion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCompletionTokenUsage resets all changes to the "completion_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) ResetCompletionTokenUsage() {
+	m.completion_token_usage = nil
+	m.addcompletion_token_usage = nil
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) SetTotalTokenUsage(i int) {
+	m.total_token_usage = &i
+	m.addtotal_token_usage = nil
+}
+
+// TotalTokenUsage returns the value of the "total_token_usage" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) TotalTokenUsage() (r int, exists bool) {
+	v := m.total_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTotalTokenUsage returns the old "total_token_usage" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldTotalTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTotalTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTotalTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTotalTokenUsage: %w", err)
+	}
+	return oldValue.TotalTokenUsage, nil
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) AddTotalTokenUsage(i int) {
+	if m.addtotal_token_usage != nil {
+		*m.addtotal_token_usage += i
+	} else {
+		m.addtotal_token_usage = &i
+	}
+}
+
+// AddedTotalTokenUsage returns the value that was added to the "total_token_usage" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedTotalTokenUsage() (r int, exists bool) {
+	v := m.addtotal_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTotalTokenUsage resets all changes to the "total_token_usage" field.
+func (m *LogChatHistoriesRecapMutation) ResetTotalTokenUsage() {
+	m.total_token_usage = nil
+	m.addtotal_token_usage = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *LogChatHistoriesRecapMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -1987,7 +2161,7 @@ func (m *LogChatHistoriesRecapMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogChatHistoriesRecapMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 9)
 	if m.chat_id != nil {
 		fields = append(fields, logchathistoriesrecap.FieldChatID)
 	}
@@ -1999,6 +2173,15 @@ func (m *LogChatHistoriesRecapMutation) Fields() []string {
 	}
 	if m.from_platform != nil {
 		fields = append(fields, logchathistoriesrecap.FieldFromPlatform)
+	}
+	if m.prompt_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldPromptTokenUsage)
+	}
+	if m.completion_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldCompletionTokenUsage)
+	}
+	if m.total_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldTotalTokenUsage)
 	}
 	if m.created_at != nil {
 		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
@@ -2022,6 +2205,12 @@ func (m *LogChatHistoriesRecapMutation) Field(name string) (ent.Value, bool) {
 		return m.RecapOutputs()
 	case logchathistoriesrecap.FieldFromPlatform:
 		return m.FromPlatform()
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		return m.PromptTokenUsage()
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		return m.CompletionTokenUsage()
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		return m.TotalTokenUsage()
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.CreatedAt()
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2043,6 +2232,12 @@ func (m *LogChatHistoriesRecapMutation) OldField(ctx context.Context, name strin
 		return m.OldRecapOutputs(ctx)
 	case logchathistoriesrecap.FieldFromPlatform:
 		return m.OldFromPlatform(ctx)
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		return m.OldPromptTokenUsage(ctx)
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		return m.OldCompletionTokenUsage(ctx)
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		return m.OldTotalTokenUsage(ctx)
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2084,6 +2279,27 @@ func (m *LogChatHistoriesRecapMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetFromPlatform(v)
 		return nil
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPromptTokenUsage(v)
+		return nil
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompletionTokenUsage(v)
+		return nil
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTotalTokenUsage(v)
+		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
@@ -2112,6 +2328,15 @@ func (m *LogChatHistoriesRecapMutation) AddedFields() []string {
 	if m.addfrom_platform != nil {
 		fields = append(fields, logchathistoriesrecap.FieldFromPlatform)
 	}
+	if m.addprompt_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldPromptTokenUsage)
+	}
+	if m.addcompletion_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldCompletionTokenUsage)
+	}
+	if m.addtotal_token_usage != nil {
+		fields = append(fields, logchathistoriesrecap.FieldTotalTokenUsage)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
 	}
@@ -2130,6 +2355,12 @@ func (m *LogChatHistoriesRecapMutation) AddedField(name string) (ent.Value, bool
 		return m.AddedChatID()
 	case logchathistoriesrecap.FieldFromPlatform:
 		return m.AddedFromPlatform()
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		return m.AddedPromptTokenUsage()
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		return m.AddedCompletionTokenUsage()
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		return m.AddedTotalTokenUsage()
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2156,6 +2387,27 @@ func (m *LogChatHistoriesRecapMutation) AddField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFromPlatform(v)
+		return nil
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPromptTokenUsage(v)
+		return nil
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCompletionTokenUsage(v)
+		return nil
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTotalTokenUsage(v)
 		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -2209,6 +2461,15 @@ func (m *LogChatHistoriesRecapMutation) ResetField(name string) error {
 		return nil
 	case logchathistoriesrecap.FieldFromPlatform:
 		m.ResetFromPlatform()
+		return nil
+	case logchathistoriesrecap.FieldPromptTokenUsage:
+		m.ResetPromptTokenUsage()
+		return nil
+	case logchathistoriesrecap.FieldCompletionTokenUsage:
+		m.ResetCompletionTokenUsage()
+		return nil
+	case logchathistoriesrecap.FieldTotalTokenUsage:
+		m.ResetTotalTokenUsage()
 		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		m.ResetCreatedAt()
@@ -2281,6 +2542,12 @@ type LogSummarizationsMutation struct {
 	content_summarized_outputs *string
 	from_platform              *int
 	addfrom_platform           *int
+	prompt_token_usage         *int
+	addprompt_token_usage      *int
+	completion_token_usage     *int
+	addcompletion_token_usage  *int
+	total_token_usage          *int
+	addtotal_token_usage       *int
 	created_at                 *int64
 	addcreated_at              *int64
 	updated_at                 *int64
@@ -2631,6 +2898,174 @@ func (m *LogSummarizationsMutation) ResetFromPlatform() {
 	m.addfrom_platform = nil
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (m *LogSummarizationsMutation) SetPromptTokenUsage(i int) {
+	m.prompt_token_usage = &i
+	m.addprompt_token_usage = nil
+}
+
+// PromptTokenUsage returns the value of the "prompt_token_usage" field in the mutation.
+func (m *LogSummarizationsMutation) PromptTokenUsage() (r int, exists bool) {
+	v := m.prompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPromptTokenUsage returns the old "prompt_token_usage" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldPromptTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPromptTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPromptTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPromptTokenUsage: %w", err)
+	}
+	return oldValue.PromptTokenUsage, nil
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (m *LogSummarizationsMutation) AddPromptTokenUsage(i int) {
+	if m.addprompt_token_usage != nil {
+		*m.addprompt_token_usage += i
+	} else {
+		m.addprompt_token_usage = &i
+	}
+}
+
+// AddedPromptTokenUsage returns the value that was added to the "prompt_token_usage" field in this mutation.
+func (m *LogSummarizationsMutation) AddedPromptTokenUsage() (r int, exists bool) {
+	v := m.addprompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPromptTokenUsage resets all changes to the "prompt_token_usage" field.
+func (m *LogSummarizationsMutation) ResetPromptTokenUsage() {
+	m.prompt_token_usage = nil
+	m.addprompt_token_usage = nil
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (m *LogSummarizationsMutation) SetCompletionTokenUsage(i int) {
+	m.completion_token_usage = &i
+	m.addcompletion_token_usage = nil
+}
+
+// CompletionTokenUsage returns the value of the "completion_token_usage" field in the mutation.
+func (m *LogSummarizationsMutation) CompletionTokenUsage() (r int, exists bool) {
+	v := m.completion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompletionTokenUsage returns the old "completion_token_usage" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldCompletionTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompletionTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompletionTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompletionTokenUsage: %w", err)
+	}
+	return oldValue.CompletionTokenUsage, nil
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (m *LogSummarizationsMutation) AddCompletionTokenUsage(i int) {
+	if m.addcompletion_token_usage != nil {
+		*m.addcompletion_token_usage += i
+	} else {
+		m.addcompletion_token_usage = &i
+	}
+}
+
+// AddedCompletionTokenUsage returns the value that was added to the "completion_token_usage" field in this mutation.
+func (m *LogSummarizationsMutation) AddedCompletionTokenUsage() (r int, exists bool) {
+	v := m.addcompletion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCompletionTokenUsage resets all changes to the "completion_token_usage" field.
+func (m *LogSummarizationsMutation) ResetCompletionTokenUsage() {
+	m.completion_token_usage = nil
+	m.addcompletion_token_usage = nil
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (m *LogSummarizationsMutation) SetTotalTokenUsage(i int) {
+	m.total_token_usage = &i
+	m.addtotal_token_usage = nil
+}
+
+// TotalTokenUsage returns the value of the "total_token_usage" field in the mutation.
+func (m *LogSummarizationsMutation) TotalTokenUsage() (r int, exists bool) {
+	v := m.total_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTotalTokenUsage returns the old "total_token_usage" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldTotalTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTotalTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTotalTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTotalTokenUsage: %w", err)
+	}
+	return oldValue.TotalTokenUsage, nil
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (m *LogSummarizationsMutation) AddTotalTokenUsage(i int) {
+	if m.addtotal_token_usage != nil {
+		*m.addtotal_token_usage += i
+	} else {
+		m.addtotal_token_usage = &i
+	}
+}
+
+// AddedTotalTokenUsage returns the value that was added to the "total_token_usage" field in this mutation.
+func (m *LogSummarizationsMutation) AddedTotalTokenUsage() (r int, exists bool) {
+	v := m.addtotal_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTotalTokenUsage resets all changes to the "total_token_usage" field.
+func (m *LogSummarizationsMutation) ResetTotalTokenUsage() {
+	m.total_token_usage = nil
+	m.addtotal_token_usage = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *LogSummarizationsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -2777,7 +3212,7 @@ func (m *LogSummarizationsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogSummarizationsMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 11)
 	if m.content_url != nil {
 		fields = append(fields, logsummarizations.FieldContentURL)
 	}
@@ -2795,6 +3230,15 @@ func (m *LogSummarizationsMutation) Fields() []string {
 	}
 	if m.from_platform != nil {
 		fields = append(fields, logsummarizations.FieldFromPlatform)
+	}
+	if m.prompt_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldPromptTokenUsage)
+	}
+	if m.completion_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldCompletionTokenUsage)
+	}
+	if m.total_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldTotalTokenUsage)
 	}
 	if m.created_at != nil {
 		fields = append(fields, logsummarizations.FieldCreatedAt)
@@ -2822,6 +3266,12 @@ func (m *LogSummarizationsMutation) Field(name string) (ent.Value, bool) {
 		return m.ContentSummarizedOutputs()
 	case logsummarizations.FieldFromPlatform:
 		return m.FromPlatform()
+	case logsummarizations.FieldPromptTokenUsage:
+		return m.PromptTokenUsage()
+	case logsummarizations.FieldCompletionTokenUsage:
+		return m.CompletionTokenUsage()
+	case logsummarizations.FieldTotalTokenUsage:
+		return m.TotalTokenUsage()
 	case logsummarizations.FieldCreatedAt:
 		return m.CreatedAt()
 	case logsummarizations.FieldUpdatedAt:
@@ -2847,6 +3297,12 @@ func (m *LogSummarizationsMutation) OldField(ctx context.Context, name string) (
 		return m.OldContentSummarizedOutputs(ctx)
 	case logsummarizations.FieldFromPlatform:
 		return m.OldFromPlatform(ctx)
+	case logsummarizations.FieldPromptTokenUsage:
+		return m.OldPromptTokenUsage(ctx)
+	case logsummarizations.FieldCompletionTokenUsage:
+		return m.OldCompletionTokenUsage(ctx)
+	case logsummarizations.FieldTotalTokenUsage:
+		return m.OldTotalTokenUsage(ctx)
 	case logsummarizations.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case logsummarizations.FieldUpdatedAt:
@@ -2902,6 +3358,27 @@ func (m *LogSummarizationsMutation) SetField(name string, value ent.Value) error
 		}
 		m.SetFromPlatform(v)
 		return nil
+	case logsummarizations.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPromptTokenUsage(v)
+		return nil
+	case logsummarizations.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompletionTokenUsage(v)
+		return nil
+	case logsummarizations.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTotalTokenUsage(v)
+		return nil
 	case logsummarizations.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
@@ -2927,6 +3404,15 @@ func (m *LogSummarizationsMutation) AddedFields() []string {
 	if m.addfrom_platform != nil {
 		fields = append(fields, logsummarizations.FieldFromPlatform)
 	}
+	if m.addprompt_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldPromptTokenUsage)
+	}
+	if m.addcompletion_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldCompletionTokenUsage)
+	}
+	if m.addtotal_token_usage != nil {
+		fields = append(fields, logsummarizations.FieldTotalTokenUsage)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, logsummarizations.FieldCreatedAt)
 	}
@@ -2943,6 +3429,12 @@ func (m *LogSummarizationsMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case logsummarizations.FieldFromPlatform:
 		return m.AddedFromPlatform()
+	case logsummarizations.FieldPromptTokenUsage:
+		return m.AddedPromptTokenUsage()
+	case logsummarizations.FieldCompletionTokenUsage:
+		return m.AddedCompletionTokenUsage()
+	case logsummarizations.FieldTotalTokenUsage:
+		return m.AddedTotalTokenUsage()
 	case logsummarizations.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case logsummarizations.FieldUpdatedAt:
@@ -2962,6 +3454,27 @@ func (m *LogSummarizationsMutation) AddField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddFromPlatform(v)
+		return nil
+	case logsummarizations.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPromptTokenUsage(v)
+		return nil
+	case logsummarizations.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCompletionTokenUsage(v)
+		return nil
+	case logsummarizations.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTotalTokenUsage(v)
 		return nil
 	case logsummarizations.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -3021,6 +3534,15 @@ func (m *LogSummarizationsMutation) ResetField(name string) error {
 		return nil
 	case logsummarizations.FieldFromPlatform:
 		m.ResetFromPlatform()
+		return nil
+	case logsummarizations.FieldPromptTokenUsage:
+		m.ResetPromptTokenUsage()
+		return nil
+	case logsummarizations.FieldCompletionTokenUsage:
+		m.ResetCompletionTokenUsage()
+		return nil
+	case logsummarizations.FieldTotalTokenUsage:
+		m.ResetTotalTokenUsage()
 		return nil
 	case logsummarizations.FieldCreatedAt:
 		m.ResetCreatedAt()

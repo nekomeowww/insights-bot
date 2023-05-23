@@ -76,6 +76,48 @@ func (lchrc *LogChatHistoriesRecapCreate) SetNillableFromPlatform(i *int) *LogCh
 	return lchrc
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lchrc *LogChatHistoriesRecapCreate) SetPromptTokenUsage(i int) *LogChatHistoriesRecapCreate {
+	lchrc.mutation.SetPromptTokenUsage(i)
+	return lchrc
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lchrc *LogChatHistoriesRecapCreate) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapCreate {
+	if i != nil {
+		lchrc.SetPromptTokenUsage(*i)
+	}
+	return lchrc
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lchrc *LogChatHistoriesRecapCreate) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapCreate {
+	lchrc.mutation.SetCompletionTokenUsage(i)
+	return lchrc
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lchrc *LogChatHistoriesRecapCreate) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapCreate {
+	if i != nil {
+		lchrc.SetCompletionTokenUsage(*i)
+	}
+	return lchrc
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lchrc *LogChatHistoriesRecapCreate) SetTotalTokenUsage(i int) *LogChatHistoriesRecapCreate {
+	lchrc.mutation.SetTotalTokenUsage(i)
+	return lchrc
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lchrc *LogChatHistoriesRecapCreate) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapCreate {
+	if i != nil {
+		lchrc.SetTotalTokenUsage(*i)
+	}
+	return lchrc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchrc *LogChatHistoriesRecapCreate) SetCreatedAt(i int64) *LogChatHistoriesRecapCreate {
 	lchrc.mutation.SetCreatedAt(i)
@@ -169,6 +211,18 @@ func (lchrc *LogChatHistoriesRecapCreate) defaults() {
 		v := logchathistoriesrecap.DefaultFromPlatform
 		lchrc.mutation.SetFromPlatform(v)
 	}
+	if _, ok := lchrc.mutation.PromptTokenUsage(); !ok {
+		v := logchathistoriesrecap.DefaultPromptTokenUsage
+		lchrc.mutation.SetPromptTokenUsage(v)
+	}
+	if _, ok := lchrc.mutation.CompletionTokenUsage(); !ok {
+		v := logchathistoriesrecap.DefaultCompletionTokenUsage
+		lchrc.mutation.SetCompletionTokenUsage(v)
+	}
+	if _, ok := lchrc.mutation.TotalTokenUsage(); !ok {
+		v := logchathistoriesrecap.DefaultTotalTokenUsage
+		lchrc.mutation.SetTotalTokenUsage(v)
+	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		v := logchathistoriesrecap.DefaultCreatedAt()
 		lchrc.mutation.SetCreatedAt(v)
@@ -196,6 +250,15 @@ func (lchrc *LogChatHistoriesRecapCreate) check() error {
 	}
 	if _, ok := lchrc.mutation.FromPlatform(); !ok {
 		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.from_platform"`)}
+	}
+	if _, ok := lchrc.mutation.PromptTokenUsage(); !ok {
+		return &ValidationError{Name: "prompt_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.prompt_token_usage"`)}
+	}
+	if _, ok := lchrc.mutation.CompletionTokenUsage(); !ok {
+		return &ValidationError{Name: "completion_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.completion_token_usage"`)}
+	}
+	if _, ok := lchrc.mutation.TotalTokenUsage(); !ok {
+		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.total_token_usage"`)}
 	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.created_at"`)}
@@ -254,6 +317,18 @@ func (lchrc *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, 
 	if value, ok := lchrc.mutation.FromPlatform(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 		_node.FromPlatform = value
+	}
+	if value, ok := lchrc.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
+		_node.PromptTokenUsage = value
+	}
+	if value, ok := lchrc.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
+		_node.CompletionTokenUsage = value
+	}
+	if value, ok := lchrc.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
+		_node.TotalTokenUsage = value
 	}
 	if value, ok := lchrc.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

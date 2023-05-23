@@ -104,6 +104,48 @@ func (lsc *LogSummarizationsCreate) SetNillableFromPlatform(i *int) *LogSummariz
 	return lsc
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lsc *LogSummarizationsCreate) SetPromptTokenUsage(i int) *LogSummarizationsCreate {
+	lsc.mutation.SetPromptTokenUsage(i)
+	return lsc
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lsc *LogSummarizationsCreate) SetNillablePromptTokenUsage(i *int) *LogSummarizationsCreate {
+	if i != nil {
+		lsc.SetPromptTokenUsage(*i)
+	}
+	return lsc
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lsc *LogSummarizationsCreate) SetCompletionTokenUsage(i int) *LogSummarizationsCreate {
+	lsc.mutation.SetCompletionTokenUsage(i)
+	return lsc
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lsc *LogSummarizationsCreate) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsCreate {
+	if i != nil {
+		lsc.SetCompletionTokenUsage(*i)
+	}
+	return lsc
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lsc *LogSummarizationsCreate) SetTotalTokenUsage(i int) *LogSummarizationsCreate {
+	lsc.mutation.SetTotalTokenUsage(i)
+	return lsc
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lsc *LogSummarizationsCreate) SetNillableTotalTokenUsage(i *int) *LogSummarizationsCreate {
+	if i != nil {
+		lsc.SetTotalTokenUsage(*i)
+	}
+	return lsc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lsc *LogSummarizationsCreate) SetCreatedAt(i int64) *LogSummarizationsCreate {
 	lsc.mutation.SetCreatedAt(i)
@@ -205,6 +247,18 @@ func (lsc *LogSummarizationsCreate) defaults() {
 		v := logsummarizations.DefaultFromPlatform
 		lsc.mutation.SetFromPlatform(v)
 	}
+	if _, ok := lsc.mutation.PromptTokenUsage(); !ok {
+		v := logsummarizations.DefaultPromptTokenUsage
+		lsc.mutation.SetPromptTokenUsage(v)
+	}
+	if _, ok := lsc.mutation.CompletionTokenUsage(); !ok {
+		v := logsummarizations.DefaultCompletionTokenUsage
+		lsc.mutation.SetCompletionTokenUsage(v)
+	}
+	if _, ok := lsc.mutation.TotalTokenUsage(); !ok {
+		v := logsummarizations.DefaultTotalTokenUsage
+		lsc.mutation.SetTotalTokenUsage(v)
+	}
 	if _, ok := lsc.mutation.CreatedAt(); !ok {
 		v := logsummarizations.DefaultCreatedAt()
 		lsc.mutation.SetCreatedAt(v)
@@ -238,6 +292,15 @@ func (lsc *LogSummarizationsCreate) check() error {
 	}
 	if _, ok := lsc.mutation.FromPlatform(); !ok {
 		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "LogSummarizations.from_platform"`)}
+	}
+	if _, ok := lsc.mutation.PromptTokenUsage(); !ok {
+		return &ValidationError{Name: "prompt_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.prompt_token_usage"`)}
+	}
+	if _, ok := lsc.mutation.CompletionTokenUsage(); !ok {
+		return &ValidationError{Name: "completion_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.completion_token_usage"`)}
+	}
+	if _, ok := lsc.mutation.TotalTokenUsage(); !ok {
+		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.total_token_usage"`)}
 	}
 	if _, ok := lsc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogSummarizations.created_at"`)}
@@ -304,6 +367,18 @@ func (lsc *LogSummarizationsCreate) createSpec() (*LogSummarizations, *sqlgraph.
 	if value, ok := lsc.mutation.FromPlatform(); ok {
 		_spec.SetField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 		_node.FromPlatform = value
+	}
+	if value, ok := lsc.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
+		_node.PromptTokenUsage = value
+	}
+	if value, ok := lsc.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
+		_node.CompletionTokenUsage = value
+	}
+	if value, ok := lsc.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
+		_node.TotalTokenUsage = value
 	}
 	if value, ok := lsc.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)

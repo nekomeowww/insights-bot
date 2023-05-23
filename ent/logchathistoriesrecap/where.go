@@ -73,6 +73,21 @@ func FromPlatform(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldFromPlatform, v))
 }
 
+// PromptTokenUsage applies equality check predicate on the "prompt_token_usage" field. It's identical to PromptTokenUsageEQ.
+func PromptTokenUsage(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldPromptTokenUsage, v))
+}
+
+// CompletionTokenUsage applies equality check predicate on the "completion_token_usage" field. It's identical to CompletionTokenUsageEQ.
+func CompletionTokenUsage(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldCompletionTokenUsage, v))
+}
+
+// TotalTokenUsage applies equality check predicate on the "total_token_usage" field. It's identical to TotalTokenUsageEQ.
+func TotalTokenUsage(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldTotalTokenUsage, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldCreatedAt, v))
@@ -291,6 +306,126 @@ func FromPlatformLT(v int) predicate.LogChatHistoriesRecap {
 // FromPlatformLTE applies the LTE predicate on the "from_platform" field.
 func FromPlatformLTE(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldFromPlatform, v))
+}
+
+// PromptTokenUsageEQ applies the EQ predicate on the "prompt_token_usage" field.
+func PromptTokenUsageEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldPromptTokenUsage, v))
+}
+
+// PromptTokenUsageNEQ applies the NEQ predicate on the "prompt_token_usage" field.
+func PromptTokenUsageNEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNEQ(FieldPromptTokenUsage, v))
+}
+
+// PromptTokenUsageIn applies the In predicate on the "prompt_token_usage" field.
+func PromptTokenUsageIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldIn(FieldPromptTokenUsage, vs...))
+}
+
+// PromptTokenUsageNotIn applies the NotIn predicate on the "prompt_token_usage" field.
+func PromptTokenUsageNotIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNotIn(FieldPromptTokenUsage, vs...))
+}
+
+// PromptTokenUsageGT applies the GT predicate on the "prompt_token_usage" field.
+func PromptTokenUsageGT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGT(FieldPromptTokenUsage, v))
+}
+
+// PromptTokenUsageGTE applies the GTE predicate on the "prompt_token_usage" field.
+func PromptTokenUsageGTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGTE(FieldPromptTokenUsage, v))
+}
+
+// PromptTokenUsageLT applies the LT predicate on the "prompt_token_usage" field.
+func PromptTokenUsageLT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLT(FieldPromptTokenUsage, v))
+}
+
+// PromptTokenUsageLTE applies the LTE predicate on the "prompt_token_usage" field.
+func PromptTokenUsageLTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldPromptTokenUsage, v))
+}
+
+// CompletionTokenUsageEQ applies the EQ predicate on the "completion_token_usage" field.
+func CompletionTokenUsageEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldCompletionTokenUsage, v))
+}
+
+// CompletionTokenUsageNEQ applies the NEQ predicate on the "completion_token_usage" field.
+func CompletionTokenUsageNEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNEQ(FieldCompletionTokenUsage, v))
+}
+
+// CompletionTokenUsageIn applies the In predicate on the "completion_token_usage" field.
+func CompletionTokenUsageIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldIn(FieldCompletionTokenUsage, vs...))
+}
+
+// CompletionTokenUsageNotIn applies the NotIn predicate on the "completion_token_usage" field.
+func CompletionTokenUsageNotIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNotIn(FieldCompletionTokenUsage, vs...))
+}
+
+// CompletionTokenUsageGT applies the GT predicate on the "completion_token_usage" field.
+func CompletionTokenUsageGT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGT(FieldCompletionTokenUsage, v))
+}
+
+// CompletionTokenUsageGTE applies the GTE predicate on the "completion_token_usage" field.
+func CompletionTokenUsageGTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGTE(FieldCompletionTokenUsage, v))
+}
+
+// CompletionTokenUsageLT applies the LT predicate on the "completion_token_usage" field.
+func CompletionTokenUsageLT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLT(FieldCompletionTokenUsage, v))
+}
+
+// CompletionTokenUsageLTE applies the LTE predicate on the "completion_token_usage" field.
+func CompletionTokenUsageLTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldCompletionTokenUsage, v))
+}
+
+// TotalTokenUsageEQ applies the EQ predicate on the "total_token_usage" field.
+func TotalTokenUsageEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldTotalTokenUsage, v))
+}
+
+// TotalTokenUsageNEQ applies the NEQ predicate on the "total_token_usage" field.
+func TotalTokenUsageNEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNEQ(FieldTotalTokenUsage, v))
+}
+
+// TotalTokenUsageIn applies the In predicate on the "total_token_usage" field.
+func TotalTokenUsageIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldIn(FieldTotalTokenUsage, vs...))
+}
+
+// TotalTokenUsageNotIn applies the NotIn predicate on the "total_token_usage" field.
+func TotalTokenUsageNotIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNotIn(FieldTotalTokenUsage, vs...))
+}
+
+// TotalTokenUsageGT applies the GT predicate on the "total_token_usage" field.
+func TotalTokenUsageGT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGT(FieldTotalTokenUsage, v))
+}
+
+// TotalTokenUsageGTE applies the GTE predicate on the "total_token_usage" field.
+func TotalTokenUsageGTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGTE(FieldTotalTokenUsage, v))
+}
+
+// TotalTokenUsageLT applies the LT predicate on the "total_token_usage" field.
+func TotalTokenUsageLT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLT(FieldTotalTokenUsage, v))
+}
+
+// TotalTokenUsageLTE applies the LTE predicate on the "total_token_usage" field.
+func TotalTokenUsageLTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldTotalTokenUsage, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

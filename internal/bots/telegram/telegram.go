@@ -41,6 +41,8 @@ func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 	return func(param NewBotParam) (*tgbot.BotService, error) {
 		dispatcher := param.Dispatcher
 		dispatcher.Use(middlewares.RecordMessage(param.ChatHistories, param.TgChats))
+		dispatcher.Use(middlewares.SyncWithEditedMessage(param.ChatHistories))
+
 		param.Handlers.InstallAll()
 
 		bot, err := tgbot.NewBotService(

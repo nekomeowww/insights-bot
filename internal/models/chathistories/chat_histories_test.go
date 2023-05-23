@@ -125,6 +125,44 @@ func TestSaveOneTelegramChatHistory(t *testing.T) {
 	assert.Equal(time.Unix(int64(message.Date), 0).UnixMilli(), chatHistory.ChattedAt)
 }
 
+func TestUpdateOneTelegramChatHistory(t *testing.T) {
+	assert := assert.New(t)
+	require := require.New(t)
+
+	message := &tgbotapi.Message{
+		MessageID: int(utils.RandomInt64()),
+		From: &tgbotapi.User{
+			ID:        utils.RandomInt64(),
+			FirstName: utils.RandomHashString(5),
+			UserName:  utils.RandomHashString(10),
+		},
+		Chat: &tgbotapi.Chat{
+			ID: utils.RandomInt64(),
+		},
+		Date: int(time.Now().Unix()),
+		Text: utils.RandomHashString(10),
+	}
+	err := model.SaveOneTelegramChatHistory(message)
+	require.NoError(err)
+
+	message.Text = utils.RandomHashString(10)
+	err = model.UpdateOneTelegramChatHistory(message)
+	require.NoError(err)
+
+	chatHistory, err := model.ent.ChatHistories.
+		Query().
+		Where(
+			chathistories.ChatID(message.Chat.ID),
+			chathistories.MessageID(int64(message.MessageID)),
+		).
+		First(context.Background())
+	require.NoError(err)
+	require.NotNil(chatHistory)
+
+	assert.Equal(message.Chat.ID, chatHistory.ChatID)
+	assert.Equal(message.Text, chatHistory.Text)
+}
+
 func TestFindLastOneHourChatHistories(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
@@ -289,8 +327,7 @@ func TestFormatFullNameAndUsername(t *testing.T) {
 			result:   "example_username",
 		},
 		{
-			name: `full name longer than 10 chars
-			AND username is empty`,
+			name:     `full name longer than 10 chars AND username is empty`,
 			fullName: "A Very Long Full Name",
 			username: "",
 			result:   "A Very Long Full Name",

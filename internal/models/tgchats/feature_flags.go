@@ -2,12 +2,14 @@ package tgchats
 
 import (
 	"context"
+	"time"
 
 	"github.com/samber/lo"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
+	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
 )
 
 func (m *Model) findOneFeatureFlag(chatID int64, chatType telegram.ChatType, chatTitle string) (*ent.TelegramChatFeatureFlags, error) {
@@ -145,4 +147,52 @@ func (m *Model) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
 	return lo.Map(featureFlagsChats, func(featureFlags *ent.TelegramChatFeatureFlags, _ int) int64 {
 		return featureFlags.ChatID
 	}), nil
+}
+
+func (m *Model) QueueSendChatHistoriesRecapTask() {
+	chatIDs, err := m.ListChatHistoriesRecapEnabledChats()
+	if err != nil {
+		m.logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
+		return
+	}
+
+	for _, chatID := range chatIDs {
+		err = m.QueueOneSendChatHistoriesRecapTaskForChatID(chatID)
+		if err != nil {
+			m.logger.Errorf("failed to queue send chat histories recap task: %v", err)
+			continue
+		}
+	}
+}
+
+func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	now := time.Now()
+
+	location := time.UTC
+	if m.config.TimezoneShiftSeconds > 0 {
+		location = time.FixedZone("Local", int(m.config.TimezoneShiftSeconds))
+	}
+
+	scheduleTargets := []int64{2, 8, 14, 20} // queue for 02:00, 08:00, 14:00, 20:00
+	scheduleSets := make([]time.Time, 0, len(scheduleTargets))
+
+	for _, target := range scheduleTargets {
+		if now.Hour() < int(target) {
+			scheduleSets = append(scheduleSets, time.Date(now.Year(), now.Month(), now.Day(), int(target), 0, 0, 0, location))
+			break
+		}
+	}
+	if len(scheduleSets) == 0 {
+		scheduleSets = append(scheduleSets, time.Date(now.Year(), now.Month(), now.Day()+1, int(scheduleTargets[0]), 0, 0, 0, location))
+	}
+
+	for _, schedule := range scheduleSets {
+		m.logger.Infof("scheduled one send chat histories recap task for %d at %s", chatID, schedule)
+		return m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{ChatID: chatID}, schedule.UnixMilli())
+	}
+
+	return nil
 }

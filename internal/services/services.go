@@ -10,7 +10,7 @@ import (
 func NewModules() fx.Option {
 	return fx.Options(
 		fx.Provide(health.NewHealth()),
-		fx.Provide(autorecap.NewAutoRecapService()),
 		fx.Provide(pprof.NewPprof()),
+		fx.Provide(autorecap.NewAutoRecapService()),
 	)
 }

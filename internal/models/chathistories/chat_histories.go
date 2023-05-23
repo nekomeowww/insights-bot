@@ -38,6 +38,8 @@ const (
 type NewModelParams struct {
 	fx.In
 
+	Lifecycle fx.Lifecycle
+
 	Logger *logger.Logger
 	Ent    *datastore.Ent
 	OpenAI openai.Client
@@ -52,12 +54,14 @@ type Model struct {
 
 func NewModel() func(NewModelParams) (*Model, error) {
 	return func(param NewModelParams) (*Model, error) {
-		return &Model{
+		m := &Model{
 			logger:   param.Logger,
 			ent:      param.Ent,
 			openAI:   param.OpenAI,
 			linkprev: linkprev.NewClient(),
-		}, nil
+		}
+
+		return m, nil
 	}
 }
 

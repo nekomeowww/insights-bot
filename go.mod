@@ -14,16 +14,17 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gookit/color v1.5.3
 	github.com/gorilla/schema v1.2.0
-	github.com/imroc/req/v3 v3.34.0
+	github.com/imroc/req/v3 v3.33.2
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.6.1
 	github.com/nekomeowww/go-pinecone v0.1.0
+	github.com/nekomeowww/timecapsule/v2 v2.1.0
 	github.com/pkoukk/tiktoken-go v0.1.1
-	github.com/robfig/cron/v3 v3.0.1
+	github.com/redis/rueidis v1.0.5
 	github.com/samber/lo v1.38.1
 	github.com/sashabaranov/go-openai v1.9.4
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.2
 	github.com/slack-go/slack v0.12.2
 	github.com/stretchr/testify v1.8.2
 	go.uber.org/fx v1.19.3
@@ -34,6 +35,8 @@ require (
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/disgoorg/json v1.0.0 // indirect
 	github.com/disgoorg/log v1.2.0 // indirect
 	github.com/disgoorg/snowflake/v2 v2.0.1 // indirect
@@ -65,9 +68,11 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
+	github.com/quic-go/qtls-go1-18 v0.2.0 // indirect
 	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
 	github.com/quic-go/qtls-go1-20 v0.2.2 // indirect
-	github.com/quic-go/quic-go v0.34.0 // indirect
+	github.com/quic-go/quic-go v0.32.0 // indirect
+	github.com/redis/go-redis/v9 v9.0.4 // indirect
 	github.com/samber/mo v1.8.0 // indirect
 	github.com/sasha-s/go-csync v0.0.0-20210812194225-61421b77c44b // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
@@ -79,7 +84,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/exp v0.0.0-20230510235704-dd950f8aeaea // indirect
+	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect

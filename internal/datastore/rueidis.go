@@ -31,11 +31,12 @@ func NewRedis() func(NewRedisParams) (*Redis, error) {
 		}
 
 		client, err := rueidis.NewClient(rueidis.ClientOption{
-			TLSConfig:   tlsConfig,
-			Username:    params.Configs.Redis.Username,
-			Password:    params.Configs.Redis.Password,
-			InitAddress: []string{net.JoinHostPort(params.Configs.Redis.Host, params.Configs.Redis.Port)},
-			SelectDB:    int(params.Configs.Redis.DB),
+			TLSConfig:    tlsConfig,
+			Username:     params.Configs.Redis.Username,
+			Password:     params.Configs.Redis.Password,
+			InitAddress:  []string{net.JoinHostPort(params.Configs.Redis.Host, params.Configs.Redis.Port)},
+			SelectDB:     int(params.Configs.Redis.DB),
+			DisableCache: !params.Configs.Redis.ClientCacheEnabled,
 		})
 		if err != nil {
 			return nil, err

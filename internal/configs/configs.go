@@ -33,12 +33,13 @@ const (
 
 	EnvDBConnectionString = "DB_CONNECTION_STR"
 
-	EnvRedisHost       = "REDIS_HOST"
-	EnvRedisPort       = "REDIS_PORT"
-	EnvRedisTLSEnabled = "REDIS_TLS_ENABLED"
-	EnvRedisUsername   = "REDIS_USERNAME"
-	EnvRedisPassword   = "REDIS_PASSWORD"
-	EnvRedisDB         = "REDIS_DB"
+	EnvRedisHost               = "REDIS_HOST"
+	EnvRedisPort               = "REDIS_PORT"
+	EnvRedisTLSEnabled         = "REDIS_TLS_ENABLED"
+	EnvRedisUsername           = "REDIS_USERNAME"
+	EnvRedisPassword           = "REDIS_PASSWORD"
+	EnvRedisDB                 = "REDIS_DB"
+	EnvRedisClientCacheEnabled = "REDIS_CLIENT_CACHE_ENABLED"
 
 	EnvLogLevel = "LOG_LEVEL"
 )
@@ -77,12 +78,13 @@ type SectionTelegram struct {
 }
 
 type SectionRedis struct {
-	Host       string
-	Port       string
-	TLSEnabled bool
-	Username   string
-	Password   string
-	DB         int64
+	Host               string
+	Port               string
+	TLSEnabled         bool
+	Username           string
+	Password           string
+	DB                 int64
+	ClientCacheEnabled bool
 }
 
 type Config struct {
@@ -151,12 +153,13 @@ func NewConfig() func() (*Config, error) {
 				PublicKey: getEnv(EnvDiscordBotPublicKey),
 			},
 			Redis: SectionRedis{
-				Host:       getEnv(EnvRedisHost),
-				Port:       getEnv(EnvRedisPort),
-				TLSEnabled: getEnv(EnvRedisTLSEnabled) == "true",
-				Username:   getEnv(EnvRedisUsername),
-				Password:   getEnv(EnvRedisPassword),
-				DB:         lo.Ternary(redisDBParseErr == nil, lo.Ternary(redisDB != 0, redisDB, 0), 0),
+				Host:               getEnv(EnvRedisHost),
+				Port:               getEnv(EnvRedisPort),
+				TLSEnabled:         getEnv(EnvRedisTLSEnabled) == "true" || getEnv(EnvRedisTLSEnabled) == "1",
+				Username:           getEnv(EnvRedisUsername),
+				Password:           getEnv(EnvRedisPassword),
+				DB:                 lo.Ternary(redisDBParseErr == nil, lo.Ternary(redisDB != 0, redisDB, 0), 0),
+				ClientCacheEnabled: getEnv(EnvRedisClientCacheEnabled) == "true" || getEnv(EnvRedisClientCacheEnabled) == "1",
 			},
 			LogLevel: lo.Ternary(envLogLevel == "", "info", envLogLevel),
 		}, nil
@@ -174,9 +177,10 @@ func NewTestConfig() func() *Config {
 				),
 			},
 			Redis: SectionRedis{
-				Host:       lo.Ternary(os.Getenv(EnvRedisHost) == "", "localhost", os.Getenv(EnvRedisHost)),
-				Port:       lo.Ternary(os.Getenv(EnvRedisPort) == "", "6379", os.Getenv(EnvRedisPort)),
-				TLSEnabled: false,
+				Host:               lo.Ternary(os.Getenv(EnvRedisHost) == "", "localhost", os.Getenv(EnvRedisHost)),
+				Port:               lo.Ternary(os.Getenv(EnvRedisPort) == "", "6379", os.Getenv(EnvRedisPort)),
+				TLSEnabled:         false,
+				ClientCacheEnabled: false,
 			},
 			LogLevel: "debug",
 		}

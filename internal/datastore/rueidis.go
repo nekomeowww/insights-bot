@@ -36,7 +36,7 @@ func NewRedis() func(NewRedisParams) (*Redis, error) {
 			Password:     params.Configs.Redis.Password,
 			InitAddress:  []string{net.JoinHostPort(params.Configs.Redis.Host, params.Configs.Redis.Port)},
 			SelectDB:     int(params.Configs.Redis.DB),
-			DisableCache: true,
+			DisableCache: !params.Configs.Redis.ClientCacheEnabled,
 		})
 		if err != nil {
 			return nil, err

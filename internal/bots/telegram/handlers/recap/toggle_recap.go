@@ -4,12 +4,13 @@ import (
 	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/samber/lo"
+	"go.uber.org/fx"
+
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/samber/lo"
-	"go.uber.org/fx"
 )
 
 func checkTogglingRecapPermission(chatID, userID int64, update tgbotapi.Update, bot *tgbot.Bot, enable bool) error {
@@ -131,7 +132,10 @@ func (h *EnableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, er
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
 	}
 
-	h.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(c.Update.Message.Chat.ID)
+	err = h.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(c.Update.Message.Chat.ID)
+	if err != nil {
+		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
+	}
 
 	return c.NewMessageReplyTo("聊天记录回顾功能已开启，开启后将会自动收集群组中的聊天记录并定时发送聊天回顾快报！", c.Update.Message.MessageID), nil
 }

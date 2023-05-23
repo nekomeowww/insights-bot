@@ -157,6 +157,9 @@ func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string,
 }
 
 func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
+	if message == nil {
+		return nil
+	}
 	if message.Text == "" && message.Caption == "" {
 		m.logger.Warn("message text is empty")
 		return nil
@@ -214,6 +217,45 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
 	}).Debug("saved one telegram chat history")
+
+	return nil
+}
+
+func (m *Model) UpdateOneMessage(message *tgbotapi.Message) error {
+	if message == nil {
+		return nil
+	}
+	if message.Text == "" && message.Caption == "" {
+		m.logger.Warn("message text is empty")
+		return nil
+	}
+
+	text, err := m.extractTextWithSummarization(message)
+	if err != nil {
+		return err
+	}
+	if text == "" {
+		m.logger.Warn("message text is empty")
+		return nil
+	}
+
+	err = m.ent.ChatHistories.
+		Update().
+		Where(
+			chathistories.ChatID(message.Chat.ID),
+			chathistories.MessageID(int64(message.MessageID)),
+		).
+		SetText(text).
+		Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.WithFields(logrus.Fields{
+		"chat_id":    message.Chat.ID,
+		"message_id": message.MessageID,
+		"text":       strings.ReplaceAll(text, "\n", " "),
+	}).Debug("updated one message")
 
 	return nil
 }

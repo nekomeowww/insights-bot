@@ -327,8 +327,7 @@ func TestFormatFullNameAndUsername(t *testing.T) {
 			result:   "example_username",
 		},
 		{
-			name: `full name longer than 10 chars
-			AND username is empty`,
+			name:     `full name longer than 10 chars AND username is empty`,
 			fullName: "A Very Long Full Name",
 			username: "",
 			result:   "A Very Long Full Name",

@@ -3,12 +3,15 @@ package configs
 import (
 	"errors"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 	"github.com/samber/lo"
 )
 
 const (
+	EnvTimezoneShiftSeconds = "TIMEZONE_SHIFT_SECONDS"
+
 	EnvTelegramBotToken       = "TELEGRAM_BOT_TOKEN" //nolint:gosec
 	EnvTelegramBotWebhookURL  = "TELEGRAM_BOT_WEBHOOK_URL"
 	EnvTelegramBotWebhookPort = "TELEGRAM_BOT_WEBHOOK_PORT"
@@ -27,7 +30,15 @@ const (
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
 	EnvPineconeAPIKey               = "PINECONE_API_KEY" //nolint:gosec
 	EnvPineconeChatHistoryIndexName = "PINECONE_CHAT_HISTORY_INDEX_NAME"
-	EnvDBConnectionString           = "DB_CONNECTION_STR"
+
+	EnvDBConnectionString = "DB_CONNECTION_STR"
+
+	EnvRedisHost       = "REDIS_HOST"
+	EnvRedisPort       = "REDIS_PORT"
+	EnvRedisTLSEnabled = "REDIS_TLS_ENABLED"
+	EnvRedisUsername   = "REDIS_USERNAME"
+	EnvRedisPassword   = "REDIS_PASSWORD"
+	EnvRedisDB         = "REDIS_DB"
 
 	EnvLogLevel = "LOG_LEVEL"
 )
@@ -65,16 +76,27 @@ type SectionTelegram struct {
 	BotWebhookPort string
 }
 
+type SectionRedis struct {
+	Host       string
+	Port       string
+	TLSEnabled bool
+	Username   string
+	Password   string
+	DB         int64
+}
+
 type Config struct {
-	Telegram        SectionTelegram
-	OpenAIAPISecret string
-	OpenAIAPIHost   string
-	Pinecone        SectionPinecone
-	CloverDBPath    string
-	DB              SectionDB
-	Slack           SectionSlack
-	Discord         SectionDiscord
-	LogLevel        string
+	TimezoneShiftSeconds int64
+	Telegram             SectionTelegram
+	OpenAIAPISecret      string
+	OpenAIAPIHost        string
+	Pinecone             SectionPinecone
+	CloverDBPath         string
+	DB                   SectionDB
+	Slack                SectionSlack
+	Discord              SectionDiscord
+	Redis                SectionRedis
+	LogLevel             string
 }
 
 func NewConfig() func() (*Config, error) {
@@ -95,7 +117,11 @@ func NewConfig() func() (*Config, error) {
 
 		envLogLevel := getEnv(EnvLogLevel)
 
+		redisDB, redisDBParseErr := strconv.ParseInt(getEnv(EnvRedisDB), 10, 64)
+		timezoneShiftSeconds, timezoneShiftSecondsParseErr := strconv.ParseInt(getEnv(EnvTimezoneShiftSeconds), 10, 64)
+
 		return &Config{
+			TimezoneShiftSeconds: lo.Ternary(timezoneShiftSecondsParseErr == nil, lo.Ternary(timezoneShiftSeconds != 0, timezoneShiftSeconds, 0), 0),
 			Telegram: SectionTelegram{
 				BotToken:       getEnv(EnvTelegramBotToken),
 				BotWebhookURL:  getEnv(EnvTelegramBotWebhookURL),
@@ -124,6 +150,14 @@ func NewConfig() func() (*Config, error) {
 				Token:     getEnv(EnvDiscordBotToken),
 				PublicKey: getEnv(EnvDiscordBotPublicKey),
 			},
+			Redis: SectionRedis{
+				Host:       getEnv(EnvRedisHost),
+				Port:       getEnv(EnvRedisPort),
+				TLSEnabled: getEnv(EnvRedisTLSEnabled) == "true",
+				Username:   getEnv(EnvRedisUsername),
+				Password:   getEnv(EnvRedisPassword),
+				DB:         lo.Ternary(redisDBParseErr == nil, lo.Ternary(redisDB != 0, redisDB, 0), 0),
+			},
 			LogLevel: lo.Ternary(envLogLevel == "", "info", envLogLevel),
 		}, nil
 	}
@@ -138,6 +172,11 @@ func NewTestConfig() func() *Config {
 					"postgresql://postgres:123456@localhost:5432/postgres?search_path=public&sslmode=disable",
 					os.Getenv(EnvDBConnectionString),
 				),
+			},
+			Redis: SectionRedis{
+				Host:       lo.Ternary(os.Getenv(EnvRedisHost) == "", "localhost", os.Getenv(EnvRedisHost)),
+				Port:       lo.Ternary(os.Getenv(EnvRedisPort) == "", "6379", os.Getenv(EnvRedisPort)),
+				TLSEnabled: false,
 			},
 			LogLevel: "debug",
 		}

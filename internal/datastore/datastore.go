@@ -8,5 +8,7 @@ func NewModules() fx.Option {
 	return fx.Options(
 		fx.Provide(NewPinecone()),
 		fx.Provide(NewEnt()),
+		fx.Provide(NewRedis()),
+		fx.Provide(NewAutoRecapTimeCapsuleDigger()),
 	)
 }

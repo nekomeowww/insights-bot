@@ -38,6 +38,8 @@ const (
 type NewModelParams struct {
 	fx.In
 
+	Lifecycle fx.Lifecycle
+
 	Logger *logger.Logger
 	Ent    *datastore.Ent
 	OpenAI openai.Client

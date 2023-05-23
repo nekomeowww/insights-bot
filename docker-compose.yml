@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
   insights_bot:
+    profiles:
+      - hub
     image: ghcr.io/nekomeowww/insights-bot:latest
     restart: always
     environment:
@@ -10,23 +12,31 @@ services:
       - OPENAI_API_HOST
       - SLACK_CLIENT_ID
       - SLACK_CLIENT_SECRET
-      - DISCORD_BOT_TOKEN
-      - DISCORD_BOT_PUBLIC_KEY
-      - DISCORD_BOT_WEBHOOK_PORT
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
+      - REDIS_HOST=redis_local
+      - REDIS_PORT=6379
+      - REDIS_TLS_ENABLED=false
+      - REDIS_PASSWORD=123456
+      # # uncomment the following lines if you want to enable discord bot webhook
+      # - DISCORD_BOT_TOKEN
+      # - DISCORD_BOT_PUBLIC_KEY
+      # - DISCORD_BOT_WEBHOOK_PORT
     ports:
       - 7070:7070
-      - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT}
+      # - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT} # uncomment this line if you have set DISCORD_BOT_WEBHOOK_PORT in .env file
     healthcheck:
       test: curl --fail http://localhost:7069/health || exit 1
       interval: 1s
       retries: 5
       start_period: 1s
       timeout: 1s
-    profiles:
-      - hub
+    depends_on:
+      - db_local
+      - redis_local
 
   insights_bot_local:
+    profiles:
+      - local
     image: insights-bot
     restart: always
     environment:
@@ -35,13 +45,18 @@ services:
       - OPENAI_API_HOST
       - SLACK_CLIENT_ID
       - SLACK_CLIENT_SECRET
-      - DISCORD_BOT_TOKEN
-      - DISCORD_BOT_PUBLIC_KEY
-      - DISCORD_BOT_WEBHOOK_PORT
       - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
+      - REDIS_HOST=redis_local
+      - REDIS_PORT=6379
+      - REDIS_TLS_ENABLED=false
+      - REDIS_PASSWORD=123456
+      # # uncomment the following lines if you want to enable discord bot webhook
+      # - DISCORD_BOT_TOKEN
+      # - DISCORD_BOT_PUBLIC_KEY
+      # - DISCORD_BOT_WEBHOOK_PORT
     ports:
       - 7070:7070
-      - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT}
+      # - ${DISCORD_BOT_WEBHOOK_PORT}:${DISCORD_BOT_WEBHOOK_PORT} # uncomment this line if you have set DISCORD_BOT_WEBHOOK_PORT in .env file
     healthcheck:
       test: curl --fail http://localhost:7069/health || exit 1
       interval: 10s
@@ -50,8 +65,9 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    profiles:
-      - local
+    depends_on:
+      - db_local
+      - redis_local
 
   db_local:
     image: postgres:alpine
@@ -64,6 +80,18 @@ services:
       - ./.postgres/data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis_local:
+    image: redis:7
+    restart: unless-stopped
+    # comment the following line if you don't want to set password for redis
+    command: >
+      --requirepass 123456
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping"]
       interval: 10s
       timeout: 5s
       retries: 5

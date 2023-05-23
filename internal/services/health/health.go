@@ -3,18 +3,19 @@ package health
 import (
 	"context"
 	"fmt"
-	"github.com/nekomeowww/insights-bot/internal/bots/discord"
 	"net"
 	"net/http"
 	"time"
 
 	"github.com/alexliesenfeld/health"
+	"go.uber.org/fx"
+
+	"github.com/nekomeowww/insights-bot/internal/bots/discord"
 	"github.com/nekomeowww/insights-bot/internal/bots/slack"
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"go.uber.org/fx"
 )
 
 type NewHealthParams struct {

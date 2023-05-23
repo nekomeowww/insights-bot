@@ -8,6 +8,7 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
 )
 
@@ -26,10 +27,13 @@ type AutoRecapTimeCapsuleDigger struct {
 
 func NewAutoRecapTimeCapsuleDigger() func(NewAutoRecapTimeCapsuleDiggerParams) (*AutoRecapTimeCapsuleDigger, error) {
 	return func(params NewAutoRecapTimeCapsuleDiggerParams) (*AutoRecapTimeCapsuleDigger, error) {
-		dataloader := timecapsule.NewRueidisDataloader[timecapsules.AutoRecapCapsule](timecapsules.AutoRecapTimeCapsuleKey, params.Redis)
-		digger := timecapsule.NewDigger[timecapsules.AutoRecapCapsule](dataloader, time.Second, timecapsule.TimeCapsuleDiggerOption{
-			Logger: params.Logger,
-		})
+		dataloader := timecapsule.NewRueidisDataloader[timecapsules.AutoRecapCapsule](redis.TimeCapsuleAutoRecapSortedSetKey, params.Redis)
+
+		digger := timecapsule.NewDigger[timecapsules.AutoRecapCapsule](
+			dataloader,
+			time.Second,
+			timecapsule.TimeCapsuleDiggerOption{Logger: params.Logger},
+		)
 
 		params.Lifecycle.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {

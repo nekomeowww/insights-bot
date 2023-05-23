@@ -169,12 +169,15 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	now := time.Now()
-
 	location := time.UTC
-	if m.config.TimezoneShiftSeconds > 0 {
+	if m.config.TimezoneShiftSeconds != 0 {
 		location = time.FixedZone("Local", int(m.config.TimezoneShiftSeconds))
 	}
+
+	now := time.
+		Now().       // Current time.
+		UTC().       // Resets to UTC.
+		In(location) // Align current timezone with the configured offset (if any) for later calculation.
 
 	scheduleTargets := []int64{2, 8, 14, 20} // queue for 02:00, 08:00, 14:00, 20:00
 	scheduleSets := make([]time.Time, 0, len(scheduleTargets))

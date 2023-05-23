@@ -25,6 +25,12 @@ type LogChatHistoriesRecap struct {
 	RecapOutputs string `json:"recap_outputs,omitempty"`
 	// FromPlatform holds the value of the "from_platform" field.
 	FromPlatform int `json:"from_platform,omitempty"`
+	// PromptTokenUsage holds the value of the "prompt_token_usage" field.
+	PromptTokenUsage int `json:"prompt_token_usage,omitempty"`
+	// CompletionTokenUsage holds the value of the "completion_token_usage" field.
+	CompletionTokenUsage int `json:"completion_token_usage,omitempty"`
+	// TotalTokenUsage holds the value of the "total_token_usage" field.
+	TotalTokenUsage int `json:"total_token_usage,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -37,7 +43,7 @@ func (*LogChatHistoriesRecap) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case logchathistoriesrecap.FieldChatID, logchathistoriesrecap.FieldFromPlatform, logchathistoriesrecap.FieldCreatedAt, logchathistoriesrecap.FieldUpdatedAt:
+		case logchathistoriesrecap.FieldChatID, logchathistoriesrecap.FieldFromPlatform, logchathistoriesrecap.FieldPromptTokenUsage, logchathistoriesrecap.FieldCompletionTokenUsage, logchathistoriesrecap.FieldTotalTokenUsage, logchathistoriesrecap.FieldCreatedAt, logchathistoriesrecap.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
 		case logchathistoriesrecap.FieldRecapInputs, logchathistoriesrecap.FieldRecapOutputs:
 			values[i] = new(sql.NullString)
@@ -87,6 +93,24 @@ func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
 			} else if value.Valid {
 				lchr.FromPlatform = int(value.Int64)
+			}
+		case logchathistoriesrecap.FieldPromptTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field prompt_token_usage", values[i])
+			} else if value.Valid {
+				lchr.PromptTokenUsage = int(value.Int64)
+			}
+		case logchathistoriesrecap.FieldCompletionTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field completion_token_usage", values[i])
+			} else if value.Valid {
+				lchr.CompletionTokenUsage = int(value.Int64)
+			}
+		case logchathistoriesrecap.FieldTotalTokenUsage:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
+			} else if value.Valid {
+				lchr.TotalTokenUsage = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -147,6 +171,15 @@ func (lchr *LogChatHistoriesRecap) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("from_platform=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.FromPlatform))
+	builder.WriteString(", ")
+	builder.WriteString("prompt_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", lchr.PromptTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("completion_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", lchr.CompletionTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("total_token_usage=")
+	builder.WriteString(fmt.Sprintf("%v", lchr.TotalTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.CreatedAt))

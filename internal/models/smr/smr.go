@@ -129,6 +129,9 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		SetContentText(textContent).
 		SetContentSummarizedOutputs(respMessages[0]).
 		SetFromPlatform(int(fromPlatform)).
+		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+		SetPromptTokenUsage(resp.Usage.PromptTokens).
+		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(context.Background())
 	if err != nil {
 		m.logger.WithError(err).Error("failed to create log")

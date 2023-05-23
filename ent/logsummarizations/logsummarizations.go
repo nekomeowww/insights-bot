@@ -24,6 +24,12 @@ const (
 	FieldContentSummarizedOutputs = "content_summarized_outputs"
 	// FieldFromPlatform holds the string denoting the from_platform field in the database.
 	FieldFromPlatform = "from_platform"
+	// FieldPromptTokenUsage holds the string denoting the prompt_token_usage field in the database.
+	FieldPromptTokenUsage = "prompt_token_usage"
+	// FieldCompletionTokenUsage holds the string denoting the completion_token_usage field in the database.
+	FieldCompletionTokenUsage = "completion_token_usage"
+	// FieldTotalTokenUsage holds the string denoting the total_token_usage field in the database.
+	FieldTotalTokenUsage = "total_token_usage"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -41,6 +47,9 @@ var Columns = []string{
 	FieldContentText,
 	FieldContentSummarizedOutputs,
 	FieldFromPlatform,
+	FieldPromptTokenUsage,
+	FieldCompletionTokenUsage,
+	FieldTotalTokenUsage,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -68,6 +77,12 @@ var (
 	DefaultContentSummarizedOutputs string
 	// DefaultFromPlatform holds the default value on creation for the "from_platform" field.
 	DefaultFromPlatform int
+	// DefaultPromptTokenUsage holds the default value on creation for the "prompt_token_usage" field.
+	DefaultPromptTokenUsage int
+	// DefaultCompletionTokenUsage holds the default value on creation for the "completion_token_usage" field.
+	DefaultCompletionTokenUsage int
+	// DefaultTotalTokenUsage holds the default value on creation for the "total_token_usage" field.
+	DefaultTotalTokenUsage int
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -112,6 +127,21 @@ func ByContentSummarizedOutputs(opts ...sql.OrderTermOption) OrderOption {
 // ByFromPlatform orders the results by the from_platform field.
 func ByFromPlatform(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFromPlatform, opts...).ToFunc()
+}
+
+// ByPromptTokenUsage orders the results by the prompt_token_usage field.
+func ByPromptTokenUsage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPromptTokenUsage, opts...).ToFunc()
+}
+
+// ByCompletionTokenUsage orders the results by the completion_token_usage field.
+func ByCompletionTokenUsage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompletionTokenUsage, opts...).ToFunc()
+}
+
+// ByTotalTokenUsage orders the results by the total_token_usage field.
+func ByTotalTokenUsage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTotalTokenUsage, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

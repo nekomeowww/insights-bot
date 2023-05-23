@@ -108,12 +108,24 @@ func init() {
 	logchathistoriesrecapDescFromPlatform := logchathistoriesrecapFields[4].Descriptor()
 	// logchathistoriesrecap.DefaultFromPlatform holds the default value on creation for the from_platform field.
 	logchathistoriesrecap.DefaultFromPlatform = logchathistoriesrecapDescFromPlatform.Default.(int)
+	// logchathistoriesrecapDescPromptTokenUsage is the schema descriptor for prompt_token_usage field.
+	logchathistoriesrecapDescPromptTokenUsage := logchathistoriesrecapFields[5].Descriptor()
+	// logchathistoriesrecap.DefaultPromptTokenUsage holds the default value on creation for the prompt_token_usage field.
+	logchathistoriesrecap.DefaultPromptTokenUsage = logchathistoriesrecapDescPromptTokenUsage.Default.(int)
+	// logchathistoriesrecapDescCompletionTokenUsage is the schema descriptor for completion_token_usage field.
+	logchathistoriesrecapDescCompletionTokenUsage := logchathistoriesrecapFields[6].Descriptor()
+	// logchathistoriesrecap.DefaultCompletionTokenUsage holds the default value on creation for the completion_token_usage field.
+	logchathistoriesrecap.DefaultCompletionTokenUsage = logchathistoriesrecapDescCompletionTokenUsage.Default.(int)
+	// logchathistoriesrecapDescTotalTokenUsage is the schema descriptor for total_token_usage field.
+	logchathistoriesrecapDescTotalTokenUsage := logchathistoriesrecapFields[7].Descriptor()
+	// logchathistoriesrecap.DefaultTotalTokenUsage holds the default value on creation for the total_token_usage field.
+	logchathistoriesrecap.DefaultTotalTokenUsage = logchathistoriesrecapDescTotalTokenUsage.Default.(int)
 	// logchathistoriesrecapDescCreatedAt is the schema descriptor for created_at field.
-	logchathistoriesrecapDescCreatedAt := logchathistoriesrecapFields[5].Descriptor()
+	logchathistoriesrecapDescCreatedAt := logchathistoriesrecapFields[8].Descriptor()
 	// logchathistoriesrecap.DefaultCreatedAt holds the default value on creation for the created_at field.
 	logchathistoriesrecap.DefaultCreatedAt = logchathistoriesrecapDescCreatedAt.Default.(func() int64)
 	// logchathistoriesrecapDescUpdatedAt is the schema descriptor for updated_at field.
-	logchathistoriesrecapDescUpdatedAt := logchathistoriesrecapFields[6].Descriptor()
+	logchathistoriesrecapDescUpdatedAt := logchathistoriesrecapFields[9].Descriptor()
 	// logchathistoriesrecap.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	logchathistoriesrecap.DefaultUpdatedAt = logchathistoriesrecapDescUpdatedAt.Default.(func() int64)
 	// logchathistoriesrecapDescID is the schema descriptor for id field.
@@ -146,12 +158,24 @@ func init() {
 	logsummarizationsDescFromPlatform := logsummarizationsFields[6].Descriptor()
 	// logsummarizations.DefaultFromPlatform holds the default value on creation for the from_platform field.
 	logsummarizations.DefaultFromPlatform = logsummarizationsDescFromPlatform.Default.(int)
+	// logsummarizationsDescPromptTokenUsage is the schema descriptor for prompt_token_usage field.
+	logsummarizationsDescPromptTokenUsage := logsummarizationsFields[7].Descriptor()
+	// logsummarizations.DefaultPromptTokenUsage holds the default value on creation for the prompt_token_usage field.
+	logsummarizations.DefaultPromptTokenUsage = logsummarizationsDescPromptTokenUsage.Default.(int)
+	// logsummarizationsDescCompletionTokenUsage is the schema descriptor for completion_token_usage field.
+	logsummarizationsDescCompletionTokenUsage := logsummarizationsFields[8].Descriptor()
+	// logsummarizations.DefaultCompletionTokenUsage holds the default value on creation for the completion_token_usage field.
+	logsummarizations.DefaultCompletionTokenUsage = logsummarizationsDescCompletionTokenUsage.Default.(int)
+	// logsummarizationsDescTotalTokenUsage is the schema descriptor for total_token_usage field.
+	logsummarizationsDescTotalTokenUsage := logsummarizationsFields[9].Descriptor()
+	// logsummarizations.DefaultTotalTokenUsage holds the default value on creation for the total_token_usage field.
+	logsummarizations.DefaultTotalTokenUsage = logsummarizationsDescTotalTokenUsage.Default.(int)
 	// logsummarizationsDescCreatedAt is the schema descriptor for created_at field.
-	logsummarizationsDescCreatedAt := logsummarizationsFields[7].Descriptor()
+	logsummarizationsDescCreatedAt := logsummarizationsFields[10].Descriptor()
 	// logsummarizations.DefaultCreatedAt holds the default value on creation for the created_at field.
 	logsummarizations.DefaultCreatedAt = logsummarizationsDescCreatedAt.Default.(func() int64)
 	// logsummarizationsDescUpdatedAt is the schema descriptor for updated_at field.
-	logsummarizationsDescUpdatedAt := logsummarizationsFields[8].Descriptor()
+	logsummarizationsDescUpdatedAt := logsummarizationsFields[11].Descriptor()
 	// logsummarizations.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	logsummarizations.DefaultUpdatedAt = logsummarizationsDescUpdatedAt.Default.(func() int64)
 	// logsummarizationsDescID is the schema descriptor for id field.

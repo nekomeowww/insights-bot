@@ -98,6 +98,69 @@ func (lchru *LogChatHistoriesRecapUpdate) AddFromPlatform(i int) *LogChatHistori
 	return lchru
 }
 
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) SetPromptTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.ResetPromptTokenUsage()
+	lchru.mutation.SetPromptTokenUsage(i)
+	return lchru
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lchru *LogChatHistoriesRecapUpdate) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
+	if i != nil {
+		lchru.SetPromptTokenUsage(*i)
+	}
+	return lchru
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) AddPromptTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.AddPromptTokenUsage(i)
+	return lchru
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.ResetCompletionTokenUsage()
+	lchru.mutation.SetCompletionTokenUsage(i)
+	return lchru
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lchru *LogChatHistoriesRecapUpdate) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
+	if i != nil {
+		lchru.SetCompletionTokenUsage(*i)
+	}
+	return lchru
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) AddCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.AddCompletionTokenUsage(i)
+	return lchru
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) SetTotalTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.ResetTotalTokenUsage()
+	lchru.mutation.SetTotalTokenUsage(i)
+	return lchru
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lchru *LogChatHistoriesRecapUpdate) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
+	if i != nil {
+		lchru.SetTotalTokenUsage(*i)
+	}
+	return lchru
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (lchru *LogChatHistoriesRecapUpdate) AddTotalTokenUsage(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.AddTotalTokenUsage(i)
+	return lchru
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchru *LogChatHistoriesRecapUpdate) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdate {
 	lchru.mutation.ResetCreatedAt()
@@ -198,6 +261,24 @@ func (lchru *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if value, ok := lchru.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.AddedPromptTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.AddedCompletionTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.AddedTotalTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
 	if value, ok := lchru.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
@@ -300,6 +381,69 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableFromPlatform(i *int) *L
 // AddFromPlatform adds i to the "from_platform" field.
 func (lchruo *LogChatHistoriesRecapUpdateOne) AddFromPlatform(i int) *LogChatHistoriesRecapUpdateOne {
 	lchruo.mutation.AddFromPlatform(i)
+	return lchruo
+}
+
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetPromptTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.ResetPromptTokenUsage()
+	lchruo.mutation.SetPromptTokenUsage(i)
+	return lchruo
+}
+
+// SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
+	if i != nil {
+		lchruo.SetPromptTokenUsage(*i)
+	}
+	return lchruo
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) AddPromptTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.AddPromptTokenUsage(i)
+	return lchruo
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.ResetCompletionTokenUsage()
+	lchruo.mutation.SetCompletionTokenUsage(i)
+	return lchruo
+}
+
+// SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
+	if i != nil {
+		lchruo.SetCompletionTokenUsage(*i)
+	}
+	return lchruo
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) AddCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.AddCompletionTokenUsage(i)
+	return lchruo
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetTotalTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.ResetTotalTokenUsage()
+	lchruo.mutation.SetTotalTokenUsage(i)
+	return lchruo
+}
+
+// SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
+	if i != nil {
+		lchruo.SetTotalTokenUsage(*i)
+	}
+	return lchruo
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) AddTotalTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.AddTotalTokenUsage(i)
 	return lchruo
 }
 
@@ -433,6 +577,24 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if value, ok := lchruo.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.PromptTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.AddedPromptTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.CompletionTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.AddedCompletionTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.TotalTokenUsage(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.AddedTotalTokenUsage(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
 	if value, ok := lchruo.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

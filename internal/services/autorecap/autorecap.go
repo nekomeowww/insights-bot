@@ -118,4 +118,9 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 			m.logger.Errorf("failed to send chat histories recap: %v", err)
 		}
 	}
+
+	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+	if err != nil {
+		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+	}
 }

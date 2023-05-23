@@ -54,14 +54,12 @@ type Model struct {
 
 func NewModel() func(NewModelParams) (*Model, error) {
 	return func(param NewModelParams) (*Model, error) {
-		m := &Model{
+		return &Model{
 			logger:   param.Logger,
 			ent:      param.Ent,
 			openAI:   param.OpenAI,
 			linkprev: linkprev.NewClient(),
-		}
-
-		return m, nil
+		}, nil
 	}
 }
 

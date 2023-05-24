@@ -164,9 +164,6 @@ func (m *Model) QueueSendChatHistoriesRecapTask() {
 }
 
 func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
-	defer cancel()
-
 	location := time.UTC
 	if m.config.TimezoneShiftSeconds != 0 {
 		location = time.FixedZone("Local", int(m.config.TimezoneShiftSeconds))
@@ -193,9 +190,16 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 	for _, schedule := range scheduleSets {
 		m.logger.Infof("scheduled one send chat histories recap task for %d at %s", chatID, schedule)
 
-		return m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+
+		err := m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
 			ChatID: chatID,
 		}, schedule.UnixMilli())
+		if err != nil {
+			m.logger.Errorf("failed to bury one send chat histories recap task for %d at %s: %v", chatID, schedule, err)
+		}
+
+		cancel()
 	}
 
 	return nil

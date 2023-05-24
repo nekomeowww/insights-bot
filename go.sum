@@ -130,8 +130,8 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/nekomeowww/go-pinecone v0.1.0 h1:byYmyHQJ4velNUeECvNuCN6KbXGuyVjSFlvO9VV2zj8=
 github.com/nekomeowww/go-pinecone v0.1.0/go.mod h1:p8I6F7G7fSrfaa9k3HpsWNxf2y+W1wqn8tw0jsV9e1s=
-github.com/nekomeowww/timecapsule/v2 v2.1.0 h1:vfCHU3W2VNRvEr7CuBra4MnCzsl5k7e9hyPEElyuIo0=
-github.com/nekomeowww/timecapsule/v2 v2.1.0/go.mod h1:4vevpnLBU2hsjHU7qKPRvD3NUQGjdAYb4y8dbL47Baw=
+github.com/nekomeowww/timecapsule/v2 v2.1.1 h1:1UeBgLhiWstn1pv7w9Bo+43AbhzYYrpyoVhtETtw0uI=
+github.com/nekomeowww/timecapsule/v2 v2.1.1/go.mod h1:4vevpnLBU2hsjHU7qKPRvD3NUQGjdAYb4y8dbL47Baw=
 github.com/olekukonko/tablewriter v0.0.5 h1:P2Ga83D34wi1o9J6Wh1mRuqd4mF/x/lgBS7N7AbDhec=
 github.com/onsi/ginkgo/v2 v2.9.4 h1:xR7vG4IXt5RWx6FfIjyAtsoMAtnc3C/rFXBBd2AjZwE=
 github.com/onsi/ginkgo/v2 v2.9.4/go.mod h1:gCQYp2Q+kSoIj7ykSVb9nskRSsR6PUj4AiLywzIhbKM=

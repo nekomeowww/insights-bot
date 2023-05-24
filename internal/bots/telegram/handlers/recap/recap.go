@@ -7,7 +7,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
-	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 )
@@ -99,7 +98,7 @@ func (h CommandHandler) CommandHelp() string {
 }
 
 func (h *CommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
-	enabled, err := h.tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, telegram.ChatType(c.Update.Message.Chat.Type), c.Update.Message.Chat.Title)
+	enabled, err := h.tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("生成失败，请稍后再试。").WithReply(c.Update.Message)
 	}

@@ -192,6 +192,7 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64, chatTy
 
 	for _, schedule := range scheduleSets {
 		m.logger.Infof("scheduled one send chat histories recap task for %d at %s", chatID, schedule)
+
 		return m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
 			ChatID:    chatID,
 			ChatType:  chatType,

@@ -71,6 +71,39 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 	digger *timecapsule.TimeCapsuleDigger[timecapsules.AutoRecapCapsule],
 	capsule *timecapsule.TimeCapsule[timecapsules.AutoRecapCapsule],
 ) {
+	var enabled bool
+
+	_, err := lo.Attempt(10, func(index int) error {
+		var err error
+		enabled, err = m.tgchats.HasChatHistoriesRecapEnabled(capsule.Payload.ChatID, capsule.Payload.ChatType, capsule.Payload.ChatTitle)
+		if err != nil {
+			m.logger.Errorf("failed to check chat histories recap enabled: %v", err)
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		// requeue if failed
+		err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+		if err != nil {
+			m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+		}
+
+		m.logger.Errorf("failed to check chat histories recap enabled: %v", err)
+
+		return
+	}
+	if !enabled {
+		return
+	}
+
+	// always requeue
+	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+	if err != nil {
+		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+	}
+
 	m.logger.Infof("generating chat histories recap for chat %d", capsule.Payload.ChatID)
 
 	histories, err := m.chathistories.FindLastSixHourChatHistories(capsule.Payload.ChatID)
@@ -117,10 +150,5 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 		if err != nil {
 			m.logger.Errorf("failed to send chat histories recap: %v", err)
 		}
-	}
-
-	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
-	if err != nil {
-		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
 	}
 }

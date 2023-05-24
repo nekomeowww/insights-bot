@@ -4,9 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -85,8 +87,8 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 		assert.NoError(err)
 	}()
 
-	chatIDs, err := model.ListChatHistoriesRecapEnabledChats()
+	chats, err := model.ListChatHistoriesRecapEnabledChats()
 	require.NoError(err)
-	require.Len(chatIDs, 3)
-	assert.ElementsMatch([]int64{chatID1, chatID2, chatID3}, chatIDs)
+	require.Len(chats, 3)
+	assert.ElementsMatch([]int64{chatID1, chatID2, chatID3}, lo.Map(chats, func(item *ent.TelegramChatFeatureFlags, _ int) int64 { return item.ChatID }))
 }

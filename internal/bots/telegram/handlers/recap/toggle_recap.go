@@ -132,7 +132,7 @@ func (h *EnableRecapCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, er
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
 	}
 
-	err = h.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(c.Update.Message.Chat.ID)
+	err = h.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(c.Update.Message.Chat.ID, telegram.ChatType(c.Update.Message.Chat.Type), c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾功能开启失败，请稍后再试！").WithReply(c.Update.Message)
 	}

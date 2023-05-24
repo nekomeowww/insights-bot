@@ -85,7 +85,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 	})
 	if err != nil {
 		// requeue if failed
-		err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+		err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID, capsule.Payload.ChatType, capsule.Payload.ChatTitle)
 		if err != nil {
 			m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
 		}
@@ -99,7 +99,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 	}
 
 	// always requeue
-	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID, capsule.Payload.ChatType, capsule.Payload.ChatTitle)
 	if err != nil {
 		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
 	}

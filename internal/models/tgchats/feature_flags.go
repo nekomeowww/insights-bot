@@ -132,7 +132,7 @@ func (m *Model) HasChatHistoriesRecapEnabled(chatID int64, chatType telegram.Cha
 	return featureFlags.FeatureChatHistoriesRecap, nil
 }
 
-func (m *Model) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
+func (m *Model) ListChatHistoriesRecapEnabledChats() ([]*ent.TelegramChatFeatureFlags, error) {
 	featureFlagsChats, err := m.ent.TelegramChatFeatureFlags.
 		Query().
 		Where(
@@ -144,20 +144,18 @@ func (m *Model) ListChatHistoriesRecapEnabledChats() ([]int64, error) {
 		return nil, err
 	}
 
-	return lo.Map(featureFlagsChats, func(featureFlags *ent.TelegramChatFeatureFlags, _ int) int64 {
-		return featureFlags.ChatID
-	}), nil
+	return featureFlagsChats, nil
 }
 
 func (m *Model) QueueSendChatHistoriesRecapTask() {
-	chatIDs, err := m.ListChatHistoriesRecapEnabledChats()
+	chats, err := m.ListChatHistoriesRecapEnabledChats()
 	if err != nil {
 		m.logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
 		return
 	}
 
-	for _, chatID := range chatIDs {
-		err = m.QueueOneSendChatHistoriesRecapTaskForChatID(chatID)
+	for _, chat := range chats {
+		err = m.QueueOneSendChatHistoriesRecapTaskForChatID(chat.ChatID, telegram.ChatType(chat.ChatType), chat.ChatTitle)
 		if err != nil {
 			m.logger.Errorf("failed to queue send chat histories recap task: %v", err)
 			continue
@@ -165,7 +163,7 @@ func (m *Model) QueueSendChatHistoriesRecapTask() {
 	}
 }
 
-func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error {
+func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64, chatType telegram.ChatType, chatTitle string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
@@ -194,7 +192,12 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 
 	for _, schedule := range scheduleSets {
 		m.logger.Infof("scheduled one send chat histories recap task for %d at %s", chatID, schedule)
-		return m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{ChatID: chatID}, schedule.UnixMilli())
+
+		return m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
+			ChatID:    chatID,
+			ChatType:  chatType,
+			ChatTitle: chatTitle,
+		}, schedule.UnixMilli())
 	}
 
 	return nil

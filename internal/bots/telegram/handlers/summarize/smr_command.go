@@ -24,7 +24,11 @@ func (h Handlers) CommandHelp() string {
 func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	urlString := c.Update.Message.CommandArguments()
 	if urlString == "" {
-		return nil, tgbot.NewMessageError("没有找到链接，可以发送一个有效的链接吗？用法：/smr <链接>").WithReply(c.Update.Message)
+		if c.Update.Message.ReplyToMessage != nil && c.Update.Message.ReplyToMessage.Text != "" {
+			urlString = c.Update.Message.ReplyToMessage.Text
+		} else {
+			return nil, tgbot.NewMessageError("没有找到链接，可以发送一个有效的链接吗？用法：/smr <链接>").WithReply(c.Update.Message)
+		}
 	}
 
 	parsedURL, err := url.Parse(urlString)

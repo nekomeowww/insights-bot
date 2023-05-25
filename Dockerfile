@@ -3,8 +3,6 @@
 # 设定构建步骤所使用的来源镜像为基于 Debian 发行版的 Go 1.20 版本镜像
 FROM golang:1.20 as builder
 
-ARG VERSION
-
 # 设定 Go 使用 模块化依赖 管理方式：GO111MODULE
 RUN GO111MODULE=on
 

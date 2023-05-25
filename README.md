@@ -6,7 +6,8 @@
 
 <p align="center">
   <img src="https://github.com/nekomeowww/insights-bot/workflows/Testing/badge.svg">
-  <img src="https://github.com/nekomeowww/insights-bot/workflows/Building/badge.svg" />
+  <img src="https://github.com/nekomeowww/insights-bot/workflows/UnstableBuild/badge.svg" />
+  <img src="https://github.com/nekomeowww/insights-bot/workflows/ReleasingBuild/badge.svg" />
   <a href="https://goreportcard.com/badge/github.com/nekomeowww/insights-bot"><img src="https://goreportcard.com/badge/github.com/nekomeowww/insights-bot" /></a>
   <a href="https://hub.docker.com/r/nekomeowww/insights-bot">
     <img src="https://img.shields.io/docker/pulls/nekomeowww/insights-bot" />
@@ -45,7 +46,7 @@ Insights Bot ships with a set of commands, you can use `/help` to get a list of 
 
 Command: `/smr`
 
-Arguments: URL
+Arguments: URL, Replied message with only URL
 
 Usage:
 
@@ -53,7 +54,11 @@ Usage:
 /smr https://www.example.com
 ```
 
-By sending `/smr` command with a URL, the bot will try to summarize the webpage and return the result.
+```txt
+/smr [Reply to a message with only URL]
+```
+
+By sending `/smr` command with a URL or replying to a message that only contains a URL, the bot will try to summarize the webpage and return the result.
 
 #### Enable chat history recapturing
 

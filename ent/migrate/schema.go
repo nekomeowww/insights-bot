@@ -75,6 +75,23 @@ var (
 		Columns:    LogSummarizationsColumns,
 		PrimaryKey: []*schema.Column{LogSummarizationsColumns[0]},
 	}
+	// MetricOpenAiChatCompletionTokenUsagesColumns holds the columns for the "metric_open_ai_chat_completion_token_usages" table.
+	MetricOpenAiChatCompletionTokenUsagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "prompt_operation", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "prompt_character_length", Type: field.TypeInt, Default: 0},
+		{Name: "prompt_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "completion_character_length", Type: field.TypeInt, Default: 0},
+		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+	}
+	// MetricOpenAiChatCompletionTokenUsagesTable holds the schema information for the "metric_open_ai_chat_completion_token_usages" table.
+	MetricOpenAiChatCompletionTokenUsagesTable = &schema.Table{
+		Name:       "metric_open_ai_chat_completion_token_usages",
+		Columns:    MetricOpenAiChatCompletionTokenUsagesColumns,
+		PrimaryKey: []*schema.Column{MetricOpenAiChatCompletionTokenUsagesColumns[0]},
+	}
 	// SlackOauthCredentialsColumns holds the columns for the "slack_oauth_credentials" table.
 	SlackOauthCredentialsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -111,6 +128,7 @@ var (
 		ChatHistoriesTable,
 		LogChatHistoriesRecapsTable,
 		LogSummarizationsTable,
+		MetricOpenAiChatCompletionTokenUsagesTable,
 		SlackOauthCredentialsTable,
 		TelegramChatFeatureFlagsTable,
 	}

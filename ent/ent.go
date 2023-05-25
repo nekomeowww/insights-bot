@@ -15,6 +15,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
+	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 )
@@ -77,11 +78,12 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			chathistories.Table:            chathistories.ValidColumn,
-			logchathistoriesrecap.Table:    logchathistoriesrecap.ValidColumn,
-			logsummarizations.Table:        logsummarizations.ValidColumn,
-			slackoauthcredentials.Table:    slackoauthcredentials.ValidColumn,
-			telegramchatfeatureflags.Table: telegramchatfeatureflags.ValidColumn,
+			chathistories.Table:                        chathistories.ValidColumn,
+			logchathistoriesrecap.Table:                logchathistoriesrecap.ValidColumn,
+			logsummarizations.Table:                    logsummarizations.ValidColumn,
+			metricopenaichatcompletiontokenusage.Table: metricopenaichatcompletiontokenusage.ValidColumn,
+			slackoauthcredentials.Table:                slackoauthcredentials.ValidColumn,
+			telegramchatfeatureflags.Table:             telegramchatfeatureflags.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +32,12 @@ func TestTruncateContentBasedOnTokens(t *testing.T) {
 		},
 	}
 
-	c, err := NewClient("", "")
+	c, err := NewClient()(NewClientParams{
+		Config: &configs.Config{
+			OpenAIAPISecret: "",
+			OpenAIAPIHost:   "",
+		},
+	})
 	require.NoError(t, err)
 
 	for _, table := range tables {
@@ -60,7 +66,12 @@ func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 		},
 	}
 
-	c, err := NewClient("", "")
+	c, err := NewClient()(NewClientParams{
+		Config: &configs.Config{
+			OpenAIAPISecret: "",
+			OpenAIAPIHost:   "",
+		},
+	})
 	require.NoError(t, err)
 
 	for i, table := range tables {

@@ -9,16 +9,21 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
+	"github.com/sirupsen/logrus"
+	"go.uber.org/fx"
 )
 
 //counterfeiter:generate -o openaimock/mock_client.go --fake-name MockClient . Client
 type Client interface {
 	SplitContentBasedByTokenLimitations(textContent string, limits int) []string
 	SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error)
-	SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error)
-	SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error)
+	SummarizeChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error)
+	SummarizeOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error)
 	SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title string, by string, content string) (*openai.ChatCompletionResponse, error)
 	TruncateContentBasedOnTokens(textContent string, limits int) string
 }
@@ -27,7 +32,9 @@ var _ Client = (*OpenAIClient)(nil)
 
 type OpenAIClient struct {
 	tiktokenEncoding *tiktoken.Tiktoken
-	OpenAIClient     *openai.Client
+	client           *openai.Client
+	ent              *datastore.Ent
+	logger           *logger.Logger
 }
 
 func parseOpenAIAPIHost(apiHost string) (string, error) {
@@ -48,28 +55,42 @@ func parseOpenAIAPIHost(apiHost string) (string, error) {
 	return "", fmt.Errorf("invalid API host: %s", apiHost)
 }
 
-func NewClient(apiSecret string, apiHost string) (*OpenAIClient, error) {
-	tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
-	if err != nil {
-		return nil, err
-	}
+type NewClientParams struct {
+	fx.In
 
-	config := openai.DefaultConfig(apiSecret)
-	if apiHost != "" {
-		apiHost, err = parseOpenAIAPIHost(apiHost)
+	Config *configs.Config
+	Logger *logger.Logger
+	Ent    *datastore.Ent
+}
+
+func NewClient() func(NewClientParams) (Client, error) {
+	return func(params NewClientParams) (Client, error) {
+		tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
 		if err != nil {
 			return nil, err
 		}
 
-		config.BaseURL = fmt.Sprintf("%s/v1", apiHost)
+		apiHost := params.Config.OpenAIAPIHost
+
+		config := openai.DefaultConfig(params.Config.OpenAIAPISecret)
+		if apiHost != "" {
+			apiHost, err = parseOpenAIAPIHost(apiHost)
+			if err != nil {
+				return nil, err
+			}
+
+			config.BaseURL = fmt.Sprintf("%s/v1", apiHost)
+		}
+
+		client := openai.NewClientWithConfig(config)
+
+		return &OpenAIClient{
+			client:           client,
+			tiktokenEncoding: tokenizer,
+			ent:              params.Ent,
+			logger:           params.Logger,
+		}, nil
 	}
-
-	client := openai.NewClientWithConfig(config)
-
-	return &OpenAIClient{
-		OpenAIClient:     client,
-		tiktokenEncoding: tokenizer,
-	}, nil
 }
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本。
@@ -114,7 +135,7 @@ func (c *OpenAIClient) SplitContentBasedByTokenLimitations(textContent string, l
 
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题。
 func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
-	resp, err := c.OpenAIClient.CreateChatCompletion(
+	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
@@ -147,11 +168,27 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 		return nil, err
 	}
 
+	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+		Create().
+		SetPromptOperation("Summarize With Questions As Simplified Chinese").
+		SetPromptTokenUsage(resp.Usage.PromptTokens).
+		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		Exec(ctx)
+	if err != nil {
+		c.logger.WithFields(logrus.Fields{
+			"prompt_operation":       "Summarize With Questions As Simplified Chinese",
+			"prompt_token_usage":     resp.Usage.PromptTokens,
+			"completion_token_usage": resp.Usage.CompletionTokens,
+			"total_token_usage":      resp.Usage.TotalTokens,
+		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+	}
+
 	return &resp, nil
 }
 
-func (c *OpenAIClient) SummarizeWithOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
-	resp, err := c.OpenAIClient.CreateChatCompletion(
+func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
+	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
@@ -179,6 +216,22 @@ func (c *OpenAIClient) SummarizeWithOneChatHistory(ctx context.Context, llmFrien
 		return nil, err
 	}
 
+	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+		Create().
+		SetPromptOperation("Summarize One Chat History").
+		SetPromptTokenUsage(resp.Usage.PromptTokens).
+		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		Exec(ctx)
+	if err != nil {
+		c.logger.WithFields(logrus.Fields{
+			"prompt_operation":       "Summarize One Chat History",
+			"prompt_token_usage":     resp.Usage.PromptTokens,
+			"completion_token_usage": resp.Usage.CompletionTokens,
+			"total_token_usage":      resp.Usage.TotalTokens,
+		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+	}
+
 	return &resp, nil
 }
 
@@ -193,7 +246,7 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 		return nil, err
 	}
 
-	resp, err := c.OpenAIClient.CreateChatCompletion(
+	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
@@ -209,10 +262,26 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 		return nil, err
 	}
 
+	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+		Create().
+		SetPromptOperation("Summarize Any").
+		SetPromptTokenUsage(resp.Usage.PromptTokens).
+		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		Exec(ctx)
+	if err != nil {
+		c.logger.WithFields(logrus.Fields{
+			"prompt_operation":       "Summarize Any",
+			"prompt_token_usage":     resp.Usage.PromptTokens,
+			"completion_token_usage": resp.Usage.CompletionTokens,
+			"total_token_usage":      resp.Usage.TotalTokens,
+		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+	}
+
 	return &resp, nil
 }
 
-func (c *OpenAIClient) SummarizeWithChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
+func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
 	sb := new(strings.Builder)
 
 	err := ChatHistorySummarizationPrompt.Execute(
@@ -226,7 +295,7 @@ func (c *OpenAIClient) SummarizeWithChatHistories(ctx context.Context, llmFriend
 		return nil, err
 	}
 
-	resp, err := c.OpenAIClient.CreateChatCompletion(
+	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
 			Model: openai.GPT3Dot5Turbo,
@@ -238,6 +307,22 @@ func (c *OpenAIClient) SummarizeWithChatHistories(ctx context.Context, llmFriend
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+		Create().
+		SetPromptOperation("Summarize Chat Histories").
+		SetPromptTokenUsage(resp.Usage.PromptTokens).
+		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		Exec(ctx)
+	if err != nil {
+		c.logger.WithFields(logrus.Fields{
+			"prompt_operation":       "Summarize Chat Histories",
+			"prompt_token_usage":     resp.Usage.PromptTokens,
+			"completion_token_usage": resp.Usage.CompletionTokens,
+			"total_token_usage":      resp.Usage.TotalTokens,
+		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
 	}
 
 	return &resp, nil

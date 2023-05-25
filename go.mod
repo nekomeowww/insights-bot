@@ -27,13 +27,16 @@ require (
 	github.com/sashabaranov/go-openai v1.9.4
 	github.com/sirupsen/logrus v1.9.2
 	github.com/slack-go/slack v0.12.2
+	github.com/sourcegraph/conc v0.3.0
 	github.com/stretchr/testify v1.8.2
 	go.uber.org/fx v1.19.3
+	go.uber.org/ratelimit v0.2.0
 )
 
 require (
 	ariga.io/atlas v0.11.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
+	github.com/andres-erbsen/clock v0.0.0-20160526145045-9e14626cd129 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -59,7 +62,6 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl/v2 v2.16.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/kr/pretty v0.2.1 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect

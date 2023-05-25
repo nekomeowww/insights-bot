@@ -9,13 +9,16 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/nekomeowww/insights-bot/internal/configs"
-	"github.com/nekomeowww/insights-bot/internal/datastore"
-	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
 	"github.com/sirupsen/logrus"
+	"github.com/sourcegraph/conc/pool"
 	"go.uber.org/fx"
+	"go.uber.org/ratelimit"
+
+	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/pkg/logger"
 )
 
 //counterfeiter:generate -o openaimock/mock_client.go --fake-name MockClient . Client
@@ -35,6 +38,7 @@ type OpenAIClient struct {
 	client           *openai.Client
 	ent              *datastore.Ent
 	logger           *logger.Logger
+	limiter          ratelimit.Limiter
 }
 
 func parseOpenAIAPIHost(apiHost string) (string, error) {
@@ -84,11 +88,20 @@ func NewClient() func(NewClientParams) (Client, error) {
 
 		client := openai.NewClientWithConfig(config)
 
+		limiter := ratelimit.New(1)
+		limiter.Take()
+
+		p := pool.New().WithMaxGoroutines(10)
+		p.Go(func() {
+
+		})
+
 		return &OpenAIClient{
 			client:           client,
 			tiktokenEncoding: tokenizer,
 			ent:              params.Ent,
 			logger:           params.Logger,
+			limiter:          ratelimit.New(5),
 		}, nil
 	}
 }
@@ -135,6 +148,8 @@ func (c *OpenAIClient) SplitContentBasedByTokenLimitations(textContent string, l
 
 // SummarizeWithQuestionsAsSimplifiedChinese 通过 OpenAI 的 Chat API 来为文章生成摘要和联想问题。
 func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Context, title, by, content string) (*openai.ChatCompletionResponse, error) {
+	c.limiter.Take()
+
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
@@ -188,6 +203,8 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 }
 
 func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyChatHistory string) (*openai.ChatCompletionResponse, error) {
+	c.limiter.Take()
+
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
@@ -237,6 +254,8 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 
 // SummarizeAny 通过 OpenAI 的 Chat API 来为任意内容生成摘要。
 func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error) {
+	c.limiter.Take()
+
 	sb := new(strings.Builder)
 
 	err := AnySummarizationPrompt.Execute(sb, AnySummarizationInputs{
@@ -282,6 +301,8 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 }
 
 func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error) {
+	c.limiter.Take()
+
 	sb := new(strings.Builder)
 
 	err := ChatHistorySummarizationPrompt.Execute(

@@ -14,6 +14,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
+	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/predicate"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -28,11 +29,12 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeChatHistories            = "ChatHistories"
-	TypeLogChatHistoriesRecap    = "LogChatHistoriesRecap"
-	TypeLogSummarizations        = "LogSummarizations"
-	TypeSlackOAuthCredentials    = "SlackOAuthCredentials"
-	TypeTelegramChatFeatureFlags = "TelegramChatFeatureFlags"
+	TypeChatHistories                        = "ChatHistories"
+	TypeLogChatHistoriesRecap                = "LogChatHistoriesRecap"
+	TypeLogSummarizations                    = "LogSummarizations"
+	TypeMetricOpenAIChatCompletionTokenUsage = "MetricOpenAIChatCompletionTokenUsage"
+	TypeSlackOAuthCredentials                = "SlackOAuthCredentials"
+	TypeTelegramChatFeatureFlags             = "TelegramChatFeatureFlags"
 )
 
 // ChatHistoriesMutation represents an operation that mutates the ChatHistories nodes in the graph.
@@ -3600,6 +3602,863 @@ func (m *LogSummarizationsMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *LogSummarizationsMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown LogSummarizations edge %s", name)
+}
+
+// MetricOpenAIChatCompletionTokenUsageMutation represents an operation that mutates the MetricOpenAIChatCompletionTokenUsage nodes in the graph.
+type MetricOpenAIChatCompletionTokenUsageMutation struct {
+	config
+	op                             Op
+	typ                            string
+	id                             *uuid.UUID
+	prompt_operation               *string
+	prompt_character_length        *int
+	addprompt_character_length     *int
+	prompt_token_usage             *int
+	addprompt_token_usage          *int
+	completion_character_length    *int
+	addcompletion_character_length *int
+	completion_token_usage         *int
+	addcompletion_token_usage      *int
+	total_token_usage              *int
+	addtotal_token_usage           *int
+	created_at                     *int64
+	addcreated_at                  *int64
+	clearedFields                  map[string]struct{}
+	done                           bool
+	oldValue                       func(context.Context) (*MetricOpenAIChatCompletionTokenUsage, error)
+	predicates                     []predicate.MetricOpenAIChatCompletionTokenUsage
+}
+
+var _ ent.Mutation = (*MetricOpenAIChatCompletionTokenUsageMutation)(nil)
+
+// metricopenaichatcompletiontokenusageOption allows management of the mutation configuration using functional options.
+type metricopenaichatcompletiontokenusageOption func(*MetricOpenAIChatCompletionTokenUsageMutation)
+
+// newMetricOpenAIChatCompletionTokenUsageMutation creates new mutation for the MetricOpenAIChatCompletionTokenUsage entity.
+func newMetricOpenAIChatCompletionTokenUsageMutation(c config, op Op, opts ...metricopenaichatcompletiontokenusageOption) *MetricOpenAIChatCompletionTokenUsageMutation {
+	m := &MetricOpenAIChatCompletionTokenUsageMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeMetricOpenAIChatCompletionTokenUsage,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withMetricOpenAIChatCompletionTokenUsageID sets the ID field of the mutation.
+func withMetricOpenAIChatCompletionTokenUsageID(id uuid.UUID) metricopenaichatcompletiontokenusageOption {
+	return func(m *MetricOpenAIChatCompletionTokenUsageMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *MetricOpenAIChatCompletionTokenUsage
+		)
+		m.oldValue = func(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().MetricOpenAIChatCompletionTokenUsage.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withMetricOpenAIChatCompletionTokenUsage sets the old MetricOpenAIChatCompletionTokenUsage of the mutation.
+func withMetricOpenAIChatCompletionTokenUsage(node *MetricOpenAIChatCompletionTokenUsage) metricopenaichatcompletiontokenusageOption {
+	return func(m *MetricOpenAIChatCompletionTokenUsageMutation) {
+		m.oldValue = func(context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m MetricOpenAIChatCompletionTokenUsageMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m MetricOpenAIChatCompletionTokenUsageMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of MetricOpenAIChatCompletionTokenUsage entities.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().MetricOpenAIChatCompletionTokenUsage.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetPromptOperation sets the "prompt_operation" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetPromptOperation(s string) {
+	m.prompt_operation = &s
+}
+
+// PromptOperation returns the value of the "prompt_operation" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) PromptOperation() (r string, exists bool) {
+	v := m.prompt_operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPromptOperation returns the old "prompt_operation" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldPromptOperation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPromptOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPromptOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPromptOperation: %w", err)
+	}
+	return oldValue.PromptOperation, nil
+}
+
+// ResetPromptOperation resets all changes to the "prompt_operation" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetPromptOperation() {
+	m.prompt_operation = nil
+}
+
+// SetPromptCharacterLength sets the "prompt_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetPromptCharacterLength(i int) {
+	m.prompt_character_length = &i
+	m.addprompt_character_length = nil
+}
+
+// PromptCharacterLength returns the value of the "prompt_character_length" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) PromptCharacterLength() (r int, exists bool) {
+	v := m.prompt_character_length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPromptCharacterLength returns the old "prompt_character_length" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldPromptCharacterLength(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPromptCharacterLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPromptCharacterLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPromptCharacterLength: %w", err)
+	}
+	return oldValue.PromptCharacterLength, nil
+}
+
+// AddPromptCharacterLength adds i to the "prompt_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddPromptCharacterLength(i int) {
+	if m.addprompt_character_length != nil {
+		*m.addprompt_character_length += i
+	} else {
+		m.addprompt_character_length = &i
+	}
+}
+
+// AddedPromptCharacterLength returns the value that was added to the "prompt_character_length" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedPromptCharacterLength() (r int, exists bool) {
+	v := m.addprompt_character_length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPromptCharacterLength resets all changes to the "prompt_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetPromptCharacterLength() {
+	m.prompt_character_length = nil
+	m.addprompt_character_length = nil
+}
+
+// SetPromptTokenUsage sets the "prompt_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetPromptTokenUsage(i int) {
+	m.prompt_token_usage = &i
+	m.addprompt_token_usage = nil
+}
+
+// PromptTokenUsage returns the value of the "prompt_token_usage" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) PromptTokenUsage() (r int, exists bool) {
+	v := m.prompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPromptTokenUsage returns the old "prompt_token_usage" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldPromptTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPromptTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPromptTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPromptTokenUsage: %w", err)
+	}
+	return oldValue.PromptTokenUsage, nil
+}
+
+// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddPromptTokenUsage(i int) {
+	if m.addprompt_token_usage != nil {
+		*m.addprompt_token_usage += i
+	} else {
+		m.addprompt_token_usage = &i
+	}
+}
+
+// AddedPromptTokenUsage returns the value that was added to the "prompt_token_usage" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedPromptTokenUsage() (r int, exists bool) {
+	v := m.addprompt_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPromptTokenUsage resets all changes to the "prompt_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetPromptTokenUsage() {
+	m.prompt_token_usage = nil
+	m.addprompt_token_usage = nil
+}
+
+// SetCompletionCharacterLength sets the "completion_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetCompletionCharacterLength(i int) {
+	m.completion_character_length = &i
+	m.addcompletion_character_length = nil
+}
+
+// CompletionCharacterLength returns the value of the "completion_character_length" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) CompletionCharacterLength() (r int, exists bool) {
+	v := m.completion_character_length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompletionCharacterLength returns the old "completion_character_length" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldCompletionCharacterLength(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompletionCharacterLength is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompletionCharacterLength requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompletionCharacterLength: %w", err)
+	}
+	return oldValue.CompletionCharacterLength, nil
+}
+
+// AddCompletionCharacterLength adds i to the "completion_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddCompletionCharacterLength(i int) {
+	if m.addcompletion_character_length != nil {
+		*m.addcompletion_character_length += i
+	} else {
+		m.addcompletion_character_length = &i
+	}
+}
+
+// AddedCompletionCharacterLength returns the value that was added to the "completion_character_length" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedCompletionCharacterLength() (r int, exists bool) {
+	v := m.addcompletion_character_length
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCompletionCharacterLength resets all changes to the "completion_character_length" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetCompletionCharacterLength() {
+	m.completion_character_length = nil
+	m.addcompletion_character_length = nil
+}
+
+// SetCompletionTokenUsage sets the "completion_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetCompletionTokenUsage(i int) {
+	m.completion_token_usage = &i
+	m.addcompletion_token_usage = nil
+}
+
+// CompletionTokenUsage returns the value of the "completion_token_usage" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) CompletionTokenUsage() (r int, exists bool) {
+	v := m.completion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCompletionTokenUsage returns the old "completion_token_usage" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldCompletionTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCompletionTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCompletionTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCompletionTokenUsage: %w", err)
+	}
+	return oldValue.CompletionTokenUsage, nil
+}
+
+// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddCompletionTokenUsage(i int) {
+	if m.addcompletion_token_usage != nil {
+		*m.addcompletion_token_usage += i
+	} else {
+		m.addcompletion_token_usage = &i
+	}
+}
+
+// AddedCompletionTokenUsage returns the value that was added to the "completion_token_usage" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedCompletionTokenUsage() (r int, exists bool) {
+	v := m.addcompletion_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCompletionTokenUsage resets all changes to the "completion_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetCompletionTokenUsage() {
+	m.completion_token_usage = nil
+	m.addcompletion_token_usage = nil
+}
+
+// SetTotalTokenUsage sets the "total_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetTotalTokenUsage(i int) {
+	m.total_token_usage = &i
+	m.addtotal_token_usage = nil
+}
+
+// TotalTokenUsage returns the value of the "total_token_usage" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) TotalTokenUsage() (r int, exists bool) {
+	v := m.total_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTotalTokenUsage returns the old "total_token_usage" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldTotalTokenUsage(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTotalTokenUsage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTotalTokenUsage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTotalTokenUsage: %w", err)
+	}
+	return oldValue.TotalTokenUsage, nil
+}
+
+// AddTotalTokenUsage adds i to the "total_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddTotalTokenUsage(i int) {
+	if m.addtotal_token_usage != nil {
+		*m.addtotal_token_usage += i
+	} else {
+		m.addtotal_token_usage = &i
+	}
+}
+
+// AddedTotalTokenUsage returns the value that was added to the "total_token_usage" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedTotalTokenUsage() (r int, exists bool) {
+	v := m.addtotal_token_usage
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetTotalTokenUsage resets all changes to the "total_token_usage" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetTotalTokenUsage() {
+	m.total_token_usage = nil
+	m.addtotal_token_usage = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// Where appends a list predicates to the MetricOpenAIChatCompletionTokenUsageMutation builder.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the MetricOpenAIChatCompletionTokenUsageMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.MetricOpenAIChatCompletionTokenUsage, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (MetricOpenAIChatCompletionTokenUsage).
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.prompt_operation != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptOperation)
+	}
+	if m.prompt_character_length != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptCharacterLength)
+	}
+	if m.prompt_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptTokenUsage)
+	}
+	if m.completion_character_length != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength)
+	}
+	if m.completion_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage)
+	}
+	if m.total_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldTotalTokenUsage)
+	}
+	if m.created_at != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCreatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptOperation:
+		return m.PromptOperation()
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		return m.PromptCharacterLength()
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		return m.PromptTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		return m.CompletionCharacterLength()
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		return m.CompletionTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		return m.TotalTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		return m.CreatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptOperation:
+		return m.OldPromptOperation(ctx)
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		return m.OldPromptCharacterLength(ctx)
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		return m.OldPromptTokenUsage(ctx)
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		return m.OldCompletionCharacterLength(ctx)
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		return m.OldCompletionTokenUsage(ctx)
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		return m.OldTotalTokenUsage(ctx)
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptOperation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPromptOperation(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPromptCharacterLength(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPromptTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompletionCharacterLength(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCompletionTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTotalTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedFields() []string {
+	var fields []string
+	if m.addprompt_character_length != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptCharacterLength)
+	}
+	if m.addprompt_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptTokenUsage)
+	}
+	if m.addcompletion_character_length != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength)
+	}
+	if m.addcompletion_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage)
+	}
+	if m.addtotal_token_usage != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldTotalTokenUsage)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCreatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		return m.AddedPromptCharacterLength()
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		return m.AddedPromptTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		return m.AddedCompletionCharacterLength()
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		return m.AddedCompletionTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		return m.AddedTotalTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPromptCharacterLength(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPromptTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCompletionCharacterLength(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCompletionTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddTotalTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetField(name string) error {
+	switch name {
+	case metricopenaichatcompletiontokenusage.FieldPromptOperation:
+		m.ResetPromptOperation()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
+		m.ResetPromptCharacterLength()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
+		m.ResetPromptTokenUsage()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
+		m.ResetCompletionCharacterLength()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
+		m.ResetCompletionTokenUsage()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
+		m.ResetTotalTokenUsage()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage edge %s", name)
 }
 
 // SlackOAuthCredentialsMutation represents an operation that mutates the SlackOAuthCredentials nodes in the graph.

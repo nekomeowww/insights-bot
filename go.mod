@@ -18,6 +18,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/lib/pq v1.10.9
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.6.1
+	github.com/nekomeowww/fo v1.1.1
 	github.com/nekomeowww/go-pinecone v0.1.0
 	github.com/nekomeowww/timecapsule/v2 v2.1.1
 	github.com/pkoukk/tiktoken-go v0.1.1

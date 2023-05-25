@@ -5,7 +5,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/nekomeowww/insights-bot/pkg/openai"
+	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	openaia "github.com/sashabaranov/go-openai"
 )
 
@@ -36,31 +36,31 @@ type MockClient struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}
-	SummarizeWithChatHistoriesStub        func(context.Context, string) (*openaia.ChatCompletionResponse, error)
-	summarizeWithChatHistoriesMutex       sync.RWMutex
-	summarizeWithChatHistoriesArgsForCall []struct {
+	SummarizeChatHistoriesStub        func(context.Context, string) (*openaia.ChatCompletionResponse, error)
+	summarizeChatHistoriesMutex       sync.RWMutex
+	summarizeChatHistoriesArgsForCall []struct {
 		arg1 context.Context
 		arg2 string
 	}
-	summarizeWithChatHistoriesReturns struct {
+	summarizeChatHistoriesReturns struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}
-	summarizeWithChatHistoriesReturnsOnCall map[int]struct {
+	summarizeChatHistoriesReturnsOnCall map[int]struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}
-	SummarizeWithOneChatHistoryStub        func(context.Context, string) (*openaia.ChatCompletionResponse, error)
-	summarizeWithOneChatHistoryMutex       sync.RWMutex
-	summarizeWithOneChatHistoryArgsForCall []struct {
+	SummarizeOneChatHistoryStub        func(context.Context, string) (*openaia.ChatCompletionResponse, error)
+	summarizeOneChatHistoryMutex       sync.RWMutex
+	summarizeOneChatHistoryArgsForCall []struct {
 		arg1 context.Context
 		arg2 string
 	}
-	summarizeWithOneChatHistoryReturns struct {
+	summarizeOneChatHistoryReturns struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}
-	summarizeWithOneChatHistoryReturnsOnCall map[int]struct {
+	summarizeOneChatHistoryReturnsOnCall map[int]struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}
@@ -223,17 +223,17 @@ func (fake *MockClient) SummarizeAnyReturnsOnCall(i int, result1 *openaia.ChatCo
 	}{result1, result2}
 }
 
-func (fake *MockClient) SummarizeWithChatHistories(arg1 context.Context, arg2 string) (*openaia.ChatCompletionResponse, error) {
-	fake.summarizeWithChatHistoriesMutex.Lock()
-	ret, specificReturn := fake.summarizeWithChatHistoriesReturnsOnCall[len(fake.summarizeWithChatHistoriesArgsForCall)]
-	fake.summarizeWithChatHistoriesArgsForCall = append(fake.summarizeWithChatHistoriesArgsForCall, struct {
+func (fake *MockClient) SummarizeChatHistories(arg1 context.Context, arg2 string) (*openaia.ChatCompletionResponse, error) {
+	fake.summarizeChatHistoriesMutex.Lock()
+	ret, specificReturn := fake.summarizeChatHistoriesReturnsOnCall[len(fake.summarizeChatHistoriesArgsForCall)]
+	fake.summarizeChatHistoriesArgsForCall = append(fake.summarizeChatHistoriesArgsForCall, struct {
 		arg1 context.Context
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.SummarizeWithChatHistoriesStub
-	fakeReturns := fake.summarizeWithChatHistoriesReturns
-	fake.recordInvocation("SummarizeWithChatHistories", []interface{}{arg1, arg2})
-	fake.summarizeWithChatHistoriesMutex.Unlock()
+	stub := fake.SummarizeChatHistoriesStub
+	fakeReturns := fake.summarizeChatHistoriesReturns
+	fake.recordInvocation("SummarizeChatHistories", []interface{}{arg1, arg2})
+	fake.summarizeChatHistoriesMutex.Unlock()
 	if stub != nil {
 		return stub(arg1, arg2)
 	}
@@ -243,62 +243,62 @@ func (fake *MockClient) SummarizeWithChatHistories(arg1 context.Context, arg2 st
 	return fakeReturns.result1, fakeReturns.result2
 }
 
-func (fake *MockClient) SummarizeWithChatHistoriesCallCount() int {
-	fake.summarizeWithChatHistoriesMutex.RLock()
-	defer fake.summarizeWithChatHistoriesMutex.RUnlock()
-	return len(fake.summarizeWithChatHistoriesArgsForCall)
+func (fake *MockClient) SummarizeChatHistoriesCallCount() int {
+	fake.summarizeChatHistoriesMutex.RLock()
+	defer fake.summarizeChatHistoriesMutex.RUnlock()
+	return len(fake.summarizeChatHistoriesArgsForCall)
 }
 
-func (fake *MockClient) SummarizeWithChatHistoriesCalls(stub func(context.Context, string) (*openaia.ChatCompletionResponse, error)) {
-	fake.summarizeWithChatHistoriesMutex.Lock()
-	defer fake.summarizeWithChatHistoriesMutex.Unlock()
-	fake.SummarizeWithChatHistoriesStub = stub
+func (fake *MockClient) SummarizeChatHistoriesCalls(stub func(context.Context, string) (*openaia.ChatCompletionResponse, error)) {
+	fake.summarizeChatHistoriesMutex.Lock()
+	defer fake.summarizeChatHistoriesMutex.Unlock()
+	fake.SummarizeChatHistoriesStub = stub
 }
 
-func (fake *MockClient) SummarizeWithChatHistoriesArgsForCall(i int) (context.Context, string) {
-	fake.summarizeWithChatHistoriesMutex.RLock()
-	defer fake.summarizeWithChatHistoriesMutex.RUnlock()
-	argsForCall := fake.summarizeWithChatHistoriesArgsForCall[i]
+func (fake *MockClient) SummarizeChatHistoriesArgsForCall(i int) (context.Context, string) {
+	fake.summarizeChatHistoriesMutex.RLock()
+	defer fake.summarizeChatHistoriesMutex.RUnlock()
+	argsForCall := fake.summarizeChatHistoriesArgsForCall[i]
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *MockClient) SummarizeWithChatHistoriesReturns(result1 *openaia.ChatCompletionResponse, result2 error) {
-	fake.summarizeWithChatHistoriesMutex.Lock()
-	defer fake.summarizeWithChatHistoriesMutex.Unlock()
-	fake.SummarizeWithChatHistoriesStub = nil
-	fake.summarizeWithChatHistoriesReturns = struct {
+func (fake *MockClient) SummarizeChatHistoriesReturns(result1 *openaia.ChatCompletionResponse, result2 error) {
+	fake.summarizeChatHistoriesMutex.Lock()
+	defer fake.summarizeChatHistoriesMutex.Unlock()
+	fake.SummarizeChatHistoriesStub = nil
+	fake.summarizeChatHistoriesReturns = struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *MockClient) SummarizeWithChatHistoriesReturnsOnCall(i int, result1 *openaia.ChatCompletionResponse, result2 error) {
-	fake.summarizeWithChatHistoriesMutex.Lock()
-	defer fake.summarizeWithChatHistoriesMutex.Unlock()
-	fake.SummarizeWithChatHistoriesStub = nil
-	if fake.summarizeWithChatHistoriesReturnsOnCall == nil {
-		fake.summarizeWithChatHistoriesReturnsOnCall = make(map[int]struct {
+func (fake *MockClient) SummarizeChatHistoriesReturnsOnCall(i int, result1 *openaia.ChatCompletionResponse, result2 error) {
+	fake.summarizeChatHistoriesMutex.Lock()
+	defer fake.summarizeChatHistoriesMutex.Unlock()
+	fake.SummarizeChatHistoriesStub = nil
+	if fake.summarizeChatHistoriesReturnsOnCall == nil {
+		fake.summarizeChatHistoriesReturnsOnCall = make(map[int]struct {
 			result1 *openaia.ChatCompletionResponse
 			result2 error
 		})
 	}
-	fake.summarizeWithChatHistoriesReturnsOnCall[i] = struct {
+	fake.summarizeChatHistoriesReturnsOnCall[i] = struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistory(arg1 context.Context, arg2 string) (*openaia.ChatCompletionResponse, error) {
-	fake.summarizeWithOneChatHistoryMutex.Lock()
-	ret, specificReturn := fake.summarizeWithOneChatHistoryReturnsOnCall[len(fake.summarizeWithOneChatHistoryArgsForCall)]
-	fake.summarizeWithOneChatHistoryArgsForCall = append(fake.summarizeWithOneChatHistoryArgsForCall, struct {
+func (fake *MockClient) SummarizeOneChatHistory(arg1 context.Context, arg2 string) (*openaia.ChatCompletionResponse, error) {
+	fake.summarizeOneChatHistoryMutex.Lock()
+	ret, specificReturn := fake.summarizeOneChatHistoryReturnsOnCall[len(fake.summarizeOneChatHistoryArgsForCall)]
+	fake.summarizeOneChatHistoryArgsForCall = append(fake.summarizeOneChatHistoryArgsForCall, struct {
 		arg1 context.Context
 		arg2 string
 	}{arg1, arg2})
-	stub := fake.SummarizeWithOneChatHistoryStub
-	fakeReturns := fake.summarizeWithOneChatHistoryReturns
-	fake.recordInvocation("SummarizeWithOneChatHistory", []interface{}{arg1, arg2})
-	fake.summarizeWithOneChatHistoryMutex.Unlock()
+	stub := fake.SummarizeOneChatHistoryStub
+	fakeReturns := fake.summarizeOneChatHistoryReturns
+	fake.recordInvocation("SummarizeOneChatHistory", []interface{}{arg1, arg2})
+	fake.summarizeOneChatHistoryMutex.Unlock()
 	if stub != nil {
 		return stub(arg1, arg2)
 	}
@@ -308,46 +308,46 @@ func (fake *MockClient) SummarizeWithOneChatHistory(arg1 context.Context, arg2 s
 	return fakeReturns.result1, fakeReturns.result2
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistoryCallCount() int {
-	fake.summarizeWithOneChatHistoryMutex.RLock()
-	defer fake.summarizeWithOneChatHistoryMutex.RUnlock()
-	return len(fake.summarizeWithOneChatHistoryArgsForCall)
+func (fake *MockClient) SummarizeOneChatHistoryCallCount() int {
+	fake.summarizeOneChatHistoryMutex.RLock()
+	defer fake.summarizeOneChatHistoryMutex.RUnlock()
+	return len(fake.summarizeOneChatHistoryArgsForCall)
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistoryCalls(stub func(context.Context, string) (*openaia.ChatCompletionResponse, error)) {
-	fake.summarizeWithOneChatHistoryMutex.Lock()
-	defer fake.summarizeWithOneChatHistoryMutex.Unlock()
-	fake.SummarizeWithOneChatHistoryStub = stub
+func (fake *MockClient) SummarizeOneChatHistoryCalls(stub func(context.Context, string) (*openaia.ChatCompletionResponse, error)) {
+	fake.summarizeOneChatHistoryMutex.Lock()
+	defer fake.summarizeOneChatHistoryMutex.Unlock()
+	fake.SummarizeOneChatHistoryStub = stub
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistoryArgsForCall(i int) (context.Context, string) {
-	fake.summarizeWithOneChatHistoryMutex.RLock()
-	defer fake.summarizeWithOneChatHistoryMutex.RUnlock()
-	argsForCall := fake.summarizeWithOneChatHistoryArgsForCall[i]
+func (fake *MockClient) SummarizeOneChatHistoryArgsForCall(i int) (context.Context, string) {
+	fake.summarizeOneChatHistoryMutex.RLock()
+	defer fake.summarizeOneChatHistoryMutex.RUnlock()
+	argsForCall := fake.summarizeOneChatHistoryArgsForCall[i]
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistoryReturns(result1 *openaia.ChatCompletionResponse, result2 error) {
-	fake.summarizeWithOneChatHistoryMutex.Lock()
-	defer fake.summarizeWithOneChatHistoryMutex.Unlock()
-	fake.SummarizeWithOneChatHistoryStub = nil
-	fake.summarizeWithOneChatHistoryReturns = struct {
+func (fake *MockClient) SummarizeOneChatHistoryReturns(result1 *openaia.ChatCompletionResponse, result2 error) {
+	fake.summarizeOneChatHistoryMutex.Lock()
+	defer fake.summarizeOneChatHistoryMutex.Unlock()
+	fake.SummarizeOneChatHistoryStub = nil
+	fake.summarizeOneChatHistoryReturns = struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *MockClient) SummarizeWithOneChatHistoryReturnsOnCall(i int, result1 *openaia.ChatCompletionResponse, result2 error) {
-	fake.summarizeWithOneChatHistoryMutex.Lock()
-	defer fake.summarizeWithOneChatHistoryMutex.Unlock()
-	fake.SummarizeWithOneChatHistoryStub = nil
-	if fake.summarizeWithOneChatHistoryReturnsOnCall == nil {
-		fake.summarizeWithOneChatHistoryReturnsOnCall = make(map[int]struct {
+func (fake *MockClient) SummarizeOneChatHistoryReturnsOnCall(i int, result1 *openaia.ChatCompletionResponse, result2 error) {
+	fake.summarizeOneChatHistoryMutex.Lock()
+	defer fake.summarizeOneChatHistoryMutex.Unlock()
+	fake.SummarizeOneChatHistoryStub = nil
+	if fake.summarizeOneChatHistoryReturnsOnCall == nil {
+		fake.summarizeOneChatHistoryReturnsOnCall = make(map[int]struct {
 			result1 *openaia.ChatCompletionResponse
 			result2 error
 		})
 	}
-	fake.summarizeWithOneChatHistoryReturnsOnCall[i] = struct {
+	fake.summarizeOneChatHistoryReturnsOnCall[i] = struct {
 		result1 *openaia.ChatCompletionResponse
 		result2 error
 	}{result1, result2}
@@ -489,10 +489,10 @@ func (fake *MockClient) Invocations() map[string][][]interface{} {
 	defer fake.splitContentBasedByTokenLimitationsMutex.RUnlock()
 	fake.summarizeAnyMutex.RLock()
 	defer fake.summarizeAnyMutex.RUnlock()
-	fake.summarizeWithChatHistoriesMutex.RLock()
-	defer fake.summarizeWithChatHistoriesMutex.RUnlock()
-	fake.summarizeWithOneChatHistoryMutex.RLock()
-	defer fake.summarizeWithOneChatHistoryMutex.RUnlock()
+	fake.summarizeChatHistoriesMutex.RLock()
+	defer fake.summarizeChatHistoriesMutex.RUnlock()
+	fake.summarizeOneChatHistoryMutex.RLock()
+	defer fake.summarizeOneChatHistoryMutex.RUnlock()
 	fake.summarizeWithQuestionsAsSimplifiedChineseMutex.RLock()
 	defer fake.summarizeWithQuestionsAsSimplifiedChineseMutex.RUnlock()
 	fake.truncateContentBasedOnTokensMutex.RLock()

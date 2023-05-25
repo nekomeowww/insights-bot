@@ -17,8 +17,8 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/nekomeowww/insights-bot/pkg/openai"
 )
 
 type FromPlatform int
@@ -114,11 +114,8 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 	}
 
 	m.logger.WithFields(logrus.Fields{
-		"title":                  article.Title,
-		"url":                    url,
-		"prompt_token_usage":     resp.Usage.PromptTokens,
-		"completion_token_usage": resp.Usage.CompletionTokens,
-		"total_token_usage":      resp.Usage.TotalTokens,
+		"title": article.Title,
+		"url":   url,
 	}).Infof("✅ summarizing article done")
 
 	err = m.ent.LogSummarizations.

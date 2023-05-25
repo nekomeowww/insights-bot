@@ -17,6 +17,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
+	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 
@@ -34,6 +35,8 @@ type Client struct {
 	LogChatHistoriesRecap *LogChatHistoriesRecapClient
 	// LogSummarizations is the client for interacting with the LogSummarizations builders.
 	LogSummarizations *LogSummarizationsClient
+	// MetricOpenAIChatCompletionTokenUsage is the client for interacting with the MetricOpenAIChatCompletionTokenUsage builders.
+	MetricOpenAIChatCompletionTokenUsage *MetricOpenAIChatCompletionTokenUsageClient
 	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
 	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
@@ -54,6 +57,7 @@ func (c *Client) init() {
 	c.ChatHistories = NewChatHistoriesClient(c.config)
 	c.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(c.config)
 	c.LogSummarizations = NewLogSummarizationsClient(c.config)
+	c.MetricOpenAIChatCompletionTokenUsage = NewMetricOpenAIChatCompletionTokenUsageClient(c.config)
 	c.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(c.config)
 	c.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(c.config)
 }
@@ -138,13 +142,14 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                      ctx,
-		config:                   cfg,
-		ChatHistories:            NewChatHistoriesClient(cfg),
-		LogChatHistoriesRecap:    NewLogChatHistoriesRecapClient(cfg),
-		LogSummarizations:        NewLogSummarizationsClient(cfg),
-		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
-		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
+		ctx:                                  ctx,
+		config:                               cfg,
+		ChatHistories:                        NewChatHistoriesClient(cfg),
+		LogChatHistoriesRecap:                NewLogChatHistoriesRecapClient(cfg),
+		LogSummarizations:                    NewLogSummarizationsClient(cfg),
+		MetricOpenAIChatCompletionTokenUsage: NewMetricOpenAIChatCompletionTokenUsageClient(cfg),
+		SlackOAuthCredentials:                NewSlackOAuthCredentialsClient(cfg),
+		TelegramChatFeatureFlags:             NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
 
@@ -162,13 +167,14 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                      ctx,
-		config:                   cfg,
-		ChatHistories:            NewChatHistoriesClient(cfg),
-		LogChatHistoriesRecap:    NewLogChatHistoriesRecapClient(cfg),
-		LogSummarizations:        NewLogSummarizationsClient(cfg),
-		SlackOAuthCredentials:    NewSlackOAuthCredentialsClient(cfg),
-		TelegramChatFeatureFlags: NewTelegramChatFeatureFlagsClient(cfg),
+		ctx:                                  ctx,
+		config:                               cfg,
+		ChatHistories:                        NewChatHistoriesClient(cfg),
+		LogChatHistoriesRecap:                NewLogChatHistoriesRecapClient(cfg),
+		LogSummarizations:                    NewLogSummarizationsClient(cfg),
+		MetricOpenAIChatCompletionTokenUsage: NewMetricOpenAIChatCompletionTokenUsageClient(cfg),
+		SlackOAuthCredentials:                NewSlackOAuthCredentialsClient(cfg),
+		TelegramChatFeatureFlags:             NewTelegramChatFeatureFlagsClient(cfg),
 	}, nil
 }
 
@@ -197,21 +203,25 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.ChatHistories.Use(hooks...)
-	c.LogChatHistoriesRecap.Use(hooks...)
-	c.LogSummarizations.Use(hooks...)
-	c.SlackOAuthCredentials.Use(hooks...)
-	c.TelegramChatFeatureFlags.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.ChatHistories, c.LogChatHistoriesRecap, c.LogSummarizations,
+		c.MetricOpenAIChatCompletionTokenUsage, c.SlackOAuthCredentials,
+		c.TelegramChatFeatureFlags,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.ChatHistories.Intercept(interceptors...)
-	c.LogChatHistoriesRecap.Intercept(interceptors...)
-	c.LogSummarizations.Intercept(interceptors...)
-	c.SlackOAuthCredentials.Intercept(interceptors...)
-	c.TelegramChatFeatureFlags.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.ChatHistories, c.LogChatHistoriesRecap, c.LogSummarizations,
+		c.MetricOpenAIChatCompletionTokenUsage, c.SlackOAuthCredentials,
+		c.TelegramChatFeatureFlags,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -223,6 +233,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.LogChatHistoriesRecap.mutate(ctx, m)
 	case *LogSummarizationsMutation:
 		return c.LogSummarizations.mutate(ctx, m)
+	case *MetricOpenAIChatCompletionTokenUsageMutation:
+		return c.MetricOpenAIChatCompletionTokenUsage.mutate(ctx, m)
 	case *SlackOAuthCredentialsMutation:
 		return c.SlackOAuthCredentials.mutate(ctx, m)
 	case *TelegramChatFeatureFlagsMutation:
@@ -586,6 +598,124 @@ func (c *LogSummarizationsClient) mutate(ctx context.Context, m *LogSummarizatio
 	}
 }
 
+// MetricOpenAIChatCompletionTokenUsageClient is a client for the MetricOpenAIChatCompletionTokenUsage schema.
+type MetricOpenAIChatCompletionTokenUsageClient struct {
+	config
+}
+
+// NewMetricOpenAIChatCompletionTokenUsageClient returns a client for the MetricOpenAIChatCompletionTokenUsage from the given config.
+func NewMetricOpenAIChatCompletionTokenUsageClient(c config) *MetricOpenAIChatCompletionTokenUsageClient {
+	return &MetricOpenAIChatCompletionTokenUsageClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `metricopenaichatcompletiontokenusage.Hooks(f(g(h())))`.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Use(hooks ...Hook) {
+	c.hooks.MetricOpenAIChatCompletionTokenUsage = append(c.hooks.MetricOpenAIChatCompletionTokenUsage, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `metricopenaichatcompletiontokenusage.Intercept(f(g(h())))`.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Intercept(interceptors ...Interceptor) {
+	c.inters.MetricOpenAIChatCompletionTokenUsage = append(c.inters.MetricOpenAIChatCompletionTokenUsage, interceptors...)
+}
+
+// Create returns a builder for creating a MetricOpenAIChatCompletionTokenUsage entity.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Create() *MetricOpenAIChatCompletionTokenUsageCreate {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpCreate)
+	return &MetricOpenAIChatCompletionTokenUsageCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of MetricOpenAIChatCompletionTokenUsage entities.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) CreateBulk(builders ...*MetricOpenAIChatCompletionTokenUsageCreate) *MetricOpenAIChatCompletionTokenUsageCreateBulk {
+	return &MetricOpenAIChatCompletionTokenUsageCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for MetricOpenAIChatCompletionTokenUsage.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Update() *MetricOpenAIChatCompletionTokenUsageUpdate {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpUpdate)
+	return &MetricOpenAIChatCompletionTokenUsageUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) UpdateOne(moacctu *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpUpdateOne, withMetricOpenAIChatCompletionTokenUsage(moacctu))
+	return &MetricOpenAIChatCompletionTokenUsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) UpdateOneID(id uuid.UUID) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpUpdateOne, withMetricOpenAIChatCompletionTokenUsageID(id))
+	return &MetricOpenAIChatCompletionTokenUsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for MetricOpenAIChatCompletionTokenUsage.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Delete() *MetricOpenAIChatCompletionTokenUsageDelete {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpDelete)
+	return &MetricOpenAIChatCompletionTokenUsageDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) DeleteOne(moacctu *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
+	return c.DeleteOneID(moacctu.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) DeleteOneID(id uuid.UUID) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
+	builder := c.Delete().Where(metricopenaichatcompletiontokenusage.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &MetricOpenAIChatCompletionTokenUsageDeleteOne{builder}
+}
+
+// Query returns a query builder for MetricOpenAIChatCompletionTokenUsage.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Query() *MetricOpenAIChatCompletionTokenUsageQuery {
+	return &MetricOpenAIChatCompletionTokenUsageQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeMetricOpenAIChatCompletionTokenUsage},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a MetricOpenAIChatCompletionTokenUsage entity by its id.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Get(ctx context.Context, id uuid.UUID) (*MetricOpenAIChatCompletionTokenUsage, error) {
+	return c.Query().Where(metricopenaichatcompletiontokenusage.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) GetX(ctx context.Context, id uuid.UUID) *MetricOpenAIChatCompletionTokenUsage {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Hooks() []Hook {
+	return c.hooks.MetricOpenAIChatCompletionTokenUsage
+}
+
+// Interceptors returns the client interceptors.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) Interceptors() []Interceptor {
+	return c.inters.MetricOpenAIChatCompletionTokenUsage
+}
+
+func (c *MetricOpenAIChatCompletionTokenUsageClient) mutate(ctx context.Context, m *MetricOpenAIChatCompletionTokenUsageMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&MetricOpenAIChatCompletionTokenUsageCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&MetricOpenAIChatCompletionTokenUsageUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&MetricOpenAIChatCompletionTokenUsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&MetricOpenAIChatCompletionTokenUsageDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown MetricOpenAIChatCompletionTokenUsage mutation op: %q", m.Op())
+	}
+}
+
 // SlackOAuthCredentialsClient is a client for the SlackOAuthCredentials schema.
 type SlackOAuthCredentialsClient struct {
 	config
@@ -825,11 +955,13 @@ func (c *TelegramChatFeatureFlagsClient) mutate(ctx context.Context, m *Telegram
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ChatHistories, LogChatHistoriesRecap, LogSummarizations, SlackOAuthCredentials,
+		ChatHistories, LogChatHistoriesRecap, LogSummarizations,
+		MetricOpenAIChatCompletionTokenUsage, SlackOAuthCredentials,
 		TelegramChatFeatureFlags []ent.Hook
 	}
 	inters struct {
-		ChatHistories, LogChatHistoriesRecap, LogSummarizations, SlackOAuthCredentials,
+		ChatHistories, LogChatHistoriesRecap, LogSummarizations,
+		MetricOpenAIChatCompletionTokenUsage, SlackOAuthCredentials,
 		TelegramChatFeatureFlags []ent.Interceptor
 	}
 )

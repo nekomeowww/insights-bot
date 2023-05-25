@@ -7,11 +7,12 @@ import "context"
 // SchemaConfig represents alternative schema names for all tables
 // that can be passed at runtime.
 type SchemaConfig struct {
-	ChatHistories            string // ChatHistories table.
-	LogChatHistoriesRecap    string // LogChatHistoriesRecap table.
-	LogSummarizations        string // LogSummarizations table.
-	SlackOAuthCredentials    string // SlackOAuthCredentials table.
-	TelegramChatFeatureFlags string // TelegramChatFeatureFlags table.
+	ChatHistories                        string // ChatHistories table.
+	LogChatHistoriesRecap                string // LogChatHistoriesRecap table.
+	LogSummarizations                    string // LogSummarizations table.
+	MetricOpenAIChatCompletionTokenUsage string // MetricOpenAIChatCompletionTokenUsage table.
+	SlackOAuthCredentials                string // SlackOAuthCredentials table.
+	TelegramChatFeatureFlags             string // TelegramChatFeatureFlags table.
 }
 
 type schemaCtxKey struct{}

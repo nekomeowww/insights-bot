@@ -45,6 +45,18 @@ func (f LogSummarizationsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.LogSummarizationsMutation", m)
 }
 
+// The MetricOpenAIChatCompletionTokenUsageFunc type is an adapter to allow the use of ordinary
+// function as MetricOpenAIChatCompletionTokenUsage mutator.
+type MetricOpenAIChatCompletionTokenUsageFunc func(context.Context, *ent.MetricOpenAIChatCompletionTokenUsageMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f MetricOpenAIChatCompletionTokenUsageFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.MetricOpenAIChatCompletionTokenUsageMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.MetricOpenAIChatCompletionTokenUsageMutation", m)
+}
+
 // The SlackOAuthCredentialsFunc type is an adapter to allow the use of ordinary
 // function as SlackOAuthCredentials mutator.
 type SlackOAuthCredentialsFunc func(context.Context, *ent.SlackOAuthCredentialsMutation) (ent.Value, error)

@@ -19,14 +19,14 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
+	"github.com/nekomeowww/fo"
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/linkprev"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/nekomeowww/insights-bot/pkg/openai"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type FromPlatform int
@@ -142,7 +142,7 @@ func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string,
 		return "", nil
 	}
 	if utf8.RuneCountInString(text) >= 300 {
-		resp, err := m.openAI.SummarizeWithOneChatHistory(context.Background(), text)
+		resp, err := m.openAI.SummarizeOneChatHistory(context.Background(), text)
 		if err != nil {
 			return "", err
 		}
@@ -327,7 +327,7 @@ var RecapOutputTemplate = lo.Must(template.
 func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, int, int, int, error) {
 	m.logger.Infof("✍️ summarizing last one hour chat histories:\n%s", s)
 
-	resp, err := m.openAI.SummarizeWithChatHistories(context.Background(), s)
+	resp, err := m.openAI.SummarizeChatHistories(context.Background(), s)
 	if err != nil {
 		return nil, 0, 0, 0, err
 	}
@@ -335,11 +335,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, 0, 0, 0, nil
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"prompt_token_usage":     resp.Usage.PromptTokens,
-		"completion_token_usage": resp.Usage.CompletionTokens,
-		"total_token_usage":      resp.Usage.TotalTokens,
-	}).Info("✅ summarized last one hour chat histories")
+	m.logger.Info("✅ summarized last one hour chat histories")
 	if resp.Choices[0].Message.Content == "" {
 		return nil, 0, 0, 0, nil
 	}
@@ -352,7 +348,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, resp.Usage.CompletionTokens, resp.Usage.PromptTokens, resp.Usage.TotalTokens, err
 	}
 
-	m.logger.Infof("✅ unmarshaled chat history summarization output: %s", utils.SprintJSON(outputs))
+	m.logger.Infof("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs)))
 
 	return outputs, resp.Usage.CompletionTokens, resp.Usage.PromptTokens, resp.Usage.TotalTokens, nil
 }

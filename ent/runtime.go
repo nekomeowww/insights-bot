@@ -7,6 +7,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
+	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/schema"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -182,6 +183,40 @@ func init() {
 	logsummarizationsDescID := logsummarizationsFields[0].Descriptor()
 	// logsummarizations.DefaultID holds the default value on creation for the id field.
 	logsummarizations.DefaultID = logsummarizationsDescID.Default.(func() uuid.UUID)
+	metricopenaichatcompletiontokenusageFields := schema.MetricOpenAIChatCompletionTokenUsage{}.Fields()
+	_ = metricopenaichatcompletiontokenusageFields
+	// metricopenaichatcompletiontokenusageDescPromptOperation is the schema descriptor for prompt_operation field.
+	metricopenaichatcompletiontokenusageDescPromptOperation := metricopenaichatcompletiontokenusageFields[1].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultPromptOperation holds the default value on creation for the prompt_operation field.
+	metricopenaichatcompletiontokenusage.DefaultPromptOperation = metricopenaichatcompletiontokenusageDescPromptOperation.Default.(string)
+	// metricopenaichatcompletiontokenusageDescPromptCharacterLength is the schema descriptor for prompt_character_length field.
+	metricopenaichatcompletiontokenusageDescPromptCharacterLength := metricopenaichatcompletiontokenusageFields[2].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultPromptCharacterLength holds the default value on creation for the prompt_character_length field.
+	metricopenaichatcompletiontokenusage.DefaultPromptCharacterLength = metricopenaichatcompletiontokenusageDescPromptCharacterLength.Default.(int)
+	// metricopenaichatcompletiontokenusageDescPromptTokenUsage is the schema descriptor for prompt_token_usage field.
+	metricopenaichatcompletiontokenusageDescPromptTokenUsage := metricopenaichatcompletiontokenusageFields[3].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultPromptTokenUsage holds the default value on creation for the prompt_token_usage field.
+	metricopenaichatcompletiontokenusage.DefaultPromptTokenUsage = metricopenaichatcompletiontokenusageDescPromptTokenUsage.Default.(int)
+	// metricopenaichatcompletiontokenusageDescCompletionCharacterLength is the schema descriptor for completion_character_length field.
+	metricopenaichatcompletiontokenusageDescCompletionCharacterLength := metricopenaichatcompletiontokenusageFields[4].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultCompletionCharacterLength holds the default value on creation for the completion_character_length field.
+	metricopenaichatcompletiontokenusage.DefaultCompletionCharacterLength = metricopenaichatcompletiontokenusageDescCompletionCharacterLength.Default.(int)
+	// metricopenaichatcompletiontokenusageDescCompletionTokenUsage is the schema descriptor for completion_token_usage field.
+	metricopenaichatcompletiontokenusageDescCompletionTokenUsage := metricopenaichatcompletiontokenusageFields[5].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultCompletionTokenUsage holds the default value on creation for the completion_token_usage field.
+	metricopenaichatcompletiontokenusage.DefaultCompletionTokenUsage = metricopenaichatcompletiontokenusageDescCompletionTokenUsage.Default.(int)
+	// metricopenaichatcompletiontokenusageDescTotalTokenUsage is the schema descriptor for total_token_usage field.
+	metricopenaichatcompletiontokenusageDescTotalTokenUsage := metricopenaichatcompletiontokenusageFields[6].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage holds the default value on creation for the total_token_usage field.
+	metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage = metricopenaichatcompletiontokenusageDescTotalTokenUsage.Default.(int)
+	// metricopenaichatcompletiontokenusageDescCreatedAt is the schema descriptor for created_at field.
+	metricopenaichatcompletiontokenusageDescCreatedAt := metricopenaichatcompletiontokenusageFields[7].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultCreatedAt holds the default value on creation for the created_at field.
+	metricopenaichatcompletiontokenusage.DefaultCreatedAt = metricopenaichatcompletiontokenusageDescCreatedAt.Default.(func() int64)
+	// metricopenaichatcompletiontokenusageDescID is the schema descriptor for id field.
+	metricopenaichatcompletiontokenusageDescID := metricopenaichatcompletiontokenusageFields[0].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultID holds the default value on creation for the id field.
+	metricopenaichatcompletiontokenusage.DefaultID = metricopenaichatcompletiontokenusageDescID.Default.(func() uuid.UUID)
 	slackoauthcredentialsFields := schema.SlackOAuthCredentials{}.Fields()
 	_ = slackoauthcredentialsFields
 	// slackoauthcredentialsDescTeamID is the schema descriptor for team_id field.

@@ -15,6 +15,9 @@ type LogChatHistoriesRecap func(*sql.Selector)
 // LogSummarizations is the predicate function for logsummarizations builders.
 type LogSummarizations func(*sql.Selector)
 
+// MetricOpenAIChatCompletionTokenUsage is the predicate function for metricopenaichatcompletiontokenusage builders.
+type MetricOpenAIChatCompletionTokenUsage func(*sql.Selector)
+
 // SlackOAuthCredentials is the predicate function for slackoauthcredentials builders.
 type SlackOAuthCredentials func(*sql.Selector)
 

@@ -63,6 +63,11 @@ func ChatTitle(v string) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldEQ(FieldChatTitle, v))
 }
 
+// ChatType applies equality check predicate on the "chat_type" field. It's identical to ChatTypeEQ.
+func ChatType(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldChatType, v))
+}
+
 // MessageID applies equality check predicate on the "message_id" field. It's identical to MessageIDEQ.
 func MessageID(v int64) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldEQ(FieldMessageID, v))
@@ -111,6 +116,11 @@ func RepliedToUsername(v string) predicate.ChatHistories {
 // RepliedToText applies equality check predicate on the "replied_to_text" field. It's identical to RepliedToTextEQ.
 func RepliedToText(v string) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldEQ(FieldRepliedToText, v))
+}
+
+// RepliedToChatType applies equality check predicate on the "replied_to_chat_type" field. It's identical to RepliedToChatTypeEQ.
+func RepliedToChatType(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldRepliedToChatType, v))
 }
 
 // ChattedAt applies equality check predicate on the "chatted_at" field. It's identical to ChattedAtEQ.
@@ -241,6 +251,71 @@ func ChatTitleEqualFold(v string) predicate.ChatHistories {
 // ChatTitleContainsFold applies the ContainsFold predicate on the "chat_title" field.
 func ChatTitleContainsFold(v string) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldContainsFold(FieldChatTitle, v))
+}
+
+// ChatTypeEQ applies the EQ predicate on the "chat_type" field.
+func ChatTypeEQ(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldChatType, v))
+}
+
+// ChatTypeNEQ applies the NEQ predicate on the "chat_type" field.
+func ChatTypeNEQ(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNEQ(FieldChatType, v))
+}
+
+// ChatTypeIn applies the In predicate on the "chat_type" field.
+func ChatTypeIn(vs ...string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldIn(FieldChatType, vs...))
+}
+
+// ChatTypeNotIn applies the NotIn predicate on the "chat_type" field.
+func ChatTypeNotIn(vs ...string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNotIn(FieldChatType, vs...))
+}
+
+// ChatTypeGT applies the GT predicate on the "chat_type" field.
+func ChatTypeGT(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGT(FieldChatType, v))
+}
+
+// ChatTypeGTE applies the GTE predicate on the "chat_type" field.
+func ChatTypeGTE(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGTE(FieldChatType, v))
+}
+
+// ChatTypeLT applies the LT predicate on the "chat_type" field.
+func ChatTypeLT(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLT(FieldChatType, v))
+}
+
+// ChatTypeLTE applies the LTE predicate on the "chat_type" field.
+func ChatTypeLTE(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLTE(FieldChatType, v))
+}
+
+// ChatTypeContains applies the Contains predicate on the "chat_type" field.
+func ChatTypeContains(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldContains(FieldChatType, v))
+}
+
+// ChatTypeHasPrefix applies the HasPrefix predicate on the "chat_type" field.
+func ChatTypeHasPrefix(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldHasPrefix(FieldChatType, v))
+}
+
+// ChatTypeHasSuffix applies the HasSuffix predicate on the "chat_type" field.
+func ChatTypeHasSuffix(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldHasSuffix(FieldChatType, v))
+}
+
+// ChatTypeEqualFold applies the EqualFold predicate on the "chat_type" field.
+func ChatTypeEqualFold(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEqualFold(FieldChatType, v))
+}
+
+// ChatTypeContainsFold applies the ContainsFold predicate on the "chat_type" field.
+func ChatTypeContainsFold(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldContainsFold(FieldChatType, v))
 }
 
 // MessageIDEQ applies the EQ predicate on the "message_id" field.
@@ -791,6 +866,71 @@ func RepliedToTextEqualFold(v string) predicate.ChatHistories {
 // RepliedToTextContainsFold applies the ContainsFold predicate on the "replied_to_text" field.
 func RepliedToTextContainsFold(v string) predicate.ChatHistories {
 	return predicate.ChatHistories(sql.FieldContainsFold(FieldRepliedToText, v))
+}
+
+// RepliedToChatTypeEQ applies the EQ predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeEQ(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEQ(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeNEQ applies the NEQ predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeNEQ(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNEQ(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeIn applies the In predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeIn(vs ...string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldIn(FieldRepliedToChatType, vs...))
+}
+
+// RepliedToChatTypeNotIn applies the NotIn predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeNotIn(vs ...string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldNotIn(FieldRepliedToChatType, vs...))
+}
+
+// RepliedToChatTypeGT applies the GT predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeGT(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGT(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeGTE applies the GTE predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeGTE(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldGTE(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeLT applies the LT predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeLT(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLT(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeLTE applies the LTE predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeLTE(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldLTE(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeContains applies the Contains predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeContains(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldContains(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeHasPrefix applies the HasPrefix predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeHasPrefix(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldHasPrefix(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeHasSuffix applies the HasSuffix predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeHasSuffix(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldHasSuffix(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeEqualFold applies the EqualFold predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeEqualFold(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldEqualFold(FieldRepliedToChatType, v))
+}
+
+// RepliedToChatTypeContainsFold applies the ContainsFold predicate on the "replied_to_chat_type" field.
+func RepliedToChatTypeContainsFold(v string) predicate.ChatHistories {
+	return predicate.ChatHistories(sql.FieldContainsFold(FieldRepliedToChatType, v))
 }
 
 // ChattedAtEQ applies the EQ predicate on the "chatted_at" field.

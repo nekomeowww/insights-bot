@@ -63,6 +63,20 @@ func (chu *ChatHistoriesUpdate) SetNillableChatTitle(s *string) *ChatHistoriesUp
 	return chu
 }
 
+// SetChatType sets the "chat_type" field.
+func (chu *ChatHistoriesUpdate) SetChatType(s string) *ChatHistoriesUpdate {
+	chu.mutation.SetChatType(s)
+	return chu
+}
+
+// SetNillableChatType sets the "chat_type" field if the given value is not nil.
+func (chu *ChatHistoriesUpdate) SetNillableChatType(s *string) *ChatHistoriesUpdate {
+	if s != nil {
+		chu.SetChatType(*s)
+	}
+	return chu
+}
+
 // SetMessageID sets the "message_id" field.
 func (chu *ChatHistoriesUpdate) SetMessageID(i int64) *ChatHistoriesUpdate {
 	chu.mutation.ResetMessageID()
@@ -231,6 +245,20 @@ func (chu *ChatHistoriesUpdate) SetNillableRepliedToText(s *string) *ChatHistori
 	return chu
 }
 
+// SetRepliedToChatType sets the "replied_to_chat_type" field.
+func (chu *ChatHistoriesUpdate) SetRepliedToChatType(s string) *ChatHistoriesUpdate {
+	chu.mutation.SetRepliedToChatType(s)
+	return chu
+}
+
+// SetNillableRepliedToChatType sets the "replied_to_chat_type" field if the given value is not nil.
+func (chu *ChatHistoriesUpdate) SetNillableRepliedToChatType(s *string) *ChatHistoriesUpdate {
+	if s != nil {
+		chu.SetRepliedToChatType(*s)
+	}
+	return chu
+}
+
 // SetChattedAt sets the "chatted_at" field.
 func (chu *ChatHistoriesUpdate) SetChattedAt(i int64) *ChatHistoriesUpdate {
 	chu.mutation.ResetChattedAt()
@@ -379,6 +407,9 @@ func (chu *ChatHistoriesUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	if value, ok := chu.mutation.ChatTitle(); ok {
 		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
 	}
+	if value, ok := chu.mutation.ChatType(); ok {
+		_spec.SetField(chathistories.FieldChatType, field.TypeString, value)
+	}
 	if value, ok := chu.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)
 	}
@@ -420,6 +451,9 @@ func (chu *ChatHistoriesUpdate) sqlSave(ctx context.Context) (n int, err error) 
 	}
 	if value, ok := chu.mutation.RepliedToText(); ok {
 		_spec.SetField(chathistories.FieldRepliedToText, field.TypeString, value)
+	}
+	if value, ok := chu.mutation.RepliedToChatType(); ok {
+		_spec.SetField(chathistories.FieldRepliedToChatType, field.TypeString, value)
 	}
 	if value, ok := chu.mutation.ChattedAt(); ok {
 		_spec.SetField(chathistories.FieldChattedAt, field.TypeInt64, value)
@@ -501,6 +535,20 @@ func (chuo *ChatHistoriesUpdateOne) SetChatTitle(s string) *ChatHistoriesUpdateO
 func (chuo *ChatHistoriesUpdateOne) SetNillableChatTitle(s *string) *ChatHistoriesUpdateOne {
 	if s != nil {
 		chuo.SetChatTitle(*s)
+	}
+	return chuo
+}
+
+// SetChatType sets the "chat_type" field.
+func (chuo *ChatHistoriesUpdateOne) SetChatType(s string) *ChatHistoriesUpdateOne {
+	chuo.mutation.SetChatType(s)
+	return chuo
+}
+
+// SetNillableChatType sets the "chat_type" field if the given value is not nil.
+func (chuo *ChatHistoriesUpdateOne) SetNillableChatType(s *string) *ChatHistoriesUpdateOne {
+	if s != nil {
+		chuo.SetChatType(*s)
 	}
 	return chuo
 }
@@ -669,6 +717,20 @@ func (chuo *ChatHistoriesUpdateOne) SetRepliedToText(s string) *ChatHistoriesUpd
 func (chuo *ChatHistoriesUpdateOne) SetNillableRepliedToText(s *string) *ChatHistoriesUpdateOne {
 	if s != nil {
 		chuo.SetRepliedToText(*s)
+	}
+	return chuo
+}
+
+// SetRepliedToChatType sets the "replied_to_chat_type" field.
+func (chuo *ChatHistoriesUpdateOne) SetRepliedToChatType(s string) *ChatHistoriesUpdateOne {
+	chuo.mutation.SetRepliedToChatType(s)
+	return chuo
+}
+
+// SetNillableRepliedToChatType sets the "replied_to_chat_type" field if the given value is not nil.
+func (chuo *ChatHistoriesUpdateOne) SetNillableRepliedToChatType(s *string) *ChatHistoriesUpdateOne {
+	if s != nil {
+		chuo.SetRepliedToChatType(*s)
 	}
 	return chuo
 }
@@ -851,6 +913,9 @@ func (chuo *ChatHistoriesUpdateOne) sqlSave(ctx context.Context) (_node *ChatHis
 	if value, ok := chuo.mutation.ChatTitle(); ok {
 		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
 	}
+	if value, ok := chuo.mutation.ChatType(); ok {
+		_spec.SetField(chathistories.FieldChatType, field.TypeString, value)
+	}
 	if value, ok := chuo.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)
 	}
@@ -892,6 +957,9 @@ func (chuo *ChatHistoriesUpdateOne) sqlSave(ctx context.Context) (_node *ChatHis
 	}
 	if value, ok := chuo.mutation.RepliedToText(); ok {
 		_spec.SetField(chathistories.FieldRepliedToText, field.TypeString, value)
+	}
+	if value, ok := chuo.mutation.RepliedToChatType(); ok {
+		_spec.SetField(chathistories.FieldRepliedToChatType, field.TypeString, value)
 	}
 	if value, ok := chuo.mutation.ChattedAt(); ok {
 		_spec.SetField(chathistories.FieldChattedAt, field.TypeInt64, value)

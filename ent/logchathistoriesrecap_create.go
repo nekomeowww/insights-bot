@@ -118,6 +118,20 @@ func (lchrc *LogChatHistoriesRecapCreate) SetNillableTotalTokenUsage(i *int) *Lo
 	return lchrc
 }
 
+// SetRecapType sets the "recap_type" field.
+func (lchrc *LogChatHistoriesRecapCreate) SetRecapType(i int) *LogChatHistoriesRecapCreate {
+	lchrc.mutation.SetRecapType(i)
+	return lchrc
+}
+
+// SetNillableRecapType sets the "recap_type" field if the given value is not nil.
+func (lchrc *LogChatHistoriesRecapCreate) SetNillableRecapType(i *int) *LogChatHistoriesRecapCreate {
+	if i != nil {
+		lchrc.SetRecapType(*i)
+	}
+	return lchrc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchrc *LogChatHistoriesRecapCreate) SetCreatedAt(i int64) *LogChatHistoriesRecapCreate {
 	lchrc.mutation.SetCreatedAt(i)
@@ -223,6 +237,10 @@ func (lchrc *LogChatHistoriesRecapCreate) defaults() {
 		v := logchathistoriesrecap.DefaultTotalTokenUsage
 		lchrc.mutation.SetTotalTokenUsage(v)
 	}
+	if _, ok := lchrc.mutation.RecapType(); !ok {
+		v := logchathistoriesrecap.DefaultRecapType
+		lchrc.mutation.SetRecapType(v)
+	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		v := logchathistoriesrecap.DefaultCreatedAt()
 		lchrc.mutation.SetCreatedAt(v)
@@ -259,6 +277,9 @@ func (lchrc *LogChatHistoriesRecapCreate) check() error {
 	}
 	if _, ok := lchrc.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.total_token_usage"`)}
+	}
+	if _, ok := lchrc.mutation.RecapType(); !ok {
+		return &ValidationError{Name: "recap_type", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.recap_type"`)}
 	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.created_at"`)}
@@ -329,6 +350,10 @@ func (lchrc *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, 
 	if value, ok := lchrc.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
+	}
+	if value, ok := lchrc.mutation.RecapType(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
+		_node.RecapType = value
 	}
 	if value, ok := lchrc.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

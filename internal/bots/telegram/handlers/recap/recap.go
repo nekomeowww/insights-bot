@@ -18,6 +18,8 @@ func NewModules() fx.Option {
 		fx.Provide(NewRecapCallbackQueryHandler()),
 		fx.Provide(NewEnableRecapCommandHandler()),
 		fx.Provide(NewDisableRecapCommandHandler()),
+		fx.Provide(NewRecapForwardedStartCommandHandler()),
+		fx.Provide(NewRecapForwardedCommandHandler()),
 	)
 }
 
@@ -28,10 +30,12 @@ var (
 type NewHandlersParams struct {
 	fx.In
 
-	RecapCommand        *CommandHandler
-	RecapCallbackQuery  *CallbackQueryHandler
-	EnableRecapCommand  *EnableRecapCommandHandler
-	DisableRecapCommand *DisableRecapCommandHandler
+	RecapCommand               *CommandHandler
+	RecapCallbackQuery         *CallbackQueryHandler
+	EnableRecapCommand         *EnableRecapCommandHandler
+	DisableRecapCommand        *DisableRecapCommandHandler
+	RecapForwardedStartCommand *RecapForwardedStartCommandHandler
+	RecapForwardedCommand      *RecapForwardedCommandHandler
 }
 
 type Handlers struct {
@@ -39,6 +43,8 @@ type Handlers struct {
 	recapCallbackQuery  *CallbackQueryHandler
 	enableRecapCommand  *EnableRecapCommandHandler
 	disableRecapCommand *DisableRecapCommandHandler
+	recapForwardedStart *RecapForwardedStartCommandHandler
+	recapForwarded      *RecapForwardedCommandHandler
 }
 
 func NewHandlers() func(NewHandlersParams) *Handlers {
@@ -48,6 +54,8 @@ func NewHandlers() func(NewHandlersParams) *Handlers {
 			recapCallbackQuery:  param.RecapCallbackQuery,
 			enableRecapCommand:  param.EnableRecapCommand,
 			disableRecapCommand: param.DisableRecapCommand,
+			recapForwardedStart: param.RecapForwardedStartCommand,
+			recapForwarded:      param.RecapForwardedCommand,
 		}
 	}
 }
@@ -57,6 +65,8 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 	dispatcher.OnCallbackQuery(h.recapCallbackQuery)
 	dispatcher.OnCommand(h.enableRecapCommand)
 	dispatcher.OnCommand(h.disableRecapCommand)
+	dispatcher.OnCommand(h.recapForwardedStart)
+	dispatcher.OnCommand(h.recapForwarded)
 }
 
 var (

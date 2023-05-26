@@ -48,6 +48,20 @@ func (chc *ChatHistoriesCreate) SetNillableChatTitle(s *string) *ChatHistoriesCr
 	return chc
 }
 
+// SetChatType sets the "chat_type" field.
+func (chc *ChatHistoriesCreate) SetChatType(s string) *ChatHistoriesCreate {
+	chc.mutation.SetChatType(s)
+	return chc
+}
+
+// SetNillableChatType sets the "chat_type" field if the given value is not nil.
+func (chc *ChatHistoriesCreate) SetNillableChatType(s *string) *ChatHistoriesCreate {
+	if s != nil {
+		chc.SetChatType(*s)
+	}
+	return chc
+}
+
 // SetMessageID sets the "message_id" field.
 func (chc *ChatHistoriesCreate) SetMessageID(i int64) *ChatHistoriesCreate {
 	chc.mutation.SetMessageID(i)
@@ -188,6 +202,20 @@ func (chc *ChatHistoriesCreate) SetNillableRepliedToText(s *string) *ChatHistori
 	return chc
 }
 
+// SetRepliedToChatType sets the "replied_to_chat_type" field.
+func (chc *ChatHistoriesCreate) SetRepliedToChatType(s string) *ChatHistoriesCreate {
+	chc.mutation.SetRepliedToChatType(s)
+	return chc
+}
+
+// SetNillableRepliedToChatType sets the "replied_to_chat_type" field if the given value is not nil.
+func (chc *ChatHistoriesCreate) SetNillableRepliedToChatType(s *string) *ChatHistoriesCreate {
+	if s != nil {
+		chc.SetRepliedToChatType(*s)
+	}
+	return chc
+}
+
 // SetChattedAt sets the "chatted_at" field.
 func (chc *ChatHistoriesCreate) SetChattedAt(i int64) *ChatHistoriesCreate {
 	chc.mutation.SetChattedAt(i)
@@ -315,6 +343,10 @@ func (chc *ChatHistoriesCreate) defaults() {
 		v := chathistories.DefaultChatTitle
 		chc.mutation.SetChatTitle(v)
 	}
+	if _, ok := chc.mutation.ChatType(); !ok {
+		v := chathistories.DefaultChatType
+		chc.mutation.SetChatType(v)
+	}
 	if _, ok := chc.mutation.MessageID(); !ok {
 		v := chathistories.DefaultMessageID
 		chc.mutation.SetMessageID(v)
@@ -355,6 +387,10 @@ func (chc *ChatHistoriesCreate) defaults() {
 		v := chathistories.DefaultRepliedToText
 		chc.mutation.SetRepliedToText(v)
 	}
+	if _, ok := chc.mutation.RepliedToChatType(); !ok {
+		v := chathistories.DefaultRepliedToChatType
+		chc.mutation.SetRepliedToChatType(v)
+	}
 	if _, ok := chc.mutation.ChattedAt(); !ok {
 		v := chathistories.DefaultChattedAt()
 		chc.mutation.SetChattedAt(v)
@@ -389,6 +425,9 @@ func (chc *ChatHistoriesCreate) check() error {
 	if _, ok := chc.mutation.ChatTitle(); !ok {
 		return &ValidationError{Name: "chat_title", err: errors.New(`ent: missing required field "ChatHistories.chat_title"`)}
 	}
+	if _, ok := chc.mutation.ChatType(); !ok {
+		return &ValidationError{Name: "chat_type", err: errors.New(`ent: missing required field "ChatHistories.chat_type"`)}
+	}
 	if _, ok := chc.mutation.MessageID(); !ok {
 		return &ValidationError{Name: "message_id", err: errors.New(`ent: missing required field "ChatHistories.message_id"`)}
 	}
@@ -418,6 +457,9 @@ func (chc *ChatHistoriesCreate) check() error {
 	}
 	if _, ok := chc.mutation.RepliedToText(); !ok {
 		return &ValidationError{Name: "replied_to_text", err: errors.New(`ent: missing required field "ChatHistories.replied_to_text"`)}
+	}
+	if _, ok := chc.mutation.RepliedToChatType(); !ok {
+		return &ValidationError{Name: "replied_to_chat_type", err: errors.New(`ent: missing required field "ChatHistories.replied_to_chat_type"`)}
 	}
 	if _, ok := chc.mutation.ChattedAt(); !ok {
 		return &ValidationError{Name: "chatted_at", err: errors.New(`ent: missing required field "ChatHistories.chatted_at"`)}
@@ -478,6 +520,10 @@ func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSp
 		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
 		_node.ChatTitle = value
 	}
+	if value, ok := chc.mutation.ChatType(); ok {
+		_spec.SetField(chathistories.FieldChatType, field.TypeString, value)
+		_node.ChatType = value
+	}
 	if value, ok := chc.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)
 		_node.MessageID = value
@@ -517,6 +563,10 @@ func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSp
 	if value, ok := chc.mutation.RepliedToText(); ok {
 		_spec.SetField(chathistories.FieldRepliedToText, field.TypeString, value)
 		_node.RepliedToText = value
+	}
+	if value, ok := chc.mutation.RepliedToChatType(); ok {
+		_spec.SetField(chathistories.FieldRepliedToChatType, field.TypeString, value)
+		_node.RepliedToChatType = value
 	}
 	if value, ok := chc.mutation.ChattedAt(); ok {
 		_spec.SetField(chathistories.FieldChattedAt, field.TypeInt64, value)

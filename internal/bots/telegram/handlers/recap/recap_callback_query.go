@@ -76,7 +76,6 @@ func (h *CallbackQueryHandler) Handle(c *tgbot.Context) (tgbot.Response, error) 
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾生成失败，请稍后再试！").WithReply(c.Update.CallbackQuery.Message.ReplyToMessage)
 	}
 	if len(histories) <= 5 {
-		fmt.Println(len(histories))
 		return nil, tgbot.NewMessageError(fmt.Sprintf("最近 %d 小时内暂时没有超过 5 条的聊天记录可以生成聊天回顾哦，要再多聊点之后再试试吗？", data.Hour)).WithReply(c.Update.CallbackQuery.Message.ReplyToMessage)
 	}
 

@@ -41,6 +41,7 @@ A bot works with OpenAI GPT models to provide insights for your info flows.
 ### Commands
 
 Insights Bot ships with a set of commands, you can use `/help` to get a list of available commands when talking to the bot in Telegram.
+You can also use `/cancel` to cancel any ongoing actions with the bot.
 
 #### Summarize webpages
 
@@ -112,6 +113,22 @@ By sending `/recap` command, the bot will try to summarize the chat histories an
 
 > **Warning**
 > **This command is not available in Slack/Discord integration currently.**
+
+#### Summarize forwarded messages in private chat
+
+By sending `/recap_forwarded_start` command, the bot will start to capture the forwarded messages you send later in private chat and try to summarize them when you send `/recap_forwarded` command afterwards. Such as:
+
+```txt
+/recap_forwarded_start
+```
+
+```
+[Forward a message]
+```
+
+```txt
+/recap_forwarded
+```
 
 ## Deployment
 

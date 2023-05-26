@@ -16,6 +16,8 @@ const (
 	FieldChatID = "chat_id"
 	// FieldChatTitle holds the string denoting the chat_title field in the database.
 	FieldChatTitle = "chat_title"
+	// FieldChatType holds the string denoting the chat_type field in the database.
+	FieldChatType = "chat_type"
 	// FieldMessageID holds the string denoting the message_id field in the database.
 	FieldMessageID = "message_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
@@ -36,6 +38,8 @@ const (
 	FieldRepliedToUsername = "replied_to_username"
 	// FieldRepliedToText holds the string denoting the replied_to_text field in the database.
 	FieldRepliedToText = "replied_to_text"
+	// FieldRepliedToChatType holds the string denoting the replied_to_chat_type field in the database.
+	FieldRepliedToChatType = "replied_to_chat_type"
 	// FieldChattedAt holds the string denoting the chatted_at field in the database.
 	FieldChattedAt = "chatted_at"
 	// FieldEmbedded holds the string denoting the embedded field in the database.
@@ -55,6 +59,7 @@ var Columns = []string{
 	FieldID,
 	FieldChatID,
 	FieldChatTitle,
+	FieldChatType,
 	FieldMessageID,
 	FieldUserID,
 	FieldUsername,
@@ -65,6 +70,7 @@ var Columns = []string{
 	FieldRepliedToFullName,
 	FieldRepliedToUsername,
 	FieldRepliedToText,
+	FieldRepliedToChatType,
 	FieldChattedAt,
 	FieldEmbedded,
 	FieldFromPlatform,
@@ -87,6 +93,8 @@ var (
 	DefaultChatID int64
 	// DefaultChatTitle holds the default value on creation for the "chat_title" field.
 	DefaultChatTitle string
+	// DefaultChatType holds the default value on creation for the "chat_type" field.
+	DefaultChatType string
 	// DefaultMessageID holds the default value on creation for the "message_id" field.
 	DefaultMessageID int64
 	// DefaultUserID holds the default value on creation for the "user_id" field.
@@ -107,6 +115,8 @@ var (
 	DefaultRepliedToUsername string
 	// DefaultRepliedToText holds the default value on creation for the "replied_to_text" field.
 	DefaultRepliedToText string
+	// DefaultRepliedToChatType holds the default value on creation for the "replied_to_chat_type" field.
+	DefaultRepliedToChatType string
 	// DefaultChattedAt holds the default value on creation for the "chatted_at" field.
 	DefaultChattedAt func() int64
 	// DefaultEmbedded holds the default value on creation for the "embedded" field.
@@ -137,6 +147,11 @@ func ByChatID(opts ...sql.OrderTermOption) OrderOption {
 // ByChatTitle orders the results by the chat_title field.
 func ByChatTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldChatTitle, opts...).ToFunc()
+}
+
+// ByChatType orders the results by the chat_type field.
+func ByChatType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldChatType, opts...).ToFunc()
 }
 
 // ByMessageID orders the results by the message_id field.
@@ -187,6 +202,11 @@ func ByRepliedToUsername(opts ...sql.OrderTermOption) OrderOption {
 // ByRepliedToText orders the results by the replied_to_text field.
 func ByRepliedToText(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRepliedToText, opts...).ToFunc()
+}
+
+// ByRepliedToChatType orders the results by the replied_to_chat_type field.
+func ByRepliedToChatType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRepliedToChatType, opts...).ToFunc()
 }
 
 // ByChattedAt orders the results by the chatted_at field.

@@ -27,7 +27,7 @@ type AutoRecapTimeCapsuleDigger struct {
 
 func NewAutoRecapTimeCapsuleDigger() func(NewAutoRecapTimeCapsuleDiggerParams) (*AutoRecapTimeCapsuleDigger, error) {
 	return func(params NewAutoRecapTimeCapsuleDiggerParams) (*AutoRecapTimeCapsuleDigger, error) {
-		dataloader := timecapsule.NewRueidisDataloader[timecapsules.AutoRecapCapsule](redis.TimeCapsuleAutoRecapSortedSetKey, params.Redis)
+		dataloader := timecapsule.NewRueidisDataloader[timecapsules.AutoRecapCapsule](redis.TimeCapsuleAutoRecapSortedSetKey.Format(), params.Redis)
 
 		digger := timecapsule.NewDigger[timecapsules.AutoRecapCapsule](
 			dataloader,

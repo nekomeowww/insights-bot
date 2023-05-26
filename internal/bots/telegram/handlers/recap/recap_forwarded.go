@@ -129,6 +129,14 @@ func (h RecapForwardedCommandHandler) CommandHelp() string {
 }
 
 func (h *RecapForwardedCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+	_, err := c.Bot.Send(tgbotapi.NewMessage(
+		c.Update.Message.From.ID,
+		"正在为已经接收到的聊天记录生成回顾，请稍等...",
+	))
+	if err != nil {
+		h.logger.Error("failed to send message")
+	}
+
 	histories, err := h.chathistories.FindPrivateForwardedChatHistories(c.Update.Message.From.ID)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾生成失败，请稍后再试！").WithReply(c.Update.Message)

@@ -3,15 +3,16 @@ package slackbot
 import (
 	"context"
 	"errors"
+	"net"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
 	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
-	"net"
-	"net/http"
-	"time"
 
 	"github.com/slack-go/slack"
 )
@@ -153,6 +154,7 @@ func (s *BotService) Stop(ctx context.Context) error {
 		s.logger.WithField("error", err.Error()).Error("slack bot server shutdown failed")
 		return err
 	}
+
 	s.logger.Info("stopped to receiving new requests")
 
 	return nil

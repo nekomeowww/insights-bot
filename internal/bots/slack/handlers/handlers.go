@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
@@ -16,7 +18,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"go.uber.org/fx"
-	"net/http"
 )
 
 func NewModules() fx.Option {
@@ -78,13 +79,16 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	}).Infof("slack: command received: /smr %s", body.Text)
 
 	urlString := body.Text
+
 	err := smr.CheckUrl(urlString)
 	if err != nil {
 		if smr.IsUrlCheckError(err) {
 			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(err.Error()))
 			return
 		}
+
 		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("出现了一些问题，可以再试试？"))
+
 		return
 	}
 
@@ -114,6 +118,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	if err != nil {
 		h.logger.WithError(err).Warn("slack: failed to add task")
 		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("量子速读请求发送失败了，可以再试试？"))
+
 		return
 	}
 

@@ -1,8 +1,9 @@
 package types
 
 import (
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"sync"
+
+	"github.com/nekomeowww/insights-bot/internal/models/smr"
 )
 
 type TaskInfo struct {
@@ -37,8 +38,6 @@ func (t *TaskQueue) AddTask(info TaskInfo) {
 
 	t.queue = append(t.queue, info)
 	t.mu.Unlock()
-
-	return
 }
 
 func (t *TaskQueue) RemoveTask() {
@@ -49,7 +48,6 @@ func (t *TaskQueue) RemoveTask() {
 	}
 
 	t.queue = t.queue[1:]
-	return
 }
 
 func (t *TaskQueue) Len() int {

@@ -3,6 +3,8 @@ package smr
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/snowflake/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -12,7 +14,6 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/slack-go/slack"
-	"time"
 )
 
 func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) {
@@ -47,6 +48,7 @@ func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
 		}
 		msgEdit.ChatID = info.ChatID
 		msgEdit.MessageID = info.MessageID
+
 		if ok {
 			msgEdit.ParseMode = tgbotapi.ModeHTML
 		}
@@ -60,6 +62,7 @@ func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
 		token, err := s.ent.SlackOAuthCredentials.Query().
 			Where(slackoauthcredentials.TeamID(info.TeamID)).
 			First(context.Background())
+
 		if err != nil {
 			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to get team's access token")
 			return
@@ -72,6 +75,7 @@ func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
 			s.slackBot.GetService().NewStoreFuncForRefresh(info.TeamID),
 			slack.MsgOptionText(result, false),
 		)
+
 		if err != nil {
 			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
 		}
@@ -82,6 +86,7 @@ func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
 				SetContent(result).
 				Build(),
 			)
+
 		if err != nil {
 			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
 		}
@@ -109,6 +114,7 @@ func (s *Service) processor(info types.TaskInfo) {
 		if err != nil {
 			s.logger.WithError(err).Errorf("failed to move task back to queue")
 		}
+
 		return
 	}
 
@@ -119,6 +125,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	if err != nil {
 		s.logger.WithError(err).Warn("smr service: summarization failed")
 		s.processError(info, err)
+
 		return
 	}
 

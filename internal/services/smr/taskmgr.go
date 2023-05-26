@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/url"
+
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
 	"github.com/sourcegraph/conc/pool"
-	"net/url"
 )
 
 func CheckUrl(urlString string) error {
@@ -33,8 +34,6 @@ func (s *Service) AddTask(taskInfo types.TaskInfo) error {
 		return err
 	}
 
-	s.logger.Infof("task: %s\n", result)
-
 	err = s.redisClient.Do(context.Background(), s.redisClient.B().Lpush().Key("smr/task").Element(string(result)).Build()).Error()
 	if err != nil {
 		return err
@@ -44,8 +43,9 @@ func (s *Service) AddTask(taskInfo types.TaskInfo) error {
 		WithField("url", taskInfo.Url).
 		WithField("platform", taskInfo.Platform).
 		Info("smr service: task added")
+
+		// TODO: #111 should reject ongoing smr request in the same chat
 	return nil
-	// TODO: #111 should reject ongoing smr request in the same chat
 }
 
 func (s *Service) stop() {
@@ -82,6 +82,7 @@ func (s *Service) run() {
 	needToClose := false
 
 	taskRunner := pool.New().WithMaxGoroutines(10)
+
 	for {
 		select {
 		case <-s.closeChan:
@@ -101,7 +102,9 @@ func (s *Service) run() {
 			if errors.Is(err, rueidis.Nil) {
 				continue
 			}
+
 			s.logger.WithError(err).Warn("smr service: failed to get task")
+
 			continue
 		}
 
@@ -117,5 +120,6 @@ func (s *Service) run() {
 	}
 
 	s.alreadyClosed = true
+
 	taskRunner.Wait()
 }

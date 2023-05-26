@@ -4,13 +4,14 @@ import (
 	"context"
 	"crypto/ed25519"
 	"errors"
+	"net"
+
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
 	"github.com/disgoorg/disgo/httpserver"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
-	"net"
 )
 
 type BotService struct {
@@ -46,6 +47,7 @@ func NewBotService[E bot.Event](
 	}
 
 	discordBot.Client = client
+
 	return discordBot
 }
 

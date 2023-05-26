@@ -68,7 +68,7 @@ func (h *CallbackQueryHandler) Handle(c *tgbot.Context) (tgbot.Response, error) 
 		tgbotapi.NewInlineKeyboardMarkup([]tgbotapi.InlineKeyboardButton{}),
 	))
 	if err != nil {
-		h.logger.Errorf("failed to delete message: %v", err)
+		h.logger.Errorf("failed to edit message: %v", err)
 	}
 
 	histories, err := h.chatHistories.FindChatHistoriesByTimeBefore(chatID, time.Duration(data.Hour)*time.Hour)

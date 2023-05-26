@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
 )
@@ -53,6 +54,10 @@ func (h RecapForwardedStartCommandHandler) CommandHelp() string {
 }
 
 func (h *RecapForwardedStartCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+	if !lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		return nil, tgbot.NewMessageError("该命令当前只能在私聊中使用哦！")
+	}
+
 	has, err := h.chathistories.HasOngoingRecapForwardedFromPrivateMessages(c.Update.Message.From.ID)
 	if err != nil {
 		return nil, err
@@ -129,6 +134,10 @@ func (h RecapForwardedCommandHandler) CommandHelp() string {
 }
 
 func (h *RecapForwardedCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+	if !lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		return nil, tgbot.NewMessageError("该命令当前只能在私聊中使用哦！")
+	}
+
 	_, err := c.Bot.Send(tgbotapi.NewMessage(
 		c.Update.Message.From.ID,
 		"正在为已经接收到的聊天记录生成回顾，请稍等...",

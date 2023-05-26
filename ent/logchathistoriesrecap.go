@@ -31,6 +31,8 @@ type LogChatHistoriesRecap struct {
 	CompletionTokenUsage int `json:"completion_token_usage,omitempty"`
 	// TotalTokenUsage holds the value of the "total_token_usage" field.
 	TotalTokenUsage int `json:"total_token_usage,omitempty"`
+	// RecapType holds the value of the "recap_type" field.
+	RecapType int `json:"recap_type,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -43,7 +45,7 @@ func (*LogChatHistoriesRecap) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case logchathistoriesrecap.FieldChatID, logchathistoriesrecap.FieldFromPlatform, logchathistoriesrecap.FieldPromptTokenUsage, logchathistoriesrecap.FieldCompletionTokenUsage, logchathistoriesrecap.FieldTotalTokenUsage, logchathistoriesrecap.FieldCreatedAt, logchathistoriesrecap.FieldUpdatedAt:
+		case logchathistoriesrecap.FieldChatID, logchathistoriesrecap.FieldFromPlatform, logchathistoriesrecap.FieldPromptTokenUsage, logchathistoriesrecap.FieldCompletionTokenUsage, logchathistoriesrecap.FieldTotalTokenUsage, logchathistoriesrecap.FieldRecapType, logchathistoriesrecap.FieldCreatedAt, logchathistoriesrecap.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
 		case logchathistoriesrecap.FieldRecapInputs, logchathistoriesrecap.FieldRecapOutputs:
 			values[i] = new(sql.NullString)
@@ -111,6 +113,12 @@ func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
 			} else if value.Valid {
 				lchr.TotalTokenUsage = int(value.Int64)
+			}
+		case logchathistoriesrecap.FieldRecapType:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field recap_type", values[i])
+			} else if value.Valid {
+				lchr.RecapType = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -180,6 +188,9 @@ func (lchr *LogChatHistoriesRecap) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.TotalTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("recap_type=")
+	builder.WriteString(fmt.Sprintf("%v", lchr.RecapType))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.CreatedAt))

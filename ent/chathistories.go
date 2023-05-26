@@ -21,6 +21,8 @@ type ChatHistories struct {
 	ChatID int64 `json:"chat_id,omitempty"`
 	// ChatTitle holds the value of the "chat_title" field.
 	ChatTitle string `json:"chat_title,omitempty"`
+	// ChatType holds the value of the "chat_type" field.
+	ChatType string `json:"chat_type,omitempty"`
 	// MessageID holds the value of the "message_id" field.
 	MessageID int64 `json:"message_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
@@ -41,6 +43,8 @@ type ChatHistories struct {
 	RepliedToUsername string `json:"replied_to_username,omitempty"`
 	// RepliedToText holds the value of the "replied_to_text" field.
 	RepliedToText string `json:"replied_to_text,omitempty"`
+	// RepliedToChatType holds the value of the "replied_to_chat_type" field.
+	RepliedToChatType string `json:"replied_to_chat_type,omitempty"`
 	// ChattedAt holds the value of the "chatted_at" field.
 	ChattedAt int64 `json:"chatted_at,omitempty"`
 	// Embedded holds the value of the "embedded" field.
@@ -63,7 +67,7 @@ func (*ChatHistories) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case chathistories.FieldChatID, chathistories.FieldMessageID, chathistories.FieldUserID, chathistories.FieldRepliedToMessageID, chathistories.FieldRepliedToUserID, chathistories.FieldChattedAt, chathistories.FieldFromPlatform, chathistories.FieldCreatedAt, chathistories.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case chathistories.FieldChatTitle, chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText:
+		case chathistories.FieldChatTitle, chathistories.FieldChatType, chathistories.FieldUsername, chathistories.FieldFullName, chathistories.FieldText, chathistories.FieldRepliedToFullName, chathistories.FieldRepliedToUsername, chathistories.FieldRepliedToText, chathistories.FieldRepliedToChatType:
 			values[i] = new(sql.NullString)
 		case chathistories.FieldID:
 			values[i] = new(uuid.UUID)
@@ -99,6 +103,12 @@ func (ch *ChatHistories) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field chat_title", values[i])
 			} else if value.Valid {
 				ch.ChatTitle = value.String
+			}
+		case chathistories.FieldChatType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field chat_type", values[i])
+			} else if value.Valid {
+				ch.ChatType = value.String
 			}
 		case chathistories.FieldMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -159,6 +169,12 @@ func (ch *ChatHistories) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field replied_to_text", values[i])
 			} else if value.Valid {
 				ch.RepliedToText = value.String
+			}
+		case chathistories.FieldRepliedToChatType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field replied_to_chat_type", values[i])
+			} else if value.Valid {
+				ch.RepliedToChatType = value.String
 			}
 		case chathistories.FieldChattedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -232,6 +248,9 @@ func (ch *ChatHistories) String() string {
 	builder.WriteString("chat_title=")
 	builder.WriteString(ch.ChatTitle)
 	builder.WriteString(", ")
+	builder.WriteString("chat_type=")
+	builder.WriteString(ch.ChatType)
+	builder.WriteString(", ")
 	builder.WriteString("message_id=")
 	builder.WriteString(fmt.Sprintf("%v", ch.MessageID))
 	builder.WriteString(", ")
@@ -261,6 +280,9 @@ func (ch *ChatHistories) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("replied_to_text=")
 	builder.WriteString(ch.RepliedToText)
+	builder.WriteString(", ")
+	builder.WriteString("replied_to_chat_type=")
+	builder.WriteString(ch.RepliedToChatType)
 	builder.WriteString(", ")
 	builder.WriteString("chatted_at=")
 	builder.WriteString(fmt.Sprintf("%v", ch.ChattedAt))

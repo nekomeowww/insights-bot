@@ -37,6 +37,7 @@ func (h helpCommandHandler) Handle(c *Context) (Response, error) {
 		subCommandHelpMessage := strings.Builder{}
 		subCommandHelpMessage.WriteString("/")
 		subCommandHelpMessage.WriteString(c.Command())
+
 		if c.CommandHelp() != "" {
 			subCommandHelpMessage.WriteString(" ")
 			subCommandHelpMessage.WriteString(c.CommandHelp())

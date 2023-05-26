@@ -26,6 +26,8 @@ const (
 	FieldCompletionTokenUsage = "completion_token_usage"
 	// FieldTotalTokenUsage holds the string denoting the total_token_usage field in the database.
 	FieldTotalTokenUsage = "total_token_usage"
+	// FieldRecapType holds the string denoting the recap_type field in the database.
+	FieldRecapType = "recap_type"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -44,6 +46,7 @@ var Columns = []string{
 	FieldPromptTokenUsage,
 	FieldCompletionTokenUsage,
 	FieldTotalTokenUsage,
+	FieldRecapType,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -73,6 +76,8 @@ var (
 	DefaultCompletionTokenUsage int
 	// DefaultTotalTokenUsage holds the default value on creation for the "total_token_usage" field.
 	DefaultTotalTokenUsage int
+	// DefaultRecapType holds the default value on creation for the "recap_type" field.
+	DefaultRecapType int
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -122,6 +127,11 @@ func ByCompletionTokenUsage(opts ...sql.OrderTermOption) OrderOption {
 // ByTotalTokenUsage orders the results by the total_token_usage field.
 func ByTotalTokenUsage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTotalTokenUsage, opts...).ToFunc()
+}
+
+// ByRecapType orders the results by the recap_type field.
+func ByRecapType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRecapType, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

@@ -161,6 +161,27 @@ func (lchru *LogChatHistoriesRecapUpdate) AddTotalTokenUsage(i int) *LogChatHist
 	return lchru
 }
 
+// SetRecapType sets the "recap_type" field.
+func (lchru *LogChatHistoriesRecapUpdate) SetRecapType(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.ResetRecapType()
+	lchru.mutation.SetRecapType(i)
+	return lchru
+}
+
+// SetNillableRecapType sets the "recap_type" field if the given value is not nil.
+func (lchru *LogChatHistoriesRecapUpdate) SetNillableRecapType(i *int) *LogChatHistoriesRecapUpdate {
+	if i != nil {
+		lchru.SetRecapType(*i)
+	}
+	return lchru
+}
+
+// AddRecapType adds i to the "recap_type" field.
+func (lchru *LogChatHistoriesRecapUpdate) AddRecapType(i int) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.AddRecapType(i)
+	return lchru
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchru *LogChatHistoriesRecapUpdate) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdate {
 	lchru.mutation.ResetCreatedAt()
@@ -279,6 +300,12 @@ func (lchru *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if value, ok := lchru.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.RecapType(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.AddedRecapType(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
 	if value, ok := lchru.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
@@ -447,6 +474,27 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) AddTotalTokenUsage(i int) *LogChat
 	return lchruo
 }
 
+// SetRecapType sets the "recap_type" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetRecapType(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.ResetRecapType()
+	lchruo.mutation.SetRecapType(i)
+	return lchruo
+}
+
+// SetNillableRecapType sets the "recap_type" field if the given value is not nil.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableRecapType(i *int) *LogChatHistoriesRecapUpdateOne {
+	if i != nil {
+		lchruo.SetRecapType(*i)
+	}
+	return lchruo
+}
+
+// AddRecapType adds i to the "recap_type" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) AddRecapType(i int) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.AddRecapType(i)
+	return lchruo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchruo *LogChatHistoriesRecapUpdateOne) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
 	lchruo.mutation.ResetCreatedAt()
@@ -595,6 +643,12 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if value, ok := lchruo.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.RecapType(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.AddedRecapType(); ok {
+		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
 	if value, ok := lchruo.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

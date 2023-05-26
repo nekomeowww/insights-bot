@@ -21,6 +21,12 @@ type CommandHandler interface {
 	CommandHelp() string
 }
 
+type CancellableCommandHandler interface {
+	CommandHandler
+	ShouldCancel(c *Context) (bool, error)
+	HandleCancel(c *Context) (Response, error)
+}
+
 type MessageHandler interface {
 	Handler
 	Message() string

@@ -15,23 +15,31 @@ func RecordMessage(chatHistories *chathistories.Model, tgchats *tgchats.Model) f
 		}
 
 		chatType := telegram.ChatType(c.Update.Message.Chat.Type)
-		if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
+		if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup, telegram.ChatTypePrivate}, chatType) {
 			return
 		}
+		if lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
+			enabled, err := tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
+			if err != nil {
+				c.Logger.Error(err)
+				return
+			}
+			if !enabled {
+				return
+			}
 
-		enabled, err := tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
-		if err != nil {
-			c.Logger.Error(err)
-			return
+			err = chatHistories.SaveOneTelegramChatHistory(c.Update.Message)
+			if err != nil {
+				c.Logger.Error(err)
+				return
+			}
 		}
-		if !enabled {
-			return
-		}
-
-		err = chatHistories.SaveOneTelegramChatHistory(c.Update.Message)
-		if err != nil {
-			c.Logger.Error(err)
-			return
+		if lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, chatType) {
+			err := chatHistories.SaveOneTelegramPrivateForwardedReplayChatHistory(c.Update.Message)
+			if err != nil {
+				c.Logger.Error(err)
+				return
+			}
 		}
 
 		next()

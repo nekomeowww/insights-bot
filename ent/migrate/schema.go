@@ -13,6 +13,7 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
 		{Name: "chat_title", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "chat_type", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "message_id", Type: field.TypeInt64, Default: 0},
 		{Name: "user_id", Type: field.TypeInt64, Default: 0},
 		{Name: "username", Type: field.TypeString, Size: 2147483647, Default: ""},
@@ -23,6 +24,7 @@ var (
 		{Name: "replied_to_full_name", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "replied_to_username", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "replied_to_text", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "replied_to_chat_type", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "chatted_at", Type: field.TypeInt64},
 		{Name: "embedded", Type: field.TypeBool, Default: false},
 		{Name: "from_platform", Type: field.TypeInt, Default: 0},
@@ -45,6 +47,7 @@ var (
 		{Name: "prompt_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "recap_type", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}

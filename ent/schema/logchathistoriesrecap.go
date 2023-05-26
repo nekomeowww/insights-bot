@@ -24,6 +24,7 @@ func (LogChatHistoriesRecap) Fields() []ent.Field {
 		field.Int("prompt_token_usage").Default(0),
 		field.Int("completion_token_usage").Default(0),
 		field.Int("total_token_usage").Default(0),
+		field.Int("recap_type").Default(0),
 		field.Int64("created_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 		field.Int64("updated_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 	}

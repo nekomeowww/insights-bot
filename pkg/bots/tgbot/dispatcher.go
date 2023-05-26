@@ -18,6 +18,7 @@ type Dispatcher struct {
 	Logger *logger.Logger
 
 	helpCommand           *helpCommandHandler
+	cancelCommand         *cancelCommandHandler
 	middlewares           []MiddlewareFunc
 	commandHandlers       map[string]HandleFunc
 	messageHandlers       map[string]HandleFunc
@@ -30,6 +31,7 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 		d := &Dispatcher{
 			Logger:                logger,
 			helpCommand:           newHelpCommandHandler(),
+			cancelCommand:         newCancelCommandHandler(),
 			middlewares:           make([]MiddlewareFunc, 0),
 			commandHandlers:       make(map[string]HandleFunc),
 			messageHandlers:       make(map[string]HandleFunc),
@@ -38,6 +40,7 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 		}
 
 		d.OnCommand(d.helpCommand)
+		d.OnCommand(d.cancelCommand)
 
 		return d
 	}
@@ -49,6 +52,12 @@ func (d *Dispatcher) Use(middleware MiddlewareFunc) {
 
 func (d *Dispatcher) OnCommand(h CommandHandler) {
 	d.helpCommand.commands = append(d.helpCommand.commands, h)
+
+	cancellableHandler, ok := any(h).(CancellableCommandHandler)
+	if ok {
+		d.cancelCommand.commands = append(d.cancelCommand.commands, cancellableHandler)
+	}
+
 	d.commandHandlers[h.Command()] = NewHandler(h.Handle).Handle
 }
 

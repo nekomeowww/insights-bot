@@ -88,6 +88,11 @@ func TotalTokenUsage(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldTotalTokenUsage, v))
 }
 
+// RecapType applies equality check predicate on the "recap_type" field. It's identical to RecapTypeEQ.
+func RecapType(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldRecapType, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldCreatedAt, v))
@@ -426,6 +431,46 @@ func TotalTokenUsageLT(v int) predicate.LogChatHistoriesRecap {
 // TotalTokenUsageLTE applies the LTE predicate on the "total_token_usage" field.
 func TotalTokenUsageLTE(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldTotalTokenUsage, v))
+}
+
+// RecapTypeEQ applies the EQ predicate on the "recap_type" field.
+func RecapTypeEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldRecapType, v))
+}
+
+// RecapTypeNEQ applies the NEQ predicate on the "recap_type" field.
+func RecapTypeNEQ(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNEQ(FieldRecapType, v))
+}
+
+// RecapTypeIn applies the In predicate on the "recap_type" field.
+func RecapTypeIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldIn(FieldRecapType, vs...))
+}
+
+// RecapTypeNotIn applies the NotIn predicate on the "recap_type" field.
+func RecapTypeNotIn(vs ...int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNotIn(FieldRecapType, vs...))
+}
+
+// RecapTypeGT applies the GT predicate on the "recap_type" field.
+func RecapTypeGT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGT(FieldRecapType, v))
+}
+
+// RecapTypeGTE applies the GTE predicate on the "recap_type" field.
+func RecapTypeGTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGTE(FieldRecapType, v))
+}
+
+// RecapTypeLT applies the LT predicate on the "recap_type" field.
+func RecapTypeLT(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLT(FieldRecapType, v))
+}
+
+// RecapTypeLTE applies the LTE predicate on the "recap_type" field.
+func RecapTypeLTE(v int) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldRecapType, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

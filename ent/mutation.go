@@ -46,6 +46,7 @@ type ChatHistoriesMutation struct {
 	chat_id                  *int64
 	addchat_id               *int64
 	chat_title               *string
+	chat_type                *string
 	message_id               *int64
 	addmessage_id            *int64
 	user_id                  *int64
@@ -60,6 +61,7 @@ type ChatHistoriesMutation struct {
 	replied_to_full_name     *string
 	replied_to_username      *string
 	replied_to_text          *string
+	replied_to_chat_type     *string
 	chatted_at               *int64
 	addchatted_at            *int64
 	embedded                 *bool
@@ -269,6 +271,42 @@ func (m *ChatHistoriesMutation) OldChatTitle(ctx context.Context) (v string, err
 // ResetChatTitle resets all changes to the "chat_title" field.
 func (m *ChatHistoriesMutation) ResetChatTitle() {
 	m.chat_title = nil
+}
+
+// SetChatType sets the "chat_type" field.
+func (m *ChatHistoriesMutation) SetChatType(s string) {
+	m.chat_type = &s
+}
+
+// ChatType returns the value of the "chat_type" field in the mutation.
+func (m *ChatHistoriesMutation) ChatType() (r string, exists bool) {
+	v := m.chat_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatType returns the old "chat_type" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldChatType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatType: %w", err)
+	}
+	return oldValue.ChatType, nil
+}
+
+// ResetChatType resets all changes to the "chat_type" field.
+func (m *ChatHistoriesMutation) ResetChatType() {
+	m.chat_type = nil
 }
 
 // SetMessageID sets the "message_id" field.
@@ -711,6 +749,42 @@ func (m *ChatHistoriesMutation) ResetRepliedToText() {
 	m.replied_to_text = nil
 }
 
+// SetRepliedToChatType sets the "replied_to_chat_type" field.
+func (m *ChatHistoriesMutation) SetRepliedToChatType(s string) {
+	m.replied_to_chat_type = &s
+}
+
+// RepliedToChatType returns the value of the "replied_to_chat_type" field in the mutation.
+func (m *ChatHistoriesMutation) RepliedToChatType() (r string, exists bool) {
+	v := m.replied_to_chat_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRepliedToChatType returns the old "replied_to_chat_type" field's value of the ChatHistories entity.
+// If the ChatHistories object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ChatHistoriesMutation) OldRepliedToChatType(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRepliedToChatType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRepliedToChatType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRepliedToChatType: %w", err)
+	}
+	return oldValue.RepliedToChatType, nil
+}
+
+// ResetRepliedToChatType resets all changes to the "replied_to_chat_type" field.
+func (m *ChatHistoriesMutation) ResetRepliedToChatType() {
+	m.replied_to_chat_type = nil
+}
+
 // SetChattedAt sets the "chatted_at" field.
 func (m *ChatHistoriesMutation) SetChattedAt(i int64) {
 	m.chatted_at = &i
@@ -1005,12 +1079,15 @@ func (m *ChatHistoriesMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ChatHistoriesMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 19)
 	if m.chat_id != nil {
 		fields = append(fields, chathistories.FieldChatID)
 	}
 	if m.chat_title != nil {
 		fields = append(fields, chathistories.FieldChatTitle)
+	}
+	if m.chat_type != nil {
+		fields = append(fields, chathistories.FieldChatType)
 	}
 	if m.message_id != nil {
 		fields = append(fields, chathistories.FieldMessageID)
@@ -1042,6 +1119,9 @@ func (m *ChatHistoriesMutation) Fields() []string {
 	if m.replied_to_text != nil {
 		fields = append(fields, chathistories.FieldRepliedToText)
 	}
+	if m.replied_to_chat_type != nil {
+		fields = append(fields, chathistories.FieldRepliedToChatType)
+	}
 	if m.chatted_at != nil {
 		fields = append(fields, chathistories.FieldChattedAt)
 	}
@@ -1069,6 +1149,8 @@ func (m *ChatHistoriesMutation) Field(name string) (ent.Value, bool) {
 		return m.ChatID()
 	case chathistories.FieldChatTitle:
 		return m.ChatTitle()
+	case chathistories.FieldChatType:
+		return m.ChatType()
 	case chathistories.FieldMessageID:
 		return m.MessageID()
 	case chathistories.FieldUserID:
@@ -1089,6 +1171,8 @@ func (m *ChatHistoriesMutation) Field(name string) (ent.Value, bool) {
 		return m.RepliedToUsername()
 	case chathistories.FieldRepliedToText:
 		return m.RepliedToText()
+	case chathistories.FieldRepliedToChatType:
+		return m.RepliedToChatType()
 	case chathistories.FieldChattedAt:
 		return m.ChattedAt()
 	case chathistories.FieldEmbedded:
@@ -1112,6 +1196,8 @@ func (m *ChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldChatID(ctx)
 	case chathistories.FieldChatTitle:
 		return m.OldChatTitle(ctx)
+	case chathistories.FieldChatType:
+		return m.OldChatType(ctx)
 	case chathistories.FieldMessageID:
 		return m.OldMessageID(ctx)
 	case chathistories.FieldUserID:
@@ -1132,6 +1218,8 @@ func (m *ChatHistoriesMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldRepliedToUsername(ctx)
 	case chathistories.FieldRepliedToText:
 		return m.OldRepliedToText(ctx)
+	case chathistories.FieldRepliedToChatType:
+		return m.OldRepliedToChatType(ctx)
 	case chathistories.FieldChattedAt:
 		return m.OldChattedAt(ctx)
 	case chathistories.FieldEmbedded:
@@ -1164,6 +1252,13 @@ func (m *ChatHistoriesMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetChatTitle(v)
+		return nil
+	case chathistories.FieldChatType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatType(v)
 		return nil
 	case chathistories.FieldMessageID:
 		v, ok := value.(int64)
@@ -1234,6 +1329,13 @@ func (m *ChatHistoriesMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRepliedToText(v)
+		return nil
+	case chathistories.FieldRepliedToChatType:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRepliedToChatType(v)
 		return nil
 	case chathistories.FieldChattedAt:
 		v, ok := value.(int64)
@@ -1436,6 +1538,9 @@ func (m *ChatHistoriesMutation) ResetField(name string) error {
 	case chathistories.FieldChatTitle:
 		m.ResetChatTitle()
 		return nil
+	case chathistories.FieldChatType:
+		m.ResetChatType()
+		return nil
 	case chathistories.FieldMessageID:
 		m.ResetMessageID()
 		return nil
@@ -1465,6 +1570,9 @@ func (m *ChatHistoriesMutation) ResetField(name string) error {
 		return nil
 	case chathistories.FieldRepliedToText:
 		m.ResetRepliedToText()
+		return nil
+	case chathistories.FieldRepliedToChatType:
+		m.ResetRepliedToChatType()
 		return nil
 	case chathistories.FieldChattedAt:
 		m.ResetChattedAt()
@@ -1551,6 +1659,8 @@ type LogChatHistoriesRecapMutation struct {
 	addcompletion_token_usage *int
 	total_token_usage         *int
 	addtotal_token_usage      *int
+	recap_type                *int
+	addrecap_type             *int
 	created_at                *int64
 	addcreated_at             *int64
 	updated_at                *int64
@@ -2017,6 +2127,62 @@ func (m *LogChatHistoriesRecapMutation) ResetTotalTokenUsage() {
 	m.addtotal_token_usage = nil
 }
 
+// SetRecapType sets the "recap_type" field.
+func (m *LogChatHistoriesRecapMutation) SetRecapType(i int) {
+	m.recap_type = &i
+	m.addrecap_type = nil
+}
+
+// RecapType returns the value of the "recap_type" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) RecapType() (r int, exists bool) {
+	v := m.recap_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRecapType returns the old "recap_type" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldRecapType(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRecapType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRecapType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRecapType: %w", err)
+	}
+	return oldValue.RecapType, nil
+}
+
+// AddRecapType adds i to the "recap_type" field.
+func (m *LogChatHistoriesRecapMutation) AddRecapType(i int) {
+	if m.addrecap_type != nil {
+		*m.addrecap_type += i
+	} else {
+		m.addrecap_type = &i
+	}
+}
+
+// AddedRecapType returns the value that was added to the "recap_type" field in this mutation.
+func (m *LogChatHistoriesRecapMutation) AddedRecapType() (r int, exists bool) {
+	v := m.addrecap_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRecapType resets all changes to the "recap_type" field.
+func (m *LogChatHistoriesRecapMutation) ResetRecapType() {
+	m.recap_type = nil
+	m.addrecap_type = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *LogChatHistoriesRecapMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -2163,7 +2329,7 @@ func (m *LogChatHistoriesRecapMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogChatHistoriesRecapMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.chat_id != nil {
 		fields = append(fields, logchathistoriesrecap.FieldChatID)
 	}
@@ -2184,6 +2350,9 @@ func (m *LogChatHistoriesRecapMutation) Fields() []string {
 	}
 	if m.total_token_usage != nil {
 		fields = append(fields, logchathistoriesrecap.FieldTotalTokenUsage)
+	}
+	if m.recap_type != nil {
+		fields = append(fields, logchathistoriesrecap.FieldRecapType)
 	}
 	if m.created_at != nil {
 		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
@@ -2213,6 +2382,8 @@ func (m *LogChatHistoriesRecapMutation) Field(name string) (ent.Value, bool) {
 		return m.CompletionTokenUsage()
 	case logchathistoriesrecap.FieldTotalTokenUsage:
 		return m.TotalTokenUsage()
+	case logchathistoriesrecap.FieldRecapType:
+		return m.RecapType()
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.CreatedAt()
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2240,6 +2411,8 @@ func (m *LogChatHistoriesRecapMutation) OldField(ctx context.Context, name strin
 		return m.OldCompletionTokenUsage(ctx)
 	case logchathistoriesrecap.FieldTotalTokenUsage:
 		return m.OldTotalTokenUsage(ctx)
+	case logchathistoriesrecap.FieldRecapType:
+		return m.OldRecapType(ctx)
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2302,6 +2475,13 @@ func (m *LogChatHistoriesRecapMutation) SetField(name string, value ent.Value) e
 		}
 		m.SetTotalTokenUsage(v)
 		return nil
+	case logchathistoriesrecap.FieldRecapType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRecapType(v)
+		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
@@ -2339,6 +2519,9 @@ func (m *LogChatHistoriesRecapMutation) AddedFields() []string {
 	if m.addtotal_token_usage != nil {
 		fields = append(fields, logchathistoriesrecap.FieldTotalTokenUsage)
 	}
+	if m.addrecap_type != nil {
+		fields = append(fields, logchathistoriesrecap.FieldRecapType)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
 	}
@@ -2363,6 +2546,8 @@ func (m *LogChatHistoriesRecapMutation) AddedField(name string) (ent.Value, bool
 		return m.AddedCompletionTokenUsage()
 	case logchathistoriesrecap.FieldTotalTokenUsage:
 		return m.AddedTotalTokenUsage()
+	case logchathistoriesrecap.FieldRecapType:
+		return m.AddedRecapType()
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2410,6 +2595,13 @@ func (m *LogChatHistoriesRecapMutation) AddField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddTotalTokenUsage(v)
+		return nil
+	case logchathistoriesrecap.FieldRecapType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRecapType(v)
 		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -2472,6 +2664,9 @@ func (m *LogChatHistoriesRecapMutation) ResetField(name string) error {
 		return nil
 	case logchathistoriesrecap.FieldTotalTokenUsage:
 		m.ResetTotalTokenUsage()
+		return nil
+	case logchathistoriesrecap.FieldRecapType:
+		m.ResetRecapType()
 		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		m.ResetCreatedAt()

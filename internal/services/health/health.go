@@ -3,6 +3,9 @@ package health
 import (
 	"context"
 	"fmt"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
+	"github.com/nekomeowww/insights-bot/pkg/bots/discordbot"
+	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"net"
 	"net/http"
 	"time"
@@ -10,8 +13,6 @@ import (
 	"github.com/alexliesenfeld/health"
 	"go.uber.org/fx"
 
-	"github.com/nekomeowww/insights-bot/internal/bots/discord"
-	"github.com/nekomeowww/insights-bot/internal/bots/slack"
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
@@ -26,10 +27,11 @@ type NewHealthParams struct {
 	Logger *logger.Logger
 
 	TelegramBot *tgbot.BotService
-	SlackBot    *slack.Bot
-	DiscordBot  *discord.DiscordBot
+	SlackBot    *slackbot.BotService
+	DiscordBot  *discordbot.BotService
 	AutoRecap   *autorecap.AutoRecapService
 	Pprof       *pprof.Pprof
+	SmrService  *smr.Service
 }
 
 type Health struct {
@@ -54,6 +56,10 @@ func NewHealth() func(NewHealthParams) (*Health, error) {
 			health.WithCheck(health.Check{
 				Name:  "pprof",
 				Check: params.Pprof.Check,
+			}),
+			health.WithCheck(health.Check{
+				Name:  "smr_service",
+				Check: params.SmrService.Check,
 			}),
 		)
 

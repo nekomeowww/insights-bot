@@ -1,7 +1,17 @@
 package slackbot
 
 import (
+	"context"
+	"errors"
+	"github.com/gin-gonic/gin"
+	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
+	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
+	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/samber/lo"
+	"net"
 	"net/http"
+	"time"
 
 	"github.com/slack-go/slack"
 )
@@ -69,4 +79,81 @@ func (cli *Client) SendMessageWithTokenExpirationCheck(channel string, storeFn S
 	cli.Client = newOriginSlackCli(cli.httpClient, resp.AccessToken)
 
 	return cli.SendMessageWithTokenExpirationCheck(channel, storeFn, options...)
+}
+
+var _ healthchecker.HealthChecker = (*BotService)(nil)
+
+type BotService struct {
+	logger *logger.Logger
+
+	services     *services.Services
+	serverEngine *gin.Engine
+	server       *http.Server
+
+	started bool
+}
+
+func (s *BotService) SetService(services *services.Services) {
+	s.services = services
+}
+
+func (s *BotService) GetService() *services.Services {
+	return s.services
+}
+
+func NewBotService(slackConfig configs.SectionSlack) *BotService {
+	engine := gin.Default()
+	server := &http.Server{
+		Addr:              lo.Ternary(slackConfig.Port == "", ":7070", net.JoinHostPort("", slackConfig.Port)),
+		Handler:           engine,
+		ReadHeaderTimeout: time.Second * 10,
+	}
+
+	return &BotService{
+		serverEngine: engine,
+		server:       server,
+	}
+}
+
+func (s *BotService) Handle(method, path string, handler gin.HandlerFunc) {
+	s.serverEngine.Handle(method, path, handler)
+}
+
+func (s *BotService) SetLogger(logger *logger.Logger) {
+	s.logger = logger
+}
+
+func (s *BotService) Check(ctx context.Context) error {
+	return lo.Ternary(s.started, nil, errors.New("slack bot not started yet"))
+}
+
+func (s *BotService) Run() error {
+	listener, err := net.Listen("tcp", s.server.Addr)
+	if err != nil {
+		return err
+	}
+
+	go func() {
+		err = s.server.Serve(listener)
+		if err != nil && err != http.ErrServerClosed {
+			s.logger.WithField("error", err.Error()).Fatal("slack bot server error")
+		}
+	}()
+
+	s.logger.Infof("Slack Bot/App webhook server is listening on %s", s.server.Addr)
+	s.started = true
+
+	return nil
+}
+
+func (s *BotService) Stop(ctx context.Context) error {
+	err := s.server.Shutdown(ctx)
+
+	if !errors.Is(err, context.Canceled) {
+		s.logger.WithField("error", err.Error()).Error("slack bot server shutdown failed")
+		return err
+	}
+	s.logger.Info("stopped to receiving new requests")
+
+	return nil
 }

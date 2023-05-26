@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"context"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"time"
 
 	"go.uber.org/fx"
@@ -36,6 +37,8 @@ type NewBotParam struct {
 	Handlers   *handlers.Handlers
 	Dispatcher *tgbot.Dispatcher
 
+	Smr *smr.Service
+
 	ChatHistories *chathistories.Model
 	TgChats       *tgchats.Model
 }
@@ -67,6 +70,8 @@ func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 		})
 
 		param.Logger.Infof("Authorized as bot @%s", bot.Self.UserName)
+
+		param.Smr.SetTelegramBot(bot)
 
 		return bot, nil
 	}

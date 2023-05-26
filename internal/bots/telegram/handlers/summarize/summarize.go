@@ -2,6 +2,7 @@ package summarize
 
 import (
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	smr2 "github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"go.uber.org/fx"
 )
@@ -15,19 +16,22 @@ func NewModules() fx.Option {
 type NewHandlersParams struct {
 	fx.In
 
-	SMR *smr.Model
+	SMR        *smr.Model
+	SmrService *smr2.Service
 }
 
 var _ tgbot.HandlerGroup = (*Handlers)(nil)
 
 type Handlers struct {
-	smr *smr.Model
+	smr        *smr.Model
+	smrService *smr2.Service
 }
 
 func NewHandlers() func(NewHandlersParams) *Handlers {
 	return func(param NewHandlersParams) *Handlers {
 		handler := &Handlers{
-			smr: param.SMR,
+			smrService: param.SmrService,
+			smr:        param.SMR,
 		}
 
 		return handler

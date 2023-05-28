@@ -4,29 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"net/url"
 
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/redis/rueidis"
-	"github.com/samber/lo"
 	"github.com/sourcegraph/conc/pool"
 )
-
-func CheckUrl(urlString string) error {
-	if urlString == "" {
-		return ErrNoLink
-	}
-
-	parsedURL, err2 := url.Parse(urlString)
-	if err2 != nil {
-		return ErrParse
-	}
-	if parsedURL.Scheme == "" || !lo.Contains([]string{"http", "https"}, parsedURL.Scheme) {
-		return ErrScheme
-	}
-
-	return nil
-}
 
 func (s *Service) AddTask(taskInfo types.TaskInfo) error {
 	result, err := json.Marshal(&taskInfo)
@@ -44,7 +26,7 @@ func (s *Service) AddTask(taskInfo types.TaskInfo) error {
 		WithField("platform", taskInfo.Platform).
 		Info("smr service: task added")
 
-		// TODO: #111 should reject ongoing smr request in the same chat
+	// TODO: #111 should reject ongoing smr request in the same chat
 	return nil
 }
 
@@ -110,6 +92,16 @@ func (s *Service) run() {
 
 		s.queue.AddTask(info)
 		taskRunner.Go(func() {
+			defer func() {
+				err2 := recover()
+				if err2 != nil {
+					s.logger.
+						WithField("err", err2).
+						WithField("task", info).
+						Error("smr service: task failed with panic")
+				}
+			}()
+
 			s.processor(info)
 			s.queue.RemoveTask()
 		})

@@ -47,10 +47,11 @@ type Handlers struct {
 func NewHandlers() func(param NewHandlersParam) *Handlers {
 	return func(param NewHandlersParam) *Handlers {
 		return &Handlers{
-			config:   param.Config,
-			ent:      param.Ent,
-			logger:   param.Logger,
-			services: param.Services,
+			config:     param.Config,
+			ent:        param.Ent,
+			logger:     param.Logger,
+			smrService: param.SMR,
+			services:   param.Services,
 		}
 	}
 }
@@ -97,7 +98,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		slackoauthcredentials.TeamID(body.TeamID),
 	).First(context.Background())
 	if err != nil {
-		h.logger.WithField("error", err.Error()).Warn("slack: failed to get team'h access token")
+		h.logger.WithField("error", err.Error()).Warn("slack: failed to get team's access token")
 		if ent.IsNotFound(err) {
 			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("本应用没有权限向这个频道发送消息，尝试重新安装一下？"))
 			return

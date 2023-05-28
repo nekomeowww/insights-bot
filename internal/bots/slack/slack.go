@@ -2,6 +2,8 @@ package slack
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/nekomeowww/insights-bot/internal/bots/slack/handlers"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/services/smr"
@@ -9,7 +11,6 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
-	"net/http"
 )
 
 func NewModules() fx.Option {
@@ -47,6 +48,7 @@ func NewSlackBot() func(param NewSlackBotParam) *slackbot.BotService {
 		bot.Handle(http.MethodPost, "/slack/command/smr", param.Handlers.PostCommandInfo)
 		bot.Handle(http.MethodGet, "/slack/install/auth", param.Handlers.GetInstallAuth)
 		bot.SetService(param.Services)
+		bot.SetLogger(param.Logger)
 
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {

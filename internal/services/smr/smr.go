@@ -71,6 +71,7 @@ func NewService() func(param NewServiceParam) (*Service, error) {
 			logger:      param.Logger,
 			redisClient: param.RedisClient,
 			ent:         param.Ent,
+			config:      param.Config,
 			model:       param.Model,
 		}
 

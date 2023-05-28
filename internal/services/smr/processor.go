@@ -8,7 +8,6 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/snowflake/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
@@ -16,31 +15,30 @@ import (
 	"github.com/slack-go/slack"
 )
 
-func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) {
+func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) string {
 	switch info.Platform {
 	case smr.FromPlatformTelegram:
-		s.sendFinalResult(info, result.FormatSummarizationAsHTML(), true)
+		return result.FormatSummarizationAsHTML()
 	case smr.FromPlatformSlack:
-		s.sendFinalResult(info, result.FormatSummarizationAsSlackMarkdown(), true)
+		return result.FormatSummarizationAsSlackMarkdown()
 	case smr.FromPlatformDiscord:
-		s.sendFinalResult(info, result.FormatSummarizationAsDiscordMarkdown(), true)
+		return result.FormatSummarizationAsDiscordMarkdown()
 	}
+
+	return ""
 }
 
-func (s *Service) processError(info types.TaskInfo, err error) {
-	errMsg := ""
+func (s *Service) processError(err error) string {
 	if errors.Is(err, smr.ErrContentNotSupported) {
-		errMsg = "暂时不支持量子速读这样的内容呢，可以换个别的链接试试。"
+		return "暂时不支持量子速读这样的内容呢，可以换个别的链接试试。"
 	} else if errors.Is(err, smr.ErrNetworkError) || errors.Is(err, smr.ErrRequestFailed) {
-		errMsg = "量子速读的链接读取失败了哦。可以再试试？"
-	} else {
-		errMsg = "量子速读失败了。可以再试试？"
+		return "量子速读的链接读取失败了哦。可以再试试？"
 	}
 
-	s.sendFinalResult(info, errMsg, false)
+	return "量子速读失败了。可以再试试？"
 }
 
-func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
+func (s *Service) sendResult(info types.TaskInfo, result string) {
 	switch info.Platform {
 	case smr.FromPlatformTelegram:
 		msgEdit := tgbotapi.EditMessageTextConfig{
@@ -48,17 +46,13 @@ func (s *Service) sendFinalResult(info types.TaskInfo, result string, ok bool) {
 		}
 		msgEdit.ChatID = info.ChatID
 		msgEdit.MessageID = info.MessageID
-
-		if ok {
-			msgEdit.ParseMode = tgbotapi.ModeHTML
-		}
+		msgEdit.ParseMode = tgbotapi.ModeHTML
 
 		_, err := s.tgBot.Send(msgEdit)
 		if err != nil {
 			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
 		}
 	case smr.FromPlatformSlack:
-		var token *ent.SlackOAuthCredentials
 		token, err := s.ent.SlackOAuthCredentials.Query().
 			Where(slackoauthcredentials.TeamID(info.TeamID)).
 			First(context.Background())
@@ -121,13 +115,15 @@ func (s *Service) processor(info types.TaskInfo) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	result, err := s.model.SummarizeInputURL(ctx, info.Url, info.Platform)
+	smrResult, err := s.model.SummarizeInputURL(ctx, info.Url, info.Platform)
 	if err != nil {
 		s.logger.WithError(err).Warn("smr service: summarization failed")
-		s.processError(info, err)
+		errStr := s.processError(err)
+		s.sendResult(info, errStr)
 
 		return
 	}
 
-	s.processOutput(info, result)
+	finalResult := s.processOutput(info, smrResult)
+	s.sendResult(info, finalResult)
 }

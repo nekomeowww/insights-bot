@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"

@@ -42,9 +42,10 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 	if msgError.message == "" {
 		return nil
 	}
-
 	if msgError.editMessage != nil && msgError.editMessage.MessageID != 0 {
-		returns := NewEditMessageText(chatID, msgError.editMessage.MessageID, msgError.message)
+		editMessage := msgError.editMessage
+
+		returns := NewEditMessageText(chatID, editMessage.MessageID, msgError.message)
 		if msgError.parseMode == tgbotapi.ModeHTML {
 			returns = returns.WithParseModeHTML()
 		}
@@ -52,16 +53,19 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 			returns = returns.WithInlineReplyMarkup(*msgError.replyMarkup)
 		}
 
-		textIsTheSame := msgError.editMessage.Text == RemoveHTMLBlocksFromString(msgError.message) || msgError.editMessage.Caption == RemoveHTMLBlocksFromString(msgError.message)
+		editMessageReplyMarkup := editMessage.ReplyMarkup
+		sourceReplyMarkup := msgError.replyMarkup
+
+		textIsTheSame := editMessage.Text == RemoveHTMLBlocksFromString(msgError.message) || editMessage.Caption == RemoveHTMLBlocksFromString(msgError.message)
 		inlineKeyboardsAreTheSame := true
 
-		if msgError.editMessage != nil &&
-			msgError.editMessage.ReplyMarkup != nil &&
-			msgError.editMessage.ReplyMarkup.InlineKeyboard != nil &&
-			msgError.replyMarkup != nil &&
-			len(msgError.editMessage.ReplyMarkup.InlineKeyboard) == len(msgError.replyMarkup.InlineKeyboard) {
-			for i := range msgError.editMessage.ReplyMarkup.InlineKeyboard {
-				diff1, diff2 := lo.Difference(msgError.editMessage.ReplyMarkup.InlineKeyboard[i], msgError.replyMarkup.InlineKeyboard[i])
+		if editMessageReplyMarkup != nil && sourceReplyMarkup != nil && len(editMessageReplyMarkup.InlineKeyboard) == len(sourceReplyMarkup.InlineKeyboard) {
+			for i := range editMessageReplyMarkup.InlineKeyboard {
+				diff1, diff2 := lo.Difference(
+					editMessageReplyMarkup.InlineKeyboard[i],
+					sourceReplyMarkup.InlineKeyboard[i],
+				)
+
 				inlineKeyboardsAreTheSame = !(len(diff1) != 0 || len(diff2) != 0)
 
 				break

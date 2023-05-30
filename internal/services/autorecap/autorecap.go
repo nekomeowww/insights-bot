@@ -6,16 +6,22 @@ import (
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/nekomeowww/fo"
 	"github.com/nekomeowww/timecapsule/v2"
 	"github.com/samber/lo"
 	"github.com/sourcegraph/conc/pool"
 	"go.uber.org/fx"
+	"go.uber.org/multierr"
+	"go.uber.org/ratelimit"
 
+	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/bots/handlers/recap"
+	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
 )
 
@@ -33,7 +39,7 @@ type NewAutoRecapParams struct {
 
 type AutoRecapService struct {
 	logger        *logger.Logger
-	bot           *tgbot.BotService
+	botService    *tgbot.BotService
 	chathistories *chathistories.Model
 	tgchats       *tgchats.Model
 
@@ -45,7 +51,7 @@ func NewAutoRecapService() func(NewAutoRecapParams) (*AutoRecapService, error) {
 	return func(params NewAutoRecapParams) (*AutoRecapService, error) {
 		service := &AutoRecapService{
 			logger:        params.Logger,
-			bot:           params.Bot,
+			botService:    params.Bot,
 			chathistories: params.ChatHistories,
 			tgchats:       params.TgChats,
 			digger:        params.Digger,
@@ -73,45 +79,71 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 	capsule *timecapsule.TimeCapsule[timecapsules.AutoRecapCapsule],
 ) {
 	var enabled bool
+	var options *ent.TelegramChatRecapsOptions
+	var subscribers []*ent.TelegramChatAutoRecapsSubscribers
 
-	_, err := lo.Attempt(10, func(index int) error {
+	may := fo.NewMay[int]()
+
+	_ = may.Invoke(lo.Attempt(10, func(index int) error {
 		var err error
+
 		enabled, err = m.tgchats.HasChatHistoriesRecapEnabled(capsule.Payload.ChatID, "")
 		if err != nil {
 			m.logger.Errorf("failed to check chat histories recap enabled: %v", err)
-			return err
 		}
 
-		return nil
-	})
-	if err != nil {
-		// requeue if failed
-		err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+		return err
+	}))
+	_ = may.Invoke(lo.Attempt(10, func(index int) error {
+		var err error
+
+		options, err = m.tgchats.FindOneRecapsOption(capsule.Payload.ChatID)
 		if err != nil {
-			m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+			m.logger.Errorf("failed to find chat recap options: %v", err)
 		}
 
-		m.logger.Errorf("failed to check chat histories recap enabled: %v", err)
+		return err
+	}))
+	_ = may.Invoke(lo.Attempt(10, func(index int) error {
+		var err error
 
-		return
-	}
+		subscribers, err = m.tgchats.FindAutoRecapsSubscribers(capsule.Payload.ChatID)
+		if err != nil {
+			m.logger.Errorf("failed to find chat recap subscribers: %v", err)
+		}
+
+		return err
+	}))
+
+	may.HandleErrors(func(errs []error) {
+		// requeue if failed
+		queueErr := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+		if queueErr != nil {
+			m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, queueErr)
+		}
+
+		m.logger.Errorf("failed to check chat histories recap enabled, options or subscribers: %v", multierr.Combine(errs...))
+	})
 	if !enabled {
 		return
 	}
 
 	// always requeue
-	err = m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+	err := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
 	if err != nil {
 		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+	}
+	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions && len(subscribers) == 0 {
+		return
 	}
 
 	pool := pool.New().WithMaxGoroutines(20)
 	pool.Go(func() {
-		m.summarize(capsule.Payload.ChatID)
+		m.summarize(capsule.Payload.ChatID, options, subscribers)
 	})
 }
 
-func (m *AutoRecapService) summarize(chatID int64) {
+func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatRecapsOptions, subscribers []*ent.TelegramChatAutoRecapsSubscribers) {
 	m.logger.Infof("generating chat histories recap for chat %d", chatID)
 
 	histories, err := m.chathistories.FindLastSixHourChatHistories(chatID)
@@ -123,6 +155,8 @@ func (m *AutoRecapService) summarize(chatID int64) {
 		m.logger.Warn("no enough chat histories")
 		return
 	}
+
+	chatTitle := histories[len(histories)-1].ChatTitle
 
 	summarizations, err := m.chathistories.SummarizeChatHistories(chatID, histories)
 	if err != nil {
@@ -141,6 +175,30 @@ func (m *AutoRecapService) summarize(chatID int64) {
 	}
 
 	summarizationBatches := tgbot.SplitMessagesAgainstLengthLimitIntoMessageGroups(summarizations)
+
+	limiter := ratelimit.New(5)
+
+	type targetChat struct {
+		chatID              int64
+		isPrivateSubscriber bool
+	}
+
+	targetChats := make([]targetChat, 0)
+
+	if options == nil || tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModePublicly {
+		targetChats = append(targetChats, targetChat{
+			chatID:              chatID,
+			isPrivateSubscriber: false,
+		})
+	}
+
+	for _, subscriber := range subscribers {
+		targetChats = append(targetChats, targetChat{
+			chatID:              subscriber.UserID,
+			isPrivateSubscriber: true,
+		})
+	}
+
 	for i, b := range summarizationBatches {
 		var content string
 		if len(summarizationBatches) > 1 {
@@ -149,14 +207,35 @@ func (m *AutoRecapService) summarize(chatID int64) {
 			content = fmt.Sprintf("%s\n\n#recap #recap_auto\n<em>🤖️ Generated by chatGPT</em>", strings.Join(b, "\n\n"))
 		}
 
-		msg := tgbotapi.NewMessage(chatID, content)
-		msg.ParseMode = tgbotapi.ModeHTML
+		for _, targetChat := range targetChats {
+			limiter.Take()
+			m.logger.Infof("sending chat histories recap for chat %d", targetChat.chatID)
 
-		m.logger.Infof("sending chat histories recap for chat %d: %s", chatID, msg.Text)
+			msg := tgbotapi.NewMessage(targetChat.chatID, "")
+			msg.ParseMode = tgbotapi.ModeHTML
 
-		_, err = m.bot.Send(msg)
-		if err != nil {
-			m.logger.Errorf("failed to send chat histories recap: %v", err)
+			if targetChat.isPrivateSubscriber {
+				msg.Text = fmt.Sprintf("您好，这是您订阅的 <b>%s</b> 群组的定时聊天回顾。\n\n%s", chatTitle, content)
+
+				buttonData, err := m.botService.Bot().AssignOneCallbackQueryData("recap/unsubscribe_recap", recap.UnsubscribeRecapActionData{
+					ChatID:    chatID,
+					ChatTitle: chatTitle,
+					FromID:    targetChat.chatID,
+				})
+				if err != nil {
+					m.logger.Errorf("failed to assign callback query data: %v", err)
+					continue
+				}
+
+				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("取消订阅", buttonData)))
+			} else {
+				msg.Text = content
+			}
+
+			_, err = m.botService.Send(msg)
+			if err != nil {
+				m.logger.Errorf("failed to send chat histories recap: %v", err)
+			}
 		}
 	}
 }

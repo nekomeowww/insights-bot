@@ -61,74 +61,88 @@ Usage:
 
 By sending `/smr` command with a URL or replying to a message that only contains a URL, the bot will try to summarize the webpage and return the result.
 
-#### Enable chat history recapturing
-
-Command: `/enable_recap`
-
-Arguments: None
-
-```txt
-/enable_recap
-```
-
-> **Note**
-> This command requires user to be an administrator of the chat.
-
-> **Warning**
-> **This command will also enable the bot to rapidly send a chat history recap automatically for each 6 hours.**
+#### Configure chat history recapturing
 
 > **Warning**
 > **This command is not available in Slack/Discord integration currently.**
 
-By sending `/enable_recap` command, the bot will start to capture the chat histories and try to summarize them when you send `/recap` command afterwards.
-
-#### Disable chat history recapturing
-
-Command: `/disable_recap`
+Command: `/configure_recap`
 
 Arguments: None
 
 ```txt
-/disable_recap
+/configure_recap
 ```
 
-> **Note**
-> This command requires user to be an administrator of the chat.
-
-> **Warning**
-> **This command will also disable the functionalities of `/recap` command**
-
-> **Warning**
-> **This command is not available in Slack/Discord integration currently.**
-
-By sending `/disable_recap` command, the bot will stop capturing the chat histories and no longer respond to `/recap` command.
+By sending `/configure_recap` command, the bot will send you a message with options you can interact with. Click the buttons to choose the group you want to configure.
 
 #### Summarize chat histories or Recap
 
-By sending `/recap` command, the bot will try to summarize the chat histories and return the result you choose later. Such as:
+> **Warning**
+> **This command is not available in Slack/Discord integration currently.**
+
+Command: `/recap`
+
+Arguments: None
 
 ```txt
 /recap
 ```
 
+By sending `/recap` command, the bot will try to summarize the chat histories and return the result you choose later.
+
+#### Subscribe to chat histories recap for a group
+
 > **Warning**
 > **This command is not available in Slack/Discord integration currently.**
 
+Command: `/subscribe_recap`
+
+Arguments: None
+
+```txt
+/subscribe_recap
+```
+
+By sending `/subscribe_recap` command, the bot will start to capture the messages from the group you subscribed and then send a copy of the recap message to you through private chat when it is available.
+
+#### Unsubscribe to chat histories recap for a group
+
+> **Warning**
+> **This command is not available in Slack/Discord integration currently.**
+
+Command: `/unsubscribe_recap`
+
+Arguments: None
+
+```txt
+/unsubscribe_recap
+```
+
+By sending `/unsubscribe_recap` command, the bot will no longer send the copy of the recap message for the group you subscribe. Such as:
+
 #### Summarize forwarded messages in private chat
 
-By sending `/recap_forwarded_start` command, the bot will start to capture the forwarded messages you send later in private chat and try to summarize them when you send `/recap_forwarded` command afterwards. Such as:
+> **Warning**
+> **This command is not available in Slack/Discord integration currently.**
+
+Commands: `/recap_forwarded_start`, `/recap_forwarded`
+
+Arguments: None
 
 ```txt
 /recap_forwarded_start
 ```
 
-```
+```txt
 [Forward a message]
 ```
 
 ```txt
 /recap_forwarded
 ```
+
+By sending `/recap_forwarded_start` command, the bot will start to capture the forwarded messages you send later in private chat and try to summarize them when you send `/recap_forwarded` command afterwards.
 
 ## Deployment
 

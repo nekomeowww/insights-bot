@@ -13,14 +13,6 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 )
 
-func (h Handlers) Command() string {
-	return "smr"
-}
-
-func (h Handlers) CommandHelp() string {
-	return "量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>"
-}
-
 func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	urlString := c.Update.Message.CommandArguments()
 	if urlString == "" {

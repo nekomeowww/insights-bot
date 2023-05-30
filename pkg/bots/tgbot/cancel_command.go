@@ -2,35 +2,38 @@ package tgbot
 
 import "github.com/nekomeowww/fo"
 
-var _ CommandHandler = (*cancelCommandHandler)(nil)
+type cancellableCommand struct {
+	shouldCancelFunc func(c *Context) (bool, error)
+	handler          Handler
+}
 
 type cancelCommandHandler struct {
-	commands []CancellableCommandHandler
+	cancellableCommands []cancellableCommand
 }
 
 func newCancelCommandHandler() *cancelCommandHandler {
 	h := &cancelCommandHandler{
-		commands: make([]CancellableCommandHandler, 0),
+		cancellableCommands: make([]cancellableCommand, 0),
 	}
 
 	return h
 }
 
-func (h cancelCommandHandler) Command() string {
+func (h *cancelCommandHandler) Command() string {
 	return "cancel"
 }
 
-func (h cancelCommandHandler) CommandHelp() string {
+func (h *cancelCommandHandler) CommandHelp() string {
 	return "取消正在进行的操作"
 }
 
-func (h cancelCommandHandler) Handle(c *Context) (Response, error) {
+func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
 	may := fo.NewMay[bool]()
 
-	for _, h := range h.commands {
-		should := may.Invoke(h.ShouldCancel(c))
+	for _, h := range h.cancellableCommands {
+		should := may.Invoke(h.shouldCancelFunc(c))
 		if should {
-			return h.HandleCancel(c)
+			return h.handler.Handle(c)
 		}
 
 		continue

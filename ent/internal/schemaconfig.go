@@ -12,7 +12,9 @@ type SchemaConfig struct {
 	LogSummarizations                    string // LogSummarizations table.
 	MetricOpenAIChatCompletionTokenUsage string // MetricOpenAIChatCompletionTokenUsage table.
 	SlackOAuthCredentials                string // SlackOAuthCredentials table.
+	TelegramChatAutoRecapsSubscribers    string // TelegramChatAutoRecapsSubscribers table.
 	TelegramChatFeatureFlags             string // TelegramChatFeatureFlags table.
+	TelegramChatRecapsOptions            string // TelegramChatRecapsOptions table.
 }
 
 type schemaCtxKey struct{}

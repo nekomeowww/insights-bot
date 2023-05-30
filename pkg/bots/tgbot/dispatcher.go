@@ -1,46 +1,55 @@
 package tgbot
 
 import (
-	"net/url"
+	"crypto/sha256"
+	"fmt"
 	"runtime/debug"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/gookit/color"
+	"github.com/redis/rueidis"
 	"github.com/samber/lo"
+	"github.com/sirupsen/logrus"
 
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type Dispatcher struct {
 	Logger *logger.Logger
 
-	helpCommand           *helpCommandHandler
-	cancelCommand         *cancelCommandHandler
-	middlewares           []MiddlewareFunc
-	commandHandlers       map[string]HandleFunc
-	messageHandlers       map[string]HandleFunc
-	channelPostHandlers   []Handler
-	callbackQueryHandlers map[string]HandleFunc
+	helpCommand                *helpCommandHandler
+	cancelCommand              *cancelCommandHandler
+	startCommandHandler        *startCommandHandler
+	middlewares                []MiddlewareFunc
+	commandHandlers            map[string]HandleFunc
+	channelPostHandlers        []Handler
+	callbackQueryHandlers      map[string]HandleFunc
+	callbackQueryHandlersRoute map[string]string
 }
 
 func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 	return func(logger *logger.Logger) *Dispatcher {
 		d := &Dispatcher{
-			Logger:                logger,
-			helpCommand:           newHelpCommandHandler(),
-			cancelCommand:         newCancelCommandHandler(),
-			middlewares:           make([]MiddlewareFunc, 0),
-			commandHandlers:       make(map[string]HandleFunc),
-			messageHandlers:       make(map[string]HandleFunc),
-			channelPostHandlers:   make([]Handler, 0),
-			callbackQueryHandlers: make(map[string]HandleFunc),
+			Logger:                     logger,
+			helpCommand:                newHelpCommandHandler(),
+			cancelCommand:              newCancelCommandHandler(),
+			startCommandHandler:        newStartCommandHandler(),
+			middlewares:                make([]MiddlewareFunc, 0),
+			commandHandlers:            make(map[string]HandleFunc),
+			channelPostHandlers:        make([]Handler, 0),
+			callbackQueryHandlers:      make(map[string]HandleFunc),
+			callbackQueryHandlersRoute: make(map[string]string),
 		}
 
-		d.OnCommand(d.helpCommand)
-		d.OnCommand(d.cancelCommand)
+		d.startCommandHandler.helpCommandHandler = d.helpCommand
+
+		d.OnCommandGroup("基础命令", []Command{
+			{Command: d.helpCommand.Command(), HelpMessage: d.helpCommand.CommandHelp(), Handler: NewHandler(d.helpCommand.handle)},
+			{Command: d.cancelCommand.Command(), HelpMessage: d.cancelCommand.CommandHelp(), Handler: NewHandler(d.cancelCommand.handle)},
+			{Command: d.startCommandHandler.Command(), HelpMessage: d.startCommandHandler.CommandHelp(), Handler: NewHandler(d.startCommandHandler.handle)},
+		})
 
 		return d
 	}
@@ -50,19 +59,32 @@ func (d *Dispatcher) Use(middleware MiddlewareFunc) {
 	d.middlewares = append(d.middlewares, middleware)
 }
 
-func (d *Dispatcher) OnCommand(h CommandHandler) {
-	d.helpCommand.commands = append(d.helpCommand.commands, h)
+func (d *Dispatcher) OnCommand(cmd, commandHelp string, h Handler) {
+	d.helpCommand.defaultGroup.commands = append(d.helpCommand.defaultGroup.commands, Command{
+		Command:     cmd,
+		HelpMessage: commandHelp,
+	})
 
-	cancellableHandler, ok := any(h).(CancellableCommandHandler)
-	if ok {
-		d.cancelCommand.commands = append(d.cancelCommand.commands, cancellableHandler)
-	}
-
-	d.commandHandlers[h.Command()] = NewHandler(h.Handle).Handle
+	d.commandHandlers[cmd] = h.Handle
 }
 
-func (d *Dispatcher) OnMessage(h MessageHandler) {
-	d.messageHandlers[h.Message()] = NewHandler(h.Handle).Handle
+func (d *Dispatcher) OnCommandGroup(groupName string, group []Command) {
+	d.helpCommand.commandGroups = append(d.helpCommand.commandGroups, commandGroup{name: groupName, commands: group})
+
+	for _, c := range group {
+		d.commandHandlers[c.Command] = c.Handler.Handle
+	}
+}
+
+func (d *Dispatcher) OnCancelCommand(cancelHandler func(c *Context) (bool, error), handler Handler) {
+	d.cancelCommand.cancellableCommands = append(d.cancelCommand.cancellableCommands, cancellableCommand{
+		shouldCancelFunc: cancelHandler,
+		handler:          handler,
+	})
+}
+
+func (d *Dispatcher) OnStartCommand(h Handler) {
+	d.startCommandHandler.startCommandHandlers = append(d.startCommandHandler.startCommandHandlers, h)
 }
 
 func (d *Dispatcher) dispatchMessage(c *Context) {
@@ -97,17 +119,6 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 				}
 			}
 		})
-	} else {
-		d.dispatchInGoroutine(func() {
-			for msg, f := range d.messageHandlers {
-				if c.Update.Message.Text == msg {
-					_, _ = f(c)
-				}
-				if c.Update.Message.Caption == msg {
-					_, _ = f(c)
-				}
-			}
-		})
 	}
 }
 
@@ -130,29 +141,72 @@ func (d *Dispatcher) dispatchChannelPost(c *Context) {
 	})
 }
 
-func (d *Dispatcher) OnCallbackQuery(h CallbackQueryHandler) {
-	d.callbackQueryHandlers[h.CallbackQueryRoute()] = NewHandler(h.Handle).Handle
+func (d *Dispatcher) OnCallbackQuery(route string, h Handler) {
+	routeHash := fmt.Sprintf("%x", sha256.Sum256([]byte(route)))[0:16]
+	d.callbackQueryHandlersRoute[routeHash] = route
+	d.callbackQueryHandlers[routeHash] = h.Handle
 }
 
 func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
-	d.Logger.Tracef("[回调查询｜%s] [%s (%s)]: %s",
-		MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
-		color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
-		color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
-		c.Update.CallbackQuery.Data,
-	)
+	defer func() {
+		if c.callbackQueryHandlerRoute == "" || c.callbackQueryHandlerActionData == "" {
+			d.Logger.WithFields(logrus.Fields{
+				"route":            c.callbackQueryHandlerRoute,
+				"route_hash":       c.callbackQueryHandlerRouteHash,
+				"action_data_hash": c.callbackQueryHandlerActionDataHash,
+			}).Tracef("[回调查询｜%s] [%s (%s)]: %s (Raw Data, missing route or action data)",
+				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
+				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
+				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
+				c.Update.CallbackData(),
+			)
+		} else {
+			d.Logger.WithFields(logrus.Fields{
+				"route":            c.callbackQueryHandlerRoute,
+				"route_hash":       c.callbackQueryHandlerRouteHash,
+				"action_data_hash": c.callbackQueryHandlerActionDataHash,
+			}).Tracef("[回调查询｜%s] [%s (%s)]: %s: %s",
+				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
+				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
+				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
+				c.callbackQueryHandlerRoute, c.callbackQueryHandlerActionData,
+			)
+		}
+	}()
+
+	callbackQueryActionInvalidErrMessage := tgbotapi.NewEditMessageText(c.Update.CallbackQuery.Message.Chat.ID, c.Update.CallbackQuery.Message.MessageID, "抱歉，因为操作无效，此操作无法进行，请重新发起操作后再试。")
+
+	routeHash, actionDataHash := c.Bot.routeHashAndActionHashFromData(c.Update.CallbackQuery.Data)
+	if routeHash == "" || actionDataHash == "" {
+		c.Bot.MayRequest(callbackQueryActionInvalidErrMessage)
+		return
+	}
+
+	route, ok := d.callbackQueryHandlersRoute[routeHash]
+	if !ok || route == "" {
+		return
+	}
+
+	handler, ok := d.callbackQueryHandlers[routeHash]
+	if !ok || handler == nil {
+		c.Bot.MayRequest(callbackQueryActionInvalidErrMessage)
+		return
+	}
+
+	c.initForCallbackQuery(route, routeHash, actionDataHash)
+
+	err := c.fetchActionDataForCallbackQueryHandler()
+	if err != nil {
+		d.Logger.Errorf("failed to fetch the callback query action data for handler %s: %v", c.callbackQueryHandlerRoute, err)
+		return
+	}
+	if c.callbackQueryHandlerActionDataIsEmpty {
+		c.Bot.MayRequest(callbackQueryActionInvalidErrMessage)
+		return
+	}
 
 	d.dispatchInGoroutine(func() {
-		for route, h := range d.callbackQueryHandlers {
-			parsedRoute, err := url.Parse(c.Update.CallbackQuery.Data)
-			if err != nil {
-				d.Logger.Errorf("failed to parse callback query data, err: %v, data: %v", err, utils.SprintJSON(parsedRoute))
-				continue
-			}
-			if parsedRoute.Host+parsedRoute.Path == route {
-				_, _ = h(c)
-			}
-		}
+		_, _ = handler(c)
 	})
 }
 
@@ -198,12 +252,12 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	}
 }
 
-func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
+func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update, rueidisClient rueidis.Client) {
 	for _, m := range d.middlewares {
-		m(NewContext(bot, update, d.Logger), func() {})
+		m(NewContext(bot, update, d.Logger, rueidisClient), func() {})
 	}
 
-	ctx := NewContext(bot, update, d.Logger)
+	ctx := NewContext(bot, update, d.Logger, rueidisClient)
 	switch ctx.UpdateType() {
 	case UpdateTypeMessage:
 		d.dispatchMessage(ctx)

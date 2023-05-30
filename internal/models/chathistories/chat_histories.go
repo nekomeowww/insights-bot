@@ -249,7 +249,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
-	}).Debug("saved one telegram chat history")
+	}).Trace("saved one telegram chat history")
 
 	return nil
 }
@@ -288,7 +288,7 @@ func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 		"chat_id":    message.Chat.ID,
 		"message_id": message.MessageID,
 		"text":       strings.ReplaceAll(text, "\n", " "),
-	}).Debug("updated one message")
+	}).Trace("updated one message")
 
 	return nil
 }

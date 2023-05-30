@@ -35,6 +35,9 @@ func NewHandlers() func(NewHandlersParams) *Handlers {
 }
 
 func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
-	dispatcher.OnCommand(h)
+	dispatcher.OnCommandGroup("量子速读", []tgbot.Command{
+		{Command: "smr", HelpMessage: "量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>", Handler: tgbot.NewHandler(h.Handle)},
+	})
+
 	dispatcher.OnChannelPost(tgbot.NewHandler(h.HandleChannelPost))
 }

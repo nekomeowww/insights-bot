@@ -17,7 +17,9 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
+	"github.com/nekomeowww/insights-bot/ent/telegramchatautorecapssubscribers"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
+	"github.com/nekomeowww/insights-bot/ent/telegramchatrecapsoptions"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -83,7 +85,9 @@ func checkColumn(table, column string) error {
 			logsummarizations.Table:                    logsummarizations.ValidColumn,
 			metricopenaichatcompletiontokenusage.Table: metricopenaichatcompletiontokenusage.ValidColumn,
 			slackoauthcredentials.Table:                slackoauthcredentials.ValidColumn,
+			telegramchatautorecapssubscribers.Table:    telegramchatautorecapssubscribers.ValidColumn,
 			telegramchatfeatureflags.Table:             telegramchatfeatureflags.ValidColumn,
+			telegramchatrecapsoptions.Table:            telegramchatrecapsoptions.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

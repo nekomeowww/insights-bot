@@ -1,13 +1,15 @@
 package tgbot
 
 import (
+	"encoding/json"
 	"errors"
-	"net/url"
+	"fmt"
+	"sync"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/gorilla/schema"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/samber/lo"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
+	"github.com/redis/rueidis"
 )
 
 type UpdateType string
@@ -34,17 +36,36 @@ type Context struct {
 	Bot    *Bot
 	Update tgbotapi.Update
 	Logger *logger.Logger
+
+	mutex         sync.Mutex
+	rueidisClient rueidis.Client
+
+	abort bool
+
+	isCallbackQuery                       bool
+	callbackQueryHandlerRoute             string
+	callbackQueryHandlerRouteHash         string
+	callbackQueryHandlerActionData        string
+	callbackQueryHandlerActionDataHash    string
+	callbackQueryHandlerActionDataIsEmpty bool
 }
 
-func NewContext(bot *tgbotapi.BotAPI, update tgbotapi.Update, logger *logger.Logger) *Context {
+func NewContext(bot *tgbotapi.BotAPI, update tgbotapi.Update, logger *logger.Logger, rueidisClient rueidis.Client) *Context {
 	return &Context{
-		Bot:    &Bot{BotAPI: bot, logger: logger},
-		Update: update,
-		Logger: logger,
+		Bot:                                   &Bot{BotAPI: bot, logger: logger, rueidisClient: rueidisClient},
+		Update:                                update,
+		Logger:                                logger,
+		rueidisClient:                         rueidisClient,
+		isCallbackQuery:                       false,
+		callbackQueryHandlerRoute:             "",
+		callbackQueryHandlerRouteHash:         "",
+		callbackQueryHandlerActionData:        "",
+		callbackQueryHandlerActionDataHash:    "",
+		callbackQueryHandlerActionDataIsEmpty: false,
 	}
 }
 
-func (c Context) UpdateType() UpdateType {
+func (c *Context) UpdateType() UpdateType {
 	switch {
 	case c.Update.Message != nil:
 		return UpdateTypeMessage
@@ -79,27 +100,77 @@ func (c Context) UpdateType() UpdateType {
 	}
 }
 
-func (c *Context) CallbackQueryDataBindQuery(dst interface{}) error {
-	if c.Update.CallbackQuery == nil {
-		return errors.New("callback query is nil")
+func (c *Context) Abort() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	c.abort = true
+}
+
+func (c *Context) IsAborted() bool {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	return c.abort
+}
+
+func (c *Context) initForCallbackQuery(route, routeHash, actionDataHash string) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	c.isCallbackQuery = true
+	c.callbackQueryHandlerRoute = route
+	c.callbackQueryHandlerRouteHash = routeHash
+	c.callbackQueryHandlerActionDataHash = actionDataHash
+}
+
+func (c *Context) fetchActionDataForCallbackQueryHandler() error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	c.callbackQueryHandlerActionDataIsEmpty = true
+
+	if !c.isCallbackQuery {
+		return fmt.Errorf("not a callback query")
 	}
-	if c.Update.CallbackQuery.Data == "" {
-		return nil
+	if c.callbackQueryHandlerRouteHash == "" {
+		return fmt.Errorf("callback query handler route hash is empty")
+	}
+	if c.callbackQueryHandlerActionDataHash == "" {
+		return fmt.Errorf("callback query handler action data hash is empty")
+	}
+	if c.rueidisClient == nil {
+		return fmt.Errorf("rueidis client is nil")
 	}
 
-	parsedURL, err := url.Parse(c.Update.CallbackQuery.Data)
+	str, err := c.Bot.fetchCallbackQueryActionData(c.callbackQueryHandlerRoute, c.callbackQueryHandlerActionDataHash)
 	if err != nil {
 		return err
 	}
 
-	decoder := schema.NewDecoder()
-
-	err = decoder.Decode(dst, parsedURL.Query())
-	if err != nil {
-		return err
-	}
+	c.callbackQueryHandlerActionData = str
+	c.callbackQueryHandlerActionDataIsEmpty = false
 
 	return nil
+}
+
+func (c *Context) BindFromCallbackQueryData(dst any) error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	if c.callbackQueryHandlerActionDataIsEmpty {
+		return errors.New("empty action data")
+	}
+
+	return json.Unmarshal([]byte(c.callbackQueryHandlerActionData), dst)
+}
+
+func (c *Context) IsBotAdministrator() (bool, error) {
+	return c.Bot.IsBotAdministrator(c.Update.FromChat().ID)
+}
+
+func (c *Context) IsUserMemberStatus(userID int64, status []telegram.MemberStatus) (bool, error) {
+	return c.Bot.IsUserMemberStatus(c.Update.FromChat().ID, userID, status)
 }
 
 func (c *Context) NewMessage(message string) MessageResponse {
@@ -111,13 +182,13 @@ func (c *Context) NewMessageReplyTo(message string, replyToMessageID int) Messag
 }
 
 func (c *Context) NewEditMessageText(messageID int, text string) EditMessageResponse {
-	return EditMessageResponse{
-		textConfig: lo.ToPtr(tgbotapi.NewEditMessageText(c.Update.FromChat().ID, messageID, text)),
-	}
+	return NewEditMessageText(c.Update.FromChat().ID, messageID, text)
 }
 
 func (c *Context) NewEditMessageTextAndReplyMarkup(messageID int, text string, replyMarkup tgbotapi.InlineKeyboardMarkup) EditMessageResponse {
-	return EditMessageResponse{
-		textConfig: lo.ToPtr(tgbotapi.NewEditMessageTextAndMarkup(c.Update.FromChat().ID, messageID, text, replyMarkup)),
-	}
+	return NewEditMessageTextAndReplyMarkup(c.Update.FromChat().ID, messageID, text, replyMarkup)
+}
+
+func (c *Context) NewEditMessageReplyMarkup(messageID int, replyMarkup tgbotapi.InlineKeyboardMarkup) EditMessageResponse {
+	return NewEditMessageReplyMarkup(c.Update.FromChat().ID, messageID, replyMarkup)
 }

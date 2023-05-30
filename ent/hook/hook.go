@@ -69,6 +69,18 @@ func (f SlackOAuthCredentialsFunc) Mutate(ctx context.Context, m ent.Mutation) (
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.SlackOAuthCredentialsMutation", m)
 }
 
+// The TelegramChatAutoRecapsSubscribersFunc type is an adapter to allow the use of ordinary
+// function as TelegramChatAutoRecapsSubscribers mutator.
+type TelegramChatAutoRecapsSubscribersFunc func(context.Context, *ent.TelegramChatAutoRecapsSubscribersMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TelegramChatAutoRecapsSubscribersFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TelegramChatAutoRecapsSubscribersMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TelegramChatAutoRecapsSubscribersMutation", m)
+}
+
 // The TelegramChatFeatureFlagsFunc type is an adapter to allow the use of ordinary
 // function as TelegramChatFeatureFlags mutator.
 type TelegramChatFeatureFlagsFunc func(context.Context, *ent.TelegramChatFeatureFlagsMutation) (ent.Value, error)
@@ -79,6 +91,18 @@ func (f TelegramChatFeatureFlagsFunc) Mutate(ctx context.Context, m ent.Mutation
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TelegramChatFeatureFlagsMutation", m)
+}
+
+// The TelegramChatRecapsOptionsFunc type is an adapter to allow the use of ordinary
+// function as TelegramChatRecapsOptions mutator.
+type TelegramChatRecapsOptionsFunc func(context.Context, *ent.TelegramChatRecapsOptionsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TelegramChatRecapsOptionsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.TelegramChatRecapsOptionsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.TelegramChatRecapsOptionsMutation", m)
 }
 
 // Condition is a hook condition function.

@@ -110,6 +110,20 @@ var (
 		Columns:    SlackOauthCredentialsColumns,
 		PrimaryKey: []*schema.Column{SlackOauthCredentialsColumns[0]},
 	}
+	// TelegramChatAutoRecapsSubscribersColumns holds the columns for the "telegram_chat_auto_recaps_subscribers" table.
+	TelegramChatAutoRecapsSubscribersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "user_id", Type: field.TypeInt64, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// TelegramChatAutoRecapsSubscribersTable holds the schema information for the "telegram_chat_auto_recaps_subscribers" table.
+	TelegramChatAutoRecapsSubscribersTable = &schema.Table{
+		Name:       "telegram_chat_auto_recaps_subscribers",
+		Columns:    TelegramChatAutoRecapsSubscribersColumns,
+		PrimaryKey: []*schema.Column{TelegramChatAutoRecapsSubscribersColumns[0]},
+	}
 	// TelegramChatFeatureFlagsColumns holds the columns for the "telegram_chat_feature_flags" table.
 	TelegramChatFeatureFlagsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -126,6 +140,20 @@ var (
 		Columns:    TelegramChatFeatureFlagsColumns,
 		PrimaryKey: []*schema.Column{TelegramChatFeatureFlagsColumns[0]},
 	}
+	// TelegramChatRecapsOptionsColumns holds the columns for the "telegram_chat_recaps_options" table.
+	TelegramChatRecapsOptionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Unique: true},
+		{Name: "auto_recap_send_mode", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// TelegramChatRecapsOptionsTable holds the schema information for the "telegram_chat_recaps_options" table.
+	TelegramChatRecapsOptionsTable = &schema.Table{
+		Name:       "telegram_chat_recaps_options",
+		Columns:    TelegramChatRecapsOptionsColumns,
+		PrimaryKey: []*schema.Column{TelegramChatRecapsOptionsColumns[0]},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ChatHistoriesTable,
@@ -133,7 +161,9 @@ var (
 		LogSummarizationsTable,
 		MetricOpenAiChatCompletionTokenUsagesTable,
 		SlackOauthCredentialsTable,
+		TelegramChatAutoRecapsSubscribersTable,
 		TelegramChatFeatureFlagsTable,
+		TelegramChatRecapsOptionsTable,
 	}
 )
 

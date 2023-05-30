@@ -25,7 +25,12 @@ var (
 type MessageError struct {
 	message          string
 	replyToMessageID int
-	editMessageID    int
+	editMessage      *tgbotapi.Message
+	parseMode        string
+	replyMarkup      *tgbotapi.InlineKeyboardMarkup
+
+	deleteLaterForUserID int64
+	deleteLaterChatID    int64
 }
 
 func NewMessageError(message string) MessageError {
@@ -43,12 +48,39 @@ func (e MessageError) Error() string {
 }
 
 func (e MessageError) WithReply(message *tgbotapi.Message) MessageError {
+	if message == nil {
+		return e
+	}
+
 	e.replyToMessageID = message.MessageID
+
+	return e
+}
+
+func (e MessageError) WithDeleteLater(userID int64, chatID int64) MessageError {
+	e.deleteLaterForUserID = userID
+	e.deleteLaterChatID = chatID
+
 	return e
 }
 
 func (e MessageError) WithEdit(message *tgbotapi.Message) MessageError {
-	e.editMessageID = message.MessageID
+	if message == nil {
+		return e
+	}
+
+	e.editMessage = message
+
+	return e
+}
+
+func (e MessageError) WithParseModeHTML() MessageError {
+	e.parseMode = tgbotapi.ModeHTML
+	return e
+}
+
+func (e MessageError) WithReplyMarkup(replyMarkup tgbotapi.InlineKeyboardMarkup) MessageError {
+	e.replyMarkup = &replyMarkup
 	return e
 }
 
@@ -56,9 +88,13 @@ type ExceptionError struct {
 	err              error
 	message          string
 	replyToMessageID int
-	editMessageID    int
+	editMessage      *tgbotapi.Message
 	callFrameSkip    int
 	callFrame        *runtime.Frame
+	replyMarkup      *tgbotapi.InlineKeyboardMarkup
+
+	deleteLaterForUserID int64
+	deleteLaterChatID    int64
 }
 
 func NewExceptionError(err error) ExceptionError {
@@ -98,11 +134,33 @@ func (e ExceptionError) WithMessage(message string) ExceptionError {
 }
 
 func (e ExceptionError) WithReply(message *tgbotapi.Message) ExceptionError {
+	if message == nil {
+		return e
+	}
+
 	e.replyToMessageID = message.MessageID
+
 	return e
 }
 
 func (e ExceptionError) WithEdit(message *tgbotapi.Message) ExceptionError {
-	e.editMessageID = message.MessageID
+	if message == nil {
+		return e
+	}
+
+	e.editMessage = message
+
+	return e
+}
+
+func (e ExceptionError) WithReplyMarkup(replyMarkup tgbotapi.InlineKeyboardMarkup) ExceptionError {
+	e.replyMarkup = &replyMarkup
+	return e
+}
+
+func (e ExceptionError) WithDeleteLater(userID int64, chatID int64) ExceptionError {
+	e.deleteLaterForUserID = userID
+	e.deleteLaterChatID = chatID
+
 	return e
 }

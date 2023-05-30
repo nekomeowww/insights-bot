@@ -15,7 +15,11 @@ import (
 )
 
 var (
-	errOperationCanNotBeDone = errors.New("抱歉，此操作无法进行")
+	errOperationCanNotBeDone                                   = errors.New("抱歉，此操作无法进行")
+	errAdministratorPermissionRequired                         = errors.New("<b>管理员</b>")
+	errCreatorPermissionRequired                               = errors.New("<b>群组创建者</b>")
+	errToggleRecapPermissionDeniedDueToAdministratorIsRequired = fmt.Errorf("%w，只有%w或%w角色可以开启/关闭聊天记录回顾功能。", errOperationCanNotBeDone, errAdministratorPermissionRequired, errCreatorPermissionRequired)
+	errAssignModePermissionDeniedDueToAdministratorIsRequired  = fmt.Errorf("%w，只有%w角色可以配置聊天记录回顾的模式。", errOperationCanNotBeDone, errCreatorPermissionRequired)
 )
 
 func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
@@ -23,7 +27,7 @@ func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
 	if user == nil {
-		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。")
+		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 	}
 
 	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{
@@ -34,7 +38,7 @@ func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
 		return err
 	}
 	if !is && !ctx.Bot.IsGroupAnonymousBot(user) {
-		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。")
+		return fmt.Errorf("%s，%w", errOperationCanNotBeDone, errToggleRecapPermissionDeniedDueToAdministratorIsRequired)
 	}
 
 	is, err = ctx.IsBotAdministrator()
@@ -53,7 +57,15 @@ func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) erro
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
 	if user == nil {
-		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "配置聊天记录回顾功能的模式需要<b>群组创建者</b>权限执行 /configure_recap 命令。")
+		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
+	}
+
+	isAdmin, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{telegram.MemberStatusAdministrator})
+	if err != nil {
+		return err
+	}
+	if !isAdmin && !ctx.Bot.IsGroupAnonymousBot(user) {
+		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 	}
 
 	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{
@@ -63,7 +75,7 @@ func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) erro
 		return err
 	}
 	if !is {
-		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "配置聊天记录回顾功能的模式需要<b>群组创建者</b>权限执行 /configure_recap 命令。")
+		return fmt.Errorf("%w，%w", errOperationCanNotBeDone, errAssignModePermissionDeniedDueToAdministratorIsRequired)
 	}
 
 	is, err = ctx.IsBotAdministrator()
@@ -134,7 +146,7 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 	}
 	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
 		return nil, tgbot.
-			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。").Error()).
+			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "需要<b>管理员</b>权限才能配置聊天记录回顾功能。").Error()).
 			WithReply(c.Update.Message).
 			WithParseModeHTML()
 	}

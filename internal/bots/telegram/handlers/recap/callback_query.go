@@ -180,12 +180,15 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 		return nil, nil
 	}
 	// same actor or the original command should sent by Group Anonymous Bot
-	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
 		return nil, nil
 	}
 	// check actor is admin or creator, bot is admin
 	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
+		if errors.Is(err, errAdministratorPermissionRequired) {
+			return nil, nil
+		}
 		if errors.Is(err, errOperationCanNotBeDone) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).
@@ -290,13 +293,16 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 		return nil, nil
 	}
 	// same actor or the original command should sent by Group Anonymous Bot
-	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
 		return nil, nil
 	}
-	// check actor is creator, bot is admin
+	// check actor is admin or creator, bot is admin
 	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
-		if errors.Is(err, errOperationCanNotBeDone) {
+		if errors.Is(err, errAdministratorPermissionRequired) {
+			return nil, nil
+		}
+		if errors.Is(err, errOperationCanNotBeDone) || errors.Is(err, errCreatorPermissionRequired) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).
 				WithEdit(msg).
@@ -372,10 +378,10 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 		return nil, nil
 	}
 	// same actor or the original command should sent by Group Anonymous Bot
-	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
 		return nil, nil
 	}
-	// check actor is admin or creator
+	// check actor is admin or creator, bot is admin
 	is, err := c.IsUserMemberStatus(fromID, []telegram.MemberStatus{telegram.MemberStatusCreator, telegram.MemberStatusAdministrator})
 	if err != nil {
 		return nil, tgbot.
@@ -384,11 +390,8 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
-		return nil, tgbot.
-			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。").Error()).
-			WithEdit(msg).
-			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
+	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.From) {
+		return nil, nil
 	}
 
 	_ = c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, messageID))

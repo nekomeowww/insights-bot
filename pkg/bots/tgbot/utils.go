@@ -1,8 +1,6 @@
 package tgbot
 
 import (
-	"fmt"
-	"net/url"
 	"regexp"
 	"strings"
 
@@ -55,10 +53,6 @@ func EscapeStringForMarkdownV2(src string) string {
 	return result
 }
 
-func NewCallbackQueryData(component string, route string, queries url.Values) string {
-	return fmt.Sprintf("cbq://%s/%s?%s", component, route, queries.Encode())
-}
-
 func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	if lastName == "" {
 		return firstName
@@ -88,6 +82,18 @@ func EscapeHTMLSymbols(str string) string {
 	str = strings.ReplaceAll(str, "<", "&lt;")
 	str = strings.ReplaceAll(str, ">", "&gt;")
 	str = strings.ReplaceAll(str, "&", "&amp;")
+
+	return str
+}
+
+var regexpHTMLBlocks = regexp.MustCompile(`<[^>]*>`)
+
+// RemoveHTMLBlocksFromString
+//
+//	<any> with ""
+//	</any> with ""
+func RemoveHTMLBlocksFromString(str string) string {
+	str = regexpHTMLBlocks.ReplaceAllString(str, "")
 
 	return str
 }

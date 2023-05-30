@@ -1,16 +1,22 @@
 package tgchats
 
 import (
+	"os"
 	"testing"
 
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
 )
 
 var model *Model
 
 func TestMain(m *testing.M) {
+	logger := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: configs.NewTestConfig()(),
+	})
+
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
 		Lifecycle: tutils.NewEmtpyLifecycle(),
 		Configs:   configs.NewTestConfig()(),
@@ -20,11 +26,12 @@ func TestMain(m *testing.M) {
 	}
 
 	model, err = NewModel()(NewModelParams{
-		Ent: ent,
+		Ent:    ent,
+		Logger: logger,
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	m.Run()
+	os.Exit(m.Run())
 }

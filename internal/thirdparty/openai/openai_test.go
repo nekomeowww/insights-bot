@@ -1,13 +1,54 @@
 package openai
 
 import (
+	"os"
 	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
+	"github.com/nekomeowww/insights-bot/internal/lib"
+	"github.com/nekomeowww/insights-bot/pkg/tutils"
 	"github.com/stretchr/testify/require"
 )
+
+var client *OpenAIClient
+
+func TestMain(m *testing.M) {
+	logger := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: configs.NewTestConfig()(),
+	})
+
+	ent, err := datastore.NewEnt()(datastore.NewEntParams{
+		Lifecycle: tutils.NewEmtpyLifecycle(),
+		Configs:   configs.NewTestConfig()(),
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	c, err := NewClient()(NewClientParams{
+		Logger: logger,
+		Config: &configs.Config{
+			OpenAIAPISecret: "",
+			OpenAIAPIHost:   "",
+		},
+		Ent: ent,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	var ok bool
+
+	client, ok = c.(*OpenAIClient)
+	if !ok {
+		panic("failed to cast to OpenAIClient")
+	}
+
+	os.Exit(m.Run())
+}
 
 func TestTruncateContentBasedOnTokens(t *testing.T) {
 	tables := []struct {
@@ -32,17 +73,9 @@ func TestTruncateContentBasedOnTokens(t *testing.T) {
 		},
 	}
 
-	c, err := NewClient()(NewClientParams{
-		Config: &configs.Config{
-			OpenAIAPISecret: "",
-			OpenAIAPIHost:   "",
-		},
-	})
-	require.NoError(t, err)
-
 	for _, table := range tables {
 		t.Run(table.textContent, func(t *testing.T) {
-			actual := c.TruncateContentBasedOnTokens(table.textContent, table.limits)
+			actual := client.TruncateContentBasedOnTokens(table.textContent, table.limits)
 			require.Equal(t, table.expected, actual)
 		})
 	}
@@ -66,17 +99,9 @@ func TestSplitContentBasedOnTokenLimitations(t *testing.T) {
 		},
 	}
 
-	c, err := NewClient()(NewClientParams{
-		Config: &configs.Config{
-			OpenAIAPISecret: "",
-			OpenAIAPIHost:   "",
-		},
-	})
-	require.NoError(t, err)
-
 	for i, table := range tables {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			actual := c.SplitContentBasedByTokenLimitations(table.textContent, table.limits)
+			actual := client.SplitContentBasedByTokenLimitations(table.textContent, table.limits)
 			require.Equal(t, table.expected, actual)
 		})
 	}

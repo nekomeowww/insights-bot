@@ -34,17 +34,12 @@ func (m *Model) HasOngoingRecapForwardedFromPrivateMessages(userID int64) (bool,
 		Key(redis.RecapReplayFromPrivateMessageControl1.Format(userID)).
 		Build()
 
-	res := m.redis.Do(context.Background(), getCmd)
-	if res.Error() != nil {
-		if rueidis.IsRedisNil(res.Error()) {
+	str, err := m.redis.Do(context.Background(), getCmd).ToString()
+	if err != nil {
+		if rueidis.IsRedisNil(err) {
 			return false, nil
 		}
 
-		return false, res.Error()
-	}
-
-	str, err := res.ToString()
-	if err != nil {
 		return false, err
 	}
 
@@ -168,7 +163,7 @@ func (m *Model) SaveOneTelegramPrivateForwardedReplayChatHistory(message *tgbota
 		"chat_id":    telegramChatHistory.ChatID,
 		"message_id": telegramChatHistory.MessageID,
 		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
-	}).Debug("saved one telegram private forwarded replay chat history")
+	}).Trace("saved one telegram private forwarded replay chat history")
 
 	return nil
 }
@@ -181,17 +176,12 @@ func (m *Model) FindPrivateForwardedChatHistories(userID int64) ([]telegramPriva
 		Stop(-1).
 		Build()
 
-	redisRes := m.redis.Client.Do(context.Background(), zrevrangeCmd)
-	if redisRes.Error() != nil {
-		if rueidis.IsRedisNil(redisRes.Error()) {
+	replayChatHistories, err := m.redis.Client.Do(context.Background(), zrevrangeCmd).AsStrSlice()
+	if err != nil {
+		if rueidis.IsRedisNil(err) {
 			return make([]telegramPrivateForwardedReplayChatHistory, 0), nil
 		}
 
-		return make([]telegramPrivateForwardedReplayChatHistory, 0), redisRes.Error()
-	}
-
-	replayChatHistories, err := redisRes.AsStrSlice()
-	if err != nil {
 		return make([]telegramPrivateForwardedReplayChatHistory, 0), err
 	}
 	if len(replayChatHistories) == 0 {

@@ -22,8 +22,12 @@ type Tx struct {
 	MetricOpenAIChatCompletionTokenUsage *MetricOpenAIChatCompletionTokenUsageClient
 	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
 	SlackOAuthCredentials *SlackOAuthCredentialsClient
+	// TelegramChatAutoRecapsSubscribers is the client for interacting with the TelegramChatAutoRecapsSubscribers builders.
+	TelegramChatAutoRecapsSubscribers *TelegramChatAutoRecapsSubscribersClient
 	// TelegramChatFeatureFlags is the client for interacting with the TelegramChatFeatureFlags builders.
 	TelegramChatFeatureFlags *TelegramChatFeatureFlagsClient
+	// TelegramChatRecapsOptions is the client for interacting with the TelegramChatRecapsOptions builders.
+	TelegramChatRecapsOptions *TelegramChatRecapsOptionsClient
 
 	// lazily loaded.
 	client     *Client
@@ -160,7 +164,9 @@ func (tx *Tx) init() {
 	tx.LogSummarizations = NewLogSummarizationsClient(tx.config)
 	tx.MetricOpenAIChatCompletionTokenUsage = NewMetricOpenAIChatCompletionTokenUsageClient(tx.config)
 	tx.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(tx.config)
+	tx.TelegramChatAutoRecapsSubscribers = NewTelegramChatAutoRecapsSubscribersClient(tx.config)
 	tx.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(tx.config)
+	tx.TelegramChatRecapsOptions = NewTelegramChatRecapsOptionsClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

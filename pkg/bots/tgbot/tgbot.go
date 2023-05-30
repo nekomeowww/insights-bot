@@ -2,27 +2,37 @@ package tgbot
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/redis/rueidis"
 	"github.com/samber/lo"
+	"github.com/sirupsen/logrus"
 
+	"github.com/nekomeowww/fo"
 	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/redis"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 )
 
 type BotServiceOptions struct {
-	webhookURL  string
-	webhookPort string
-	token       string
-	dispatcher  *Dispatcher
-	logger      *logger.Logger
+	webhookURL    string
+	webhookPort   string
+	token         string
+	dispatcher    *Dispatcher
+	logger        *logger.Logger
+	rueidisClient rueidis.Client
 }
 
 type CallOption func(*BotServiceOptions)
@@ -54,6 +64,12 @@ func WithDispatcher(dispatcher *Dispatcher) CallOption {
 func WithLogger(logger *logger.Logger) CallOption {
 	return func(o *BotServiceOptions) {
 		o.logger = logger
+	}
+}
+
+func WithRueidisClient(client rueidis.Client) CallOption {
+	return func(o *BotServiceOptions) {
+		o.rueidisClient = client
 	}
 }
 
@@ -182,7 +198,7 @@ func (b *BotService) startPullUpdates() {
 
 		select {
 		case update := <-b.getUpdateChan():
-			b.dispatcher.Dispatch(b.BotAPI, update)
+			b.dispatcher.Dispatch(b.BotAPI, update, b.opts.rueidisClient)
 		case <-ctx.Done():
 			b.logger.Info("stopped to receiving updates")
 			b.webhookStarted = false
@@ -226,27 +242,225 @@ func (b *BotService) Check(ctx context.Context) error {
 	return nil
 }
 
+func (b *BotService) Bot() *Bot {
+	return &Bot{
+		BotAPI:        b.BotAPI,
+		logger:        b.logger,
+		rueidisClient: b.opts.rueidisClient,
+	}
+}
+
 type Bot struct {
 	*tgbotapi.BotAPI
-	logger *logger.Logger
+	logger        *logger.Logger
+	rueidisClient rueidis.Client
 }
 
-func (b *Bot) MustSend(chattable tgbotapi.Chattable) *tgbotapi.Message {
-	message, err := b.Send(chattable)
-	if err != nil {
+func (b *Bot) MaySend(chattable tgbotapi.Chattable) *tgbotapi.Message {
+	may := fo.NewMay[tgbotapi.Message]().Use(func(err error, messageArgs ...any) {
 		b.logger.Errorf("failed to send %v to telegram: %v", utils.SprintJSON(chattable), err)
-		return nil
-	}
+	})
 
-	return &message
+	return lo.ToPtr(may.Invoke(b.Send(chattable)))
 }
 
-func (b *Bot) MustRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
-	resp, err := b.Request(chattable)
-	if err != nil {
+func (b *Bot) MayRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
+	may := fo.NewMay[*tgbotapi.APIResponse]().Use(func(err error, messageArgs ...any) {
 		b.logger.Errorf("failed to request %v to telegram: %v", utils.SprintJSON(chattable), err)
+	})
+
+	return may.Invoke(b.Request(chattable))
+}
+
+func (b *Bot) IsCannotInitiateChatWithUserErr(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	tgbotapiErr, ok := err.(*tgbotapi.Error)
+	if !ok {
+		return false
+	}
+
+	return tgbotapiErr.Code == 403 && tgbotapiErr.Message == "Forbidden: bot can't initiate conversation with a user"
+}
+
+func (b *Bot) IsBotWasBlockedByTheUserErr(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	tgbotapiErr, ok := err.(*tgbotapi.Error)
+	if !ok {
+		return false
+	}
+
+	return tgbotapiErr.Code == 403 && tgbotapiErr.Message == "Forbidden: bot was blocked by the user"
+}
+
+func (b *Bot) IsBotAdministrator(chatID int64) (bool, error) {
+	botMember, err := b.GetChatMember(tgbotapi.GetChatMemberConfig{ChatConfigWithUser: tgbotapi.ChatConfigWithUser{ChatID: chatID, UserID: b.Self.ID}})
+	if err != nil {
+		return false, err
+	}
+	if botMember.Status == string(telegram.MemberStatusAdministrator) {
+		return true, err
+	}
+
+	return false, err
+}
+
+func (b *Bot) IsUserMemberStatus(chatID int64, userID int64, status []telegram.MemberStatus) (bool, error) {
+	member, err := b.GetChatMember(tgbotapi.GetChatMemberConfig{ChatConfigWithUser: tgbotapi.ChatConfigWithUser{ChatID: chatID, UserID: userID}})
+	if err != nil {
+		return false, err
+	}
+	if lo.Contains(status, telegram.MemberStatus(member.Status)) {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+func (b *Bot) PushOneDeleteLaterMessage(forUserID int64, chatID int64, messageID int) error {
+	if forUserID == 0 || chatID == 0 || messageID == 0 {
 		return nil
 	}
 
-	return resp
+	lpushCmd := b.rueidisClient.B().
+		Lpush().
+		Key(redis.SessionDeleteLaterMessagesForActor1.Format(forUserID)).
+		Element(fmt.Sprintf("%d;%d", chatID, messageID)).
+		Build()
+
+	exCmd := b.rueidisClient.B().
+		Expire().
+		Key(redis.SessionDeleteLaterMessagesForActor1.Format(forUserID)).
+		Seconds(24 * 60 * 60).
+		Build()
+
+	res := b.rueidisClient.DoMulti(context.Background(), lpushCmd, exCmd)
+	for _, v := range res {
+		if v.Error() != nil {
+			return v.Error()
+		}
+	}
+
+	b.logger.WithFields(logrus.Fields{
+		"from_id":    forUserID,
+		"chat_id":    chatID,
+		"message_id": messageID,
+	}).Trace("pushed one delete later message for user")
+
+	return nil
+}
+
+func (b *Bot) DeleteAllDeleteLaterMessages(forUserID int64) error {
+	if forUserID == 0 {
+		return nil
+	}
+
+	lrangeCmd := b.rueidisClient.B().
+		Lrange().
+		Key(redis.SessionDeleteLaterMessagesForActor1.Format(forUserID)).
+		Start(0).
+		Stop(-1).
+		Build()
+
+	elems, err := b.rueidisClient.Do(context.Background(), lrangeCmd).AsStrSlice()
+	if err != nil {
+		return err
+	}
+	if len(elems) == 0 {
+		return nil
+	}
+
+	delCmd := b.rueidisClient.B().
+		Del().
+		Key(redis.SessionDeleteLaterMessagesForActor1.Format(forUserID)).
+		Build()
+
+	res := b.rueidisClient.Do(context.Background(), delCmd)
+
+	for _, v := range elems {
+		pairs := strings.Split(v, ";")
+		if len(pairs) != 2 {
+			continue
+		}
+
+		chatID, err := strconv.ParseInt(pairs[0], 10, 64)
+		if err != nil {
+			continue
+		}
+
+		messageID, err := strconv.Atoi(pairs[1])
+		if err != nil {
+			continue
+		}
+		if chatID == 0 || messageID == 0 {
+			continue
+		}
+
+		b.MayRequest(tgbotapi.NewDeleteMessage(chatID, messageID))
+		b.logger.WithFields(logrus.Fields{
+			"from_id":    forUserID,
+			"chat_id":    chatID,
+			"message_id": messageID,
+		}).Trace("deleted one delete later message for user")
+	}
+
+	return res.Error()
+}
+
+func (b *Bot) AssignOneCallbackQueryData(route string, data any) (string, error) {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+
+	routeHash := fmt.Sprintf("%x", sha256.Sum256([]byte(route)))[0:16]
+	actionHash := fmt.Sprintf("%x", sha256.Sum256(jsonData))[0:16]
+
+	setCmd := b.rueidisClient.B().
+		Set().
+		Key(redis.CallbackQueryData2.Format(route, actionHash)).
+		Value(string(jsonData)).
+		ExSeconds(24 * 60 * 60).
+		Build()
+
+	err = b.rueidisClient.Do(context.Background(), setCmd).Error()
+	if err != nil {
+		return fmt.Sprintf("%s;%s", routeHash, actionHash), err
+	}
+
+	b.logger.Tracef("assigned callback query data: %s;%s for route %s with data %s", route, actionHash, route, string(jsonData))
+
+	return fmt.Sprintf("%s;%s", routeHash, actionHash), nil
+}
+
+func (b *Bot) routeHashAndActionHashFromData(callbackQueryData string) (string, string) {
+	handlerIdentifierPairs := strings.Split(callbackQueryData, ";")
+	if len(handlerIdentifierPairs) != 2 {
+		return "", ""
+	}
+
+	return handlerIdentifierPairs[0], handlerIdentifierPairs[1]
+}
+
+func (b *Bot) fetchCallbackQueryActionData(route string, dataHash string) (string, error) {
+	getCmd := b.rueidisClient.B().
+		Get().
+		Key(redis.CallbackQueryData2.Format(route, dataHash)).
+		Build()
+
+	str, err := b.rueidisClient.Do(context.Background(), getCmd).ToString()
+	if err != nil {
+		if rueidis.IsRedisNil(err) {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	return str, nil
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/middlewares"
 	"github.com/nekomeowww/insights-bot/internal/configs"
+	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
@@ -28,8 +29,10 @@ type NewBotParam struct {
 
 	Lifecycle fx.Lifecycle
 
-	Config     *configs.Config
-	Logger     *logger.Logger
+	Config *configs.Config
+	Logger *logger.Logger
+	Redis  *datastore.Redis
+
 	Handlers   *handlers.Handlers
 	Dispatcher *tgbot.Dispatcher
 
@@ -51,6 +54,7 @@ func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 			tgbot.WithWebhookPort(param.Config.Telegram.BotWebhookPort),
 			tgbot.WithDispatcher(dispatcher),
 			tgbot.WithLogger(param.Logger),
+			tgbot.WithRueidisClient(param.Redis.Client),
 		)
 		if err != nil {
 			return nil, err

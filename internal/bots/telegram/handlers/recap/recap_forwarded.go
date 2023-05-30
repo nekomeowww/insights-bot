@@ -6,54 +6,13 @@ import (
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/nekomeowww/insights-bot/internal/datastore"
-	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
-	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
-	"go.uber.org/fx"
 )
 
-var (
-	_ tgbot.CancellableCommandHandler = (*RecapForwardedStartCommandHandler)(nil)
-	_ tgbot.CommandHandler            = (*RecapForwardedCommandHandler)(nil)
-)
-
-type NewRecapForwardedStartCommandHandlerParams struct {
-	fx.In
-
-	Redis         *datastore.Redis
-	ChatHistories *chathistories.Model
-	Logger        *logger.Logger
-}
-
-type RecapForwardedStartCommandHandler struct {
-	redis         *datastore.Redis
-	chathistories *chathistories.Model
-	logger        *logger.Logger
-}
-
-func NewRecapForwardedStartCommandHandler() func(NewRecapForwardedStartCommandHandlerParams) *RecapForwardedStartCommandHandler {
-	return func(param NewRecapForwardedStartCommandHandlerParams) *RecapForwardedStartCommandHandler {
-		return &RecapForwardedStartCommandHandler{
-			redis:         param.Redis,
-			chathistories: param.ChatHistories,
-			logger:        param.Logger,
-		}
-	}
-}
-
-func (h RecapForwardedStartCommandHandler) Command() string {
-	return "recap_forwarded_start"
-}
-
-func (h RecapForwardedStartCommandHandler) CommandHelp() string {
-	return "使 Bot 接收在私聊中转发给 Bot 的消息，并在发送 /recap_forwarded 后开始总结"
-}
-
-func (h *RecapForwardedStartCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+func (h *CommandHandler) handleRecapForwardedStartCommand(c *tgbot.Context) (tgbot.Response, error) {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, telegram.ChatType(c.Update.Message.Chat.Type)) {
 		return nil, tgbot.NewMessageError("该命令当前只能在私聊中使用哦！")
 	}
@@ -83,7 +42,7 @@ func (h *RecapForwardedStartCommandHandler) Handle(c *tgbot.Context) (tgbot.Resp
 	return c.NewMessageReplyTo("没问题，请将你需要总结的消息在 2 小时内发给我吧。发送完毕后可以通过发送 /recap_forwarded 给我来开始总结哦！", c.Update.Message.MessageID), nil
 }
 
-func (h *RecapForwardedStartCommandHandler) ShouldCancel(c *tgbot.Context) (bool, error) {
+func (h *CommandHandler) handleRecapForwardedStartShouleCancel(c *tgbot.Context) (bool, error) {
 	has, err := h.chathistories.HasOngoingRecapForwardedFromPrivateMessages(c.Update.Message.From.ID)
 	if err != nil {
 		return false, err
@@ -92,7 +51,7 @@ func (h *RecapForwardedStartCommandHandler) ShouldCancel(c *tgbot.Context) (bool
 	return has, nil
 }
 
-func (h *RecapForwardedStartCommandHandler) HandleCancel(c *tgbot.Context) (tgbot.Response, error) {
+func (h *CommandHandler) handleRecapForwardedStartCancelCommand(c *tgbot.Context) (tgbot.Response, error) {
 	err := h.chathistories.DisableRecapForwardedFromPrivateMessages(c.Update.Message.From.ID)
 	if err != nil {
 		return nil, err
@@ -101,39 +60,7 @@ func (h *RecapForwardedStartCommandHandler) HandleCancel(c *tgbot.Context) (tgbo
 	return c.NewMessageReplyTo("好的，已经帮你把消息清理掉了，如果需要总结转发的消息，可以再次发送 /recap_forwarded_start 开始操作。", c.Update.Message.MessageID), nil
 }
 
-type NewRecapForwardedCommandHandlerParams struct {
-	fx.In
-
-	Redis         *datastore.Redis
-	ChatHistories *chathistories.Model
-	Logger        *logger.Logger
-}
-
-type RecapForwardedCommandHandler struct {
-	redis         *datastore.Redis
-	chathistories *chathistories.Model
-	logger        *logger.Logger
-}
-
-func NewRecapForwardedCommandHandler() func(NewRecapForwardedCommandHandlerParams) *RecapForwardedCommandHandler {
-	return func(param NewRecapForwardedCommandHandlerParams) *RecapForwardedCommandHandler {
-		return &RecapForwardedCommandHandler{
-			redis:         param.Redis,
-			chathistories: param.ChatHistories,
-			logger:        param.Logger,
-		}
-	}
-}
-
-func (h RecapForwardedCommandHandler) Command() string {
-	return "recap_forwarded"
-}
-
-func (h RecapForwardedCommandHandler) CommandHelp() string {
-	return "使 Bot 停止接收在私聊中转发给 Bot 的消息，对已经转发过的消息进行总结"
-}
-
-func (h *RecapForwardedCommandHandler) Handle(c *tgbot.Context) (tgbot.Response, error) {
+func (h *CommandHandler) handleRecapForwardedCommand(c *tgbot.Context) (tgbot.Response, error) {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, telegram.ChatType(c.Update.Message.Chat.Type)) {
 		return nil, tgbot.NewMessageError("该命令当前只能在私聊中使用哦！")
 	}
@@ -184,7 +111,7 @@ func (h *RecapForwardedCommandHandler) Handle(c *tgbot.Context) (tgbot.Response,
 
 		h.logger.Infof("sending chat histories recap for chat %d: %s", c.Update.Message.Chat.ID, msg.Text)
 
-		c.Bot.MustSend(msg)
+		c.Bot.MaySend(msg)
 	}
 
 	msg := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "总结完成，如果你觉得不满意，可以再次发送 /recap_forwarded 重新生成哦！如果觉得满意，并且希望进行其他的总结操作，可以在开始前发送 /cancel 来清空当前已经接收到的消息，如果不进行操作，缓存的消息将会在 2 小时后被自动清理。")

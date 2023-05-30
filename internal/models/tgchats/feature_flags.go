@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/sirupsen/logrus"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -76,6 +77,12 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		return err
 	}
 
+	m.logger.WithFields(logrus.Fields{
+		"chat_id":    chatID,
+		"chat_title": chatTitle,
+		"chat_type":  chatType,
+	}).Info("enabled chat histories recap")
+
 	return nil
 }
 
@@ -113,9 +120,12 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 	if err != nil {
 		return err
 	}
-	if err != nil {
-		return err
-	}
+
+	m.logger.WithFields(logrus.Fields{
+		"chat_id":    chatID,
+		"chat_title": chatTitle,
+		"chat_type":  chatType,
+	}).Info("disabled chat histories recap")
 
 	return nil
 }

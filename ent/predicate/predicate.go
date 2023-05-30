@@ -21,5 +21,11 @@ type MetricOpenAIChatCompletionTokenUsage func(*sql.Selector)
 // SlackOAuthCredentials is the predicate function for slackoauthcredentials builders.
 type SlackOAuthCredentials func(*sql.Selector)
 
+// TelegramChatAutoRecapsSubscribers is the predicate function for telegramchatautorecapssubscribers builders.
+type TelegramChatAutoRecapsSubscribers func(*sql.Selector)
+
 // TelegramChatFeatureFlags is the predicate function for telegramchatfeatureflags builders.
 type TelegramChatFeatureFlags func(*sql.Selector)
+
+// TelegramChatRecapsOptions is the predicate function for telegramchatrecapsoptions builders.
+type TelegramChatRecapsOptions func(*sql.Selector)

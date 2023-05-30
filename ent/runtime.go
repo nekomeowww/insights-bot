@@ -10,7 +10,9 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/schema"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
+	"github.com/nekomeowww/insights-bot/ent/telegramchatautorecapssubscribers"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
+	"github.com/nekomeowww/insights-bot/ent/telegramchatrecapsoptions"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -255,6 +257,28 @@ func init() {
 	slackoauthcredentialsDescID := slackoauthcredentialsFields[0].Descriptor()
 	// slackoauthcredentials.DefaultID holds the default value on creation for the id field.
 	slackoauthcredentials.DefaultID = slackoauthcredentialsDescID.Default.(func() uuid.UUID)
+	telegramchatautorecapssubscribersFields := schema.TelegramChatAutoRecapsSubscribers{}.Fields()
+	_ = telegramchatautorecapssubscribersFields
+	// telegramchatautorecapssubscribersDescChatID is the schema descriptor for chat_id field.
+	telegramchatautorecapssubscribersDescChatID := telegramchatautorecapssubscribersFields[1].Descriptor()
+	// telegramchatautorecapssubscribers.DefaultChatID holds the default value on creation for the chat_id field.
+	telegramchatautorecapssubscribers.DefaultChatID = telegramchatautorecapssubscribersDescChatID.Default.(int64)
+	// telegramchatautorecapssubscribersDescUserID is the schema descriptor for user_id field.
+	telegramchatautorecapssubscribersDescUserID := telegramchatautorecapssubscribersFields[2].Descriptor()
+	// telegramchatautorecapssubscribers.DefaultUserID holds the default value on creation for the user_id field.
+	telegramchatautorecapssubscribers.DefaultUserID = telegramchatautorecapssubscribersDescUserID.Default.(int64)
+	// telegramchatautorecapssubscribersDescCreatedAt is the schema descriptor for created_at field.
+	telegramchatautorecapssubscribersDescCreatedAt := telegramchatautorecapssubscribersFields[3].Descriptor()
+	// telegramchatautorecapssubscribers.DefaultCreatedAt holds the default value on creation for the created_at field.
+	telegramchatautorecapssubscribers.DefaultCreatedAt = telegramchatautorecapssubscribersDescCreatedAt.Default.(func() int64)
+	// telegramchatautorecapssubscribersDescUpdatedAt is the schema descriptor for updated_at field.
+	telegramchatautorecapssubscribersDescUpdatedAt := telegramchatautorecapssubscribersFields[4].Descriptor()
+	// telegramchatautorecapssubscribers.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	telegramchatautorecapssubscribers.DefaultUpdatedAt = telegramchatautorecapssubscribersDescUpdatedAt.Default.(func() int64)
+	// telegramchatautorecapssubscribersDescID is the schema descriptor for id field.
+	telegramchatautorecapssubscribersDescID := telegramchatautorecapssubscribersFields[0].Descriptor()
+	// telegramchatautorecapssubscribers.DefaultID holds the default value on creation for the id field.
+	telegramchatautorecapssubscribers.DefaultID = telegramchatautorecapssubscribersDescID.Default.(func() uuid.UUID)
 	telegramchatfeatureflagsFields := schema.TelegramChatFeatureFlags{}.Fields()
 	_ = telegramchatfeatureflagsFields
 	// telegramchatfeatureflagsDescChatTitle is the schema descriptor for chat_title field.
@@ -273,4 +297,22 @@ func init() {
 	telegramchatfeatureflagsDescID := telegramchatfeatureflagsFields[0].Descriptor()
 	// telegramchatfeatureflags.DefaultID holds the default value on creation for the id field.
 	telegramchatfeatureflags.DefaultID = telegramchatfeatureflagsDescID.Default.(func() uuid.UUID)
+	telegramchatrecapsoptionsFields := schema.TelegramChatRecapsOptions{}.Fields()
+	_ = telegramchatrecapsoptionsFields
+	// telegramchatrecapsoptionsDescAutoRecapSendMode is the schema descriptor for auto_recap_send_mode field.
+	telegramchatrecapsoptionsDescAutoRecapSendMode := telegramchatrecapsoptionsFields[2].Descriptor()
+	// telegramchatrecapsoptions.DefaultAutoRecapSendMode holds the default value on creation for the auto_recap_send_mode field.
+	telegramchatrecapsoptions.DefaultAutoRecapSendMode = telegramchatrecapsoptionsDescAutoRecapSendMode.Default.(int)
+	// telegramchatrecapsoptionsDescCreatedAt is the schema descriptor for created_at field.
+	telegramchatrecapsoptionsDescCreatedAt := telegramchatrecapsoptionsFields[3].Descriptor()
+	// telegramchatrecapsoptions.DefaultCreatedAt holds the default value on creation for the created_at field.
+	telegramchatrecapsoptions.DefaultCreatedAt = telegramchatrecapsoptionsDescCreatedAt.Default.(func() int64)
+	// telegramchatrecapsoptionsDescUpdatedAt is the schema descriptor for updated_at field.
+	telegramchatrecapsoptionsDescUpdatedAt := telegramchatrecapsoptionsFields[4].Descriptor()
+	// telegramchatrecapsoptions.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	telegramchatrecapsoptions.DefaultUpdatedAt = telegramchatrecapsoptionsDescUpdatedAt.Default.(func() int64)
+	// telegramchatrecapsoptionsDescID is the schema descriptor for id field.
+	telegramchatrecapsoptionsDescID := telegramchatrecapsoptionsFields[0].Descriptor()
+	// telegramchatrecapsoptions.DefaultID holds the default value on creation for the id field.
+	telegramchatrecapsoptions.DefaultID = telegramchatrecapsoptionsDescID.Default.(func() uuid.UUID)
 }

@@ -322,6 +322,14 @@ func (b *Bot) IsUserMemberStatus(chatID int64, userID int64, status []telegram.M
 	return false, nil
 }
 
+func (b *Bot) IsGroupAnonymousBot(user *tgbotapi.User) bool {
+	if user == nil {
+		return false
+	}
+
+	return user.ID == 1087968824 && user.IsBot && user.UserName == "GroupAnonymousBot" && user.FirstName == "Group"
+}
+
 func (b *Bot) PushOneDeleteLaterMessage(forUserID int64, chatID int64, messageID int) error {
 	if forUserID == 0 || chatID == 0 || messageID == 0 {
 		return nil

@@ -18,19 +18,22 @@ var (
 	errOperationCanNotBeDone = errors.New("抱歉，此操作无法进行")
 )
 
-func checkToggle(ctx *tgbot.Context, chatID int64, fromID int64) error {
+func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(ctx.Update.FromChat().Type)) {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
+	if user == nil {
+		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。")
+	}
 
-	is, err := ctx.IsUserMemberStatus(fromID, []telegram.MemberStatus{
+	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{
 		telegram.MemberStatusCreator,
 		telegram.MemberStatusAdministrator,
 	})
 	if err != nil {
 		return err
 	}
-	if !is {
+	if !is && !ctx.Bot.IsGroupAnonymousBot(user) {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。")
 	}
 
@@ -45,12 +48,15 @@ func checkToggle(ctx *tgbot.Context, chatID int64, fromID int64) error {
 	return nil
 }
 
-func checkAssignMode(ctx *tgbot.Context, chatID int64, fromID int64) error {
+func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(ctx.Update.FromChat().Type)) {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
+	if user == nil {
+		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "配置聊天记录回顾功能的模式需要<b>群组创建者</b>权限执行 /configure_recap 命令。")
+	}
 
-	is, err := ctx.IsUserMemberStatus(fromID, []telegram.MemberStatus{
+	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{
 		telegram.MemberStatusCreator,
 	})
 	if err != nil {
@@ -116,14 +122,17 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 		return nil, tgbot.NewMessageError("只有在群组和超级群组内猜可以配置聊天记录回顾功能哦！").WithReply(c.Update.Message)
 	}
 
-	is, err := c.IsUserMemberStatus(c.Update.Message.From.ID, []telegram.MemberStatus{telegram.MemberStatusCreator, telegram.MemberStatusAdministrator})
+	is, err := c.IsUserMemberStatus(c.Update.Message.From.ID, []telegram.MemberStatus{
+		telegram.MemberStatusCreator,
+		telegram.MemberStatusAdministrator,
+	})
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).
 			WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").
 			WithReply(c.Update.Message)
 	}
-	if !is {
+	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
 		return nil, tgbot.
 			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。").Error()).
 			WithReply(c.Update.Message).

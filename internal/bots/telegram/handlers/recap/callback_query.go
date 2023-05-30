@@ -179,7 +179,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 		return nil, nil
 	}
 
-	err = checkToggle(c, chatID, fromID)
+	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errOperationCanNotBeDone) {
 			return nil, tgbot.
@@ -281,7 +281,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	err = checkAssignMode(c, chatID, fromID)
+	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errOperationCanNotBeDone) {
 			return nil, tgbot.
@@ -366,7 +366,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	if !is {
+	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
 		return nil, tgbot.
 			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "开启/关闭聊天记录回顾功能需要<b>管理员</b>权限执行 /configure_recap 命令。").Error()).
 			WithEdit(msg).

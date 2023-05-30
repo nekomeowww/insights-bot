@@ -12,13 +12,20 @@ import (
 )
 
 func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Response, error) {
+	fromID := c.Update.Message.From.ID
+	chatID := c.Update.Message.Chat.ID
+
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil, tgbot.NewMessageError("只有在群组和超级群组内才可以订阅定时的聊天记录回顾哦！").WithReply(c.Update.Message)
 	}
+	if c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
+		return nil, tgbot.
+			NewMessageError("匿名管理员无法订阅定时的聊天记录回顾哦！如果需要订阅定时的聊天记录回顾，必须先将发送角色切换为普通用户然后再试哦。").
+			WithReply(c.Update.Message).
+			WithDeleteLater(fromID, chatID)
+	}
 
-	fromID := c.Update.Message.From.ID
-	chatID := c.Update.Message.Chat.ID
 	chatTitle := c.Update.Message.Chat.Title
 
 	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
@@ -52,6 +59,11 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 
 		c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
 
+		err = c.Bot.DeleteAllDeleteLaterMessages(fromID)
+		if err != nil {
+			h.logger.Errorf("failed to delete all delete later messages: %v", err)
+		}
+
 		return nil, nil
 	}
 
@@ -76,6 +88,10 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 }
 
 func (h *CommandHandler) handleStartCommandWithRecapSubscription(c *tgbot.Context) (tgbot.Response, error) {
+	if c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
+		return nil, nil
+	}
+
 	args := strings.Split(c.Update.Message.CommandArguments(), " ")
 	if len(args) != 1 {
 		return nil, nil
@@ -114,8 +130,14 @@ func (h *CommandHandler) handleUnsubscribeRecapCommand(c *tgbot.Context) (tgbot.
 		return nil, tgbot.NewMessageError("只有在群组和超级群组内才可以取消订阅定时的聊天记录回顾哦！").WithReply(c.Update.Message)
 	}
 
-	fromID := c.Update.Message.From.ID
 	chatID := c.Update.Message.Chat.ID
+
+	if c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
+		c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
+		return nil, nil
+	}
+
+	fromID := c.Update.Message.From.ID
 	chatTitle := c.Update.Message.Chat.Title
 
 	err := h.tgchats.UnsubscribeToAutoRecaps(chatID, fromID)

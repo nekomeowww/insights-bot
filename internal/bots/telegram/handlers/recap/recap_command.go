@@ -88,8 +88,16 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 
 func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.Context) (tgbot.Response, error) {
 	chatID := c.Update.Message.Chat.ID
-	chatTitle := c.Update.Message.Chat.Title
 	fromID := c.Update.Message.From.ID
+
+	if c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
+		return nil, tgbot.
+			NewMessageError("匿名管理员无法在设定为私聊回顾模式的群组内请求创建聊天记录回顾哦！如果需要创建聊天记录回顾，必须先将发送角色切换为普通用户然后再试哦。").
+			WithReply(c.Update.Message).
+			WithDeleteLater(fromID, chatID)
+	}
+
+	chatTitle := c.Update.Message.Chat.Title
 	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您正在请求为群组 <b>%s</b> 创建聊天回顾。\n请问您要为过去几个小时内的聊天创建回顾呢？", c.Update.Message.Chat.Title))
 	msg.ParseMode = tgbotapi.ModeHTML
 
@@ -106,6 +114,12 @@ func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.
 	_, err = c.Bot.Send(msg)
 	if err == nil {
 		c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
+
+		err = c.Bot.DeleteAllDeleteLaterMessages(fromID)
+		if err != nil {
+			h.logger.Errorf("failed to delete all delete later messages: %v", err)
+		}
+
 		return nil, nil
 	}
 

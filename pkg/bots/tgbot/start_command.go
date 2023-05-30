@@ -23,8 +23,6 @@ func (h *startCommandHandler) CommandHelp() string {
 
 func (h *startCommandHandler) handle(c *Context) (Response, error) {
 	for _, h := range h.startCommandHandlers {
-		c.Logger.Infof("startCommandHandler.handle, handler: %T", h)
-
 		_, _ = h.Handle(c)
 		if c.IsAborted() {
 			return nil, nil

@@ -149,15 +149,24 @@ func (d *Dispatcher) OnCallbackQuery(route string, h Handler) {
 
 func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 	defer func() {
+		identityStrings := make([]string, 0)
+		identityStrings = append(identityStrings, FullNameFromFirstAndLastName(c.Update.CallbackQuery.From.FirstName, c.Update.CallbackQuery.From.LastName))
+
+		if c.Update.CallbackQuery.From.UserName != "" {
+			identityStrings = append(identityStrings, "@"+c.Update.CallbackQuery.From.UserName)
+		}
+
 		if c.callbackQueryHandlerRoute == "" || c.callbackQueryHandlerActionData == "" {
 			d.Logger.WithFields(logrus.Fields{
 				"route":            c.callbackQueryHandlerRoute,
 				"route_hash":       c.callbackQueryHandlerRouteHash,
 				"action_data_hash": c.callbackQueryHandlerActionDataHash,
-			}).Tracef("[回调查询｜%s] [%s (%s)]: %s (Raw Data, missing route or action data)",
+			}).Tracef("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data, missing route or action data)",
 				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
+				strings.Join(identityStrings, " "),
+				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.Update.CallbackData(),
 			)
 		} else {
@@ -165,10 +174,12 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 				"route":            c.callbackQueryHandlerRoute,
 				"route_hash":       c.callbackQueryHandlerRouteHash,
 				"action_data_hash": c.callbackQueryHandlerActionDataHash,
-			}).Tracef("[回调查询｜%s] [%s (%s)]: %s: %s",
+			}).Tracef("[回调查询｜%s] [%s (%s)] %s (%s): %s: %s",
 				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
+				strings.Join(identityStrings, " "),
+				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.callbackQueryHandlerRoute, c.callbackQueryHandlerActionData,
 			)
 		}

@@ -175,10 +175,15 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	if actionData.ChatID != chatID || actionData.FromID != fromID {
+	// same chat
+	if actionData.ChatID != chatID {
 		return nil, nil
 	}
-
+	// same actor or the original command should sent by Group Anonymous Bot
+	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+		return nil, nil
+	}
+	// check actor is admin or creator, bot is admin
 	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errOperationCanNotBeDone) {
@@ -280,7 +285,15 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-
+	// same chat
+	if actionData.ChatID != chatID {
+		return nil, nil
+	}
+	// same actor or the original command should sent by Group Anonymous Bot
+	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+		return nil, nil
+	}
+	// check actor is creator, bot is admin
 	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errOperationCanNotBeDone) {
@@ -354,11 +367,16 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	if actionData.ChatID != chatID || actionData.FromID != fromID {
+	// same chat
+	if actionData.ChatID != chatID {
 		return nil, nil
 	}
-
-	is, err := c.IsUserMemberStatus(c.Update.CallbackQuery.From.ID, []telegram.MemberStatus{telegram.MemberStatusCreator, telegram.MemberStatusAdministrator})
+	// same actor or the original command should sent by Group Anonymous Bot
+	if actionData.FromID != fromID && c.Update.CallbackQuery.Message.ReplyToMessage != nil && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From) {
+		return nil, nil
+	}
+	// check actor is admin or creator
+	is, err := c.IsUserMemberStatus(fromID, []telegram.MemberStatus{telegram.MemberStatusCreator, telegram.MemberStatusAdministrator})
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

@@ -55,7 +55,10 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 		textIsTheSame := msgError.editMessage.Text == RemoveHTMLBlocksFromString(msgError.message) || msgError.editMessage.Caption == RemoveHTMLBlocksFromString(msgError.message)
 		inlineKeyboardsAreTheSame := true
 
-		if msgError.editMessage.ReplyMarkup.InlineKeyboard != nil && msgError.replyMarkup != nil &&
+		if msgError.editMessage != nil &&
+			msgError.editMessage.ReplyMarkup != nil &&
+			msgError.editMessage.ReplyMarkup.InlineKeyboard != nil &&
+			msgError.replyMarkup != nil &&
 			len(msgError.editMessage.ReplyMarkup.InlineKeyboard) == len(msgError.replyMarkup.InlineKeyboard) {
 			for i := range msgError.editMessage.ReplyMarkup.InlineKeyboard {
 				diff1, diff2 := lo.Difference(msgError.editMessage.ReplyMarkup.InlineKeyboard[i], msgError.replyMarkup.InlineKeyboard[i])

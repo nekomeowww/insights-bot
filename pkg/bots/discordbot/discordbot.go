@@ -38,12 +38,12 @@ func NewBotService[E bot.Event](
 		bot.WithHTTPServerConfigOpts(
 			cfg.PublicKey,
 			httpserver.WithAddress(net.JoinHostPort("", port)),
-			httpserver.WithURL("/discordbot/command/smr"),
+			httpserver.WithURL("/discord/command/smr"),
 		),
 		bot.WithEventListenerFunc(f),
 	)
 	if err != nil {
-		logger.WithField("error", err.Error()).Fatal("discordbot: failed to create bot instance")
+		logger.WithField("error", err.Error()).Fatal("discord: failed to create bot instance")
 	}
 
 	discordBot.Client = client
@@ -56,7 +56,7 @@ func (b *BotService) SetLogger(logger *logger.Logger) {
 }
 
 func (b *BotService) Check(ctx context.Context) error {
-	return lo.Ternary(b.webhookStarted, nil, errors.New("discordbot bot service is not started yet"))
+	return lo.Ternary(b.webhookStarted, nil, errors.New("discord bot service is not started yet"))
 }
 
 func (b *BotService) Run() error {
@@ -86,7 +86,7 @@ func (b *BotService) Run() error {
 }
 
 func (b *BotService) Stop(ctx context.Context) {
-	b.logger.Info("discordbot: shutting down...")
+	b.logger.Info("discord: shutting down...")
 	b.Close(ctx)
 	b.webhookStarted = false
 }

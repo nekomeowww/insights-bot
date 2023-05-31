@@ -5,9 +5,9 @@
 <h1 align="center">insights-bot</h1>
 
 <p align="center">
-  <img src="https://github.com/nekomeowww/insights-bot/workflows/Testing/badge.svg">
-  <img src="https://github.com/nekomeowww/insights-bot/workflows/UnstableBuild/badge.svg" />
-  <img src="https://github.com/nekomeowww/insights-bot/workflows/ReleasingBuild/badge.svg" />
+  <img src="https://github.com/nekomeowww/insights-bot/actions/workflows/ci.yml/badge.svg">
+  <img src="https://github.com/nekomeowww/insights-bot/actions/workflows/unstable-build.yml/badge.svg" />
+  <img src="https://github.com/nekomeowww/insights-bot/actions/workflows/release-build.yml/badge.svg" />
   <a href="https://goreportcard.com/badge/github.com/nekomeowww/insights-bot"><img src="https://goreportcard.com/badge/github.com/nekomeowww/insights-bot" /></a>
   <a href="https://hub.docker.com/r/nekomeowww/insights-bot">
     <img src="https://img.shields.io/docker/pulls/nekomeowww/insights-bot" />

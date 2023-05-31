@@ -18,41 +18,37 @@ type TaskInfo struct {
 	TeamID string `json:"teamID"` // only for slack, used to query access token and refresh token
 }
 
-type TaskQueue struct {
-	queue []TaskInfo
+type OngoingTaskPool struct {
+	tasks []TaskInfo
 	mu    *sync.RWMutex
 }
 
-func NewTaskQueue() *TaskQueue {
-	return &TaskQueue{
+func NewOngoingTaskPool() *OngoingTaskPool {
+	return &OngoingTaskPool{
 		mu: &sync.RWMutex{},
 	}
 }
 
-func (t *TaskQueue) AddTask(info TaskInfo) {
+func (t *OngoingTaskPool) Add(info TaskInfo) {
 	t.mu.Lock()
-	if len(t.queue) >= 10 {
-		t.mu.Unlock()
-		return
-	}
-
-	t.queue = append(t.queue, info)
+	t.tasks = append(t.tasks, info)
 	t.mu.Unlock()
 }
 
-func (t *TaskQueue) RemoveTask() {
+func (t *OngoingTaskPool) Remove() {
 	t.mu.Lock()
-	if len(t.queue) == 0 {
+	if len(t.tasks) == 0 {
 		t.mu.Unlock()
 		return
 	}
 
-	t.queue = t.queue[1:]
+	t.tasks = t.tasks[1:]
+	t.mu.Unlock()
 }
 
-func (t *TaskQueue) Len() int {
+func (t *OngoingTaskPool) Len() int {
 	t.mu.RLock()
-	l := len(t.queue)
+	l := len(t.tasks)
 	t.mu.RUnlock()
 
 	return l

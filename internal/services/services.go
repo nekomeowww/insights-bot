@@ -13,6 +13,6 @@ func NewModules() fx.Option {
 		fx.Provide(health.NewHealth()),
 		fx.Provide(pprof.NewPprof()),
 		fx.Provide(autorecap.NewAutoRecapService()),
-		fx.Provide(smr.NewService()),
+		fx.Options(smr.NewModules()),
 	)
 }

@@ -104,7 +104,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	if !s.botExists(info.Platform) {
 		s.logger.Errorf("received task from platform %v but instance not exists", info.Platform)
 		// move back to queue
-		err := s.AddTask(info)
+		err := s.queue.AddTask(info)
 		if err != nil {
 			s.logger.WithError(err).Errorf("failed to move task back to queue")
 		}

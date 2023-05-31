@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/nekomeowww/insights-bot/internal/bots/discord/listeners"
 	"github.com/nekomeowww/insights-bot/internal/configs"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/discordbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
@@ -24,8 +23,6 @@ type NewDiscordBotParam struct {
 
 	Logger *logger.Logger
 	Config *configs.Config
-
-	Smr *smr.Service
 
 	Listeners *listeners.Listeners
 }
@@ -47,8 +44,6 @@ func NewDiscordBot() func(p NewDiscordBotParam) *discordbot.BotService {
 				return nil
 			},
 		})
-
-		p.Smr.SetDiscordBot(s)
 
 		return s
 	}

@@ -2,6 +2,9 @@ package handlers
 
 import (
 	"context"
+	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
+	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,8 +12,6 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
-	smr2 "github.com/nekomeowww/insights-bot/internal/models/smr"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
@@ -32,26 +33,26 @@ type NewHandlersParam struct {
 	Config   *configs.Config
 	Logger   *logger.Logger
 	Ent      *datastore.Ent
-	SMR      *smr.Service
+	SmrQueue *smrqueue.Queue
 	Services *services.Services
 }
 
 type Handlers struct {
-	config     *configs.Config
-	logger     *logger.Logger
-	ent        *datastore.Ent
-	smrService *smr.Service
-	services   *services.Services
+	config   *configs.Config
+	logger   *logger.Logger
+	ent      *datastore.Ent
+	smrQueue *smrqueue.Queue
+	services *services.Services
 }
 
 func NewHandlers() func(param NewHandlersParam) *Handlers {
 	return func(param NewHandlersParam) *Handlers {
 		return &Handlers{
-			config:     param.Config,
-			ent:        param.Ent,
-			logger:     param.Logger,
-			smrService: param.SMR,
-			services:   param.Services,
+			config:   param.Config,
+			ent:      param.Ent,
+			logger:   param.Logger,
+			smrQueue: param.SmrQueue,
+			services: param.Services,
 		}
 	}
 }
@@ -81,9 +82,9 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 
 	urlString := body.Text
 
-	err := smr.CheckUrl(urlString)
+	err := smrutils.CheckUrl(urlString)
 	if err != nil {
-		if smr.IsUrlCheckError(err) {
+		if smrutils.IsUrlCheckError(err) {
 			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(err.Error()))
 			return
 		}
@@ -110,8 +111,8 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	}
 
 	// add task
-	err = h.smrService.AddTask(types.TaskInfo{
-		Platform:  smr2.FromPlatformSlack,
+	err = h.smrQueue.AddTask(types.TaskInfo{
+		Platform:  smr.FromPlatformSlack,
 		Url:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,

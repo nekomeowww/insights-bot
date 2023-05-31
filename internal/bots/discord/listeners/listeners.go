@@ -3,8 +3,9 @@ package listeners
 import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
-	smr2 "github.com/nekomeowww/insights-bot/internal/models/smr"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
+	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
+	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
@@ -19,20 +20,20 @@ func NewModules() fx.Option {
 type NewListenersParam struct {
 	fx.In
 
-	Logger *logger.Logger
-	Smr    *smr.Service
+	Logger   *logger.Logger
+	SmrQueue *smrqueue.Queue
 }
 
 type Listeners struct {
-	logger *logger.Logger
-	smr    *smr.Service
+	logger   *logger.Logger
+	smrQueue *smrqueue.Queue
 }
 
 func NewListeners() func(param NewListenersParam) *Listeners {
 	return func(param NewListenersParam) *Listeners {
 		return &Listeners{
-			logger: param.Logger,
-			smr:    param.Smr,
+			logger:   param.Logger,
+			smrQueue: param.SmrQueue,
 		}
 	}
 }
@@ -40,15 +41,15 @@ func NewListeners() func(param NewListenersParam) *Listeners {
 func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, data discord.SlashCommandInteractionData) {
 	urlString := data.String("link")
 
-	b.logger.Infof("discordbot: command received: /smr %s", urlString)
+	b.logger.Infof("discord: command received: /smr %s", urlString)
 
 	// url check
-	err := smr.CheckUrl(urlString)
+	err := smrutils.CheckUrl(urlString)
 	if err != nil {
-		if smr.IsUrlCheckError(err) {
+		if smrutils.IsUrlCheckError(err) {
 			err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent(err.Error()).Build())
 			if err != nil {
-				b.logger.WithField("error", err.Error()).Warn("discordbot: failed to send error message")
+				b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
 			}
 
 			return
@@ -56,7 +57,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
 		if err != nil {
-			b.logger.WithField("error", err.Error()).Warn("discordbot: failed to send error message")
+			b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
 		}
 
 		return
@@ -67,21 +68,21 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		SetContent("请稍等，量子速读中...").
 		Build())
 	if err != nil {
-		b.logger.WithField("error", err.Error()).Warn("discordbot: failed to send response message")
+		b.logger.WithField("error", err.Error()).Warn("discord: failed to send response message")
 		return
 	}
 
-	err = b.smr.AddTask(types.TaskInfo{
-		Platform:  smr2.FromPlatformDiscord,
+	err = b.smrQueue.AddTask(types.TaskInfo{
+		Platform:  smr.FromPlatformDiscord,
 		Url:       urlString,
 		ChannelID: event.Channel().ID.String(),
 	})
 	if err != nil {
-		b.logger.WithField("error", err.Error()).Warn("discordbot: failed to add task")
+		b.logger.WithField("error", err.Error()).Warn("discord: failed to add task")
 
 		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
 		if err != nil {
-			b.logger.WithField("error", err.Error()).Warn("discordbot: failed to send error message")
+			b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
 		}
 
 		return

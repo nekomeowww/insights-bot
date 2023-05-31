@@ -3,7 +3,7 @@ package summarize
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
-	smr2 "github.com/nekomeowww/insights-bot/internal/services/smr"
+	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 )
@@ -14,9 +14,9 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		urlString = c.Update.Message.ReplyToMessage.Text
 	}
 
-	err := smr2.CheckUrl(urlString)
+	err := smrutils.CheckUrl(urlString)
 	if err != nil {
-		if smr2.IsUrlCheckError(err) {
+		if smrutils.IsUrlCheckError(err) {
 			return nil, tgbot.NewMessageError(err.Error()).WithReply(c.Update.Message)
 		}
 
@@ -31,7 +31,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		return nil, tgbot.NewExceptionError(err)
 	}
 
-	err = h.smrService.AddTask(types.TaskInfo{
+	err = h.smrQueue.AddTask(types.TaskInfo{
 		Platform:  smr.FromPlatformTelegram,
 		Url:       urlString,
 		ChatID:    c.Update.Message.Chat.ID,

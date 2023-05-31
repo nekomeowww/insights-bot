@@ -7,7 +7,3 @@ var (
 	ErrParse  = errors.New("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>")
 	ErrScheme = errors.New("你发来的链接无法被理解，可以重新发一个试试。用法：/smr <链接>")
 )
-
-func IsUrlCheckError(err error) bool {
-	return errors.Is(err, ErrNoLink) || errors.Is(err, ErrParse) || errors.Is(err, ErrScheme)
-}

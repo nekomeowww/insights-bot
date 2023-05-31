@@ -6,7 +6,6 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/bots/slack/handlers"
 	"github.com/nekomeowww/insights-bot/internal/configs"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
@@ -28,8 +27,6 @@ type NewSlackBotParam struct {
 
 	Config *configs.Config
 	Logger *logger.Logger
-
-	Smr *smr.Service
 
 	Handlers *handlers.Handlers
 	Services *services.Services
@@ -55,8 +52,6 @@ func NewSlackBot() func(param NewSlackBotParam) *slackbot.BotService {
 				return bot.Stop(ctx)
 			},
 		})
-
-		param.Smr.SetSlackBot(bot)
 
 		return bot
 	}

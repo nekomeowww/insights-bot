@@ -113,6 +113,11 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 }
 
 func processExceptionError(ctx *Context, chatID int64, e ExceptionError) Response {
+	var editMessageID int
+	if e.editMessage != nil {
+		editMessageID = e.editMessage.MessageID
+	}
+
 	entry := logrus.NewEntry(ctx.Logger.Logger)
 	logger.SetCallerFrameWithFileAndLine(entry, "insights-bot", e.callFrame.Function, e.callFrame.File, e.callFrame.Line)
 	entry.WithFields(logrus.Fields{
@@ -121,7 +126,7 @@ func processExceptionError(ctx *Context, chatID int64, e ExceptionError) Respons
 		"update_id":        ctx.Update.UpdateID,
 		"message":          e.message,
 		"error":            e.err,
-		"edit_message_id":  e.editMessage.MessageID,
+		"edit_message_id":  editMessageID,
 		"reply_message_id": e.replyToMessageID,
 	}).Errorf("encountered an exception error: %v", e.err)
 

@@ -8,6 +8,7 @@ require (
 	github.com/alexliesenfeld/health v0.7.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/disgoorg/disgo v0.16.4
+	github.com/disgoorg/snowflake/v2 v2.0.1
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-shiori/go-readability v0.0.0-20230421032831-c66949dfc0ad
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
@@ -43,7 +44,6 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/disgoorg/json v1.0.0 // indirect
 	github.com/disgoorg/log v1.2.0 // indirect
-	github.com/disgoorg/snowflake/v2 v2.0.1 // indirect
 	github.com/dlclark/regexp2 v1.10.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-openapi/inflect v0.19.0 // indirect

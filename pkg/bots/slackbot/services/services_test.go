@@ -1,4 +1,4 @@
-package slack
+package services
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func newTestSlackBot() *Bot {
+func newTestServices() *Services {
 	config := configs.NewTestConfig()()
 
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
@@ -25,36 +25,36 @@ func newTestSlackBot() *Bot {
 		log.Fatal("datastore init failed")
 	}
 
-	return &Bot{
+	return &Services{
 		ent:    ent,
 		logger: logger.NewLogger(logrus.InfoLevel, "insights-bot", "", make([]logrus.Hook, 0)),
 	}
 }
 
-func cleanSlackCredential(bot *Bot, r *require.Assertions) {
-	_, err := bot.ent.SlackOAuthCredentials.Delete().Exec(context.Background())
+func cleanSlackCredential(s *Services, r *require.Assertions) {
+	_, err := s.ent.SlackOAuthCredentials.Delete().Exec(context.Background())
 	r.Empty(err)
 }
 
 func TestSlackBot_createNewSlackCredential(t *testing.T) {
-	bot := newTestSlackBot()
+	s := newTestServices()
 
 	t.Run("no record", func(t *testing.T) {
 		a := assert.New(t)
 		r := require.New(t)
 
-		defer cleanSlackCredential(bot, r)
+		defer cleanSlackCredential(s, r)
 
-		expectTeamId := "TEAM_ID"
+		expectTeamID := "TEAM_ID"
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
-		cre, err := bot.ent.SlackOAuthCredentials.Query().First(context.Background())
+		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
-		a.Equal(expectTeamId, cre.TeamID)
+		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)
 		a.Equal(expectRefreshToken, cre.RefreshToken)
 	})
@@ -63,19 +63,19 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 		a := assert.New(t)
 		r := require.New(t)
 
-		defer cleanSlackCredential(bot, r)
+		defer cleanSlackCredential(s, r)
 
-		expectTeamId := "TEAM_ID"
+		expectTeamID := "TEAM_ID"
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
-		r.Empty(bot.createOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
-		cre, err := bot.ent.SlackOAuthCredentials.Query().First(context.Background())
+		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
-		a.Equal(expectTeamId, cre.TeamID)
+		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)
 		a.Equal(expectRefreshToken, cre.RefreshToken)
 	})

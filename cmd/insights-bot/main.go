@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"log"
 	"time"
 
@@ -38,6 +39,7 @@ func main() {
 		fx.Invoke(slack.Run()),
 		fx.Invoke(telegram.Run()),
 		fx.Invoke(discord.Run()),
+		fx.Invoke(smr.Run()),
 	))
 
 	app.Run()

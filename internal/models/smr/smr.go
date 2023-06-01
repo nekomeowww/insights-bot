@@ -5,12 +5,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/imroc/req/v3"
 	"io"
 	"net/url"
 	"strings"
 
 	"github.com/go-shiori/go-readability"
-	"github.com/imroc/req/v3"
 	"github.com/samber/lo"
 	goopenai "github.com/sashabaranov/go-openai"
 	"github.com/sirupsen/logrus"
@@ -22,6 +22,19 @@ import (
 )
 
 type FromPlatform int
+
+func (f FromPlatform) String() string {
+	switch f {
+	case FromPlatformTelegram:
+		return "Telegram"
+	case FromPlatformSlack:
+		return "Slack"
+	case FromPlatformDiscord:
+		return "Discord"
+	default:
+		return "Unknown"
+	}
+}
 
 const (
 	FromPlatformTelegram FromPlatform = iota

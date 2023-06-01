@@ -14,6 +14,7 @@ import (
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
+	"time"
 )
 
 func NewModules() fx.Option {
@@ -135,6 +136,8 @@ func (s *Service) run() {
 		if needToClose && s.queue.Count() == 0 {
 			break
 		}
+
+		time.Sleep(time.Second * 2)
 	}
 
 	s.alreadyClosed = true

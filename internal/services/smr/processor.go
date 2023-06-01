@@ -23,9 +23,9 @@ func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizatio
 		return result.FormatSummarizationAsSlackMarkdown()
 	case smr.FromPlatformDiscord:
 		return result.FormatSummarizationAsDiscordMarkdown()
+	default:
+		return ""
 	}
-
-	return ""
 }
 
 func (s *Service) processError(err error) string {
@@ -50,7 +50,9 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 
 		_, err := s.tgBot.Send(msgEdit)
 		if err != nil {
-			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
+			s.logger.WithError(err).
+				WithField("platform", info.Platform).
+				Warn("smr service: failed to send result message")
 		}
 	case smr.FromPlatformSlack:
 		token, err := s.ent.SlackOAuthCredentials.Query().
@@ -58,7 +60,10 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 			First(context.Background())
 
 		if err != nil {
-			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to get team's access token")
+			s.logger.WithError(err).
+				WithField("platform", info.Platform).
+				Warn("smr service: failed to get team's access token")
+
 			return
 		}
 
@@ -71,7 +76,9 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 		)
 
 		if err != nil {
-			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
+			s.logger.WithError(err).
+				WithField("platform", info.Platform).
+				Warn("smr service: failed to send result message")
 		}
 	case smr.FromPlatformDiscord:
 		channelID, _ := snowflake.Parse(info.ChannelID)
@@ -82,12 +89,14 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 			)
 
 		if err != nil {
-			s.logger.WithError(err).WithField("platform", info.Platform).Warn("smr service: failed to send result message")
+			s.logger.WithError(err).
+				WithField("platform", info.Platform).
+				Warn("smr service: failed to send result message")
 		}
 	}
 }
 
-func (s *Service) botExists(platform smr.FromPlatform) bool {
+func (s *Service) isBotExists(platform smr.FromPlatform) bool {
 	switch platform {
 	case smr.FromPlatformTelegram:
 		return s.tgBot != nil
@@ -101,7 +110,7 @@ func (s *Service) botExists(platform smr.FromPlatform) bool {
 }
 
 func (s *Service) processor(info types.TaskInfo) {
-	if !s.botExists(info.Platform) {
+	if !s.isBotExists(info.Platform) {
 		s.logger.Errorf("received task from platform %v but instance not exists", info.Platform)
 		// move back to queue
 		err := s.queue.AddTask(info)
@@ -115,7 +124,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 	defer cancel()
 
-	smrResult, err := s.model.SummarizeInputURL(ctx, info.Url, info.Platform)
+	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
 		s.logger.WithError(err).Warn("smr service: summarization failed")
 		errStr := s.processError(err)

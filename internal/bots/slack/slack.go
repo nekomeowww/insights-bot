@@ -3,6 +3,7 @@ package slack
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/nekomeowww/insights-bot/internal/bots/slack/handlers"
 	"github.com/nekomeowww/insights-bot/internal/configs"
@@ -49,6 +50,8 @@ func NewSlackBot() func(param NewSlackBotParam) *slackbot.BotService {
 
 		param.Lifecycle.Append(fx.Hook{
 			OnStop: func(ctx context.Context) error {
+				ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+				defer cancel()
 				return bot.Stop(ctx)
 			},
 		})

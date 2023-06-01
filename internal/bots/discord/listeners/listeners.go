@@ -44,10 +44,14 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 	b.logger.Infof("discord: command received: /smr %s", urlString)
 
 	// url check
-	err := smrutils.CheckUrl(urlString)
+	err, originErr := smrutils.CheckUrl(urlString)
 	if err != nil {
 		if smrutils.IsUrlCheckError(err) {
-			err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent(err.Error()).Build())
+			err = event.CreateMessage(
+				discord.NewMessageCreateBuilder().
+					SetContent(smrutils.FormatUrlCheckError(err, smr.FromPlatformDiscord)).
+					Build(),
+			)
 			if err != nil {
 				b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
 			}
@@ -57,7 +61,10 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
 		if err != nil {
-			b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
+			b.logger.
+				WithError(err).
+				WithError(originErr).
+				Warn("discord: failed to send error message")
 		}
 
 		return
@@ -74,7 +81,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 	err = b.smrQueue.AddTask(types.TaskInfo{
 		Platform:  smr.FromPlatformDiscord,
-		Url:       urlString,
+		URL:       urlString,
 		ChannelID: event.Channel().ID.String(),
 	})
 	if err != nil {

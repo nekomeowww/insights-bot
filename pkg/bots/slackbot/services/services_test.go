@@ -45,16 +45,16 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 
 		defer cleanSlackCredential(s, r)
 
-		expectTeamId := "TEAM_ID"
+		expectTeamID := "TEAM_ID"
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
 		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
-		a.Equal(expectTeamId, cre.TeamID)
+		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)
 		a.Equal(expectRefreshToken, cre.RefreshToken)
 	})
@@ -65,17 +65,17 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 
 		defer cleanSlackCredential(s, r)
 
-		expectTeamId := "TEAM_ID"
+		expectTeamID := "TEAM_ID"
 		expectAccessToken := "ACCESS_TOKEN"
 		expectRefreshToken := "REFRESH_TOKEN"
 
-		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamId, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
-		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamId, expectAccessToken, expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, "ANOTHER_ACCESS_TOKEN", expectRefreshToken))
+		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
 		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
-		a.Equal(expectTeamId, cre.TeamID)
+		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)
 		a.Equal(expectRefreshToken, cre.RefreshToken)
 	})

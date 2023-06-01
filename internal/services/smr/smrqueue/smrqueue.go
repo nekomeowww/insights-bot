@@ -55,7 +55,7 @@ func (q *Queue) AddTask(taskInfo types.TaskInfo) error {
 	}
 
 	q.logger.
-		WithField("url", taskInfo.Url).
+		WithField("url", taskInfo.URL).
 		WithField("platform", taskInfo.Platform).
 		Info("smr service: task added")
 

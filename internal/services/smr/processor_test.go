@@ -38,8 +38,8 @@ func TestMain(m *testing.M) {
 func TestService_botExists(t *testing.T) {
 	t.Run("BotNotExists", func(t *testing.T) {
 		a := assert.New(t)
-		a.False(testService.botExists(smr.FromPlatformDiscord))
-		a.False(testService.botExists(smr.FromPlatformSlack))
-		a.False(testService.botExists(smr.FromPlatformTelegram))
+		a.False(testService.isBotExists(smr.FromPlatformDiscord))
+		a.False(testService.isBotExists(smr.FromPlatformSlack))
+		a.False(testService.isBotExists(smr.FromPlatformTelegram))
 	})
 }

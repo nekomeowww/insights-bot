@@ -70,7 +70,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	var body receivedCommandInfo
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
-		h.logger.WithField("error", err.Error()).Warn("failed to bind request body, maybe slack request definition changed")
+		h.logger.WithField("error", err.Error()).Warn("failed to bind request body, type definition of slack request body may have changed")
 
 		return
 	}
@@ -78,18 +78,22 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	h.logger.WithFields(logrus.Fields{
 		"user_id":    body.UserID,
 		"channel_id": body.ChannelID,
-	}).Infof("slack: command received: /smr %s", body.Text)
+	}).Tracef("slack: command received: /smr %s", body.Text)
 
 	urlString := body.Text
 
-	err := smrutils.CheckUrl(urlString)
+	err, originErr := smrutils.CheckUrl(urlString)
 	if err != nil {
 		if smrutils.IsUrlCheckError(err) {
-			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(err.Error()))
+			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smrutils.FormatUrlCheckError(err, smr.FromPlatformSlack)))
 			return
 		}
 
 		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("出现了一些问题，可以再试试？"))
+		h.logger.
+			WithError(err).
+			WithError(originErr).
+			Warn("discord: failed to send error message")
 
 		return
 	}
@@ -113,7 +117,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	// add task
 	err = h.smrQueue.AddTask(types.TaskInfo{
 		Platform:  smr.FromPlatformSlack,
-		Url:       urlString,
+		URL:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,
 	})

@@ -36,7 +36,7 @@ func TestQueue_AddTask(t *testing.T) {
 	r := require.New(t)
 	taskInfo := types.TaskInfo{
 		Platform:  smr.FromPlatformDiscord,
-		Url:       "https://an.example.url/article",
+		URL:       "https://an.example.url/article",
 		ChatID:    114514,
 		MessageID: 1919810,
 		ChannelID: "CHANNEL",
@@ -54,6 +54,7 @@ func TestQueue_AddTask(t *testing.T) {
 	// try get task
 	var taskResult []string
 	taskResult, err = testQueue.redisClient.Do(context.Background(), testQueue.redisClient.B().Brpop().Key("smr/task").Timeout(0).Build()).AsStrSlice()
+	r.Len(taskResult, 2)
 	r.Empty(err)
 	a.Equal("smr/task", taskResult[0])
 
@@ -67,7 +68,7 @@ func TestService_GetTask(t *testing.T) {
 	r := require.New(t)
 	expect := types.TaskInfo{
 		Platform:  smr.FromPlatformDiscord,
-		Url:       "https://an.example.url/article",
+		URL:       "https://an.example.url/article",
 		ChatID:    114514,
 		MessageID: 1919810,
 		ChannelID: "CHANNEL",

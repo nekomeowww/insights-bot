@@ -14,13 +14,13 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		urlString = c.Update.Message.ReplyToMessage.Text
 	}
 
-	err := smrutils.CheckUrl(urlString)
+	err, originErr := smrutils.CheckUrl(urlString)
 	if err != nil {
 		if smrutils.IsUrlCheckError(err) {
-			return nil, tgbot.NewMessageError(err.Error()).WithReply(c.Update.Message)
+			return nil, tgbot.NewMessageError(smrutils.FormatUrlCheckError(err, smr.FromPlatformTelegram)).WithReply(c.Update.Message)
 		}
 
-		return nil, tgbot.NewMessageError("出现了一些问题，可以再试试？").WithReply(c.Update.Message)
+		return nil, tgbot.NewExceptionError(originErr).WithReply(c.Update.Message)
 	}
 
 	message := tgbotapi.NewMessage(c.Update.Message.Chat.ID, "请稍等，量子速读中...")
@@ -33,13 +33,13 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 
 	err = h.smrQueue.AddTask(types.TaskInfo{
 		Platform:  smr.FromPlatformTelegram,
-		Url:       urlString,
+		URL:       urlString,
 		ChatID:    c.Update.Message.Chat.ID,
 		MessageID: processingMessage.MessageID,
 	})
 
 	if err != nil {
-		return nil, tgbot.NewMessageError("量子速读请求发送失败了，可以再试试？").WithEdit(&processingMessage)
+		return nil, tgbot.NewExceptionError(err).WithMessage("量子速读失败了，可以再试试？").WithEdit(&processingMessage)
 	}
 
 	return nil, nil

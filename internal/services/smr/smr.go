@@ -13,7 +13,6 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sourcegraph/conc/pool"
 	"go.uber.org/fx"
 )
 
@@ -56,7 +55,7 @@ type Service struct {
 	discordBot *discordbot.BotService
 
 	started       bool
-	closeChan     chan struct{}
+	closeFunc     context.CancelFunc
 	alreadyClosed bool
 
 	queue *smrqueue.Queue
@@ -90,18 +89,17 @@ func NewService() func(param NewServiceParam) (*Service, error) {
 }
 
 func (s *Service) run() {
-	s.closeChan = make(chan struct{})
+	var ctx context.Context
+	ctx, s.closeFunc = context.WithCancel(context.Background())
 	s.started = true
 
 	s.logger.Info("smr service started")
 
 	needToClose := false
 
-	taskRunner := pool.New().WithMaxGoroutines(10)
-
 	for {
 		select {
-		case <-s.closeChan:
+		case <-ctx.Done():
 			s.logger.WithField("last tasks count", s.queue.Count()).Info("smr service: received stop signal, waiting for all tasks done")
 
 			needToClose = true
@@ -119,7 +117,7 @@ func (s *Service) run() {
 			continue
 		}
 
-		taskRunner.Go(func() {
+		go func() {
 			defer func() {
 				err2 := recover()
 				if err2 != nil {
@@ -132,24 +130,22 @@ func (s *Service) run() {
 
 			s.processor(info)
 			s.queue.FinishTask()
-		})
+		}()
 
-		if needToClose {
+		if needToClose && s.queue.Count() == 0 {
 			break
 		}
 	}
 
 	s.alreadyClosed = true
-
-	taskRunner.Wait()
 }
 
 func (s *Service) stop() {
 	if s.alreadyClosed {
 		return
 	}
-	s.closeChan <- struct{}{}
-	close(s.closeChan)
+
+	s.closeFunc()
 }
 
 func Run() func(s *Service) error {

@@ -9,14 +9,14 @@ import (
 
 func TestCheckUrl(t *testing.T) {
 	a := assert.New(t)
-	err := CheckUrl("")
-	a.Equal(err.Error(), smr.ErrNoLink.Error())
-	err = CheckUrl("not a url")
-	a.Equal(err.Error(), smr.ErrParse.Error())
-	err = CheckUrl("://test.com")
-	a.Equal(err.Error(), smr.ErrScheme.Error())
-	err = CheckUrl("wss://test.com")
-	a.Equal(err.Error(), smr.ErrScheme.Error())
-	err = CheckUrl("https://test.com")
+	err, _ := CheckUrl("")
+	a.ErrorIs(err, smr.ErrNoLink)
+	err, _ = CheckUrl("not a url")
+	a.ErrorIs(err, smr.ErrScheme)
+	err, _ = CheckUrl("://test.com")
+	a.ErrorIs(err, smr.ErrParse)
+	err, _ = CheckUrl("wss://test.com")
+	a.ErrorIs(err, smr.ErrScheme)
+	err, _ = CheckUrl("https://test.com")
 	a.NoError(err)
 }

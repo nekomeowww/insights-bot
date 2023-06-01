@@ -88,5 +88,4 @@ func (b *BotService) Run() error {
 func (b *BotService) Stop(ctx context.Context) {
 	b.logger.Info("discord: shutting down...")
 	b.Close(ctx)
-	b.webhookStarted = false
 }

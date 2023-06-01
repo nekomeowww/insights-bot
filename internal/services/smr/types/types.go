@@ -8,7 +8,7 @@ import (
 
 type TaskInfo struct {
 	Platform smr.FromPlatform `json:"platform"`
-	Url      string           `json:"url"` // url to summarize
+	URL      string           `json:"url"` // url to summarize
 
 	ChatID    int64 `json:"chatID"`    // only for telegram
 	MessageID int   `json:"messageID"` // used to edit the reply message of request, not work in slack or discordbot currently

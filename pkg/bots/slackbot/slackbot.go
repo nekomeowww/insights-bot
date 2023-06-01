@@ -149,8 +149,7 @@ func (s *BotService) Run() error {
 
 func (s *BotService) Stop(ctx context.Context) error {
 	err := s.server.Shutdown(ctx)
-
-	if !errors.Is(err, context.Canceled) {
+	if err != nil {
 		s.logger.WithField("error", err.Error()).Error("slack bot server shutdown failed")
 		return err
 	}

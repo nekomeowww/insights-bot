@@ -3,9 +3,6 @@ package health
 import (
 	"context"
 	"fmt"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
-	"github.com/nekomeowww/insights-bot/pkg/bots/discordbot"
-	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"net"
 	"net/http"
 	"time"
@@ -15,6 +12,9 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
+	"github.com/nekomeowww/insights-bot/pkg/bots/discordbot"
+	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 )

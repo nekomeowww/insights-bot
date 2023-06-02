@@ -3,6 +3,8 @@ package smr
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
@@ -14,7 +16,6 @@ import (
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
-	"time"
 )
 
 func NewModules() fx.Option {
@@ -151,9 +152,8 @@ func (s *Service) stop() {
 	s.closeFunc()
 }
 
-func Run() func(s *Service) error {
-	return func(s *Service) error {
-		s.run()
-		return nil
+func Run() func(s *Service) {
+	return func(s *Service) {
+		go s.run()
 	}
 }

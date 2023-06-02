@@ -40,6 +40,8 @@ linters:
     - usestdlibvars
     - whitespace
     - wsl
+  disable:
+    - depguard
 
 linters-settings:
   wsl:

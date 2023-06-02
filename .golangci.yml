@@ -11,7 +11,6 @@ linters:
 
     # - bodyclose # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
     - containedctx
-    - depguard
     - dupl
     - durationcheck
     - errname
@@ -40,6 +39,8 @@ linters:
     - usestdlibvars
     - whitespace
     - wsl
+  disable:
+    - depguard
 
 linters-settings:
   wsl:

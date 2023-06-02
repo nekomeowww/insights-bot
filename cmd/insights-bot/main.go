@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"log"
 	"time"
 
@@ -19,6 +18,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
 	"github.com/nekomeowww/insights-bot/internal/services/health"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty"
 )
 

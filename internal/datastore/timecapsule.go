@@ -36,15 +36,16 @@ func NewAutoRecapTimeCapsuleDigger() func(NewAutoRecapTimeCapsuleDiggerParams) (
 	return func(params NewAutoRecapTimeCapsuleDiggerParams) (*AutoRecapTimeCapsuleDigger, error) {
 		dataloader := timecapsule.NewRueidisDataloader[timecapsules.AutoRecapCapsule](redis.TimeCapsuleAutoRecapSortedSetKey.Format(), params.Redis)
 
-		digger := timecapsule.NewDigger[timecapsules.AutoRecapCapsule](
+		digger := &AutoRecapTimeCapsuleDigger{TimeCapsuleDigger: timecapsule.NewDigger[timecapsules.AutoRecapCapsule](
 			dataloader,
 			time.Second,
 			timecapsule.TimeCapsuleDiggerOption{Logger: params.Logger.LogrusLogger},
-		)
+		)}
 
 		params.Lifecycle.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				go digger.Start()
+				digger.started = true
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {
@@ -53,6 +54,6 @@ func NewAutoRecapTimeCapsuleDigger() func(NewAutoRecapTimeCapsuleDiggerParams) (
 			},
 		})
 
-		return &AutoRecapTimeCapsuleDigger{TimeCapsuleDigger: digger}, nil
+		return digger, nil
 	}
 }

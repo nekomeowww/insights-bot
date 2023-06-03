@@ -29,7 +29,7 @@ func NewLogger() func(NewLoggerParams) (*logger.Logger, error) {
 			logLevel = zapcore.InfoLevel
 		}
 
-		logger, err := logger.NewLogger(logLevel, "insights-bot", "", make([]logrus.Hook, 0))
+		logger, err := logger.NewLogger(logLevel, "insights-bot", params.Configs.LogFilePath, make([]logrus.Hook, 0))
 		if err != nil {
 			return nil, fmt.Errorf("failed to create logger: %w", err)
 		}

@@ -28,6 +28,9 @@ RUN apt update && apt upgrade -y && apt install -y ca-certificates
 
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
 
+# 设定日志文件环境变量
+ENV LOG_FILE_PATH /var/log/insights-bot/insights-bot.log
+
 # Health check endpoint
 EXPOSE 7069
 

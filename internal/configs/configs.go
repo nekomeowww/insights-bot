@@ -41,7 +41,8 @@ const (
 	EnvRedisDB                 = "REDIS_DB"
 	EnvRedisClientCacheEnabled = "REDIS_CLIENT_CACHE_ENABLED"
 
-	EnvLogLevel = "LOG_LEVEL"
+	EnvLogLevel    = "LOG_LEVEL"
+	EnvLogFilePath = "LOG_FILE_PATH"
 )
 
 type SectionPineconeIndexes struct {
@@ -99,6 +100,7 @@ type Config struct {
 	Discord              SectionDiscord
 	Redis                SectionRedis
 	LogLevel             string
+	LogFilePath          string
 }
 
 func NewConfig() func() (*Config, error) {
@@ -161,7 +163,8 @@ func NewConfig() func() (*Config, error) {
 				DB:                 lo.Ternary(redisDBParseErr == nil, lo.Ternary(redisDB != 0, redisDB, 0), 0),
 				ClientCacheEnabled: getEnv(EnvRedisClientCacheEnabled) == "true" || getEnv(EnvRedisClientCacheEnabled) == "1",
 			},
-			LogLevel: lo.Ternary(envLogLevel == "", "info", envLogLevel),
+			LogLevel:    lo.Ternary(envLogLevel == "", "info", envLogLevel),
+			LogFilePath: getEnv(EnvLogFilePath),
 		}, nil
 	}
 }

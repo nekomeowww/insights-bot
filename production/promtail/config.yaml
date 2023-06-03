@@ -1,0 +1,31 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  log_level: "warn"
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://<loki_service>:3100/loki/api/v1/push # replace <loki_service> with the name of the loki service in your docker-compose or cluster
+
+scrape_configs:
+  - job_name:  "insights-bot"
+    pipeline_stages:
+    - json:
+        expressions:
+          timestamp: ts
+          caller: caller
+          message: msg
+          error: error
+          level: level
+    - labels:
+        level:
+    static_configs:
+    - targets:
+        - localhost
+      labels:
+        job_name: "insights-bot_var_logs"
+        app_name: "insights-bot"
+        environment: "production"
+        __path__: "/var/log/insights-bot/insights-bot.log"

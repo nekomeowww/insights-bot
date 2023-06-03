@@ -186,11 +186,18 @@ func NewLogger(level zapcore.Level, namespace string, logFilePath string, hook [
 	logrusLogger.SetReportCaller(true)
 	logrusLogger.Level = zapCoreLevelToLogrusLevel(level)
 
-	return &Logger{
+	l := &Logger{
 		LogrusLogger: logrusLogger,
 		ZapLogger:    zapLogger,
 		namespace:    namespace,
-	}, nil
+	}
+
+	l.Info("logger init success for both logrus and zap",
+		zap.String("logFilePath", logFilePath),
+		zap.String("current_level", level.String()),
+	)
+
+	return l, nil
 }
 
 func autoCreateLogFile(logFilePathStr string) (string, error) {

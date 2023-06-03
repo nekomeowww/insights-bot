@@ -13,6 +13,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 
 	"github.com/slack-go/slack"
 )
@@ -137,11 +138,11 @@ func (s *BotService) Run() error {
 	go func() {
 		err = s.server.Serve(listener)
 		if err != nil && err != http.ErrServerClosed {
-			s.logger.WithField("error", err.Error()).Fatal("slack bot server error")
+			s.logger.Fatal("slack bot server error", zap.Error(err))
 		}
 	}()
 
-	s.logger.Infof("Slack Bot/App webhook server is listening on %s", s.server.Addr)
+	s.logger.Info("Slack Bot/App webhook server is listening", zap.String("addr", s.server.Addr))
 	s.started = true
 
 	return nil
@@ -150,7 +151,7 @@ func (s *BotService) Run() error {
 func (s *BotService) Stop(ctx context.Context) error {
 	err := s.server.Shutdown(ctx)
 	if err != nil {
-		s.logger.WithField("error", err.Error()).Error("slack bot server shutdown failed")
+		s.logger.Error("slack bot server shutdown failed", zap.Error(err))
 		return err
 	}
 

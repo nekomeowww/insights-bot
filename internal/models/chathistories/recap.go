@@ -3,6 +3,7 @@ package chathistories
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"strconv"
 	"strings"
@@ -12,6 +13,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 type RecapOutputTemplateInputs struct {
@@ -47,7 +49,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return make([]*openai.ChatHistorySummarizationOutputs, 0), 0, 0, 0, nil
 	}
 
-	m.logger.Infof("✍️ summarizing chat histories:\n%s", s)
+	m.logger.Info(fmt.Sprintf("✍️ summarizing chat histories:\n%s", s))
 
 	resp, err := m.openAI.SummarizeChatHistories(context.Background(), s)
 	if err != nil {
@@ -66,11 +68,11 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 	if err != nil {
-		m.logger.Errorf("failed to unmarshal chat history summarization output: %s", resp.Choices[0].Message.Content)
+		m.logger.Error("failed to unmarshal chat history summarization output", zap.String("content", resp.Choices[0].Message.Content))
 		return nil, resp.Usage.CompletionTokens, resp.Usage.PromptTokens, resp.Usage.TotalTokens, err
 	}
 
-	m.logger.Infof("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs)))
+	m.logger.Info(fmt.Sprintf("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs))))
 
 	return outputs, resp.Usage.CompletionTokens, resp.Usage.PromptTokens, resp.Usage.TotalTokens, nil
 }
@@ -93,7 +95,7 @@ func (m *Model) summarizeChatHistories(llmFriendlyChatHistories string) ([]*open
 			statsTotalTokenUsage += totalTokenUsage
 
 			if err != nil {
-				m.logger.Errorf("failed to summarize chat histories slice: %s, tried %d...", s, tried)
+				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried))
 				return err
 			}
 

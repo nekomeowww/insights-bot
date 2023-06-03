@@ -13,6 +13,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/slack-go/slack"
+	"go.uber.org/zap"
 )
 
 func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) string {
@@ -50,9 +51,10 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 
 		_, err := s.tgBot.Send(msgEdit)
 		if err != nil {
-			s.logger.WithError(err).
-				WithField("platform", info.Platform).
-				Warn("smr service: failed to send result message")
+			s.logger.Warn("smr service: failed to send result message",
+				zap.Error(err),
+				zap.String("platform", info.Platform.String()),
+			)
 		}
 	case smr.FromPlatformSlack:
 		token, err := s.ent.SlackOAuthCredentials.Query().
@@ -60,9 +62,10 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 			First(context.Background())
 
 		if err != nil {
-			s.logger.WithError(err).
-				WithField("platform", info.Platform).
-				Warn("smr service: failed to get team's access token")
+			s.logger.Warn("smr service: failed to get team's access token",
+				zap.Error(err),
+				zap.String("platform", info.Platform.String()),
+			)
 
 			return
 		}
@@ -76,9 +79,10 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 		)
 
 		if err != nil {
-			s.logger.WithError(err).
-				WithField("platform", info.Platform).
-				Warn("smr service: failed to send result message")
+			s.logger.Warn("smr service: failed to send result message",
+				zap.Error(err),
+				zap.String("platform", info.Platform.String()),
+			)
 		}
 	case smr.FromPlatformDiscord:
 		channelID, _ := snowflake.Parse(info.ChannelID)
@@ -89,9 +93,10 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 			)
 
 		if err != nil {
-			s.logger.WithError(err).
-				WithField("platform", info.Platform).
-				Warn("smr service: failed to send result message")
+			s.logger.Warn("smr service: failed to send result message",
+				zap.Error(err),
+				zap.String("platform", info.Platform.String()),
+			)
 		}
 	}
 }
@@ -111,11 +116,11 @@ func (s *Service) isBotExists(platform smr.FromPlatform) bool {
 
 func (s *Service) processor(info types.TaskInfo) {
 	if !s.isBotExists(info.Platform) {
-		s.logger.Errorf("received task from platform %v but instance not exists", info.Platform)
+		s.logger.Error("received task from platform " + info.Platform.String() + " but instance not exists")
 		// move back to queue
 		err := s.queue.AddTask(info)
 		if err != nil {
-			s.logger.WithError(err).Errorf("failed to move task back to queue")
+			s.logger.Error("failed to move task back to queue", zap.Error(err))
 		}
 
 		return
@@ -126,7 +131,7 @@ func (s *Service) processor(info types.TaskInfo) {
 
 	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
-		s.logger.WithError(err).Warn("smr service: summarization failed")
+		s.logger.Warn("smr service: summarization failed", zap.Error(err))
 		errStr := s.processError(err)
 		s.sendResult(info, errStr)
 

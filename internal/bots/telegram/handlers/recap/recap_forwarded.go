@@ -10,6 +10,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 func (h *CommandHandler) handleRecapForwardedStartCommand(c *tgbot.Context) (tgbot.Response, error) {
@@ -109,7 +110,10 @@ func (h *CommandHandler) handleRecapForwardedCommand(c *tgbot.Context) (tgbot.Re
 		msg.ParseMode = tgbotapi.ModeHTML
 		msg.ReplyToMessageID = c.Update.Message.MessageID
 
-		h.logger.Infof("sending chat histories recap for chat %d: %s", c.Update.Message.Chat.ID, msg.Text)
+		h.logger.Info("sending chat histories recap for chat",
+			zap.Int64("chat_id", c.Update.Message.Chat.ID),
+			zap.String("text", msg.Text),
+		)
 
 		c.Bot.MaySend(msg)
 	}

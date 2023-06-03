@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"go.uber.org/fx"
@@ -66,7 +67,7 @@ func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 			},
 		})
 
-		param.Logger.Infof("Authorized as bot @%s", bot.Self.UserName)
+		param.Logger.Info(fmt.Sprintf("Authorized as bot @%s", bot.Self.UserName))
 
 		return bot, nil
 	}

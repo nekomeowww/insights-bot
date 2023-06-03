@@ -11,10 +11,10 @@ import (
 
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
-	"github.com/sirupsen/logrus"
 	"github.com/sourcegraph/conc/pool"
 	"go.uber.org/fx"
 	"go.uber.org/ratelimit"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
@@ -191,12 +191,12 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(ctx)
 	if err != nil {
-		c.logger.WithFields(logrus.Fields{
-			"prompt_operation":       "Summarize With Questions As Simplified Chinese",
-			"prompt_token_usage":     resp.Usage.PromptTokens,
-			"completion_token_usage": resp.Usage.CompletionTokens,
-			"total_token_usage":      resp.Usage.TotalTokens,
-		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+		c.logger.Error("failed to create metric openai chat completion token usage", zap.Error(err),
+			zap.String("prompt_operation", "Summarize With Questions As Simplified Chinese"),
+			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+		)
 	}
 
 	return &resp, nil
@@ -241,12 +241,13 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(ctx)
 	if err != nil {
-		c.logger.WithFields(logrus.Fields{
-			"prompt_operation":       "Summarize One Chat History",
-			"prompt_token_usage":     resp.Usage.PromptTokens,
-			"completion_token_usage": resp.Usage.CompletionTokens,
-			"total_token_usage":      resp.Usage.TotalTokens,
-		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+		c.logger.Error("failed to create metric openai chat completion token usage",
+			zap.Error(err),
+			zap.String("prompt_operation", "Summarize One Chat History"),
+			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+		)
 	}
 
 	return &resp, nil
@@ -289,12 +290,13 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(ctx)
 	if err != nil {
-		c.logger.WithFields(logrus.Fields{
-			"prompt_operation":       "Summarize Any",
-			"prompt_token_usage":     resp.Usage.PromptTokens,
-			"completion_token_usage": resp.Usage.CompletionTokens,
-			"total_token_usage":      resp.Usage.TotalTokens,
-		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+		c.logger.Error("failed to create metric openai chat completion token usage",
+			zap.Error(err),
+			zap.String("prompt_operation", "Summarize Any"),
+			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+		)
 	}
 
 	return &resp, nil
@@ -338,12 +340,13 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(ctx)
 	if err != nil {
-		c.logger.WithFields(logrus.Fields{
-			"prompt_operation":       "Summarize Chat Histories",
-			"prompt_token_usage":     resp.Usage.PromptTokens,
-			"completion_token_usage": resp.Usage.CompletionTokens,
-			"total_token_usage":      resp.Usage.TotalTokens,
-		}).WithError(err).Errorf("failed to create metric openai chat completion token usage: %v", err)
+		c.logger.Error("failed to create metric openai chat completion token usage",
+			zap.Error(err),
+			zap.String("prompt_operation", "Summarize Chat Histories"),
+			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+		)
 	}
 
 	return &resp, nil

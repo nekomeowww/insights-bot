@@ -12,6 +12,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 type NewPprofParams struct {
@@ -78,7 +79,7 @@ func Run() func(*Pprof) error {
 
 		go func() {
 			if err := srv.srv.Serve(listener); err != nil && err != http.ErrServerClosed {
-				srv.logger.Fatalf("failed to serve pprof: %v", err)
+				srv.logger.Fatal("failed to serve pprof", zap.Error(err))
 			}
 		}()
 

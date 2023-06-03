@@ -1,10 +1,13 @@
 package lib
 
 import (
+	"fmt"
+
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
+	"go.uber.org/zap/zapcore"
 )
 
 type NewLoggerParams struct {
@@ -13,27 +16,27 @@ type NewLoggerParams struct {
 	Configs *configs.Config
 }
 
-func NewLogger() func(NewLoggerParams) *logger.Logger {
-	return func(params NewLoggerParams) *logger.Logger {
-		logLevel, err := logrus.ParseLevel(params.Configs.LogLevel)
+func NewLogger() func(NewLoggerParams) (*logger.Logger, error) {
+	return func(params NewLoggerParams) (*logger.Logger, error) {
+		logLevel, err := zapcore.ParseLevel(params.Configs.LogLevel)
 		if err != nil {
-			logLevel = logrus.InfoLevel
+			logLevel = zapcore.InfoLevel
 		}
 
 		var isFatalLevel bool
-		if logLevel == logrus.FatalLevel {
+		if logLevel == zapcore.FatalLevel {
 			isFatalLevel = true
-			logLevel = logrus.InfoLevel
+			logLevel = zapcore.InfoLevel
 		}
 
-		logger := logger.NewLogger(logLevel, "insights-bot", "", make([]logrus.Hook, 0))
+		logger, err := logger.NewLogger(logLevel, "insights-bot", params.Configs.LogFilePath, make([]logrus.Hook, 0))
 		if err != nil {
-			logger.Errorf("failed to create logger: %v, fallbacks to info level", err)
+			return nil, fmt.Errorf("failed to create logger: %w", err)
 		}
 		if isFatalLevel {
-			logger.Errorf("fatal log level is unacceptable, fallbacks to info level")
+			logger.Error("fatal log level is unacceptable, fallbacks to info level")
 		}
 
-		return logger
+		return logger, nil
 	}
 }

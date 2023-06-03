@@ -5,16 +5,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/imroc/req/v3"
 	"io"
 	"net/url"
 	"strings"
 
+	"github.com/imroc/req/v3"
+
 	"github.com/go-shiori/go-readability"
 	"github.com/samber/lo"
 	goopenai "github.com/sashabaranov/go-openai"
-	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
@@ -104,10 +105,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 
 	textContent := m.openai.TruncateContentBasedOnTokens(article.TextContent, 3000)
 
-	m.logger.WithFields(logrus.Fields{
-		"title": article.Title,
-		"url":   url,
-	}).Infof("✍️ summarizing article...")
+	m.logger.Info("✍️ summarizing article...", zap.String("title", article.Title), zap.String("url", url))
 
 	resp, err := m.openai.SummarizeWithQuestionsAsSimplifiedChinese(
 		ctx,
@@ -126,10 +124,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		return nil, fmt.Errorf("no response from OpenAI")
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"title": article.Title,
-		"url":   url,
-	}).Infof("✅ summarizing article done")
+	m.logger.Info("✅ summarizing article done", zap.String("title", article.Title), zap.String("url", url))
 
 	err = m.ent.LogSummarizations.
 		Create().
@@ -144,7 +139,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		Exec(context.Background())
 	if err != nil {
-		m.logger.WithError(err).Error("failed to create log")
+		m.logger.Error("failed to create log", zap.Error(err))
 		return nil, err
 	}
 

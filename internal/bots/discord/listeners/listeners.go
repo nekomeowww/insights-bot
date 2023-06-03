@@ -1,6 +1,8 @@
 package listeners
 
 import (
+	"fmt"
+
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
@@ -9,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 func NewModules() fx.Option {
@@ -41,7 +44,7 @@ func NewListeners() func(param NewListenersParam) *Listeners {
 func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, data discord.SlashCommandInteractionData) {
 	urlString := data.String("link")
 
-	b.logger.Infof("discord: command received: /smr %s", urlString)
+	b.logger.Info(fmt.Sprintf("discord: command received: /smr %s", urlString))
 
 	// url check
 	err, originErr := smrutils.CheckUrl(urlString)
@@ -53,7 +56,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 					Build(),
 			)
 			if err != nil {
-				b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
+				b.logger.Warn("discord: failed to send error message", zap.Error(err))
 			}
 
 			return
@@ -61,10 +64,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
 		if err != nil {
-			b.logger.
-				WithError(err).
-				WithError(originErr).
-				Warn("discord: failed to send error message")
+			b.logger.Warn("discord: failed to send error message", zap.Error(err), zap.NamedError("original_error", originErr))
 		}
 
 		return
@@ -75,7 +75,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		SetContent("请稍等，量子速读中...").
 		Build())
 	if err != nil {
-		b.logger.WithField("error", err.Error()).Warn("discord: failed to send response message")
+		b.logger.Warn("discord: failed to send response message", zap.Error(err))
 		return
 	}
 
@@ -85,11 +85,11 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		ChannelID: event.Channel().ID.String(),
 	})
 	if err != nil {
-		b.logger.WithField("error", err.Error()).Warn("discord: failed to add task")
+		b.logger.Warn("discord: failed to add task", zap.Error(err))
 
 		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
 		if err != nil {
-			b.logger.WithField("error", err.Error()).Warn("discord: failed to send error message")
+			b.logger.Warn("discord: failed to send error message", zap.Error(err))
 		}
 
 		return

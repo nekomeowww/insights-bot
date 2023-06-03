@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -77,11 +77,11 @@ func (m *Model) EnableChatHistoriesRecap(chatID int64, chatType telegram.ChatTyp
 		return err
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"chat_id":    chatID,
-		"chat_title": chatTitle,
-		"chat_type":  chatType,
-	}).Info("enabled chat histories recap")
+	m.logger.Info("enabled chat histories recap",
+		zap.Int64("chat_id", chatID),
+		zap.String("chat_title", chatTitle),
+		zap.String("chat_type", string(chatType)),
+	)
 
 	return nil
 }
@@ -121,11 +121,11 @@ func (m *Model) DisableChatHistoriesRecap(chatID int64, chatType telegram.ChatTy
 		return err
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"chat_id":    chatID,
-		"chat_title": chatTitle,
-		"chat_type":  chatType,
-	}).Info("disabled chat histories recap")
+	m.logger.Info("disabled chat histories recap",
+		zap.Int64("chat_id", chatID),
+		zap.String("chat_title", chatTitle),
+		zap.String("chat_type", string(chatType)),
+	)
 
 	return nil
 }
@@ -160,14 +160,14 @@ func (m *Model) ListChatHistoriesRecapEnabledChats() ([]*ent.TelegramChatFeature
 func (m *Model) QueueSendChatHistoriesRecapTask() {
 	chats, err := m.ListChatHistoriesRecapEnabledChats()
 	if err != nil {
-		m.logger.Errorf("failed to list chat histories recap enabled chats: %v", err)
+		m.logger.Error("failed to list chat histories recap enabled chats", zap.Error(err))
 		return
 	}
 
 	for _, chat := range chats {
 		err = m.QueueOneSendChatHistoriesRecapTaskForChatID(chat.ChatID)
 		if err != nil {
-			m.logger.Errorf("failed to queue send chat histories recap task: %v", err)
+			m.logger.Error("failed to queue send chat histories recap task", zap.Error(err))
 			continue
 		}
 	}
@@ -198,7 +198,7 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 	}
 
 	for _, schedule := range scheduleSets {
-		m.logger.Infof("scheduled one send chat histories recap task for %d at %s", chatID, schedule)
+		m.logger.Info("scheduled one send chat histories recap task for chat", zap.Int64("chat_id", chatID), zap.Time("schedule", schedule))
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 
@@ -206,7 +206,7 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 			ChatID: chatID,
 		}, schedule.UnixMilli())
 		if err != nil {
-			m.logger.Errorf("failed to bury one send chat histories recap task for %d at %s: %v", chatID, schedule, err)
+			m.logger.Error("failed to bury one send chat histories recap task for chat", zap.Int64("chat_id", chatID), zap.Error(err))
 		}
 
 		cancel()

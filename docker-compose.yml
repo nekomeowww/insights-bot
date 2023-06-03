@@ -1,6 +1,9 @@
 version: "3.9"
 
 services:
+  # default insights-bot service that would pull the image from docker hub
+  # and runs on production environment with db_local service and redis_local
+  # service
   insights_bot:
     profiles:
       - hub
@@ -17,6 +20,7 @@ services:
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
+      - LOG_LEVEL
       # # uncomment the following lines if you want to enable discord bot webhook
       # - DISCORD_BOT_TOKEN
       # - DISCORD_BOT_PUBLIC_KEY
@@ -31,13 +35,21 @@ services:
       retries: 5
       start_period: 1s
       timeout: 1s
+    volumes:
+      - insights_bot_logs:/var/log/insights-bot
     depends_on:
       - db_local
       - redis_local
 
+  # On-demand build insights-bot service that would build the image from
+  # source code and runs on production environment with db_local service
+  # and redis_local service
   insights_bot_local:
     profiles:
       - local
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     image: insights-bot
     restart: always
     environment:
@@ -51,6 +63,7 @@ services:
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
+      - LOG_LEVEL
       # # uncomment the following lines if you want to enable discord bot webhook
       # - DISCORD_BOT_TOKEN
       # - DISCORD_BOT_PUBLIC_KEY
@@ -64,13 +77,20 @@ services:
       interval: 10s
       retries: 5
       timeout: 5s
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    volumes:
+      - insights_bot_logs:/var/log/insights-bot
     depends_on:
       - db_local
       - redis_local
 
+  # the default PostgreSQL database service that helps insights-bot to store data
+  # you can change the password by changing the POSTGRES_PASSWORD environment variable
+  # and change the database name by changing the POSTGRES_DB environment variable
+  # and change the username by changing the POSTGRES_USER environment variable
+  #
+  # NOTICE: if you have your own PostgreSQL database service, you can remove this service
+  # and change the DB_CONNECTION_STR environment variable in insights_bot or
+  # insights_bot_local service
   db_local:
     image: postgres:alpine
     restart: unless-stopped
@@ -86,6 +106,13 @@ services:
       timeout: 5s
       retries: 5
 
+  # the default Redis service that helps insights-bot to store data
+  # you can change the password by changing the REDIS_PASSWORD environment variable
+  # and change the port by changing the REDIS_PORT environment variable
+  #
+  # NOTICE: if you have your own Redis service, you can remove this service
+  # and change the REDIS_HOST and REDIS_PORT environment variable in insights_bot or
+  # insights_bot_local service
   redis_local:
     image: redis:7
     restart: unless-stopped
@@ -97,3 +124,30 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # # promtail service that helps insights-bot to collect logs
+  # # you can uncomment the following lines if you want to enable promtail
+  # promtail:
+  #   image: grafana/promtail:2.8.2
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./production/promtail:/etc/promtail # you may edit the ./production/promtail/config.yaml file to suit your needs
+  #     - insights_bot_logs:/var/log/insights-bot:ro
+  #   command: >
+  #     -config.file=/etc/promtail/config.yaml
+
+  #   # uncomment the following lines if you want to view the web ui of promtail
+  #   # ports:
+  #   #   - 9080:9080
+  #   # uncomment the following lines if you want to use your own loki service
+  #   # networks:
+  #   #   - <loki_network> # replace <loki_network> with your own loki network name
+
+volumes:
+  insights_bot_logs:
+
+# uncomment the following lines if you want to use your own loki service
+# that live in another docker-compose.yml file
+# networks:
+#   <loki_network>: # replace <loki_network> with your own loki network name
+#     external: true

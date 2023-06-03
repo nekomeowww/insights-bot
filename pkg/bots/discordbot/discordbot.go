@@ -12,6 +12,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 type BotService struct {
@@ -43,7 +44,7 @@ func NewBotService[E bot.Event](
 		bot.WithEventListenerFunc(f),
 	)
 	if err != nil {
-		logger.WithField("error", err.Error()).Fatal("discord: failed to create bot instance")
+		logger.Fatal("discord: failed to create bot instance", zap.Error(err))
 	}
 
 	discordBot.Client = client

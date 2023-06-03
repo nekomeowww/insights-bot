@@ -6,6 +6,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 )
@@ -44,7 +45,7 @@ func (b *Services) CreateOrUpdateSlackCredential(teamID, accessToken, refreshTok
 		SetRefreshToken(refreshToken).
 		Save(context.Background())
 	if err != nil {
-		b.logger.WithError(err).Warn("slack: failed to update access token")
+		b.logger.Warn("slack: failed to update access token", zap.Error(err))
 		return err
 	}
 
@@ -56,7 +57,7 @@ func (b *Services) CreateOrUpdateSlackCredential(teamID, accessToken, refreshTok
 			SetRefreshToken(refreshToken).
 			Exec(context.Background())
 		if err != nil {
-			b.logger.WithError(err).Warn("slack: failed to save access token")
+			b.logger.Warn("slack: failed to save access token", zap.Error(err))
 			return err
 		}
 	}

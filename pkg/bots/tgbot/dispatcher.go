@@ -3,14 +3,13 @@ package tgbot
 import (
 	"crypto/sha256"
 	"fmt"
-	"runtime/debug"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/gookit/color"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
@@ -95,20 +94,20 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 		identityStrings = append(identityStrings, "@"+c.Update.Message.From.UserName)
 	}
 	if c.Update.Message.Chat.Type == "private" {
-		d.Logger.Tracef("[消息｜%s] %s (%s): %s",
+		d.Logger.Debug(fmt.Sprintf("[消息｜%s] %s (%s): %s",
 			MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
 			strings.Join(identityStrings, " "),
 			color.FgYellow.Render(c.Update.Message.From.ID),
-			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text),
+			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text)),
 		)
 	} else {
-		d.Logger.Tracef("[消息｜%s] [%s (%s)] %s (%s): %s",
+		d.Logger.Debug(fmt.Sprintf("[消息｜%s] [%s (%s)] %s (%s): %s",
 			MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
 			color.FgGreen.Render(c.Update.Message.Chat.Title),
 			color.FgYellow.Render(c.Update.Message.Chat.ID),
 			strings.Join(identityStrings, " "),
 			color.FgYellow.Render(c.Update.Message.From.ID),
-			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text),
+			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text)),
 		)
 	}
 	if c.Update.Message.Command() != "" {
@@ -127,12 +126,12 @@ func (d *Dispatcher) OnChannelPost(handler Handler) {
 }
 
 func (d *Dispatcher) dispatchChannelPost(c *Context) {
-	d.Logger.Tracef("[频道消息｜%s] [%s (%s)]: %s",
+	d.Logger.Debug(fmt.Sprintf("[频道消息｜%s] [%s (%s)]: %s",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.ChannelPost.Chat.Type)),
 		color.FgGreen.Render(c.Update.ChannelPost.Chat.Title),
 		color.FgYellow.Render(c.Update.ChannelPost.Chat.ID),
 		lo.Ternary(c.Update.ChannelPost.Text == "", "<empty or contains medias>", c.Update.ChannelPost.Text),
-	)
+	))
 
 	d.dispatchInGoroutine(func() {
 		for _, h := range d.channelPostHandlers {
@@ -157,30 +156,30 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 		}
 
 		if c.callbackQueryHandlerRoute == "" || c.callbackQueryHandlerActionData == "" {
-			d.Logger.WithFields(logrus.Fields{
-				"route":            c.callbackQueryHandlerRoute,
-				"route_hash":       c.callbackQueryHandlerRouteHash,
-				"action_data_hash": c.callbackQueryHandlerActionDataHash,
-			}).Tracef("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data, missing route or action data)",
+			d.Logger.Debug(fmt.Sprintf("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data, missing route or action data)",
 				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
 				strings.Join(identityStrings, " "),
 				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.Update.CallbackData(),
+			),
+				zap.String("route", c.callbackQueryHandlerRoute),
+				zap.String("route_hash", c.callbackQueryHandlerRouteHash),
+				zap.String("action_data_hash", c.callbackQueryHandlerActionDataHash),
 			)
 		} else {
-			d.Logger.WithFields(logrus.Fields{
-				"route":            c.callbackQueryHandlerRoute,
-				"route_hash":       c.callbackQueryHandlerRouteHash,
-				"action_data_hash": c.callbackQueryHandlerActionDataHash,
-			}).Tracef("[回调查询｜%s] [%s (%s)] %s (%s): %s: %s",
+			d.Logger.Debug(fmt.Sprintf("[回调查询｜%s] [%s (%s)] %s (%s): %s: %s",
 				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
 				strings.Join(identityStrings, " "),
 				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.callbackQueryHandlerRoute, c.callbackQueryHandlerActionData,
+			),
+				zap.String("route", c.callbackQueryHandlerRoute),
+				zap.String("route_hash", c.callbackQueryHandlerRouteHash),
+				zap.String("action_data_hash", c.callbackQueryHandlerActionDataHash),
 			)
 		}
 	}()
@@ -208,7 +207,7 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 
 	err := c.fetchActionDataForCallbackQueryHandler()
 	if err != nil {
-		d.Logger.Errorf("failed to fetch the callback query action data for handler %s: %v", c.callbackQueryHandlerRoute, err)
+		d.Logger.Error("failed to fetch the callback query action data for handler", zap.String("route", route), zap.Error(err))
 		return
 	}
 	if c.callbackQueryHandlerActionDataIsEmpty {
@@ -232,7 +231,7 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	oldMemberStatus := telegram.MemberStatus(c.Update.MyChatMember.OldChatMember.Status)
 	newMemberStatus := telegram.MemberStatus(c.Update.MyChatMember.NewChatMember.Status)
 
-	d.Logger.Tracef("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
+	d.Logger.Debug(fmt.Sprintf("[我的成员信息更新｜%s] [%s (%s)] %s (%s): 成员状态自 %s 变更为 %s",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.MyChatMember.Chat.Type)),
 		color.FgGreen.Render(c.Update.MyChatMember.Chat.Title),
 		color.FgYellow.Render(c.Update.MyChatMember.Chat.ID),
@@ -240,12 +239,12 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 		color.FgYellow.Render(c.Update.MyChatMember.From.ID),
 		MapMemberStatusToChineseText(oldMemberStatus),
 		MapMemberStatusToChineseText(newMemberStatus),
-	)
+	))
 
 	switch c.Update.MyChatMember.Chat.Type {
 	case "channel":
 		if newMemberStatus != "administrator" {
-			d.Logger.Tracef("已退出频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
+			d.Logger.Debug(fmt.Sprintf("已退出频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID))
 			return
 		}
 
@@ -255,11 +254,11 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 			},
 		})
 		if err != nil {
-			d.Logger.Error(err)
+			d.Logger.Error(err.Error())
 			return
 		}
 
-		d.Logger.Tracef("已加入频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID)
+		d.Logger.Debug(fmt.Sprintf("已加入频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID))
 	}
 }
 
@@ -307,7 +306,7 @@ func (d *Dispatcher) dispatchInGoroutine(f func()) {
 	go func() {
 		defer func() {
 			if err := recover(); err != nil {
-				d.Logger.Errorf("Panic recovered from command dispatcher, %v\n%s", err, debug.Stack())
+				d.Logger.Error("Panic recovered from command dispatcher", zap.Any("err", err), zap.Stack("stack"))
 				return
 			}
 		}()

@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 func newRecapSelectHoursInlineKeyboardButtons(ctx *tgbot.Context, chatID int64, chatTitle string, recapMode tgchat.AutoRecapSendMode) (tgbotapi.InlineKeyboardMarkup, error) {
@@ -117,7 +118,7 @@ func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.
 
 		err = c.Bot.DeleteAllDeleteLaterMessages(fromID)
 		if err != nil {
-			h.logger.Errorf("failed to delete all delete later messages: %v", err)
+			h.logger.Error("failed to delete all delete later messages", zap.Error(err))
 		}
 
 		return nil, nil
@@ -136,7 +137,11 @@ func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.
 	} else if c.Bot.IsBotWasBlockedByTheUserErr(err) {
 		return h.handleUserNeverStartedChatOrBlockedErr(c, chatID, chatTitle, newRecapCommandWhenUserBlockedMessage(c.Bot, hashKey))
 	} else {
-		h.logger.Errorf("failed to send private message %s to user %d: %v", utils.SprintJSON(msg), c.Update.Message.From.ID, err)
+		h.logger.Error("failed to send private message to user",
+			zap.String("message", utils.SprintJSON(msg)),
+			zap.Int64("chat_id", c.Update.Message.From.ID),
+			zap.Error(err),
+		)
 	}
 
 	return nil, nil
@@ -150,7 +155,7 @@ func (h *CommandHandler) handleStartCommandWithPrivateSubscriptionsRecap(c *tgbo
 
 	context, err := h.getRecapForPrivateSubscriptionModeStartCommandContext(args[0])
 	if err != nil {
-		h.logger.Errorf("failed to get private subscription recap start command context: %s", err)
+		h.logger.Error("failed to get private subscription recap start command context", zap.Error(err))
 		return nil, nil
 	}
 	if context == nil {
@@ -167,7 +172,7 @@ func (h *CommandHandler) handleStartCommandWithPrivateSubscriptionsRecap(c *tgbo
 
 	err = c.Bot.DeleteAllDeleteLaterMessages(c.Update.Message.From.ID)
 	if err != nil {
-		h.logger.Errorf("failed to delete all delete later messages: %v", err)
+		h.logger.Error("failed to delete all delete later messages", zap.Error(err))
 	}
 
 	return c.

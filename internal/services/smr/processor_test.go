@@ -1,11 +1,12 @@
 package smr
 
 import (
+	"testing"
+
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
-	"testing"
 
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/stretchr/testify/assert"
@@ -15,19 +16,23 @@ var testService *Service
 
 func TestMain(m *testing.M) {
 	config := configs.NewTestConfig()()
+
+	logger, err := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: config,
+	})
+	if err != nil {
+		panic(err)
+	}
+
 	redis, _ := datastore.NewRedis()(datastore.NewRedisParams{
 		Configs: config,
 	})
 	testService, _ = NewService()(NewServiceParam{
 		Config: config,
 		Model: smr.NewModel()(smr.NewModelParams{
-			Logger: lib.NewLogger()(lib.NewLoggerParams{
-				Configs: config,
-			}),
+			Logger: logger,
 		}),
-		Logger: lib.NewLogger()(lib.NewLoggerParams{
-			Configs: config,
-		}),
+		Logger:      logger,
 		RedisClient: redis,
 		LifeCycle:   tutils.NewEmtpyLifecycle(),
 	})

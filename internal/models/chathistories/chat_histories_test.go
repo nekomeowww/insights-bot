@@ -27,9 +27,12 @@ var model *Model
 func TestMain(m *testing.M) {
 	config := configs.NewTestConfig()()
 
-	logger := lib.NewLogger()(lib.NewLoggerParams{
+	logger, err := lib.NewLogger()(lib.NewLoggerParams{
 		Configs: config,
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	ent, err := datastore.NewEnt()(datastore.NewEntParams{
 		Lifecycle: tutils.NewEmtpyLifecycle(),

@@ -8,13 +8,14 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap/zapcore"
 )
 
 func TestBindFromCallbackQueryData(t *testing.T) {
-	logger := logger.NewLogger(logrus.DebugLevel, "insights-bot", "", nil)
+	logger, err := logger.NewLogger(zapcore.DebugLevel, "insights-bot", "", nil)
+	require.NoError(t, err)
 
 	c, err := rueidis.NewClient(rueidis.ClientOption{
 		InitAddress:  []string{"localhost:6379"},

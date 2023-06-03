@@ -12,6 +12,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 type privateSubscriptionStartCommandContext struct {
@@ -175,7 +176,7 @@ func (h *CommandHandler) handleUserNeverStartedChatOrBlockedErr(c *tgbot.Context
 	sentMsg := c.Bot.MaySend(msg)
 
 	may := fo.NewMay0().Use(func(err error, messageArgs ...any) {
-		h.logger.Errorf("failed to push one delete later message: %v", err)
+		h.logger.Error("failed to push one delete later message", zap.Error(err))
 	})
 
 	may.Invoke(c.Bot.PushOneDeleteLaterMessage(c.Update.Message.From.ID, chatID, c.Update.Message.MessageID))

@@ -181,16 +181,34 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 	}
 	// same chat
 	if actionData.ChatID != chatID {
+		h.logger.Debug("callback query is not from the same chat",
+			zap.Int64("chat_id", chatID),
+			zap.Int64("action_data_chat_id", actionData.ChatID),
+		)
+
 		return nil, nil
 	}
 	// same actor or the original command should sent by Group Anonymous Bot
 	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
+		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
+			zap.Int64("from_id", fromID),
+			zap.Int64("action_data_from_id", actionData.FromID),
+			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
+			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
+		)
+
 		return nil, nil
 	}
 	// check actor is admin or creator, bot is admin
 	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {
+			h.logger.Debug("callback query is not from an admin or creator",
+				zap.Int64("from_id", fromID),
+				zap.Int64("chat_id", chatID),
+				zap.String("permission_check_result", err.Error()),
+			)
+
 			return nil, nil
 		}
 		if errors.Is(err, errOperationCanNotBeDone) {
@@ -292,18 +310,37 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
+
 	// same chat
 	if actionData.ChatID != chatID {
+		h.logger.Debug("callback query is not from the same chat",
+			zap.Int64("chat_id", chatID),
+			zap.Int64("action_data_chat_id", actionData.ChatID),
+		)
+
 		return nil, nil
 	}
-	// same actor or the original command should sent by Group Anonymous Bot
+	// same actor or the original command sent by Group Anonymous Bot
 	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
+		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
+			zap.Int64("from_id", fromID),
+			zap.Int64("action_data_from_id", actionData.FromID),
+			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
+			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
+		)
+
 		return nil, nil
 	}
 	// check actor is admin or creator, bot is admin
 	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {
+			h.logger.Debug("callback query is not from an admin or creator",
+				zap.Int64("from_id", fromID),
+				zap.Int64("chat_id", chatID),
+				zap.String("permission_check_result", err.Error()),
+			)
+
 			return nil, nil
 		}
 		if errors.Is(err, errOperationCanNotBeDone) || errors.Is(err, errCreatorPermissionRequired) {
@@ -330,6 +367,8 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
+	h.logger.Info("assigned recap mode for chat", zap.String("recap_mode", actionData.Mode.String()))
+
 	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
 	if err != nil {
 		return nil, tgbot.
@@ -351,8 +390,8 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 	return c.NewEditMessageTextAndReplyMarkup(messageID,
 		lo.Ternary(
 			actionData.Mode == tgchat.AutoRecapSendModePublicly,
-			configureRecapGeneralInstructionMessage+"\n\n"+"聊天记录回顾模式已切换为<b>公开模式</b>，将会自动收集群组中的聊天记录并定时发送聊天回顾快报。",
-			configureRecapGeneralInstructionMessage+"\n\n"+"聊天记录回顾模式已切换为<b>私聊订阅模式</b>，将会自动收集群组中的聊天记录并定时发送聊天回顾快报给通过 /subscribe_recap 命令订阅了本群组聊天回顾用户。",
+			configureRecapGeneralInstructionMessage+"\n\n"+"聊天记录回顾模式已切换为<b>"+tgchat.AutoRecapSendModePublicly.String()+"</b>，将会自动收集群组中的聊天记录并定时发送聊天回顾快报。",
+			configureRecapGeneralInstructionMessage+"\n\n"+"聊天记录回顾模式已切换为<b>"+tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String()+"</b>，将会自动收集群组中的聊天记录并定时发送聊天回顾快报给通过 /subscribe_recap 命令订阅了本群组聊天回顾用户。",
 		),
 		markup,
 	).WithParseModeHTML(), nil
@@ -379,10 +418,22 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 	}
 	// same chat
 	if actionData.ChatID != chatID {
+		h.logger.Debug("callback query is not from the same chat",
+			zap.Int64("chat_id", chatID),
+			zap.Int64("action_data_chat_id", actionData.ChatID),
+		)
+
 		return nil, nil
 	}
 	// same actor or the original command should sent by Group Anonymous Bot
 	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
+		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
+			zap.Int64("from_id", fromID),
+			zap.Int64("action_data_from_id", actionData.FromID),
+			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
+			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
+		)
+
 		return nil, nil
 	}
 	// check actor is admin or creator, bot is admin

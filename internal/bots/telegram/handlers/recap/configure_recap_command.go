@@ -60,21 +60,19 @@ func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) erro
 		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 	}
 
-	isAdmin, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{telegram.MemberStatusAdministrator})
-	if err != nil {
-		return err
-	}
-	if !isAdmin && !ctx.Bot.IsGroupAnonymousBot(user) {
-		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
-	}
-
-	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{
-		telegram.MemberStatusCreator,
-	})
+	is, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{telegram.MemberStatusCreator})
 	if err != nil {
 		return err
 	}
 	if !is {
+		isAdmin, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{telegram.MemberStatusAdministrator})
+		if err != nil {
+			return err
+		}
+		if !isAdmin && !ctx.Bot.IsGroupAnonymousBot(user) {
+			return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
+		}
+
 		return fmt.Errorf("%w，%w", errOperationCanNotBeDone, errAssignModePermissionDeniedDueToAdministratorIsRequired)
 	}
 
@@ -115,8 +113,8 @@ func newRecapInlineKeyboardMarkup(ctx *tgbot.Context, chatID int64, fromID int64
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(!currentRecapStatus, "🔈 开启聊天记录回顾", "🔇 关闭聊天记录回顾"), data),
 		),
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModePublicly, "🔘 公开模式", "公开模式"), publicData),
-			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, "🔘 私聊订阅模式", "私聊订阅模式"), privateData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModePublicly, "🔘 "+tgchat.AutoRecapSendModePublicly.String(), tgchat.AutoRecapSendModePublicly.String()), publicData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, "🔘 "+tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String(), tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String()), privateData),
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData("✅ 完成", completeData),

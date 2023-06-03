@@ -9,11 +9,79 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
+
+type ZapField zapcore.Field
+
+func (f ZapField) MatchValue() any {
+	switch f.Type {
+	case zapcore.UnknownType: // checked
+		return f.Interface
+	case zapcore.ArrayMarshalerType: // checked
+		return f.Interface
+	case zapcore.ObjectMarshalerType: // checked
+		return f.Interface
+	case zapcore.BinaryType: // checked
+		return f.Interface
+	case zapcore.BoolType: // checked
+		return f.Integer != 0
+	case zapcore.ByteStringType: // checked
+		return f.Interface
+	case zapcore.Complex128Type: // checked
+		return f.Interface
+	case zapcore.Complex64Type: // checked
+		return f.Interface
+	case zapcore.DurationType: // checked
+		return time.Duration(f.Integer)
+	case zapcore.Float64Type: // checked
+		return f.Integer
+	case zapcore.Float32Type: // checked
+		return f.Integer
+	case zapcore.Int64Type: // checked
+		return f.Integer
+	case zapcore.Int32Type: // checked
+		return f.Integer
+	case zapcore.Int16Type: // checked
+		return f.Integer
+	case zapcore.Int8Type: // checked
+		return f.Integer
+	case zapcore.StringType: // checked
+		return f.String
+	case zapcore.TimeType: // checked
+		return fmt.Sprintf("%v", f.Interface)
+	case zapcore.TimeFullType: // checked
+		return f.Interface
+	case zapcore.Uint64Type: // checked
+		return f.Integer
+	case zapcore.Uint32Type: // checked
+		return f.Integer
+	case zapcore.Uint16Type: // checked
+		return f.Integer
+	case zapcore.Uint8Type: // checked
+		return f.Integer
+	case zapcore.UintptrType: // checked
+		return f.Integer
+	case zapcore.ReflectType: // checked
+		return f.Interface
+	case zapcore.NamespaceType: // checked
+		return ""
+	case zapcore.StringerType: // checked
+		return f.Interface
+	case zapcore.ErrorType: // checked
+		return f.Interface
+	case zapcore.SkipType: // checked
+		return ""
+	case zapcore.InlineMarshalerType: // checked
+		return f.Interface
+	}
+
+	return f.Interface
+}
 
 type Logger struct {
 	LogrusLogger *logrus.Logger
@@ -30,7 +98,7 @@ func (l *Logger) Debug(msg string, fields ...zapcore.Field) {
 	SetCallFrame(entry, l.namespace, 1)
 
 	for _, v := range fields {
-		entry = entry.WithField(v.Key, v.String)
+		entry = entry.WithField(v.Key, ZapField(v).MatchValue())
 	}
 
 	entry.Debug(msg)
@@ -44,7 +112,7 @@ func (l *Logger) Info(msg string, fields ...zapcore.Field) {
 	SetCallFrame(entry, l.namespace, 1)
 
 	for _, v := range fields {
-		entry = entry.WithField(v.Key, v.String)
+		entry = entry.WithField(v.Key, ZapField(v).MatchValue())
 	}
 
 	entry.Info(msg)
@@ -58,7 +126,7 @@ func (l *Logger) Warn(msg string, fields ...zapcore.Field) {
 	SetCallFrame(entry, l.namespace, 1)
 
 	for _, v := range fields {
-		entry = entry.WithField(v.Key, v.String)
+		entry = entry.WithField(v.Key, ZapField(v).MatchValue())
 	}
 
 	entry.Warn(msg)
@@ -72,7 +140,7 @@ func (l *Logger) Error(msg string, fields ...zapcore.Field) {
 	SetCallFrame(entry, l.namespace, 1)
 
 	for _, v := range fields {
-		entry = entry.WithField(v.Key, v.String)
+		entry = entry.WithField(v.Key, ZapField(v).MatchValue())
 	}
 
 	entry.Error(msg)
@@ -86,7 +154,7 @@ func (l *Logger) Fatal(msg string, fields ...zapcore.Field) {
 	SetCallFrame(entry, l.namespace, 1)
 
 	for _, v := range fields {
-		entry = entry.WithField(v.Key, v.String)
+		entry = entry.WithField(v.Key, ZapField(v).MatchValue())
 	}
 
 	entry.Fatal(msg)

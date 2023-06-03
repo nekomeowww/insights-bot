@@ -213,43 +213,53 @@ func processResponse(ctx *Context, resp Response) {
 
 		if v.mediaConfig != nil {
 			_, err := ctx.Bot.Request(v.mediaConfig)
-			ctx.Logger.Error("failed to edit message",
-				zap.Error(err),
-				zap.Any("request", v.mediaConfig),
-				zap.Int64("chat_id", ctx.Update.FromChat().ID),
-			)
+			if err != nil {
+				ctx.Logger.Error("failed to edit message",
+					zap.Error(err),
+					zap.Any("request", v.mediaConfig),
+					zap.Int64("chat_id", ctx.Update.FromChat().ID),
+				)
+			}
 		}
 		if v.replyMarkupConfig != nil {
 			_, err := ctx.Bot.Request(v.replyMarkupConfig)
-			ctx.Logger.Error("failed to edit message",
-				zap.Error(err),
-				zap.Any("request", v.replyMarkupConfig),
-				zap.Int64("chat_id", ctx.Update.FromChat().ID),
-			)
+			if err != nil {
+				ctx.Logger.Error("failed to edit message",
+					zap.Error(err),
+					zap.Any("request", v.replyMarkupConfig),
+					zap.Int64("chat_id", ctx.Update.FromChat().ID),
+				)
+			}
 		}
 		if v.liveLocationConfig != nil {
 			_, err := ctx.Bot.Request(v.liveLocationConfig)
-			ctx.Logger.Error("failed to edit message",
-				zap.Error(err),
-				zap.Any("request", v.liveLocationConfig),
-				zap.Int64("chat_id", ctx.Update.FromChat().ID),
-			)
+			if err != nil {
+				ctx.Logger.Error("failed to edit message",
+					zap.Error(err),
+					zap.Any("request", v.liveLocationConfig),
+					zap.Int64("chat_id", ctx.Update.FromChat().ID),
+				)
+			}
 		}
 		if v.textConfig != nil {
 			_, err := ctx.Bot.Request(v.textConfig)
-			ctx.Logger.Error("failed to edit message",
-				zap.Error(err),
-				zap.Any("request", v.textConfig),
-				zap.Int64("chat_id", ctx.Update.FromChat().ID),
-			)
+			if err != nil {
+				ctx.Logger.Error("failed to edit message",
+					zap.Error(err),
+					zap.Any("request", v.textConfig),
+					zap.Int64("chat_id", ctx.Update.FromChat().ID),
+				)
+			}
 		}
 		if v.captionConfig != nil {
 			_, err := ctx.Bot.Request(v.captionConfig)
-			ctx.Logger.Error("failed to edit message",
-				zap.Error(err),
-				zap.Any("request", v.captionConfig),
-				zap.Int64("chat_id", ctx.Update.FromChat().ID),
-			)
+			if err != nil {
+				ctx.Logger.Error("failed to edit message",
+					zap.Error(err),
+					zap.Any("request", v.captionConfig),
+					zap.Int64("chat_id", ctx.Update.FromChat().ID),
+				)
+			}
 		}
 	default:
 		ctx.Logger.Error(fmt.Sprintf("encountered unknown response %T", v),

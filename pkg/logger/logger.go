@@ -53,7 +53,7 @@ func (f ZapField) MatchValue() any {
 	case zapcore.StringType: // checked
 		return f.String
 	case zapcore.TimeType: // checked
-		return fmt.Sprintf("%v", f.Interface)
+		return time.Unix(0, f.Integer)
 	case zapcore.TimeFullType: // checked
 		return f.Interface
 	case zapcore.Uint64Type: // checked

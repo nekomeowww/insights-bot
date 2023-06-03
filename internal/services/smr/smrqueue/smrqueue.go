@@ -4,10 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 var (
@@ -54,10 +56,10 @@ func (q *Queue) AddTask(taskInfo types.TaskInfo) error {
 		return err
 	}
 
-	q.logger.
-		WithField("url", taskInfo.URL).
-		WithField("platform", taskInfo.Platform).
-		Info("smr service: task added")
+	q.logger.Info("smr service: task added",
+		zap.String("url", taskInfo.URL),
+		zap.String("platform", taskInfo.Platform.String()),
+	)
 
 	// TODO: #111 should reject ongoing smr request in the same chat
 	return nil

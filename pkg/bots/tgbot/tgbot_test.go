@@ -7,9 +7,9 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 )
 
 func TestAssignOneCallbackQueryData(t *testing.T) {
@@ -25,7 +25,10 @@ func TestAssignOneCallbackQueryData(t *testing.T) {
 		Hello: "world",
 	}
 
-	bot := Bot{logger: logger.NewLogger(logrus.DebugLevel, "insights-bot", "", nil), rueidisClient: c}
+	logger, err := logger.NewLogger(zap.DebugLevel, "insights-bot", "", nil)
+	require.NoError(t, err)
+
+	bot := Bot{logger: logger, rueidisClient: c}
 
 	callbackQueryData, err := bot.AssignOneCallbackQueryData("test", data)
 	require.NoError(t, err)

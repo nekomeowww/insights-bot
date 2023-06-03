@@ -9,7 +9,9 @@ import (
 
 	"github.com/alexliesenfeld/health"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
+	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/services/autorecap"
 	"github.com/nekomeowww/insights-bot/internal/services/pprof"
 	"github.com/nekomeowww/insights-bot/internal/services/smr"
@@ -26,12 +28,13 @@ type NewHealthParams struct {
 
 	Logger *logger.Logger
 
-	TelegramBot *tgbot.BotService
-	SlackBot    *slackbot.BotService
-	DiscordBot  *discordbot.BotService
-	AutoRecap   *autorecap.AutoRecapService
-	Pprof       *pprof.Pprof
-	SmrService  *smr.Service
+	AutoRecapTimeCapsuleDigger *datastore.AutoRecapTimeCapsuleDigger
+	TelegramBot                *tgbot.BotService
+	SlackBot                   *slackbot.BotService
+	DiscordBot                 *discordbot.BotService
+	AutoRecap                  *autorecap.AutoRecapService
+	Pprof                      *pprof.Pprof
+	SmrService                 *smr.Service
 }
 
 type Health struct {
@@ -48,6 +51,10 @@ func NewHealth() func(NewHealthParams) (*Health, error) {
 			health.WithCheck(health.Check{
 				Name:  "telegram_bot",
 				Check: params.TelegramBot.Check,
+			}),
+			health.WithCheck(health.Check{
+				Name:  "auto recap timecapsule digger",
+				Check: params.AutoRecapTimeCapsuleDigger.Check,
 			}),
 			health.WithCheck(health.Check{
 				Name:  "auto_recap",
@@ -119,7 +126,7 @@ func Run() func(health *Health) error {
 
 		go func() {
 			if err := health.server.Serve(listener); err != nil && err != http.ErrServerClosed {
-				health.logger.Fatalf("failed to serve health checker: %v", err)
+				health.logger.Fatal("failed to serve health checker", zap.Error(err))
 			}
 		}()
 

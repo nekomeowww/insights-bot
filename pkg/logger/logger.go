@@ -5,111 +5,91 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type Logger struct {
-	*logrus.Logger
+	LogrusLogger *logrus.Logger
+	ZapLogger    *zap.Logger
 
 	namespace string
 }
 
 // Debug 打印 debug 级别日志。
-func (l *Logger) Debug(args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Debug(args...)
-}
+func (l *Logger) Debug(msg string, fields ...zapcore.Field) {
+	l.ZapLogger.Debug(msg, fields...)
 
-// Debugf 格式化字符串后打印 debug 级别日志。
-func (l *Logger) Debugf(format string, args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
+	entry := logrus.NewEntry(l.LogrusLogger)
 	SetCallFrame(entry, l.namespace, 1)
-	entry.Debugf(format, args...)
+
+	for _, v := range fields {
+		entry = entry.WithField(v.Key, v.String)
+	}
+
+	entry.Debug(msg)
 }
 
 // Info 打印 info 级别日志。
-func (l *Logger) Info(args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Info(args...)
-}
+func (l *Logger) Info(msg string, fields ...zapcore.Field) {
+	l.ZapLogger.Info(msg, fields...)
 
-// Infof 格式化字符串后打印 info 级别日志。
-func (l *Logger) Infof(format string, args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
+	entry := logrus.NewEntry(l.LogrusLogger)
 	SetCallFrame(entry, l.namespace, 1)
-	entry.Infof(format, args...)
+
+	for _, v := range fields {
+		entry = entry.WithField(v.Key, v.String)
+	}
+
+	entry.Info(msg)
 }
 
 // Warn 打印 warn 级别日志。
-func (l *Logger) Warn(args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Warn(args...)
-}
+func (l *Logger) Warn(msg string, fields ...zapcore.Field) {
+	l.ZapLogger.Warn(msg, fields...)
 
-// Warnf 格式化字符串后打印 warn 级别日志。
-func (l *Logger) Warnf(format string, args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
+	entry := logrus.NewEntry(l.LogrusLogger)
 	SetCallFrame(entry, l.namespace, 1)
-	entry.Warnf(format, args...)
+
+	for _, v := range fields {
+		entry = entry.WithField(v.Key, v.String)
+	}
+
+	entry.Warn(msg)
 }
 
 // Error 打印错误日志。
-func (l *Logger) Error(args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Error(args...)
-}
+func (l *Logger) Error(msg string, fields ...zapcore.Field) {
+	l.ZapLogger.Error(msg, fields...)
 
-// Errorf 格式化字符串后打印错误日志。
-func (l *Logger) Errorf(format string, args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
+	entry := logrus.NewEntry(l.LogrusLogger)
 	SetCallFrame(entry, l.namespace, 1)
-	entry.Errorf(format, args...)
+
+	for _, v := range fields {
+		entry = entry.WithField(v.Key, v.String)
+	}
+
+	entry.Error(msg)
 }
 
 // Fatal 打印致命错误日志，打印后立即退出程序。
-func (l *Logger) Fatal(args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Fatal(args...)
-}
+func (l *Logger) Fatal(msg string, fields ...zapcore.Field) {
+	l.ZapLogger.Fatal(msg, fields...)
 
-// Fatalf 格式化字符串后打印致命错误日志，打印后立即退出程序。
-func (l *Logger) Fatalf(format string, args ...interface{}) {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-	entry.Fatalf(format, args...)
-}
-
-// Fields type, used to pass to `WithFields`.
-type Fields logrus.Fields
-
-// WithField adds a field to the log entry, note that it doesn't log until you
-// call Debug, Info, Warn, Error, Fatal or Panic. It only creates a log entry.
-// If you want multiple fields, use `WithFields`.
-func (l *Logger) WithField(key string, value interface{}) *logrus.Entry {
-	entry := logrus.NewEntry(l.Logger)
+	entry := logrus.NewEntry(l.LogrusLogger)
 	SetCallFrame(entry, l.namespace, 1)
 
-	return entry.WithField(key, value)
-}
+	for _, v := range fields {
+		entry = entry.WithField(v.Key, v.String)
+	}
 
-// WithFields adds a struct of fields to the log entry. All it does is call
-// `WithField` for each `Field`.
-func (l *Logger) WithFields(fields logrus.Fields) *logrus.Entry {
-	entry := logrus.NewEntry(l.Logger)
-	SetCallFrame(entry, l.namespace, 1)
-
-	return entry.WithFields(fields)
+	entry.Fatal(msg)
 }
 
 // SetCallFrame 设定调用栈。
@@ -151,75 +131,100 @@ func SetCallerFrameWithFileAndLine(entry *logrus.Entry, namespace, functionName,
 	})
 }
 
-// NewLogger 按需创建 logger 实例。
-func NewLogger(level logrus.Level, namespace string, logFilePath string, hook []logrus.Hook) *Logger {
-	// 创建 logrus 实例
-	log := logrus.New()
-	if len(hook) > 0 {
-		for _, h := range hook {
-			log.Hooks.Add(h)
-		}
+func zapCoreLevelToLogrusLevel(level zapcore.Level) logrus.Level {
+	switch level {
+	case zapcore.DebugLevel:
+		return logrus.DebugLevel
+	case zapcore.InfoLevel:
+		return logrus.InfoLevel
+	case zapcore.WarnLevel:
+		return logrus.WarnLevel
+	case zapcore.ErrorLevel:
+		return logrus.ErrorLevel
+	case zapcore.FatalLevel:
+		return logrus.FatalLevel
+	case zapcore.PanicLevel, zapcore.DPanicLevel:
+		return logrus.PanicLevel
+	case zapcore.InvalidLevel:
+		return logrus.InfoLevel
+	default:
+		return logrus.InfoLevel
 	}
-
-	// 设置日志级别
-	log.SetFormatter(NewLogFileFormatter())
-	log.SetReportCaller(true)
-	// 设置日志级别
-	log.Level = level
-
-	if logFilePath != "" {
-		// 初始化日志文件
-		err := initLoggerFile(log, logFilePath)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	return &Logger{Logger: log, namespace: namespace}
 }
 
-// initLoggerFile 初始化日志文件。
-func initLoggerFile(logger *logrus.Logger, logPath string) error {
-	execPath, _ := os.Executable()
-	// 获取日志文件目录
-	logDir := filepath.Join(filepath.Dir(execPath), filepath.Dir(logPath))
-	logPath = filepath.Join(logDir, filepath.Base(logPath))
-	// 创建并设定日志目录权限为 755（用户完全权限，组不可写，其他无权限）
-	err := os.MkdirAll(logDir, 0744)
-	if err != nil {
-		// 如果错误，则返回
-		return fmt.Errorf("failed to create %s directory: %w", logDir, err)
+// NewLogger 按需创建 logger 实例。
+func NewLogger(level zapcore.Level, namespace string, logFilePath string, hook []logrus.Hook) (*Logger, error) {
+	var err error
+	if logFilePath == "" {
+		logFilePath, err = autoCreateLogFile(logFilePath)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	// 创建日志文件
-	// 获取日志文件路径状态
-	stat, err := os.Stat(logPath)
+	config := zap.NewProductionConfig()
+	config.Level = zap.NewAtomicLevelAt(level)
+	config.OutputPaths = []string{logFilePath}
+	config.ErrorOutputPaths = []string{logFilePath}
+	config.InitialFields = map[string]interface{}{
+		"app_name": namespace,
+	}
+
+	zapLogger, err := config.Build(zap.WithCaller(true))
 	if err != nil {
-		// 如果路径不存在，则创建文件
+		return nil, err
+	}
+
+	logrusLogger := logrus.New()
+	if len(hook) > 0 {
+		for _, h := range hook {
+			logrusLogger.Hooks.Add(h)
+		}
+	}
+
+	logrusLogger.SetFormatter(NewLogFileFormatter())
+	logrusLogger.SetReportCaller(true)
+	logrusLogger.Level = zapCoreLevelToLogrusLevel(level)
+
+	return &Logger{
+		LogrusLogger: logrusLogger,
+		ZapLogger:    zapLogger,
+		namespace:    namespace,
+	}, nil
+}
+
+func autoCreateLogFile(logFilePathStr string) (string, error) {
+	if logFilePathStr != "" {
+		return logFilePathStr, nil
+	}
+
+	execPath, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+
+	logDir := filepath.Join(filepath.Dir(execPath), "logs")
+	logFilePath := filepath.Join(logDir, "insights-bot.log")
+
+	err = os.MkdirAll(logDir, 0744)
+	if err != nil {
+		return "", fmt.Errorf("failed to create %s directory: %w", logDir, err)
+	}
+
+	stat, err := os.Stat(logFilePath)
+	if err != nil {
 		if os.IsNotExist(err) {
-			_, err2 := os.Create(logPath)
+			_, err2 := os.Create(logFilePath)
 			if err2 != nil {
-				return fmt.Errorf("failed to create %s log file: %w", logPath, err)
+				return "", fmt.Errorf("failed to create %s log file: %w", logFilePath, err)
 			}
 		} else {
-			// 否则返回错误
-			return err
+			return "", err
 		}
 	}
 	if stat != nil && stat.IsDir() {
-		return errors.New("path exists but it is a directory")
+		return "", errors.New("path exists but it is a directory")
 	}
 
-	// 打开文件
-	// 设定打开方式：如文件不存在，则创建；只写入模式；追加写入模式
-	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to open %s log file: %w", logPath, err)
-	}
-
-	// 设定多重输出流：一个是标准输出，一个是文件写入输出
-	mw := io.MultiWriter(os.Stdout, logFile)
-	logger.SetOutput(mw)
-
-	return nil
+	return logFilePath, nil
 }

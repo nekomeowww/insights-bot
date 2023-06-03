@@ -13,8 +13,8 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
-	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
@@ -93,7 +93,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 
 			meta, err := m.linkprev.Preview(ctx, href)
 			if err != nil {
-				m.logger.Errorf("🔗Failed to generate link preview for %s, error %+v", href, err)
+				m.logger.Error("🔗Failed to generate link preview", zap.String("url", href), zap.Error(err))
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 
@@ -111,7 +111,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 
 			resp, err := m.openAI.SummarizeAny(ctx, title)
 			if err != nil {
-				m.logger.Errorf("🔗Failed to summarize title for %s, error %+v", href, err)
+				m.logger.Error("🔗Failed to summarize title", zap.String("url", href), zap.Error(err), zap.String("title", title))
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
 			if len(resp.Choices) != 0 {
@@ -244,12 +244,12 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return err
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"id":         telegramChatHistory.ID,
-		"chat_id":    telegramChatHistory.ChatID,
-		"message_id": telegramChatHistory.MessageID,
-		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
-	}).Trace("saved one telegram chat history")
+	m.logger.Debug("saved one telegram chat history",
+		zap.String("id", telegramChatHistory.ID.String()),
+		zap.Int64("chat_id", telegramChatHistory.ChatID),
+		zap.Int64("message_id", telegramChatHistory.MessageID),
+		zap.String("text", strings.ReplaceAll(telegramChatHistory.Text, "\n", " ")),
+	)
 
 	return nil
 }
@@ -284,11 +284,11 @@ func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 		return err
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"chat_id":    message.Chat.ID,
-		"message_id": message.MessageID,
-		"text":       strings.ReplaceAll(text, "\n", " "),
-	}).Trace("updated one message")
+	m.logger.Debug("updated one message",
+		zap.Int64("chat_id", message.Chat.ID),
+		zap.Int("message_id", message.MessageID),
+		zap.String("text", strings.ReplaceAll(text, "\n", " ")),
+	)
 
 	return nil
 }
@@ -302,7 +302,7 @@ func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.ChatHistories
 }
 
 func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.ChatHistories, error) {
-	m.logger.Infof("querying chat histories for %d", chatID)
+	m.logger.Info("querying chat histories", zap.Int64("chat_id", chatID))
 
 	telegramChatHistories, err := m.ent.ChatHistories.
 		Query().

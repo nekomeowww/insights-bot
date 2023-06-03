@@ -2,6 +2,7 @@ package smr
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 func NewModules() fx.Option {
@@ -102,7 +104,7 @@ func (s *Service) run() {
 	for {
 		select {
 		case <-ctx.Done():
-			s.logger.WithField("last tasks count", s.queue.Count()).Info("smr service: received stop signal, waiting for all tasks done")
+			s.logger.Info("smr service: received stop signal, waiting for all tasks done", zap.Int("last_tasks_count", s.queue.Count()))
 
 			needToClose = true
 		default:
@@ -114,7 +116,7 @@ func (s *Service) run() {
 				continue
 			}
 
-			s.logger.WithError(err).Warn("smr service: failed to get task")
+			s.logger.Warn("smr service: failed to get task", zap.Error(err))
 
 			continue
 		}
@@ -123,10 +125,10 @@ func (s *Service) run() {
 			defer func() {
 				err2 := recover()
 				if err2 != nil {
-					s.logger.
-						WithField("err", err2).
-						WithField("task", info).
-						Error("smr service: task failed with panic")
+					s.logger.Error("smr service: task failed with panic",
+						zap.Any("panic", err2),
+						zap.String("task", string(lo.Must(json.Marshal(info)))),
+					)
 				}
 			}()
 

@@ -13,7 +13,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 type telegramPrivateForwardedReplayChatHistory struct {
@@ -159,11 +159,11 @@ func (m *Model) SaveOneTelegramPrivateForwardedReplayChatHistory(message *tgbota
 		return err
 	}
 
-	m.logger.WithFields(logrus.Fields{
-		"chat_id":    telegramChatHistory.ChatID,
-		"message_id": telegramChatHistory.MessageID,
-		"text":       strings.ReplaceAll(telegramChatHistory.Text, "\n", " "),
-	}).Trace("saved one telegram private forwarded replay chat history")
+	m.logger.Debug("saved one telegram private forwarded replay chat history",
+		zap.Int64("chat_id", telegramChatHistory.ChatID),
+		zap.Int("message_id", telegramChatHistory.MessageID),
+		zap.String("text", strings.ReplaceAll(telegramChatHistory.Text, "\n", " ")),
+	)
 
 	return nil
 }

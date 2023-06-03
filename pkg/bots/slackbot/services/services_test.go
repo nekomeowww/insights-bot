@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap/zapcore"
 )
 
 func newTestServices() *Services {
@@ -25,9 +26,14 @@ func newTestServices() *Services {
 		log.Fatal("datastore init failed")
 	}
 
+	logger, err := logger.NewLogger(zapcore.DebugLevel, "insights-bot", "", make([]logrus.Hook, 0))
+	if err != nil {
+		log.Fatal("logger init failed")
+	}
+
 	return &Services{
 		ent:    ent,
-		logger: logger.NewLogger(logrus.InfoLevel, "insights-bot", "", make([]logrus.Hook, 0)),
+		logger: logger,
 	}
 }
 

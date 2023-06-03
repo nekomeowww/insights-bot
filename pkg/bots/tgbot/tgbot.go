@@ -16,7 +16,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/fo"
 	"github.com/nekomeowww/insights-bot/pkg/healthchecker"
@@ -138,7 +138,7 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 		return nil, err
 	}
 	if bot.opts.webhookURL != "" && webhookInfo.IsSet() && webhookInfo.LastErrorDate != 0 {
-		bot.logger.Errorf("webhook callback failed: %s", webhookInfo.LastErrorMessage)
+		bot.logger.Error("webhook callback failed", zap.String("last_message", webhookInfo.LastErrorMessage))
 	}
 
 	// cancel the previous set webhook
@@ -219,11 +219,11 @@ func (b *BotService) Start(ctx context.Context) error {
 			go func() {
 				err := b.webhookServer.Serve(l)
 				if err != nil && err != http.ErrServerClosed {
-					b.logger.Fatal(err)
+					b.logger.Fatal("", zap.Error(err))
 				}
 			}()
 
-			b.logger.Infof("Telegram Bot webhook server is listening on %s", b.webhookServer.Addr)
+			b.logger.Info("Telegram Bot webhook server is listening", zap.String("addr", b.webhookServer.Addr))
 		}
 
 		go b.startPullUpdates()
@@ -258,7 +258,7 @@ type Bot struct {
 
 func (b *Bot) MaySend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 	may := fo.NewMay[tgbotapi.Message]().Use(func(err error, messageArgs ...any) {
-		b.logger.Errorf("failed to send %v to telegram: %v", utils.SprintJSON(chattable), err)
+		b.logger.Error("failed to send message to telegram", zap.String("message", utils.SprintJSON(chattable)), zap.Error(err))
 	})
 
 	return lo.ToPtr(may.Invoke(b.Send(chattable)))
@@ -266,7 +266,7 @@ func (b *Bot) MaySend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 
 func (b *Bot) MayRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
 	may := fo.NewMay[*tgbotapi.APIResponse]().Use(func(err error, messageArgs ...any) {
-		b.logger.Errorf("failed to request %v to telegram: %v", utils.SprintJSON(chattable), err)
+		b.logger.Error("failed to send request to telegram", zap.String("request", utils.SprintJSON(chattable)), zap.Error(err))
 	})
 
 	return may.Invoke(b.Request(chattable))
@@ -354,11 +354,11 @@ func (b *Bot) PushOneDeleteLaterMessage(forUserID int64, chatID int64, messageID
 		}
 	}
 
-	b.logger.WithFields(logrus.Fields{
-		"from_id":    forUserID,
-		"chat_id":    chatID,
-		"message_id": messageID,
-	}).Trace("pushed one delete later message for user")
+	b.logger.Debug("pushed one delete later message for user",
+		zap.Int64("from_id", forUserID),
+		zap.Int64("chat_id", chatID),
+		zap.Int("message_id", messageID),
+	)
 
 	return nil
 }
@@ -410,11 +410,11 @@ func (b *Bot) DeleteAllDeleteLaterMessages(forUserID int64) error {
 		}
 
 		b.MayRequest(tgbotapi.NewDeleteMessage(chatID, messageID))
-		b.logger.WithFields(logrus.Fields{
-			"from_id":    forUserID,
-			"chat_id":    chatID,
-			"message_id": messageID,
-		}).Trace("deleted one delete later message for user")
+		b.logger.Debug("deleted one delete later message for user",
+			zap.Int64("from_id", forUserID),
+			zap.Int64("chat_id", chatID),
+			zap.Int("message_id", messageID),
+		)
 	}
 
 	return res.Error()
@@ -441,7 +441,12 @@ func (b *Bot) AssignOneCallbackQueryData(route string, data any) (string, error)
 		return fmt.Sprintf("%s;%s", routeHash, actionHash), err
 	}
 
-	b.logger.Tracef("assigned callback query data: %s;%s for route %s with data %s", route, actionHash, route, string(jsonData))
+	b.logger.Debug("assigned callback query for route",
+		zap.String("route", route),
+		zap.String("routeHas", routeHash),
+		zap.String("actionHash", actionHash),
+		zap.String("data", string(jsonData)),
+	)
 
 	return fmt.Sprintf("%s;%s", routeHash, actionHash), nil
 }

@@ -13,7 +13,7 @@ func SyncWithEditedMessage(chatHistories *chathistories.Model) func(c *tgbot.Con
 
 		err := chatHistories.UpdateOneTelegramChatHistory(c.Update.EditedMessage)
 		if err != nil {
-			c.Logger.Error(err)
+			c.Logger.Error(err.Error())
 		}
 
 		next()

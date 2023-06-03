@@ -3,10 +3,11 @@ package smrqueue
 import (
 	"context"
 	"encoding/json"
+	"testing"
+
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
-	"testing"
 
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
@@ -18,13 +19,19 @@ var testQueue *Queue
 
 func TestMain(m *testing.M) {
 	config := configs.NewTestConfig()()
+
+	logger, err := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: config,
+	})
+	if err != nil {
+		panic(err)
+	}
+
 	redis, _ := datastore.NewRedis()(datastore.NewRedisParams{
 		Configs: config,
 	})
 	testQueue = NewQueue()(NewQueueParams{
-		Logger: lib.NewLogger()(lib.NewLoggerParams{
-			Configs: config,
-		}),
+		Logger:      logger,
 		RedisClient: redis,
 	})
 

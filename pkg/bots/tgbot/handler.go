@@ -1,12 +1,14 @@
 package tgbot
 
 import (
-	"runtime/debug"
+	"encoding/json"
+	"fmt"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/samber/lo"
 	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 )
 
 type Response interface{}
@@ -118,7 +120,7 @@ func processExceptionError(ctx *Context, chatID int64, e ExceptionError) Respons
 		editMessageID = e.editMessage.MessageID
 	}
 
-	entry := logrus.NewEntry(ctx.Logger.Logger)
+	entry := logrus.NewEntry(ctx.Logger.LogrusLogger)
 	logger.SetCallerFrameWithFileAndLine(entry, "insights-bot", e.callFrame.Function, e.callFrame.File, e.callFrame.Line)
 	entry.WithFields(logrus.Fields{
 		"update_type":      ctx.UpdateType(),
@@ -155,11 +157,12 @@ func processExceptionError(ctx *Context, chatID int64, e ExceptionError) Respons
 
 func processError(ctx *Context, err error) Response {
 	if !isErrorCanBeReplied(ctx.UpdateType()) {
-		ctx.Logger.WithFields(logrus.Fields{
-			"update_type": ctx.UpdateType(),
-			"chat_id":     ctx.Update.FromChat().ID,
-			"update_id":   ctx.Update.UpdateID,
-		}).Errorf("error occurred when handling response: %v", err)
+		ctx.Logger.Error("error occurred when handling response",
+			zap.Error(err),
+			zap.String("update_type", string(ctx.UpdateType())),
+			zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			zap.Int("update_id", ctx.Update.UpdateID),
+		)
 
 		return nil
 	}
@@ -175,11 +178,13 @@ func processError(ctx *Context, err error) Response {
 	case ExceptionError:
 		return processExceptionError(ctx, chatID, v)
 	default:
-		ctx.Logger.WithFields(logrus.Fields{
-			"update_type": ctx.UpdateType(),
-			"chat_id":     ctx.Update.FromChat().ID,
-			"update_id":   ctx.Update.UpdateID,
-		}).Errorf("encountered unknown error: %v, stack: %s", err, debug.Stack())
+		ctx.Logger.Error("encountered unknown error: %v, stack: %s",
+			zap.Error(err),
+			zap.Stack("stack"),
+			zap.String("update_type", string(ctx.UpdateType())),
+			zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			zap.Int("update_id", ctx.Update.UpdateID),
+		)
 
 		ctx.Abort()
 
@@ -200,37 +205,57 @@ func processResponse(ctx *Context, resp Response) {
 		if msg != nil && v.deleteLaterForUserID != 0 && v.deleteLaterChatID != 0 {
 			err := ctx.Bot.PushOneDeleteLaterMessage(v.deleteLaterForUserID, v.deleteLaterChatID, msg.MessageID)
 			if err != nil {
-				ctx.Logger.Errorf("failed to push delete later message: %v", err)
+				ctx.Logger.Error("failed to push delete later message", zap.Error(err))
 			}
 		}
 	case EditMessageResponse:
 		ctx.Abort()
 
-		var err error
 		if v.mediaConfig != nil {
-			_, err = ctx.Bot.Request(v.mediaConfig)
+			_, err := ctx.Bot.Request(v.mediaConfig)
+			ctx.Logger.Error("failed to edit message",
+				zap.Error(err),
+				zap.Any("request", v.mediaConfig),
+				zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			)
 		}
 		if v.replyMarkupConfig != nil {
-			_, err = ctx.Bot.Request(v.replyMarkupConfig)
+			_, err := ctx.Bot.Request(v.replyMarkupConfig)
+			ctx.Logger.Error("failed to edit message",
+				zap.Error(err),
+				zap.Any("request", v.replyMarkupConfig),
+				zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			)
 		}
 		if v.liveLocationConfig != nil {
-			_, err = ctx.Bot.Request(v.liveLocationConfig)
+			_, err := ctx.Bot.Request(v.liveLocationConfig)
+			ctx.Logger.Error("failed to edit message",
+				zap.Error(err),
+				zap.Any("request", v.liveLocationConfig),
+				zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			)
 		}
 		if v.textConfig != nil {
-			_, err = ctx.Bot.Request(v.textConfig)
+			_, err := ctx.Bot.Request(v.textConfig)
+			ctx.Logger.Error("failed to edit message",
+				zap.Error(err),
+				zap.Any("request", v.textConfig),
+				zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			)
 		}
 		if v.captionConfig != nil {
-			_, err = ctx.Bot.Request(v.captionConfig)
-		}
-		if err != nil {
-			ctx.Logger.WithFields(logrus.Fields{
-				"chat_id": ctx.Update.FromChat().ID,
-			}).Errorf("failed to edit message %v: %v", v, err)
+			_, err := ctx.Bot.Request(v.captionConfig)
+			ctx.Logger.Error("failed to edit message",
+				zap.Error(err),
+				zap.Any("request", v.captionConfig),
+				zap.Int64("chat_id", ctx.Update.FromChat().ID),
+			)
 		}
 	default:
-		ctx.Logger.WithFields(logrus.Fields{
-			"chat_id": ctx.Update.FromChat().ID,
-		}).Errorf("encountered unknown response %T: %v", v, resp)
+		ctx.Logger.Error(fmt.Sprintf("encountered unknown response %T", v),
+			zap.String("request", string(lo.Must(json.Marshal(v)))),
+			zap.Int64("chat_id", ctx.Update.FromChat().ID),
+		)
 	}
 }
 

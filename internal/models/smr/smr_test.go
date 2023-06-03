@@ -16,10 +16,15 @@ import (
 var model *Model
 
 func TestMain(m *testing.M) {
+	logger, err := lib.NewLogger()(lib.NewLoggerParams{
+		Configs: configs.NewTestConfig()(),
+	})
+	if err != nil {
+		panic(err)
+	}
+
 	model = NewModel()(NewModelParams{
-		Logger: lib.NewLogger()(lib.NewLoggerParams{
-			Configs: configs.NewTestConfig()(),
-		}),
+		Logger: logger,
 	})
 
 	os.Exit(m.Run())

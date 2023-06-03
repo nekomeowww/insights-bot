@@ -9,6 +9,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
 	"github.com/samber/lo"
+	"go.uber.org/zap"
 )
 
 func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Response, error) {
@@ -61,7 +62,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 
 		err = c.Bot.DeleteAllDeleteLaterMessages(fromID)
 		if err != nil {
-			h.logger.Errorf("failed to delete all delete later messages: %v", err)
+			h.logger.Error("failed to delete all delete later messages", zap.Error(err))
 		}
 
 		return nil, nil
@@ -81,7 +82,11 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 	} else if c.Bot.IsBotWasBlockedByTheUserErr(err) {
 		return h.handleUserNeverStartedChatOrBlockedErr(c, chatID, chatTitle, newSubscribeRecapCommandWhenUserBlockedMessage(c.Bot, hashKey))
 	} else {
-		h.logger.Errorf("failed to send private message %s to user %d: %v", utils.SprintJSON(msg), c.Update.Message.From.ID, err)
+		h.logger.Error("failed to send private message to user",
+			zap.String("message", utils.SprintJSON(msg)),
+			zap.Int64("chat_id", c.Update.Message.From.ID),
+			zap.Error(err),
+		)
 	}
 
 	return nil, nil
@@ -99,7 +104,7 @@ func (h *CommandHandler) handleStartCommandWithRecapSubscription(c *tgbot.Contex
 
 	context, err := h.getSubscribeStartCommandContext(args[0])
 	if err != nil {
-		h.logger.Errorf("failed to get private subscription recap start command context: %s", err)
+		h.logger.Error("failed to get private subscription recap start command context", zap.Error(err))
 		return nil, nil
 	}
 	if context == nil {
@@ -116,7 +121,7 @@ func (h *CommandHandler) handleStartCommandWithRecapSubscription(c *tgbot.Contex
 
 	err = c.Bot.DeleteAllDeleteLaterMessages(c.Update.Message.From.ID)
 	if err != nil {
-		h.logger.Errorf("failed to delete all delete later messages: %v", err)
+		h.logger.Error("failed to delete all delete later messages", zap.Error(err))
 	}
 
 	return c.
@@ -159,7 +164,11 @@ func (h *CommandHandler) handleUnsubscribeRecapCommand(c *tgbot.Context) (tgbot.
 		if c.Bot.IsCannotInitiateChatWithUserErr(err) || c.Bot.IsBotWasBlockedByTheUserErr(err) {
 			c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
 		} else {
-			h.logger.Errorf("failed to send private message %s to user %d: %v", utils.SprintJSON(msg), c.Update.Message.From.ID, err)
+			h.logger.Error("failed to send private message to user",
+				zap.String("message", utils.SprintJSON(msg)),
+				zap.Int64("chat_id", c.Update.Message.From.ID),
+				zap.Error(err),
+			)
 		}
 	}
 

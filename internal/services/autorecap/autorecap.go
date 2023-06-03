@@ -13,6 +13,7 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/multierr"
 	"go.uber.org/ratelimit"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
@@ -89,7 +90,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 
 		enabled, err = m.tgchats.HasChatHistoriesRecapEnabled(capsule.Payload.ChatID, "")
 		if err != nil {
-			m.logger.Errorf("failed to check chat histories recap enabled: %v", err)
+			m.logger.Error("failed to check chat histories recap enabled", zap.Error(err))
 		}
 
 		return err
@@ -99,7 +100,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 
 		options, err = m.tgchats.FindOneRecapsOption(capsule.Payload.ChatID)
 		if err != nil {
-			m.logger.Errorf("failed to find chat recap options: %v", err)
+			m.logger.Error("failed to find chat recap options", zap.Error(err))
 		}
 
 		return err
@@ -109,7 +110,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 
 		subscribers, err = m.tgchats.FindAutoRecapsSubscribers(capsule.Payload.ChatID)
 		if err != nil {
-			m.logger.Errorf("failed to find chat recap subscribers: %v", err)
+			m.logger.Error("failed to find chat recap subscribers", zap.Error(err))
 		}
 
 		return err
@@ -119,10 +120,10 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 		// requeue if failed
 		queueErr := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
 		if queueErr != nil {
-			m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, queueErr)
+			m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(queueErr))
 		}
 
-		m.logger.Errorf("failed to check chat histories recap enabled, options or subscribers: %v", multierr.Combine(errs...))
+		m.logger.Error("failed to check chat histories recap enabled, options or subscribers", zap.Error(multierr.Combine(errs...)))
 	})
 	if !enabled {
 		return
@@ -131,7 +132,7 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 	// always requeue
 	err := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
 	if err != nil {
-		m.logger.Errorf("failed to queue one send chat histories recap task for chat %d: %v", capsule.Payload.ChatID, err)
+		m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(err))
 	}
 	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions && len(subscribers) == 0 {
 		return
@@ -144,11 +145,11 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 }
 
 func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatRecapsOptions, subscribers []*ent.TelegramChatAutoRecapsSubscribers) {
-	m.logger.Infof("generating chat histories recap for chat %d", chatID)
+	m.logger.Info("generating chat histories recap for chat", zap.Int64("chat_id", chatID))
 
 	histories, err := m.chathistories.FindLastSixHourChatHistories(chatID)
 	if err != nil {
-		m.logger.Errorf("failed to find last six hour chat histories: %v", err)
+		m.logger.Error("failed to find last six hour chat histories", zap.Error(err))
 		return
 	}
 	if len(histories) <= 5 {
@@ -160,7 +161,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	summarizations, err := m.chathistories.SummarizeChatHistories(chatID, histories)
 	if err != nil {
-		m.logger.Errorf("failed to summarize last six hour chat histories: %v", err)
+		m.logger.Error("failed to summarize last six hour chat histories", zap.Error(err))
 		return
 	}
 
@@ -209,7 +210,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 		for _, targetChat := range targetChats {
 			limiter.Take()
-			m.logger.Infof("sending chat histories recap for chat %d", targetChat.chatID)
+			m.logger.Info("sending chat histories recap for chat", zap.Int64("summarized_for_chat_id", chatID), zap.Int64("sending_target_chat_id", targetChat.chatID))
 
 			msg := tgbotapi.NewMessage(targetChat.chatID, "")
 			msg.ParseMode = tgbotapi.ModeHTML
@@ -223,7 +224,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 					FromID:    targetChat.chatID,
 				})
 				if err != nil {
-					m.logger.Errorf("failed to assign callback query data: %v", err)
+					m.logger.Error("failed to assign callback query data", zap.Error(err))
 					continue
 				}
 
@@ -234,7 +235,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 			_, err = m.botService.Send(msg)
 			if err != nil {
-				m.logger.Errorf("failed to send chat histories recap: %v", err)
+				m.logger.Error("failed to send chat histories recap", zap.Error(err))
 			}
 		}
 	}

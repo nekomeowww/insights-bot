@@ -8,6 +8,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 )
 
@@ -19,7 +20,7 @@ type LogFileFormatter struct {
 
 // NewLogFileFormatter return the log format for log file.
 //
-// eg: 2019-01-31T04:48:20 [info] [controllers/aibf/character.go:99] foo key=value
+// eg: 2023-06-01T12:00:00 [info] [controllers/some_controller/code_file.go:99] foo key=value
 func NewLogFileFormatter() *LogFileFormatter {
 	return &LogFileFormatter{
 		TextFormatter: logrus.TextFormatter{
@@ -34,7 +35,7 @@ func NewLogFileFormatter() *LogFileFormatter {
 //
 // the original file log format is defined here: github.com/sirupsen/logrus/text_formatter.TextFormatter{}.Format().
 func (f *LogFileFormatter) Format(entry *logrus.Entry) ([]byte, error) {
-	data := make(Fields)
+	data := make(map[string]any)
 	for k, v := range entry.Data {
 		data[k] = v
 	}
@@ -69,22 +70,31 @@ func (f *LogFileFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		b = &bytes.Buffer{}
 	}
 
-	var levelColor int
+	prefixStr := entry.Time.Format(timestampFormat) + " "
+	var renderFunc func(a ...any) string
 
 	switch entry.Level {
-	case logrus.DebugLevel, logrus.TraceLevel:
-		levelColor = 37 // gray
-	case logrus.WarnLevel:
-		levelColor = 33 // yellow
-	case logrus.ErrorLevel, logrus.FatalLevel, logrus.PanicLevel:
-		levelColor = 31 // red
+	case logrus.TraceLevel:
+		renderFunc = color.FgGray.Render
+	case logrus.DebugLevel:
+		renderFunc = color.FgGreen.Render
 	case logrus.InfoLevel:
-		levelColor = 36 // blue
+		renderFunc = color.FgCyan.Render
+	case logrus.WarnLevel:
+		renderFunc = color.FgYellow.Render
+	case logrus.ErrorLevel:
+		renderFunc = color.FgRed.Render
+	case logrus.FatalLevel:
+		renderFunc = color.FgMagenta.Render
+	case logrus.PanicLevel:
+		renderFunc = color.FgMagenta.Render
 	default:
-		levelColor = 36 //blue
+		renderFunc = color.FgGray.Render
 	}
 
-	b.WriteString(fmt.Sprintf("%s \x1b[%dm[%s]\x1b[0m", entry.Time.Format(timestampFormat), levelColor, entry.Level.String()))
+	prefixStr += renderFunc("[", entry.Level.String(), "]")
+
+	b.WriteString(prefixStr)
 	if data["file"] != nil {
 		b.WriteString(fmt.Sprintf(" [%s]", data["file"]))
 		delete(data, "file")

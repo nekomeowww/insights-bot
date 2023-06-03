@@ -9,6 +9,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/samber/lo"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
@@ -86,7 +87,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 
 	_, err = c.Bot.Request(editConfig)
 	if err != nil {
-		h.logger.Errorf("failed to edit message: %v", err)
+		h.logger.Error("failed to edit message", zap.Error(err))
 	}
 
 	histories, err := h.chatHistories.FindChatHistoriesByTimeBefore(data.ChatID, time.Duration(data.Hour)*time.Hour)
@@ -146,7 +147,10 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 			msg.ReplyToMessageID = c.Update.CallbackQuery.Message.ReplyToMessage.MessageID
 		}
 
-		h.logger.Infof("sending chat histories recap for chat %d: %s", c.Update.CallbackQuery.Message.Chat.ID, msg.Text)
+		h.logger.Info("sending chat histories recap for chat",
+			zap.Int64("chat_id", c.Update.CallbackQuery.Message.Chat.ID),
+			zap.String("text", msg.Text),
+		)
 
 		c.Bot.MaySend(msg)
 	}

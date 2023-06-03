@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/ent"
@@ -16,9 +18,9 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/sirupsen/logrus"
 	"github.com/slack-go/slack"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 func NewModules() fx.Option {
@@ -70,15 +72,15 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	var body receivedCommandInfo
 	if err := ctx.Bind(&body); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
-		h.logger.WithField("error", err.Error()).Warn("failed to bind request body, type definition of slack request body may have changed")
+		h.logger.Warn("failed to bind request body, type definition of slack request body may have changed", zap.Error(err))
 
 		return
 	}
 
-	h.logger.WithFields(logrus.Fields{
-		"user_id":    body.UserID,
-		"channel_id": body.ChannelID,
-	}).Tracef("slack: command received: /smr %s", body.Text)
+	h.logger.Debug(fmt.Sprintf("slack: command received: /smr %s", body.Text),
+		zap.String("user_id", body.UserID),
+		zap.String("channel_id", body.ChannelID),
+	)
 
 	urlString := body.Text
 
@@ -90,10 +92,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		}
 
 		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("出现了一些问题，可以再试试？"))
-		h.logger.
-			WithError(err).
-			WithError(originErr).
-			Warn("discord: failed to send error message")
+		h.logger.Warn("discord: failed to send error message", zap.Error(err), zap.NamedError("original_error", originErr))
 
 		return
 	}
@@ -103,7 +102,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		slackoauthcredentials.TeamID(body.TeamID),
 	).First(context.Background())
 	if err != nil {
-		h.logger.WithField("error", err.Error()).Warn("slack: failed to get team's access token")
+		h.logger.Warn("slack: failed to get team's access token", zap.Error(err))
 		if ent.IsNotFound(err) {
 			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("本应用没有权限向这个频道发送消息，尝试重新安装一下？"))
 			return
@@ -122,7 +121,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		TeamID:    body.TeamID,
 	})
 	if err != nil {
-		h.logger.WithError(err).Warn("slack: failed to add task")
+		h.logger.Warn("slack: failed to add task", zap.Error(err))
 		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("量子速读请求发送失败了，可以再试试？"))
 
 		return
@@ -142,7 +141,7 @@ func (h *Handlers) GetInstallAuth(ctx *gin.Context) {
 
 	resp, err := slack.GetOAuthV2Response(&http.Client{}, h.config.Slack.ClientID, h.config.Slack.ClientSecret, code, "")
 	if err != nil {
-		h.logger.WithError(err).Error("slack: failed to get access token, interrupt")
+		h.logger.Error("slack: failed to get access token, interrupt", zap.Error(err))
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)
 
 		return

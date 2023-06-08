@@ -306,7 +306,11 @@ func (d *Dispatcher) dispatchInGoroutine(f func()) {
 	go func() {
 		defer func() {
 			if err := recover(); err != nil {
-				d.Logger.Error("Panic recovered from command dispatcher", zap.Any("err", err), zap.Stack("stack"))
+				d.Logger.Error("Panic recovered from command dispatcher",
+					zap.Error(fmt.Errorf("panic error: %v", err)),
+					zap.Stack("stack"),
+				)
+
 				return
 			}
 		}()

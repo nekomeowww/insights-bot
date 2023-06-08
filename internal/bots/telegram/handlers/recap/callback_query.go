@@ -45,6 +45,49 @@ func NewCallbackQueryHandler() func(NewCallbackQueryHandlerParams) *CallbackQuer
 	}
 }
 
+func shouldSkipCallbackQueryHandlingByCheckingActionData[
+	D recap.ConfigureRecapToggleActionData | recap.ConfigureRecapAssignModeActionData | recap.ConfigureRecapCompleteActionData,
+](c *tgbot.Context, actionData D, chatID, fromID int64) bool {
+	var actionDataChatID int64
+	var actionDataFromID int64
+
+	switch val := any(actionData).(type) {
+	case recap.ConfigureRecapToggleActionData:
+		actionDataChatID = val.ChatID
+		actionDataFromID = val.FromID
+	case recap.ConfigureRecapAssignModeActionData:
+		actionDataChatID = val.ChatID
+		actionDataFromID = val.FromID
+	case recap.ConfigureRecapCompleteActionData:
+		actionDataChatID = val.ChatID
+		actionDataFromID = val.FromID
+	}
+
+	// same chat
+	if actionDataChatID != chatID {
+		c.Logger.Debug("callback query is not from the same chat",
+			zap.Int64("chat_id", chatID),
+			zap.Int64("action_data_chat_id", actionDataChatID),
+		)
+
+		return true
+	}
+	// same actor or the original command should sent by Group Anonymous Bot
+	callbackQueryMessageFromGroupAnonymousBot := c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)
+	if !(actionDataFromID == fromID || callbackQueryMessageFromGroupAnonymousBot) {
+		c.Logger.Debug("action skipped, because callback query is either not from the same actor or the original command should sent by Group Anonymous Bot",
+			zap.Int64("from_id", fromID),
+			zap.Int64("action_data_from_id", actionDataFromID),
+			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
+			zap.Bool("is_group_anonymous_bot", c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
+		)
+
+		return true
+	}
+
+	return false
+}
+
 func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) (tgbot.Response, error) {
 	messageID := c.Update.CallbackQuery.Message.MessageID
 
@@ -179,31 +222,17 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	// same chat
-	if actionData.ChatID != chatID {
-		h.logger.Debug("callback query is not from the same chat",
-			zap.Int64("chat_id", chatID),
-			zap.Int64("action_data_chat_id", actionData.ChatID),
-		)
 
+	shouldSkip := shouldSkipCallbackQueryHandlingByCheckingActionData(c, actionData, chatID, fromID)
+	if shouldSkip {
 		return nil, nil
 	}
-	// same actor or the original command should sent by Group Anonymous Bot
-	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
-		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
-			zap.Int64("from_id", fromID),
-			zap.Int64("action_data_from_id", actionData.FromID),
-			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
-			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
-		)
 
-		return nil, nil
-	}
 	// check actor is admin or creator, bot is admin
 	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {
-			h.logger.Debug("callback query is not from an admin or creator",
+			h.logger.Debug("action, skipped, callback query is not from an admin or creator",
 				zap.Int64("from_id", fromID),
 				zap.Int64("chat_id", chatID),
 				zap.String("permission_check_result", err.Error()),
@@ -311,31 +340,16 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	// same chat
-	if actionData.ChatID != chatID {
-		h.logger.Debug("callback query is not from the same chat",
-			zap.Int64("chat_id", chatID),
-			zap.Int64("action_data_chat_id", actionData.ChatID),
-		)
-
+	shouldSkip := shouldSkipCallbackQueryHandlingByCheckingActionData(c, actionData, chatID, fromID)
+	if shouldSkip {
 		return nil, nil
 	}
-	// same actor or the original command sent by Group Anonymous Bot
-	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
-		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
-			zap.Int64("from_id", fromID),
-			zap.Int64("action_data_from_id", actionData.FromID),
-			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
-			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
-		)
 
-		return nil, nil
-	}
 	// check actor is admin or creator, bot is admin
 	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {
-			h.logger.Debug("callback query is not from an admin or creator",
+			h.logger.Debug("action skipped, callback query is not from an admin or creator",
 				zap.Int64("from_id", fromID),
 				zap.Int64("chat_id", chatID),
 				zap.String("permission_check_result", err.Error()),
@@ -416,26 +430,12 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	// same chat
-	if actionData.ChatID != chatID {
-		h.logger.Debug("callback query is not from the same chat",
-			zap.Int64("chat_id", chatID),
-			zap.Int64("action_data_chat_id", actionData.ChatID),
-		)
 
+	shouldSkip := shouldSkipCallbackQueryHandlingByCheckingActionData(c, actionData, chatID, fromID)
+	if shouldSkip {
 		return nil, nil
 	}
-	// same actor or the original command should sent by Group Anonymous Bot
-	if actionData.FromID != fromID && !(c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)) {
-		h.logger.Debug("callback query is either not from the same actor or the original command sent by Group Anonymous Bot",
-			zap.Int64("from_id", fromID),
-			zap.Int64("action_data_from_id", actionData.FromID),
-			zap.Bool("has_reply_to_message", c.Update.CallbackQuery.Message.ReplyToMessage != nil),
-			zap.Bool("is_group_anonymous_bot", c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)),
-		)
 
-		return nil, nil
-	}
 	// check actor is admin or creator, bot is admin
 	is, err := c.IsUserMemberStatus(fromID, []telegram.MemberStatus{telegram.MemberStatusCreator, telegram.MemberStatusAdministrator})
 	if err != nil {

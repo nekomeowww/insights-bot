@@ -17,7 +17,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	err, originErr := smrutils.CheckUrl(urlString)
 	if err != nil {
 		if smrutils.IsUrlCheckError(err) {
-			return nil, tgbot.NewMessageError(smrutils.FormatUrlCheckError(err, smr.FromPlatformTelegram)).WithReply(c.Update.Message)
+			return nil, tgbot.NewMessageError(smrutils.FormatUrlCheckError(err, smr.FromPlatformTelegram)).WithParseModeHTML().WithReply(c.Update.Message)
 		}
 
 		return nil, tgbot.NewExceptionError(originErr).WithReply(c.Update.Message)

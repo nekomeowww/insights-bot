@@ -2,9 +2,10 @@ package smrutils
 
 import (
 	"errors"
+	"net/url"
+
 	smr2 "github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr"
-	"net/url"
 
 	"github.com/samber/lo"
 )
@@ -30,7 +31,7 @@ func FormatUrlCheckError(err error, platform smr2.FromPlatform) string {
 	case errors.Is(err, smr.ErrNoLink):
 		switch platform {
 		case smr2.FromPlatformTelegram:
-			return "没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr <链接></code>"
+			return "没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>"
 		case smr2.FromPlatformDiscord, smr2.FromPlatformSlack:
 			return "没有找到链接，可以发送一个有效的链接吗？用法：`/smr <链接>`"
 		default:
@@ -39,7 +40,7 @@ func FormatUrlCheckError(err error, platform smr2.FromPlatform) string {
 	case errors.Is(err, smr.ErrParse), errors.Is(err, smr.ErrScheme):
 		switch platform {
 		case smr2.FromPlatformTelegram:
-			return "你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr <链接></code>"
+			return `你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>`
 		case smr2.FromPlatformDiscord, smr2.FromPlatformSlack:
 			return "你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`"
 		default:

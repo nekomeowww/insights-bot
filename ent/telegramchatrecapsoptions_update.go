@@ -62,6 +62,27 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) AddAutoRecapSendMode(i int) *Teleg
 	return tcrou
 }
 
+// SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
+func (tcrou *TelegramChatRecapsOptionsUpdate) SetManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdate {
+	tcrou.mutation.ResetManualRecapRatePerSeconds()
+	tcrou.mutation.SetManualRecapRatePerSeconds(i)
+	return tcrou
+}
+
+// SetNillableManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field if the given value is not nil.
+func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableManualRecapRatePerSeconds(i *int64) *TelegramChatRecapsOptionsUpdate {
+	if i != nil {
+		tcrou.SetManualRecapRatePerSeconds(*i)
+	}
+	return tcrou
+}
+
+// AddManualRecapRatePerSeconds adds i to the "manual_recap_rate_per_seconds" field.
+func (tcrou *TelegramChatRecapsOptionsUpdate) AddManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdate {
+	tcrou.mutation.AddManualRecapRatePerSeconds(i)
+	return tcrou
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcrou *TelegramChatRecapsOptionsUpdate) SetCreatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
 	tcrou.mutation.ResetCreatedAt()
@@ -157,6 +178,12 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) sqlSave(ctx context.Context) (n in
 	if value, ok := tcrou.mutation.AddedAutoRecapSendMode(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 	}
+	if value, ok := tcrou.mutation.ManualRecapRatePerSeconds(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
+	}
+	if value, ok := tcrou.mutation.AddedManualRecapRatePerSeconds(); ok {
+		_spec.AddField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
+	}
 	if value, ok := tcrou.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
 	}
@@ -222,6 +249,27 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapSendMode(i
 // AddAutoRecapSendMode adds i to the "auto_recap_send_mode" field.
 func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapSendMode(i int) *TelegramChatRecapsOptionsUpdateOne {
 	tcrouo.mutation.AddAutoRecapSendMode(i)
+	return tcrouo
+}
+
+// SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdateOne {
+	tcrouo.mutation.ResetManualRecapRatePerSeconds()
+	tcrouo.mutation.SetManualRecapRatePerSeconds(i)
+	return tcrouo
+}
+
+// SetNillableManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field if the given value is not nil.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableManualRecapRatePerSeconds(i *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if i != nil {
+		tcrouo.SetManualRecapRatePerSeconds(*i)
+	}
+	return tcrouo
+}
+
+// AddManualRecapRatePerSeconds adds i to the "manual_recap_rate_per_seconds" field.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdateOne {
+	tcrouo.mutation.AddManualRecapRatePerSeconds(i)
 	return tcrouo
 }
 
@@ -349,6 +397,12 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if value, ok := tcrouo.mutation.AddedAutoRecapSendMode(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
+	}
+	if value, ok := tcrouo.mutation.ManualRecapRatePerSeconds(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
+	}
+	if value, ok := tcrouo.mutation.AddedManualRecapRatePerSeconds(); ok {
+		_spec.AddField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
 	}
 	if value, ok := tcrouo.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)

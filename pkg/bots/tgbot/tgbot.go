@@ -30,6 +30,7 @@ type BotServiceOptions struct {
 	webhookURL    string
 	webhookPort   string
 	token         string
+	apiEndpoint   string
 	dispatcher    *Dispatcher
 	logger        *logger.Logger
 	rueidisClient rueidis.Client
@@ -52,6 +53,12 @@ func WithWebhookPort(port string) CallOption {
 func WithToken(token string) CallOption {
 	return func(o *BotServiceOptions) {
 		o.token = token
+	}
+}
+
+func WithAPIEndpoint(endpoint string) CallOption {
+	return func(o *BotServiceOptions) {
+		o.apiEndpoint = endpoint
 	}
 }
 
@@ -100,7 +107,14 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 		return nil, errors.New("must supply a valid telegram bot token in configs or environment variable")
 	}
 
-	b, err := tgbotapi.NewBotAPI(opts.token)
+	var err error
+	var b *tgbotapi.BotAPI
+
+	if opts.apiEndpoint != "" {
+		b, err = tgbotapi.NewBotAPIWithAPIEndpoint(opts.token, opts.apiEndpoint+"/bot%s/%s")
+	} else {
+		b, err = tgbotapi.NewBotAPI(opts.token)
+	}
 	if err != nil {
 		return nil, err
 	}

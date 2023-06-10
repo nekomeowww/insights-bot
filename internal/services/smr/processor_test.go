@@ -7,6 +7,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
 
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/stretchr/testify/assert"
@@ -43,8 +44,8 @@ func TestMain(m *testing.M) {
 func TestService_botExists(t *testing.T) {
 	t.Run("BotNotExists", func(t *testing.T) {
 		a := assert.New(t)
-		a.False(testService.isBotExists(smr.FromPlatformDiscord))
-		a.False(testService.isBotExists(smr.FromPlatformSlack))
-		a.False(testService.isBotExists(smr.FromPlatformTelegram))
+		a.False(testService.isBotExists(bot.FromPlatformDiscord))
+		a.False(testService.isBotExists(bot.FromPlatformSlack))
+		a.False(testService.isBotExists(bot.FromPlatformTelegram))
 	})
 }

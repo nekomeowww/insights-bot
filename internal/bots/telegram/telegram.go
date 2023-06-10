@@ -49,14 +49,19 @@ func NewBot() func(param NewBotParam) (*tgbot.BotService, error) {
 
 		param.Handlers.InstallAll()
 
-		bot, err := tgbot.NewBotService(
+		opts := []tgbot.CallOption{
 			tgbot.WithToken(param.Config.Telegram.BotToken),
 			tgbot.WithWebhookURL(param.Config.Telegram.BotWebhookURL),
 			tgbot.WithWebhookPort(param.Config.Telegram.BotWebhookPort),
 			tgbot.WithDispatcher(dispatcher),
 			tgbot.WithLogger(param.Logger),
 			tgbot.WithRueidisClient(param.Redis.Client),
-		)
+		}
+		if param.Config.Telegram.BotAPIEndpoint != "" {
+			opts = append(opts, tgbot.WithAPIEndpoint(param.Config.Telegram.BotAPIEndpoint))
+		}
+
+		bot, err := tgbot.NewBotService(opts...)
 		if err != nil {
 			return nil, err
 		}

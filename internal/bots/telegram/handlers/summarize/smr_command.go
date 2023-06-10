@@ -2,10 +2,10 @@ package summarize
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 )
 
 func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
@@ -14,10 +14,13 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		urlString = c.Update.Message.ReplyToMessage.Text
 	}
 
-	err, originErr := smrutils.CheckUrl(urlString)
+	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
-		if smrutils.IsUrlCheckError(err) {
-			return nil, tgbot.NewMessageError(smrutils.FormatUrlCheckError(err, smr.FromPlatformTelegram)).WithParseModeHTML().WithReply(c.Update.Message)
+		if smr.IsUrlCheckError(err) {
+			return nil, tgbot.
+				NewMessageError(smr.FormatUrlCheckError(err, bot.FromPlatformTelegram)).
+				WithReply(c.Update.Message).
+				WithParseModeHTML()
 		}
 
 		return nil, tgbot.NewExceptionError(originErr).WithReply(c.Update.Message)
@@ -32,7 +35,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	}
 
 	err = h.smrQueue.AddTask(types.TaskInfo{
-		Platform:  smr.FromPlatformTelegram,
+		Platform:  bot.FromPlatformTelegram,
 		URL:       urlString,
 		ChatID:    c.Update.Message.Chat.ID,
 		MessageID: processingMessage.MessageID,

@@ -40,6 +40,20 @@ func (tcroc *TelegramChatRecapsOptionsCreate) SetNillableAutoRecapSendMode(i *in
 	return tcroc
 }
 
+// SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
+func (tcroc *TelegramChatRecapsOptionsCreate) SetManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsCreate {
+	tcroc.mutation.SetManualRecapRatePerSeconds(i)
+	return tcroc
+}
+
+// SetNillableManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field if the given value is not nil.
+func (tcroc *TelegramChatRecapsOptionsCreate) SetNillableManualRecapRatePerSeconds(i *int64) *TelegramChatRecapsOptionsCreate {
+	if i != nil {
+		tcroc.SetManualRecapRatePerSeconds(*i)
+	}
+	return tcroc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcroc *TelegramChatRecapsOptionsCreate) SetCreatedAt(i int64) *TelegramChatRecapsOptionsCreate {
 	tcroc.mutation.SetCreatedAt(i)
@@ -121,6 +135,10 @@ func (tcroc *TelegramChatRecapsOptionsCreate) defaults() {
 		v := telegramchatrecapsoptions.DefaultAutoRecapSendMode
 		tcroc.mutation.SetAutoRecapSendMode(v)
 	}
+	if _, ok := tcroc.mutation.ManualRecapRatePerSeconds(); !ok {
+		v := telegramchatrecapsoptions.DefaultManualRecapRatePerSeconds
+		tcroc.mutation.SetManualRecapRatePerSeconds(v)
+	}
 	if _, ok := tcroc.mutation.CreatedAt(); !ok {
 		v := telegramchatrecapsoptions.DefaultCreatedAt()
 		tcroc.mutation.SetCreatedAt(v)
@@ -142,6 +160,9 @@ func (tcroc *TelegramChatRecapsOptionsCreate) check() error {
 	}
 	if _, ok := tcroc.mutation.AutoRecapSendMode(); !ok {
 		return &ValidationError{Name: "auto_recap_send_mode", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.auto_recap_send_mode"`)}
+	}
+	if _, ok := tcroc.mutation.ManualRecapRatePerSeconds(); !ok {
+		return &ValidationError{Name: "manual_recap_rate_per_seconds", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.manual_recap_rate_per_seconds"`)}
 	}
 	if _, ok := tcroc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.created_at"`)}
@@ -192,6 +213,10 @@ func (tcroc *TelegramChatRecapsOptionsCreate) createSpec() (*TelegramChatRecapsO
 	if value, ok := tcroc.mutation.AutoRecapSendMode(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 		_node.AutoRecapSendMode = value
+	}
+	if value, ok := tcroc.mutation.ManualRecapRatePerSeconds(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
+		_node.ManualRecapRatePerSeconds = value
 	}
 	if value, ok := tcroc.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)

@@ -1,13 +1,13 @@
-package types
+package smr
 
 import (
 	"sync"
 
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
 )
 
 type TaskInfo struct {
-	Platform smr.FromPlatform `json:"platform"`
+	Platform bot.FromPlatform `json:"platform"`
 	URL      string           `json:"url"` // url to summarize
 
 	ChatID    int64 `json:"chatID"`    // only for telegram

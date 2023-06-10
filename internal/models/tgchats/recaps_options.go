@@ -2,6 +2,7 @@ package tgchats
 
 import (
 	"context"
+	"time"
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatrecapsoptions"
@@ -49,4 +50,13 @@ func (m *Model) SetRecapsRecapMode(chatID int64, recapMode tgchat.AutoRecapSendM
 		UpdateOne(option).
 		SetAutoRecapSendMode(int(recapMode)).
 		Exec(context.Background())
+}
+
+func (m *Model) ManualRecapRatePerSeconds(option *ent.TelegramChatRecapsOptions) time.Duration {
+	seconds := m.config.HardLimit.ManualRecapRatePerSeconds
+	if option != nil && option.ManualRecapRatePerSeconds > seconds { // if chat has a seconds for one rate config that is greater than default, use it, otherwise use default
+		seconds = option.ManualRecapRatePerSeconds
+	}
+
+	return time.Duration(seconds) * time.Second
 }

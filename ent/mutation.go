@@ -6613,21 +6613,23 @@ func (m *TelegramChatFeatureFlagsMutation) ResetEdge(name string) error {
 // TelegramChatRecapsOptionsMutation represents an operation that mutates the TelegramChatRecapsOptions nodes in the graph.
 type TelegramChatRecapsOptionsMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *uuid.UUID
-	chat_id                 *int64
-	addchat_id              *int64
-	auto_recap_send_mode    *int
-	addauto_recap_send_mode *int
-	created_at              *int64
-	addcreated_at           *int64
-	updated_at              *int64
-	addupdated_at           *int64
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*TelegramChatRecapsOptions, error)
-	predicates              []predicate.TelegramChatRecapsOptions
+	op                               Op
+	typ                              string
+	id                               *uuid.UUID
+	chat_id                          *int64
+	addchat_id                       *int64
+	auto_recap_send_mode             *int
+	addauto_recap_send_mode          *int
+	manual_recap_rate_per_seconds    *int64
+	addmanual_recap_rate_per_seconds *int64
+	created_at                       *int64
+	addcreated_at                    *int64
+	updated_at                       *int64
+	addupdated_at                    *int64
+	clearedFields                    map[string]struct{}
+	done                             bool
+	oldValue                         func(context.Context) (*TelegramChatRecapsOptions, error)
+	predicates                       []predicate.TelegramChatRecapsOptions
 }
 
 var _ ent.Mutation = (*TelegramChatRecapsOptionsMutation)(nil)
@@ -6846,6 +6848,62 @@ func (m *TelegramChatRecapsOptionsMutation) ResetAutoRecapSendMode() {
 	m.addauto_recap_send_mode = nil
 }
 
+// SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
+func (m *TelegramChatRecapsOptionsMutation) SetManualRecapRatePerSeconds(i int64) {
+	m.manual_recap_rate_per_seconds = &i
+	m.addmanual_recap_rate_per_seconds = nil
+}
+
+// ManualRecapRatePerSeconds returns the value of the "manual_recap_rate_per_seconds" field in the mutation.
+func (m *TelegramChatRecapsOptionsMutation) ManualRecapRatePerSeconds() (r int64, exists bool) {
+	v := m.manual_recap_rate_per_seconds
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldManualRecapRatePerSeconds returns the old "manual_recap_rate_per_seconds" field's value of the TelegramChatRecapsOptions entity.
+// If the TelegramChatRecapsOptions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TelegramChatRecapsOptionsMutation) OldManualRecapRatePerSeconds(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldManualRecapRatePerSeconds is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldManualRecapRatePerSeconds requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldManualRecapRatePerSeconds: %w", err)
+	}
+	return oldValue.ManualRecapRatePerSeconds, nil
+}
+
+// AddManualRecapRatePerSeconds adds i to the "manual_recap_rate_per_seconds" field.
+func (m *TelegramChatRecapsOptionsMutation) AddManualRecapRatePerSeconds(i int64) {
+	if m.addmanual_recap_rate_per_seconds != nil {
+		*m.addmanual_recap_rate_per_seconds += i
+	} else {
+		m.addmanual_recap_rate_per_seconds = &i
+	}
+}
+
+// AddedManualRecapRatePerSeconds returns the value that was added to the "manual_recap_rate_per_seconds" field in this mutation.
+func (m *TelegramChatRecapsOptionsMutation) AddedManualRecapRatePerSeconds() (r int64, exists bool) {
+	v := m.addmanual_recap_rate_per_seconds
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetManualRecapRatePerSeconds resets all changes to the "manual_recap_rate_per_seconds" field.
+func (m *TelegramChatRecapsOptionsMutation) ResetManualRecapRatePerSeconds() {
+	m.manual_recap_rate_per_seconds = nil
+	m.addmanual_recap_rate_per_seconds = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *TelegramChatRecapsOptionsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -6992,12 +7050,15 @@ func (m *TelegramChatRecapsOptionsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TelegramChatRecapsOptionsMutation) Fields() []string {
-	fields := make([]string, 0, 4)
+	fields := make([]string, 0, 5)
 	if m.chat_id != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldChatID)
 	}
 	if m.auto_recap_send_mode != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldAutoRecapSendMode)
+	}
+	if m.manual_recap_rate_per_seconds != nil {
+		fields = append(fields, telegramchatrecapsoptions.FieldManualRecapRatePerSeconds)
 	}
 	if m.created_at != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldCreatedAt)
@@ -7017,6 +7078,8 @@ func (m *TelegramChatRecapsOptionsMutation) Field(name string) (ent.Value, bool)
 		return m.ChatID()
 	case telegramchatrecapsoptions.FieldAutoRecapSendMode:
 		return m.AutoRecapSendMode()
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		return m.ManualRecapRatePerSeconds()
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.CreatedAt()
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -7034,6 +7097,8 @@ func (m *TelegramChatRecapsOptionsMutation) OldField(ctx context.Context, name s
 		return m.OldChatID(ctx)
 	case telegramchatrecapsoptions.FieldAutoRecapSendMode:
 		return m.OldAutoRecapSendMode(ctx)
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		return m.OldManualRecapRatePerSeconds(ctx)
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -7060,6 +7125,13 @@ func (m *TelegramChatRecapsOptionsMutation) SetField(name string, value ent.Valu
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAutoRecapSendMode(v)
+		return nil
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetManualRecapRatePerSeconds(v)
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -7089,6 +7161,9 @@ func (m *TelegramChatRecapsOptionsMutation) AddedFields() []string {
 	if m.addauto_recap_send_mode != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldAutoRecapSendMode)
 	}
+	if m.addmanual_recap_rate_per_seconds != nil {
+		fields = append(fields, telegramchatrecapsoptions.FieldManualRecapRatePerSeconds)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldCreatedAt)
 	}
@@ -7107,6 +7182,8 @@ func (m *TelegramChatRecapsOptionsMutation) AddedField(name string) (ent.Value, 
 		return m.AddedChatID()
 	case telegramchatrecapsoptions.FieldAutoRecapSendMode:
 		return m.AddedAutoRecapSendMode()
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		return m.AddedManualRecapRatePerSeconds()
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -7133,6 +7210,13 @@ func (m *TelegramChatRecapsOptionsMutation) AddField(name string, value ent.Valu
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddAutoRecapSendMode(v)
+		return nil
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddManualRecapRatePerSeconds(v)
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -7180,6 +7264,9 @@ func (m *TelegramChatRecapsOptionsMutation) ResetField(name string) error {
 		return nil
 	case telegramchatrecapsoptions.FieldAutoRecapSendMode:
 		m.ResetAutoRecapSendMode()
+		return nil
+	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
+		m.ResetManualRecapRatePerSeconds()
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		m.ResetCreatedAt()

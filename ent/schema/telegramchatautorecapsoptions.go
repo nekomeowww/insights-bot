@@ -19,6 +19,7 @@ func (TelegramChatRecapsOptions) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique().Immutable(),
 		field.Int64("chat_id").Unique(),
 		field.Int("auto_recap_send_mode").Default(0),
+		field.Int64("manual_recap_rate_per_seconds").Default(0),
 		field.Int64("created_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 		field.Int64("updated_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 	}

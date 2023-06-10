@@ -16,6 +16,8 @@ const (
 	FieldChatID = "chat_id"
 	// FieldAutoRecapSendMode holds the string denoting the auto_recap_send_mode field in the database.
 	FieldAutoRecapSendMode = "auto_recap_send_mode"
+	// FieldManualRecapRatePerSeconds holds the string denoting the manual_recap_rate_per_seconds field in the database.
+	FieldManualRecapRatePerSeconds = "manual_recap_rate_per_seconds"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -29,6 +31,7 @@ var Columns = []string{
 	FieldID,
 	FieldChatID,
 	FieldAutoRecapSendMode,
+	FieldManualRecapRatePerSeconds,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -46,6 +49,8 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultAutoRecapSendMode holds the default value on creation for the "auto_recap_send_mode" field.
 	DefaultAutoRecapSendMode int
+	// DefaultManualRecapRatePerSeconds holds the default value on creation for the "manual_recap_rate_per_seconds" field.
+	DefaultManualRecapRatePerSeconds int64
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -70,6 +75,11 @@ func ByChatID(opts ...sql.OrderTermOption) OrderOption {
 // ByAutoRecapSendMode orders the results by the auto_recap_send_mode field.
 func ByAutoRecapSendMode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAutoRecapSendMode, opts...).ToFunc()
+}
+
+// ByManualRecapRatePerSeconds orders the results by the manual_recap_rate_per_seconds field.
+func ByManualRecapRatePerSeconds(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManualRecapRatePerSeconds, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

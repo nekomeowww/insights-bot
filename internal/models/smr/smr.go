@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/imroc/req/v3"
 
@@ -17,6 +18,7 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
@@ -26,12 +28,14 @@ import (
 type NewModelParams struct {
 	fx.In
 
+	Config       *configs.Config
 	OpenAIClient openai.Client
 	Logger       *logger.Logger
 	Ent          *datastore.Ent
 }
 
 type Model struct {
+	config *configs.Config
 	openai openai.Client
 	logger *logger.Logger
 	req    *req.Client
@@ -41,6 +45,7 @@ type Model struct {
 func NewModel() func(NewModelParams) *Model {
 	return func(param NewModelParams) *Model {
 		return &Model{
+			config: param.Config,
 			req: req.
 				C().
 				SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54"),
@@ -168,4 +173,9 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	}
 
 	return &urlContent, nil
+}
+
+func (m *Model) SummarizeWebpageRatePerSeconds() time.Duration {
+	seconds := m.config.HardLimit.SummarizeWebpageRatePerSeconds
+	return time.Duration(seconds) * time.Second
 }

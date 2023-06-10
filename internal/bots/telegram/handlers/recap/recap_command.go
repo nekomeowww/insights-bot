@@ -79,7 +79,7 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 
 	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/recap", 1, perSeconds)
 	if err != nil {
-		h.logger.Error("failed to check rate limit for command", zap.Error(err))
+		h.logger.Error("failed to check rate limit for command /recap", zap.Error(err))
 	}
 	if !ok {
 		return nil, tgbot.

@@ -10,19 +10,20 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 	"github.com/slack-go/slack"
 	"go.uber.org/zap"
 )
 
 func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) string {
 	switch info.Platform {
-	case smr.FromPlatformTelegram:
+	case bot.FromPlatformTelegram:
 		return result.FormatSummarizationAsHTML()
-	case smr.FromPlatformSlack:
+	case bot.FromPlatformSlack:
 		return result.FormatSummarizationAsSlackMarkdown()
-	case smr.FromPlatformDiscord:
+	case bot.FromPlatformDiscord:
 		return result.FormatSummarizationAsDiscordMarkdown()
 	default:
 		return ""
@@ -41,7 +42,7 @@ func (s *Service) processError(err error) string {
 
 func (s *Service) sendResult(info types.TaskInfo, result string) {
 	switch info.Platform {
-	case smr.FromPlatformTelegram:
+	case bot.FromPlatformTelegram:
 		msgEdit := tgbotapi.EditMessageTextConfig{
 			Text: result,
 		}
@@ -56,7 +57,7 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 				zap.String("platform", info.Platform.String()),
 			)
 		}
-	case smr.FromPlatformSlack:
+	case bot.FromPlatformSlack:
 		token, err := s.ent.SlackOAuthCredentials.Query().
 			Where(slackoauthcredentials.TeamID(info.TeamID)).
 			First(context.Background())
@@ -84,7 +85,7 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 				zap.String("platform", info.Platform.String()),
 			)
 		}
-	case smr.FromPlatformDiscord:
+	case bot.FromPlatformDiscord:
 		channelID, _ := snowflake.Parse(info.ChannelID)
 		_, err := s.discordBot.Rest().
 			CreateMessage(channelID, discord.NewMessageCreateBuilder().
@@ -101,13 +102,13 @@ func (s *Service) sendResult(info types.TaskInfo, result string) {
 	}
 }
 
-func (s *Service) isBotExists(platform smr.FromPlatform) bool {
+func (s *Service) isBotExists(platform bot.FromPlatform) bool {
 	switch platform {
-	case smr.FromPlatformTelegram:
+	case bot.FromPlatformTelegram:
 		return s.tgBot != nil
-	case smr.FromPlatformSlack:
+	case bot.FromPlatformSlack:
 		return s.slackBot != nil
-	case smr.FromPlatformDiscord:
+	case bot.FromPlatformDiscord:
 		return s.discordBot != nil
 	}
 

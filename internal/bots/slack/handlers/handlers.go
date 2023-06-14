@@ -5,19 +5,19 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 	"github.com/slack-go/slack"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -84,10 +84,10 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 
 	urlString := body.Text
 
-	err, originErr := smrutils.CheckUrl(urlString)
+	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
-		if smrutils.IsUrlCheckError(err) {
-			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smrutils.FormatUrlCheckError(err, smr.FromPlatformSlack)))
+		if smr.IsUrlCheckError(err) {
+			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smr.FormatUrlCheckError(err, bot.FromPlatformSlack)))
 			return
 		}
 
@@ -115,7 +115,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 
 	// add task
 	err = h.smrQueue.AddTask(types.TaskInfo{
-		Platform:  smr.FromPlatformSlack,
+		Platform:  bot.FromPlatformSlack,
 		URL:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,

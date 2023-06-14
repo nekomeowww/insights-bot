@@ -303,12 +303,16 @@ func init() {
 	telegramchatrecapsoptionsDescAutoRecapSendMode := telegramchatrecapsoptionsFields[2].Descriptor()
 	// telegramchatrecapsoptions.DefaultAutoRecapSendMode holds the default value on creation for the auto_recap_send_mode field.
 	telegramchatrecapsoptions.DefaultAutoRecapSendMode = telegramchatrecapsoptionsDescAutoRecapSendMode.Default.(int)
+	// telegramchatrecapsoptionsDescManualRecapRatePerSeconds is the schema descriptor for manual_recap_rate_per_seconds field.
+	telegramchatrecapsoptionsDescManualRecapRatePerSeconds := telegramchatrecapsoptionsFields[3].Descriptor()
+	// telegramchatrecapsoptions.DefaultManualRecapRatePerSeconds holds the default value on creation for the manual_recap_rate_per_seconds field.
+	telegramchatrecapsoptions.DefaultManualRecapRatePerSeconds = telegramchatrecapsoptionsDescManualRecapRatePerSeconds.Default.(int64)
 	// telegramchatrecapsoptionsDescCreatedAt is the schema descriptor for created_at field.
-	telegramchatrecapsoptionsDescCreatedAt := telegramchatrecapsoptionsFields[3].Descriptor()
+	telegramchatrecapsoptionsDescCreatedAt := telegramchatrecapsoptionsFields[4].Descriptor()
 	// telegramchatrecapsoptions.DefaultCreatedAt holds the default value on creation for the created_at field.
 	telegramchatrecapsoptions.DefaultCreatedAt = telegramchatrecapsoptionsDescCreatedAt.Default.(func() int64)
 	// telegramchatrecapsoptionsDescUpdatedAt is the schema descriptor for updated_at field.
-	telegramchatrecapsoptionsDescUpdatedAt := telegramchatrecapsoptionsFields[4].Descriptor()
+	telegramchatrecapsoptionsDescUpdatedAt := telegramchatrecapsoptionsFields[5].Descriptor()
 	// telegramchatrecapsoptions.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	telegramchatrecapsoptions.DefaultUpdatedAt = telegramchatrecapsoptionsDescUpdatedAt.Default.(func() int64)
 	// telegramchatrecapsoptionsDescID is the schema descriptor for id field.

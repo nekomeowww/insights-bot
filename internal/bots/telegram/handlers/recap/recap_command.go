@@ -3,10 +3,11 @@ package recap
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
-	"github.com/nekomeowww/insights-bot/pkg/types/bots/handlers/recap"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/utils"
@@ -72,6 +73,18 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 	}
 	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions {
 		return h.handleRecapCommandForPrivateSubscriptionsMode(c)
+	}
+
+	perSeconds := h.tgchats.ManualRecapRatePerSeconds(options)
+
+	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/recap", 1, perSeconds)
+	if err != nil {
+		h.logger.Error("failed to check rate limit for command /recap", zap.Error(err))
+	}
+	if !ok {
+		return nil, tgbot.
+			NewMessageError(fmt.Sprintf("很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 %d 分钟最多使用一次，请您耐心等待 %d 分钟后再试，感谢您的理解和支持。", perSeconds, lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute))).
+			WithReply(c.Update.Message)
 	}
 
 	inlineKeyboardButtons, err := newRecapSelectHoursInlineKeyboardButtons(c, chatID, chatTitle, tgchat.AutoRecapSendModePublicly)

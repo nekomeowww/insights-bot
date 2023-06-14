@@ -5,11 +5,11 @@ import (
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
+	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/smrutils"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -47,12 +47,12 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 	b.logger.Info(fmt.Sprintf("discord: command received: /smr %s", urlString))
 
 	// url check
-	err, originErr := smrutils.CheckUrl(urlString)
+	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
-		if smrutils.IsUrlCheckError(err) {
+		if smr.IsUrlCheckError(err) {
 			err = event.CreateMessage(
 				discord.NewMessageCreateBuilder().
-					SetContent(smrutils.FormatUrlCheckError(err, smr.FromPlatformDiscord)).
+					SetContent(smr.FormatUrlCheckError(err, bot.FromPlatformDiscord)).
 					Build(),
 			)
 			if err != nil {
@@ -80,7 +80,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 	}
 
 	err = b.smrQueue.AddTask(types.TaskInfo{
-		Platform:  smr.FromPlatformDiscord,
+		Platform:  bot.FromPlatformDiscord,
 		URL:       urlString,
 		ChannelID: event.Channel().ID.String(),
 	})

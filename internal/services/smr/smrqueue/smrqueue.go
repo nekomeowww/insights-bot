@@ -6,8 +6,8 @@ import (
 	"errors"
 
 	"github.com/nekomeowww/insights-bot/internal/datastore"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )

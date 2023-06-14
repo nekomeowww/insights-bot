@@ -54,3 +54,11 @@ const (
 	// params: handler route, action hash
 	CallbackQueryData2 Key = "callback_query/button_data/%s/%s"
 )
+
+// Rate limits.
+
+const (
+	// CommandRateLimitLock2 is the key for command rate limit lock.
+	// params: command, platform, chat id
+	CommandRateLimitLock2 Key = "rate_limit/manual_recap/command:%s/group/%s/%s"
+)

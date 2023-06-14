@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
@@ -171,6 +172,10 @@ func (c *Context) IsBotAdministrator() (bool, error) {
 
 func (c *Context) IsUserMemberStatus(userID int64, status []telegram.MemberStatus) (bool, error) {
 	return c.Bot.IsUserMemberStatus(c.Update.FromChat().ID, userID, status)
+}
+
+func (c *Context) RateLimitForCommand(chatID int64, command string, rate int64, perDuration time.Duration) (int64, time.Duration, bool, error) {
+	return c.Bot.RateLimitForCommand(chatID, command, rate, perDuration)
 }
 
 func (c *Context) NewMessage(message string) MessageResponse {

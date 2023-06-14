@@ -4,6 +4,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
 )
 
@@ -16,6 +17,7 @@ func NewModules() fx.Option {
 type NewHandlersParams struct {
 	fx.In
 
+	Logger   *logger.Logger
 	SMR      *smr.Model
 	SmrQueue *smrqueue.Queue
 }
@@ -23,6 +25,7 @@ type NewHandlersParams struct {
 var _ tgbot.HandlerGroup = (*Handlers)(nil)
 
 type Handlers struct {
+	logger   *logger.Logger
 	smr      *smr.Model
 	smrQueue *smrqueue.Queue
 }
@@ -30,6 +33,7 @@ type Handlers struct {
 func NewHandlers() func(NewHandlersParams) *Handlers {
 	return func(param NewHandlersParams) *Handlers {
 		handler := &Handlers{
+			logger:   param.Logger,
 			smrQueue: param.SmrQueue,
 			smr:      param.SMR,
 		}

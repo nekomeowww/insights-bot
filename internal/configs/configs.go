@@ -2,6 +2,7 @@ package configs
 
 import (
 	"errors"
+	"log"
 	"os"
 	"strconv"
 
@@ -15,6 +16,7 @@ const (
 	EnvTelegramBotToken       = "TELEGRAM_BOT_TOKEN" //nolint:gosec
 	EnvTelegramBotWebhookURL  = "TELEGRAM_BOT_WEBHOOK_URL"
 	EnvTelegramBotWebhookPort = "TELEGRAM_BOT_WEBHOOK_PORT"
+	EnvTelegramBotAPIEndpoint = "TELEGRAM_BOT_API_ENDPOINT"
 
 	EnvSlackClientID     = "SLACK_CLIENT_ID"
 	EnvSlackClientSecret = "SLACK_CLIENT_SECRET"
@@ -43,6 +45,9 @@ const (
 
 	EnvLogLevel    = "LOG_LEVEL"
 	EnvLogFilePath = "LOG_FILE_PATH"
+
+	EnvHardLimitManualRecapRatePerSeconds      = "HARD_LIMIT_MANUAL_RECAP_RATE_PER_SECONDS"
+	EnvHardLimitSummarizeWebpageRatePerSeconds = "HARD_LIMIT_SMR_WEBPAGE_RATE_PER_SECONDS"
 )
 
 type SectionPineconeIndexes struct {
@@ -76,6 +81,7 @@ type SectionTelegram struct {
 	BotToken       string
 	BotWebhookURL  string
 	BotWebhookPort string
+	BotAPIEndpoint string
 }
 
 type SectionRedis struct {
@@ -86,6 +92,11 @@ type SectionRedis struct {
 	Password           string
 	DB                 int64
 	ClientCacheEnabled bool
+}
+
+type SectionHardLimit struct {
+	ManualRecapRatePerSeconds      int64
+	SummarizeWebpageRatePerSeconds int64
 }
 
 type Config struct {
@@ -101,6 +112,7 @@ type Config struct {
 	Redis                SectionRedis
 	LogLevel             string
 	LogFilePath          string
+	HardLimit            SectionHardLimit
 }
 
 func NewConfig() func() (*Config, error) {
@@ -122,7 +134,33 @@ func NewConfig() func() (*Config, error) {
 		envLogLevel := getEnv(EnvLogLevel)
 
 		redisDB, redisDBParseErr := strconv.ParseInt(getEnv(EnvRedisDB), 10, 64)
+		log.Printf("failed to parse redis db %v: %v, should be number", getEnv(EnvRedisDB), redisDBParseErr)
+		if redisDB < 0 {
+			redisDB = 0
+
+			log.Printf("redis db %v is less than 0, fallbacks to 0", getEnv(EnvRedisDB))
+		}
+
 		timezoneShiftSeconds, timezoneShiftSecondsParseErr := strconv.ParseInt(getEnv(EnvTimezoneShiftSeconds), 10, 64)
+		log.Printf("failed to parse %s %v: %v, should be number", EnvTimezoneShiftSeconds, getEnv(EnvTimezoneShiftSeconds), timezoneShiftSecondsParseErr)
+
+		manualRecapRatePerSecondsHardLimit, manualRecapHardLimitParseErr := strconv.ParseInt(getEnv(EnvHardLimitManualRecapRatePerSeconds), 10, 64)
+		log.Printf("failed to parse %s %v: %v, should be number", EnvHardLimitManualRecapRatePerSeconds, getEnv(EnvHardLimitManualRecapRatePerSeconds), manualRecapHardLimitParseErr)
+
+		if manualRecapRatePerSecondsHardLimit < 0 {
+			manualRecapRatePerSecondsHardLimit = 0
+
+			log.Printf("%s value %v is less than 0, fallbacks to 0", EnvHardLimitManualRecapRatePerSeconds, getEnv(EnvHardLimitManualRecapRatePerSeconds))
+		}
+
+		summarizeWebpageRatePerSecondsHardLimit, summarizeWebpageHardLimitParseErr := strconv.ParseInt(getEnv(EnvHardLimitSummarizeWebpageRatePerSeconds), 10, 64)
+		log.Printf("failed to parse %s %v: %v, should be number", EnvHardLimitSummarizeWebpageRatePerSeconds, getEnv(EnvHardLimitSummarizeWebpageRatePerSeconds), summarizeWebpageHardLimitParseErr)
+
+		if summarizeWebpageRatePerSecondsHardLimit < 0 {
+			summarizeWebpageRatePerSecondsHardLimit = 0
+
+			log.Printf("%s value %v is less than 0, fallbacks to 0", EnvHardLimitSummarizeWebpageRatePerSeconds, getEnv(EnvHardLimitSummarizeWebpageRatePerSeconds))
+		}
 
 		return &Config{
 			TimezoneShiftSeconds: lo.Ternary(timezoneShiftSecondsParseErr == nil, lo.Ternary(timezoneShiftSeconds != 0, timezoneShiftSeconds, 0), 0),
@@ -130,6 +168,7 @@ func NewConfig() func() (*Config, error) {
 				BotToken:       getEnv(EnvTelegramBotToken),
 				BotWebhookURL:  getEnv(EnvTelegramBotWebhookURL),
 				BotWebhookPort: getEnv(EnvTelegramBotWebhookPort),
+				BotAPIEndpoint: getEnv(EnvTelegramBotAPIEndpoint),
 			},
 			Slack: SectionSlack{
 				Port:         getEnv(EnvSlackWebhookPort),
@@ -165,6 +204,10 @@ func NewConfig() func() (*Config, error) {
 			},
 			LogLevel:    lo.Ternary(envLogLevel == "", "info", envLogLevel),
 			LogFilePath: getEnv(EnvLogFilePath),
+			HardLimit: SectionHardLimit{
+				ManualRecapRatePerSeconds:      manualRecapRatePerSecondsHardLimit,
+				SummarizeWebpageRatePerSeconds: summarizeWebpageRatePerSecondsHardLimit,
+			},
 		}, nil
 	}
 }

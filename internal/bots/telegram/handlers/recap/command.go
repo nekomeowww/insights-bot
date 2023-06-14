@@ -1,6 +1,7 @@
 package recap
 
 import (
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/models/chathistories"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
@@ -11,6 +12,7 @@ import (
 type NewCommandHandlerParams struct {
 	fx.In
 
+	Config        *configs.Config
 	Logger        *logger.Logger
 	TgChats       *tgchats.Model
 	ChatHistories *chathistories.Model
@@ -18,6 +20,7 @@ type NewCommandHandlerParams struct {
 }
 
 type CommandHandler struct {
+	config        *configs.Config
 	logger        *logger.Logger
 	tgchats       *tgchats.Model
 	chathistories *chathistories.Model
@@ -27,6 +30,7 @@ type CommandHandler struct {
 func NewRecapCommandHandler() func(NewCommandHandlerParams) *CommandHandler {
 	return func(param NewCommandHandlerParams) *CommandHandler {
 		return &CommandHandler{
+			config:        param.Config,
 			logger:        param.Logger,
 			tgchats:       param.TgChats,
 			chathistories: param.ChatHistories,

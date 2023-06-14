@@ -3,16 +3,17 @@ package smrqueue
 import (
 	"context"
 	"encoding/json"
+	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
-
-	"github.com/nekomeowww/insights-bot/internal/models/smr"
-	"github.com/nekomeowww/insights-bot/internal/services/smr/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
 )
 
 var testQueue *Queue
@@ -35,14 +36,14 @@ func TestMain(m *testing.M) {
 		RedisClient: redis,
 	})
 
-	m.Run()
+	os.Exit(m.Run())
 }
 
 func TestQueue_AddTask(t *testing.T) {
 	a := assert.New(t)
 	r := require.New(t)
 	taskInfo := types.TaskInfo{
-		Platform:  smr.FromPlatformDiscord,
+		Platform:  bot.FromPlatformDiscord,
 		URL:       "https://an.example.url/article",
 		ChatID:    114514,
 		MessageID: 1919810,
@@ -74,7 +75,7 @@ func TestService_GetTask(t *testing.T) {
 	a := assert.New(t)
 	r := require.New(t)
 	expect := types.TaskInfo{
-		Platform:  smr.FromPlatformDiscord,
+		Platform:  bot.FromPlatformDiscord,
 		URL:       "https://an.example.url/article",
 		ChatID:    114514,
 		MessageID: 1919810,

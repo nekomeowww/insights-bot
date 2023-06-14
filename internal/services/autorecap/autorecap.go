@@ -21,7 +21,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/nekomeowww/insights-bot/pkg/types/bots/handlers/recap"
+	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
 )

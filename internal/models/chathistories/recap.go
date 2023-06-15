@@ -78,7 +78,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 }
 
 func (m *Model) summarizeChatHistories(llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, int, int, int, error) {
-	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, 2800)
+	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, 15000)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 
 	statsCompletionTokenUsage := 0

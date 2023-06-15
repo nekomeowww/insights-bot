@@ -41,7 +41,7 @@ func NewPprof() func(NewPprofParams) *Pprof {
 		srvMux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 
 		srv := &http.Server{
-			Addr:              ":6060",
+			Addr:              ":0",
 			Handler:           srvMux,
 			ReadHeaderTimeout: time.Second * 15,
 		}
@@ -74,7 +74,7 @@ func Run() func(*Pprof) error {
 	return func(srv *Pprof) error {
 		listener, err := net.Listen("tcp", srv.srv.Addr)
 		if err != nil {
-			return fmt.Errorf("failed to listen %s: %v", "0.0.0.0:6060", err)
+			return fmt.Errorf("failed to listen %s: %v", srv.srv.Addr, err)
 		}
 
 		go func() {
@@ -84,6 +84,7 @@ func Run() func(*Pprof) error {
 		}()
 
 		srv.srvStarted = true
+		srv.logger.Info("pprof server started", zap.String("addr", listener.Addr().String()))
 
 		return nil
 	}

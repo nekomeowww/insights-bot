@@ -153,7 +153,7 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.GPT3Dot5Turbo16K,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role: openai.ChatMessageRoleSystem,
@@ -208,7 +208,7 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.GPT3Dot5Turbo16K,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role: openai.ChatMessageRoleSystem,
@@ -269,7 +269,7 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.GPT3Dot5Turbo16K,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,
@@ -321,7 +321,7 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
+			Model: openai.GPT3Dot5Turbo16K,
 			Messages: []openai.ChatCompletionMessage{{
 				Role:    openai.ChatMessageRoleSystem,
 				Content: sb.String(),

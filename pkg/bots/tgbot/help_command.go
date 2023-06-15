@@ -48,8 +48,11 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 	if is &&
 		c.Update.Message != nil &&
 		c.Update.Message.Chat != nil &&
-		c.Update.Message.CommandWithAt() == h.Command() &&
-		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) &&
+		!lo.Contains([]string{
+			fmt.Sprintf("%s@%s", h.Command(), c.Bot.Self.UserName),
+			fmt.Sprintf("%s@%s", "start", c.Bot.Self.UserName),
+		}, c.Update.Message.CommandWithAt()) {
 		return nil, nil
 	}
 

@@ -1,6 +1,8 @@
 package tgbot
 
 import (
+	"fmt"
+
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
 )
@@ -34,8 +36,8 @@ func (h *startCommandHandler) handle(c *Context) (Response, error) {
 	if is &&
 		c.Update.Message != nil &&
 		c.Update.Message.Chat != nil &&
-		c.Update.Message.CommandWithAt() == h.Command() &&
-		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) &&
+		c.Update.Message.CommandWithAt() != fmt.Sprintf("%s@%s", h.Command(), c.Bot.Self.UserName) {
 		return nil, nil
 	}
 

@@ -1,6 +1,10 @@
 package tgbot
 
-import "github.com/nekomeowww/fo"
+import (
+	"github.com/nekomeowww/fo"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
+	"github.com/samber/lo"
+)
 
 type cancellableCommand struct {
 	shouldCancelFunc func(c *Context) (bool, error)
@@ -29,6 +33,15 @@ func (h *cancelCommandHandler) CommandHelp() string {
 
 func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
 	may := fo.NewMay[bool]()
+
+	is := may.Invoke(c.IsBotAdministrator())
+	if is &&
+		c.Update.Message != nil &&
+		c.Update.Message.Chat != nil &&
+		c.Update.Message.CommandWithAt() == h.Command() &&
+		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		return nil, nil
+	}
 
 	for _, h := range h.cancellableCommands {
 		should := may.Invoke(h.shouldCancelFunc(c))

@@ -1,5 +1,10 @@
 package tgbot
 
+import (
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
+	"github.com/samber/lo"
+)
+
 type startCommandHandler struct {
 	helpCommandHandler   *helpCommandHandler
 	startCommandHandlers []Handler
@@ -22,6 +27,18 @@ func (h *startCommandHandler) CommandHelp() string {
 }
 
 func (h *startCommandHandler) handle(c *Context) (Response, error) {
+	is, err := c.IsBotAdministrator()
+	if err != nil {
+		c.Logger.Error("failed to check if bot is administrator")
+	}
+	if is &&
+		c.Update.Message != nil &&
+		c.Update.Message.Chat != nil &&
+		c.Update.Message.CommandWithAt() == h.Command() &&
+		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		return nil, nil
+	}
+
 	for _, h := range h.startCommandHandlers {
 		_, _ = h.Handle(c)
 		if c.IsAborted() {

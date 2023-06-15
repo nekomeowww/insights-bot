@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
 )
 
@@ -40,6 +41,18 @@ func (h *helpCommandHandler) CommandHelp() string {
 }
 
 func (h *helpCommandHandler) handle(c *Context) (Response, error) {
+	is, err := c.IsBotAdministrator()
+	if err != nil {
+		c.Logger.Error("failed to check if bot is administrator")
+	}
+	if is &&
+		c.Update.Message != nil &&
+		c.Update.Message.Chat != nil &&
+		c.Update.Message.CommandWithAt() == h.Command() &&
+		lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(c.Update.Message.Chat.Type)) {
+		return nil, nil
+	}
+
 	helpMessage := strings.Builder{}
 	helpMessage.WriteString("你好，欢迎使用 Insights Bot！\n\n")
 	helpMessage.WriteString("我当前支持这些命令：\n\n")

@@ -19,7 +19,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/lib"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai/openaimock"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 )
 
 var model *Model
@@ -102,17 +102,17 @@ func TestSaveOneTelegramChatHistory(t *testing.T) {
 	require := require.New(t)
 
 	message := &tgbotapi.Message{
-		MessageID: int(utils.RandomInt64()),
+		MessageID: int(xo.RandomInt64()),
 		From: &tgbotapi.User{
-			ID:        utils.RandomInt64(),
-			FirstName: utils.RandomHashString(5),
-			UserName:  utils.RandomHashString(10),
+			ID:        xo.RandomInt64(),
+			FirstName: xo.RandomHashString(5),
+			UserName:  xo.RandomHashString(10),
 		},
 		Chat: &tgbotapi.Chat{
-			ID: utils.RandomInt64(),
+			ID: xo.RandomInt64(),
 		},
 		Date: int(time.Now().Unix()),
-		Text: utils.RandomHashString(10),
+		Text: xo.RandomHashString(10),
 	}
 	err := model.SaveOneTelegramChatHistory(message)
 	require.NoError(err)
@@ -141,22 +141,22 @@ func TestUpdateOneTelegramChatHistory(t *testing.T) {
 	require := require.New(t)
 
 	message := &tgbotapi.Message{
-		MessageID: int(utils.RandomInt64()),
+		MessageID: int(xo.RandomInt64()),
 		From: &tgbotapi.User{
-			ID:        utils.RandomInt64(),
-			FirstName: utils.RandomHashString(5),
-			UserName:  utils.RandomHashString(10),
+			ID:        xo.RandomInt64(),
+			FirstName: xo.RandomHashString(5),
+			UserName:  xo.RandomHashString(10),
 		},
 		Chat: &tgbotapi.Chat{
-			ID: utils.RandomInt64(),
+			ID: xo.RandomInt64(),
 		},
 		Date: int(time.Now().Unix()),
-		Text: utils.RandomHashString(10),
+		Text: xo.RandomHashString(10),
 	}
 	err := model.SaveOneTelegramChatHistory(message)
 	require.NoError(err)
 
-	message.Text = utils.RandomHashString(10)
+	message.Text = xo.RandomHashString(10)
 	err = model.UpdateOneTelegramChatHistory(message)
 	require.NoError(err)
 
@@ -178,42 +178,42 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	chatID := utils.RandomInt64()
+	chatID := xo.RandomInt64()
 
 	message1 := &tgbotapi.Message{
 		MessageID: 1,
 		From: &tgbotapi.User{
-			ID:        utils.RandomInt64(),
-			FirstName: utils.RandomHashString(5),
-			UserName:  utils.RandomHashString(10),
+			ID:        xo.RandomInt64(),
+			FirstName: xo.RandomHashString(5),
+			UserName:  xo.RandomHashString(10),
 		},
 		Chat: &tgbotapi.Chat{ID: chatID},
 		Date: int(time.Now().Unix()),
-		Text: utils.RandomHashString(10),
+		Text: xo.RandomHashString(10),
 	}
 
 	message2 := &tgbotapi.Message{
 		MessageID: 2,
 		From: &tgbotapi.User{
-			ID:        utils.RandomInt64(),
-			FirstName: utils.RandomHashString(5),
-			UserName:  utils.RandomHashString(10),
+			ID:        xo.RandomInt64(),
+			FirstName: xo.RandomHashString(5),
+			UserName:  xo.RandomHashString(10),
 		},
 		Chat: &tgbotapi.Chat{ID: chatID},
 		Date: int(time.Now().Unix()),
-		Text: utils.RandomHashString(10),
+		Text: xo.RandomHashString(10),
 	}
 
 	message3 := &tgbotapi.Message{
 		MessageID: 3,
 		From: &tgbotapi.User{
-			ID:        utils.RandomInt64(),
-			FirstName: utils.RandomHashString(5),
-			UserName:  utils.RandomHashString(10),
+			ID:        xo.RandomInt64(),
+			FirstName: xo.RandomHashString(5),
+			UserName:  xo.RandomHashString(10),
 		},
 		Chat: &tgbotapi.Chat{ID: chatID},
 		Date: int(time.Now().Unix()),
-		Text: utils.RandomHashString(10),
+		Text: xo.RandomHashString(10),
 	}
 
 	err := model.SaveOneTelegramChatHistory(message1)

@@ -6,7 +6,6 @@ require (
 	entgo.io/ent v0.12.3
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/alexliesenfeld/health v0.7.0
-	github.com/davecgh/go-spew v1.1.1
 	github.com/disgoorg/disgo v0.16.4
 	github.com/disgoorg/snowflake/v2 v2.0.1
 	github.com/gin-gonic/gin v1.9.1
@@ -20,15 +19,16 @@ require (
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.6.1
 	github.com/nekomeowww/fo v1.1.1
 	github.com/nekomeowww/go-pinecone v0.1.0
-	github.com/nekomeowww/timecapsule/v2 v2.1.1
+	github.com/nekomeowww/timecapsule/v2 v2.1.3
+	github.com/nekomeowww/xo v1.1.1
 	github.com/pkoukk/tiktoken-go v0.1.1
-	github.com/redis/rueidis v1.0.5
+	github.com/redis/rueidis v1.0.8
 	github.com/samber/lo v1.38.1
 	github.com/sashabaranov/go-openai v1.11.1
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 	github.com/slack-go/slack v0.12.2
 	github.com/sourcegraph/conc v0.3.0
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.uber.org/fx v1.19.3
 	go.uber.org/multierr v1.11.0
 	go.uber.org/ratelimit v0.2.0
@@ -44,6 +44,7 @@ require (
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/disgoorg/json v1.0.0 // indirect
 	github.com/disgoorg/log v1.2.0 // indirect
@@ -81,9 +82,10 @@ require (
 	github.com/quic-go/qtls-go1-19 v0.3.2 // indirect
 	github.com/quic-go/qtls-go1-20 v0.2.2 // indirect
 	github.com/quic-go/quic-go v0.32.0 // indirect
-	github.com/redis/go-redis/v9 v9.0.4 // indirect
+	github.com/redis/go-redis/v9 v9.0.5 // indirect
 	github.com/samber/mo v1.8.0 // indirect
 	github.com/sasha-s/go-csync v0.0.0-20210812194225-61421b77c44b // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
@@ -92,12 +94,12 @@ require (
 	go.uber.org/dig v1.17.0 // indirect
 	go.uber.org/goleak v1.2.1 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/crypto v0.10.0 // indirect
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/mod v0.10.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/net v0.11.0 // indirect
+	golang.org/x/sys v0.9.0 // indirect
+	golang.org/x/text v0.10.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

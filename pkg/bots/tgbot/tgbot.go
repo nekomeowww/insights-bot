@@ -16,6 +16,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
+	"github.com/sourcegraph/conc/panics"
 	"go.uber.org/zap"
 
 	"github.com/nekomeowww/fo"
@@ -23,7 +24,8 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
+	"github.com/nekomeowww/xo/exp/channelx"
 )
 
 type BotServiceOptions struct {
@@ -92,9 +94,11 @@ type BotService struct {
 	webhookServer     *http.Server
 	webhookUpdateChan chan tgbotapi.Update
 	updateChan        tgbotapi.UpdatesChannel
-	alreadyClose      bool
-	ctxCancel         context.CancelFunc
 	webhookStarted    bool
+
+	alreadyStopped bool
+
+	puller *channelx.Puller[tgbotapi.Update]
 }
 
 func NewBotService(callOpts ...CallOption) (*BotService, error) {
@@ -126,6 +130,14 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 		dispatcher: opts.dispatcher,
 	}
 
+	bot.puller = channelx.NewPuller[tgbotapi.Update]().
+		WithHandler(func(update tgbotapi.Update) {
+			bot.dispatcher.Dispatch(bot.BotAPI, update, bot.opts.rueidisClient)
+		}).
+		WithPanicHandler(func(panicValues *panics.Recovered) {
+			bot.logger.Error("panic occurred", zap.Any("panic", panicValues))
+		})
+
 	// init webhook server and set webhook
 	if bot.opts.webhookURL != "" {
 		parsed, err := url.Parse(bot.opts.webhookURL)
@@ -135,6 +147,7 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 
 		bot.webhookUpdateChan = make(chan tgbotapi.Update, b.Buffer)
 		bot.webhookServer = newWebhookServer(parsed.Path, bot.opts.webhookPort, bot.BotAPI, bot.webhookUpdateChan)
+		bot.puller = bot.puller.WithNotifyChannel(bot.webhookUpdateChan)
 
 		err = setWebhook(bot.opts.webhookURL, bot.BotAPI)
 		if err != nil {
@@ -144,6 +157,7 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 		u := tgbotapi.NewUpdate(0)
 		u.Timeout = 60
 		bot.updateChan = b.GetUpdatesChan(u)
+		bot.puller = bot.puller.WithNotifyChannel(bot.updateChan)
 	}
 
 	// obtain webhook info
@@ -166,20 +180,12 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 	return bot, nil
 }
 
-func (b *BotService) getUpdateChan() tgbotapi.UpdatesChannel {
-	if b.opts.webhookURL != "" {
-		return b.webhookUpdateChan
-	}
-
-	return b.updateChan
-}
-
 func (b *BotService) Stop(ctx context.Context) error {
-	if b.alreadyClose {
+	if b.alreadyStopped {
 		return nil
 	}
 
-	b.alreadyClose = true
+	b.alreadyStopped = true
 
 	if b.opts.webhookURL != "" {
 		closeCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -194,36 +200,17 @@ func (b *BotService) Stop(ctx context.Context) error {
 		b.StopReceivingUpdates()
 	}
 
-	b.ctxCancel()
+	_ = b.puller.StopPull(ctx)
 
 	return nil
 }
 
 func (b *BotService) startPullUpdates() {
-	ctx, cancel := context.WithCancel(context.Background())
-	b.ctxCancel = cancel
-
-	for {
-		if b.alreadyClose {
-			b.logger.Info("stopped to receiving updates")
-
-			return
-		}
-
-		select {
-		case update := <-b.getUpdateChan():
-			b.dispatcher.Dispatch(b.BotAPI, update, b.opts.rueidisClient)
-		case <-ctx.Done():
-			b.logger.Info("stopped to receiving updates")
-			b.webhookStarted = false
-
-			return
-		}
-	}
+	b.puller.StartPull(context.Background())
 }
 
 func (b *BotService) Start(ctx context.Context) error {
-	return utils.Invoke0(ctx, func() error {
+	return fo.Invoke0(ctx, func() error {
 		if b.opts.webhookURL != "" && b.webhookServer != nil {
 			l, err := net.Listen("tcp", b.webhookServer.Addr)
 			if err != nil {
@@ -240,7 +227,7 @@ func (b *BotService) Start(ctx context.Context) error {
 			b.logger.Info("Telegram Bot webhook server is listening", zap.String("addr", b.webhookServer.Addr))
 		}
 
-		go b.startPullUpdates()
+		b.startPullUpdates()
 		b.webhookStarted = true
 		return nil
 	})
@@ -272,7 +259,7 @@ type Bot struct {
 
 func (b *Bot) MaySend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 	may := fo.NewMay[tgbotapi.Message]().Use(func(err error, messageArgs ...any) {
-		b.logger.Error("failed to send message to telegram", zap.String("message", utils.SprintJSON(chattable)), zap.Error(err))
+		b.logger.Error("failed to send message to telegram", zap.String("message", xo.SprintJSON(chattable)), zap.Error(err))
 	})
 
 	return lo.ToPtr(may.Invoke(b.Send(chattable)))
@@ -280,7 +267,7 @@ func (b *Bot) MaySend(chattable tgbotapi.Chattable) *tgbotapi.Message {
 
 func (b *Bot) MayRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
 	may := fo.NewMay[*tgbotapi.APIResponse]().Use(func(err error, messageArgs ...any) {
-		b.logger.Error("failed to send request to telegram", zap.String("request", utils.SprintJSON(chattable)), zap.Error(err))
+		b.logger.Error("failed to send request to telegram", zap.String("request", xo.SprintJSON(chattable)), zap.Error(err))
 	})
 
 	return may.Invoke(b.Request(chattable))

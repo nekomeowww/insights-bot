@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 	"github.com/redis/rueidis"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHasOngoingRecapForwardedFromPrivateMessages(t *testing.T) {
-	userID := utils.RandomInt64()
+	userID := xo.RandomInt64()
 
 	// assign batch for user ID
 	setCmd := model.redis.B().
@@ -31,7 +31,7 @@ func TestHasOngoingRecapForwardedFromPrivateMessages(t *testing.T) {
 }
 
 func TestEnabledRecapForwardedFromPrivateMessages(t *testing.T) {
-	userID := utils.RandomInt64()
+	userID := xo.RandomInt64()
 
 	err := model.EnabledRecapForwardedFromPrivateMessages(userID)
 	require.NoError(t, err)
@@ -50,7 +50,7 @@ func TestEnabledRecapForwardedFromPrivateMessages(t *testing.T) {
 }
 
 func TestDisableRecapForwardedFromPrivateMessages(t *testing.T) {
-	userID := utils.RandomInt64()
+	userID := xo.RandomInt64()
 
 	err := model.EnabledRecapForwardedFromPrivateMessages(userID)
 	require.NoError(t, err)

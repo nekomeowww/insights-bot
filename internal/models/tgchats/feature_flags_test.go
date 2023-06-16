@@ -7,20 +7,20 @@ import (
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestChatHistoriesRecap(t *testing.T) {
-	chatID := utils.RandomInt64()
+	chatID := xo.RandomInt64()
 
 	t.Run("Enable", func(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, utils.RandomHashString(6))
+		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -43,7 +43,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, utils.RandomHashString(6))
+		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -66,12 +66,12 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 	assert := assert.New(t)
 	require := require.New(t)
 
-	chatID1 := utils.RandomInt64()
-	chatTitle1 := utils.RandomHashString(6)
-	chatID2 := utils.RandomInt64()
-	chatTitle2 := utils.RandomHashString(6)
-	chatID3 := utils.RandomInt64()
-	chatTitle3 := utils.RandomHashString(6)
+	chatID1 := xo.RandomInt64()
+	chatTitle1 := xo.RandomHashString(6)
+	chatID2 := xo.RandomInt64()
+	chatTitle2 := xo.RandomHashString(6)
+	chatID3 := xo.RandomInt64()
+	chatTitle3 := xo.RandomHashString(6)
 
 	err := model.EnableChatHistoriesRecap(chatID1, telegram.ChatTypeGroup, chatTitle1)
 	require.NoError(err)

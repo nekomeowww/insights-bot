@@ -10,7 +10,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
 )
@@ -151,7 +151,7 @@ func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.
 		return h.handleUserNeverStartedChatOrBlockedErr(c, chatID, chatTitle, newRecapCommandWhenUserBlockedMessage(c.Bot, hashKey))
 	} else {
 		h.logger.Error("failed to send private message to user",
-			zap.String("message", utils.SprintJSON(msg)),
+			zap.String("message", xo.SprintJSON(msg)),
 			zap.Int64("chat_id", c.Update.Message.From.ID),
 			zap.Error(err),
 		)

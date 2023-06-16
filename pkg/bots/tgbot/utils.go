@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 )
 
 var (
@@ -60,13 +60,13 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	if firstName == "" {
 		return lastName
 	}
-	if utils.ContainsCJKChar(firstName) && !utils.ContainsCJKChar(lastName) {
+	if xo.ContainsCJKChar(firstName) && !xo.ContainsCJKChar(lastName) {
 		return firstName + " " + lastName
 	}
-	if !utils.ContainsCJKChar(firstName) && utils.ContainsCJKChar(lastName) {
+	if !xo.ContainsCJKChar(firstName) && xo.ContainsCJKChar(lastName) {
 		return lastName + " " + firstName
 	}
-	if utils.ContainsCJKChar(firstName) && utils.ContainsCJKChar(lastName) {
+	if xo.ContainsCJKChar(firstName) && xo.ContainsCJKChar(lastName) {
 		return lastName + " " + firstName
 	}
 

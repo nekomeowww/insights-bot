@@ -7,7 +7,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
-	"github.com/nekomeowww/insights-bot/pkg/utils"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
 )
@@ -83,7 +83,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 		return h.handleUserNeverStartedChatOrBlockedErr(c, chatID, chatTitle, newSubscribeRecapCommandWhenUserBlockedMessage(c.Bot, hashKey))
 	} else {
 		h.logger.Error("failed to send private message to user",
-			zap.String("message", utils.SprintJSON(msg)),
+			zap.String("message", xo.SprintJSON(msg)),
 			zap.Int64("chat_id", c.Update.Message.From.ID),
 			zap.Error(err),
 		)
@@ -165,7 +165,7 @@ func (h *CommandHandler) handleUnsubscribeRecapCommand(c *tgbot.Context) (tgbot.
 			c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
 		} else {
 			h.logger.Error("failed to send private message to user",
-				zap.String("message", utils.SprintJSON(msg)),
+				zap.String("message", xo.SprintJSON(msg)),
 				zap.Int64("chat_id", c.Update.Message.From.ID),
 				zap.Error(err),
 			)

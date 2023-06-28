@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
@@ -83,6 +84,11 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	)
 
 	urlString := body.Text
+
+	urlString = strings.TrimSpace(urlString)
+	if !strings.HasPrefix(urlString, "http://") && !strings.HasPrefix(urlString, "https://") {
+		urlString = "https://" + urlString
+	}
 
 	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {

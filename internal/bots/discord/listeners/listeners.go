@@ -2,6 +2,7 @@ package listeners
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
@@ -43,6 +44,11 @@ func NewListeners() func(param NewListenersParam) *Listeners {
 
 func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, data discord.SlashCommandInteractionData) {
 	urlString := data.String("link")
+
+	urlString = strings.TrimSpace(urlString)
+	if !strings.HasPrefix(urlString, "http://") && !strings.HasPrefix(urlString, "https://") {
+		urlString = "https://" + urlString
+	}
 
 	b.logger.Info(fmt.Sprintf("discord: command received: /smr %s", urlString))
 

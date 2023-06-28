@@ -2,6 +2,7 @@ package summarize
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -17,6 +18,11 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	urlString := c.Update.Message.CommandArguments()
 	if urlString == "" && c.Update.Message.ReplyToMessage != nil && c.Update.Message.ReplyToMessage.Text != "" {
 		urlString = c.Update.Message.ReplyToMessage.Text
+	}
+
+	urlString = strings.TrimSpace(urlString)
+	if !strings.HasPrefix(urlString, "http://") && !strings.HasPrefix(urlString, "https://") {
+		urlString = "https://" + urlString
 	}
 
 	err, originErr := smr.CheckUrl(urlString)

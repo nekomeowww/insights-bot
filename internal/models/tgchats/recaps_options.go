@@ -60,3 +60,15 @@ func (m *Model) ManualRecapRatePerSeconds(option *ent.TelegramChatRecapsOptions)
 
 	return time.Duration(seconds) * time.Second
 }
+
+func (m *Model) DeleteOneOptionByChatID(chatID int64) error {
+	_, err := m.ent.TelegramChatRecapsOptions.
+		Delete().
+		Where(telegramchatrecapsoptions.ChatID(chatID)).
+		Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

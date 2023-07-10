@@ -3,6 +3,7 @@ package tgbot
 import (
 	"crypto/sha256"
 	"fmt"
+	"runtime/debug"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -28,6 +29,7 @@ type Dispatcher struct {
 	callbackQueryHandlersRoute map[string]string
 	leftChatMemberHandlers     []Handler
 	newChatMembersHandlers     []Handler
+	myChatMemberHandlers       []Handler
 }
 
 func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
@@ -44,6 +46,7 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 			callbackQueryHandlersRoute: make(map[string]string),
 			leftChatMemberHandlers:     make([]Handler, 0),
 			newChatMembersHandlers:     make([]Handler, 0),
+			myChatMemberHandlers:       make([]Handler, 0),
 		}
 
 		d.startCommandHandler.helpCommandHandler = d.helpCommand
@@ -224,6 +227,10 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 	})
 }
 
+func (d *Dispatcher) OnMyChatMember(handler Handler) {
+	d.myChatMemberHandlers = append(d.myChatMemberHandlers, handler)
+}
+
 func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	identityStrings := make([]string, 0)
 	identityStrings = append(identityStrings, FullNameFromFirstAndLastName(c.Update.MyChatMember.From.FirstName, c.Update.MyChatMember.From.LastName))
@@ -264,6 +271,12 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 
 		d.Logger.Debug(fmt.Sprintf("已加入频道 %s (%d)", c.Update.MyChatMember.Chat.Title, c.Update.MyChatMember.Chat.ID))
 	}
+
+	d.dispatchInGoroutine(func() {
+		for _, h := range d.myChatMemberHandlers {
+			_, _ = h.Handle(c)
+		}
+	})
 }
 
 func (d *Dispatcher) OnLeftChatMember(h Handler) {
@@ -312,7 +325,7 @@ func (d *Dispatcher) dispatchNewChatMember(c *Context) {
 		identities = append(identities, strings.Join(identityStrings, " "))
 	}
 
-	d.Logger.Debug(fmt.Sprintf("[成员信息更新｜%s] [%s (%s)] %s 离开了聊天",
+	d.Logger.Debug(fmt.Sprintf("[成员信息更新｜%s] [%s (%s)] %s 加入了聊天",
 		MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
 		color.FgGreen.Render(c.Update.Message.Chat.Title),
 		color.FgYellow.Render(c.Update.Message.Chat.ID),
@@ -380,6 +393,7 @@ func (d *Dispatcher) dispatchInGoroutine(f func()) {
 					zap.Error(fmt.Errorf("panic error: %v", err)),
 					zap.Stack("stack"),
 				)
+				fmt.Println("Panic recovered from command dispatcher: " + string(debug.Stack()))
 
 				return
 			}

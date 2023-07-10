@@ -214,3 +214,15 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 
 	return nil
 }
+
+func (m *Model) DeleteOneFeatureFlagByChatID(chatID int64) error {
+	_, err := m.ent.TelegramChatFeatureFlags.
+		Delete().
+		Where(telegramchatfeatureflags.ChatID(chatID)).
+		Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

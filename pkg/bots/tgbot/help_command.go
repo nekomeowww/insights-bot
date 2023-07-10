@@ -69,15 +69,17 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 	for _, group := range h.commandGroups {
 		commandHelpMessages := make([]string, 0)
 
-		for _, c := range group.commands {
+		for _, cmd := range group.commands {
 			commandHelpMessage := strings.Builder{}
 
 			commandHelpMessage.WriteString("/")
-			commandHelpMessage.WriteString(c.Command)
+			commandHelpMessage.WriteString(cmd.Command)
+			commandHelpMessage.WriteString("@")
+			commandHelpMessage.WriteString(c.Bot.Self.UserName)
 
-			if c.HelpMessage != "" {
+			if cmd.HelpMessage != "" {
 				commandHelpMessage.WriteString(" - ")
-				commandHelpMessage.WriteString(c.HelpMessage)
+				commandHelpMessage.WriteString(cmd.HelpMessage)
 			}
 
 			commandHelpMessages = append(commandHelpMessages, commandHelpMessage.String())

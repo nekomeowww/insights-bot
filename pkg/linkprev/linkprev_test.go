@@ -60,7 +60,7 @@ func TestPreview(t *testing.T) {
 				OpenGraph: opengraph.OpenGraph{
 					Title:       "Google for Developers Europe (@GoogleDevEurope)",
 					Image:       "https://pbs.twimg.com/media/FsTSN8nWwAA278D.png",
-					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://goo.gle/3zaGgRi\n🎁 Trying out the Go Playground → https://goo.gle/3zaGurC\n\nRT if you are a fellow Gopher!",
+					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll",
 					SiteName:    "FixTweet",
 				},
 			}, meta)

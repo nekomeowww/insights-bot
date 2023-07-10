@@ -30,6 +30,8 @@ const (
 	UpdateTypePollAnswer         UpdateType = "poll_answer"
 	UpdateTypeMyChatMember       UpdateType = "my_chat_member"
 	UpdateTypeChatMember         UpdateType = "chat_member"
+	UpdateTypeLeftChatMember     UpdateType = "left_chat_member"
+	UpdateTypeNewChatMembers     UpdateType = "new_chat_members"
 	UpdateTypeChatJoinRequest    UpdateType = "chat_join_request"
 )
 
@@ -69,7 +71,14 @@ func NewContext(bot *tgbotapi.BotAPI, update tgbotapi.Update, logger *logger.Log
 func (c *Context) UpdateType() UpdateType {
 	switch {
 	case c.Update.Message != nil:
-		return UpdateTypeMessage
+		switch {
+		case c.Update.Message.NewChatMembers != nil:
+			return UpdateTypeNewChatMembers
+		case c.Update.Message.LeftChatMember != nil:
+			return UpdateTypeLeftChatMember
+		default:
+			return UpdateTypeMessage
+		}
 	case c.Update.EditedMessage != nil:
 		return UpdateTypeEditedMessage
 	case c.Update.ChannelPost != nil:

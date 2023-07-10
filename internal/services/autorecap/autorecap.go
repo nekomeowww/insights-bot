@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/nekomeowww/fo"
@@ -22,6 +23,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
 )
@@ -58,7 +60,7 @@ func NewAutoRecapService() func(NewAutoRecapParams) (*AutoRecapService, error) {
 			digger:        params.Digger,
 		}
 
-		service.digger.SetHandler(service.sendChatHistoriesRecap)
+		service.digger.SetHandler(service.sendChatHistoriesRecapTimeCapsuleHandler)
 		service.tgchats.QueueSendChatHistoriesRecapTask()
 
 		return service, nil
@@ -75,10 +77,12 @@ func Run() func(service *AutoRecapService) {
 	}
 }
 
-func (m *AutoRecapService) sendChatHistoriesRecap(
+func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 	digger *timecapsule.TimeCapsuleDigger[timecapsules.AutoRecapCapsule],
 	capsule *timecapsule.TimeCapsule[timecapsules.AutoRecapCapsule],
 ) {
+	m.logger.Debug("send chat histories recap time capsule handler invoked", zap.Int64("chat_id", capsule.Payload.ChatID))
+
 	var enabled bool
 	var options *ent.TelegramChatRecapsOptions
 	var subscribers []*ent.TelegramChatAutoRecapsSubscribers
@@ -126,6 +130,8 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 		m.logger.Error("failed to check chat histories recap enabled, options or subscribers", zap.Error(multierr.Combine(errs...)))
 	})
 	if !enabled {
+		m.logger.Debug("chat histories recap disabled, skipping...", zap.Int64("chat_id", capsule.Payload.ChatID))
+
 		return
 	}
 
@@ -135,6 +141,8 @@ func (m *AutoRecapService) sendChatHistoriesRecap(
 		m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(err))
 	}
 	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions && len(subscribers) == 0 {
+		m.logger.Debug("chat histories recap send mode is only private subscriptions, but no subscribers, skipping...", zap.Int64("chat_id", capsule.Payload.ChatID))
+
 		return
 	}
 
@@ -194,6 +202,60 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 	}
 
 	for _, subscriber := range subscribers {
+		member, err := m.botService.GetChatMember(tgbotapi.GetChatMemberConfig{
+			ChatConfigWithUser: tgbotapi.ChatConfigWithUser{
+				ChatID: chatID,
+				UserID: subscriber.UserID,
+			},
+		})
+		if err != nil {
+			m.logger.Error("failed to get chat member", zap.Error(err))
+			continue
+		}
+		if !lo.Contains([]telegram.MemberStatus{
+			telegram.MemberStatusAdministrator,
+			telegram.MemberStatusCreator,
+			telegram.MemberStatusMember,
+			telegram.MemberStatusRestricted,
+		}, telegram.MemberStatus(member.Status)) {
+			m.logger.Warn("subscriber is not a member, auto unsubscribing...",
+				zap.String("status", member.Status),
+				zap.Int64("chat_id", chatID),
+				zap.Int64("user_id", subscriber.UserID),
+			)
+
+			_, _, err := lo.AttemptWithDelay(1000, time.Minute, func(iter int, _ time.Duration) error {
+				err := m.tgchats.UnsubscribeToAutoRecaps(chatID, subscriber.UserID)
+				if err != nil {
+					m.logger.Error("failed to auto unsubscribe to auto recaps",
+						zap.Error(err),
+						zap.String("status", member.Status),
+						zap.Int64("chat_id", chatID),
+						zap.Int64("user_id", subscriber.UserID),
+						zap.Int("iter", iter),
+						zap.Int("max_iter", 100),
+					)
+
+					return err
+				}
+
+				return nil
+			})
+			if err != nil {
+				m.logger.Error("failed to unsubscribe to auto recaps", zap.Error(err))
+			}
+
+			msg := tgbotapi.NewMessage(subscriber.UserID, fmt.Sprintf("由于您已不再是 <b>%s</b> 的成员，因此已自动帮您取消了您所订阅的聊天记录回顾。", tgbot.EscapeHTMLSymbols(chatTitle)))
+			msg.ParseMode = tgbotapi.ModeHTML
+
+			_, err = m.botService.Send(msg)
+			if err != nil {
+				m.logger.Error("failed to send the auto un-subscription message", zap.Error(err), zap.Int64("user_id", subscriber.UserID))
+			}
+
+			continue
+		}
+
 		targetChats = append(targetChats, targetChat{
 			chatID:              subscriber.UserID,
 			isPrivateSubscriber: true,
@@ -216,7 +278,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			msg.ParseMode = tgbotapi.ModeHTML
 
 			if targetChat.isPrivateSubscriber {
-				msg.Text = fmt.Sprintf("您好，这是您订阅的 <b>%s</b> 群组的定时聊天回顾。\n\n%s", chatTitle, content)
+				msg.Text = fmt.Sprintf("您好，这是您订阅的 <b>%s</b> 群组的定时聊天回顾。\n\n%s", tgbot.EscapeHTMLSymbols(chatTitle), content)
 
 				buttonData, err := m.botService.Bot().AssignOneCallbackQueryData("recap/unsubscribe_recap", recap.UnsubscribeRecapActionData{
 					ChatID:    chatID,

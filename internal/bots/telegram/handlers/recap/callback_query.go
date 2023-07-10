@@ -114,7 +114,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 	case tgchat.AutoRecapSendModePublicly:
 		inProgressText = fmt.Sprintf("正在为过去 %d 个小时的聊天记录生成回顾，请稍等...", data.Hour)
 	case tgchat.AutoRecapSendModeOnlyPrivateSubscriptions:
-		inProgressText = fmt.Sprintf("正在为 <b>%s</b> 过去 %d 个小时的聊天记录生成回顾，请稍等...", data.ChatTitle, data.Hour)
+		inProgressText = fmt.Sprintf("正在为 <b>%s</b> 过去 %d 个小时的聊天记录生成回顾，请稍等...", tgbot.EscapeHTMLSymbols(data.ChatTitle), data.Hour)
 	default:
 		inProgressText = fmt.Sprintf("正在为过去 %d 个小时的聊天记录生成回顾，请稍等...", data.Hour)
 	}
@@ -490,5 +490,5 @@ func (h *CallbackQueryHandler) handleCallbackQueryUnsubscribe(c *tgbot.Context) 
 		InlineKeyboard: make([][]tgbotapi.InlineKeyboardButton, 0),
 	}))
 
-	return c.NewMessage(fmt.Sprintf("已成功取消订阅群组 <b>%s</b> 的定时聊天回顾。", actionData.ChatTitle)).WithParseModeHTML(), nil
+	return c.NewMessage(fmt.Sprintf("已成功取消订阅群组 <b>%s</b> 的定时聊天回顾。", tgbot.EscapeHTMLSymbols(actionData.ChatTitle))).WithParseModeHTML(), nil
 }

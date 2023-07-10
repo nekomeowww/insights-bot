@@ -6,6 +6,7 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
@@ -112,7 +113,7 @@ func (h *CommandHandler) handleRecapCommandForPrivateSubscriptionsMode(c *tgbot.
 	}
 
 	chatTitle := c.Update.Message.Chat.Title
-	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您正在请求为群组 <b>%s</b> 创建聊天回顾。\n请问您要为过去几个小时内的聊天创建回顾呢？", c.Update.Message.Chat.Title))
+	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您正在请求为群组 <b>%s</b> 创建聊天回顾。\n请问您要为过去几个小时内的聊天创建回顾呢？", tgbot.EscapeHTMLSymbols(c.Update.Message.Chat.Title)))
 	msg.ParseMode = tgbotapi.ModeHTML
 
 	inlineKeyboardButtons, err := newRecapSelectHoursInlineKeyboardButtons(c, chatID, chatTitle, tgchat.AutoRecapSendModeOnlyPrivateSubscriptions)
@@ -189,7 +190,79 @@ func (h *CommandHandler) handleStartCommandWithPrivateSubscriptionsRecap(c *tgbo
 	}
 
 	return c.
-		NewMessageReplyTo(fmt.Sprintf("您正在请求为群组 <b>%s</b> 创建聊天回顾。\n请问您要为过去几个小时内的聊天创建回顾呢？", context.ChatTitle), c.Update.Message.MessageID).
+		NewMessageReplyTo(fmt.Sprintf("您正在请求为群组 <b>%s</b> 创建聊天回顾。\n请问您要为过去几个小时内的聊天创建回顾呢？", tgbot.EscapeHTMLSymbols(context.ChatTitle)), c.Update.Message.MessageID).
 		WithReplyMarkup(inlineKeyboardButtons).
 		WithParseModeHTML(), nil
+}
+
+func (h *CommandHandler) handleChatMemberLeft(c *tgbot.Context) (tgbot.Response, error) {
+	if c.Update.Message.LeftChatMember == nil {
+		return nil, nil
+	}
+
+	chatID := c.Update.Message.Chat.ID
+	userID := c.Update.Message.LeftChatMember.ID
+
+	var err error
+	var subscriber *ent.TelegramChatAutoRecapsSubscribers
+
+	_, _, err = lo.AttemptWithDelay(1000, time.Minute, func(iter int, _ time.Duration) error {
+		subscriber, err = h.tgchats.FindOneAutoRecapsSubscriber(chatID, userID)
+		if err != nil {
+			h.logger.Error("failed to query subscriber of auto recaps",
+				zap.Error(err),
+				zap.Int64("chat_id", chatID),
+				zap.Int64("user_id", userID),
+				zap.Int("iter", iter),
+				zap.Int("max_iter", 100),
+			)
+
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		h.logger.Error("failed to query subscriber of auto recaps",
+			zap.Error(err),
+			zap.Int64("chat_id", chatID),
+			zap.Int64("user_id", userID),
+		)
+
+		return nil, nil
+	}
+	if subscriber == nil {
+		return nil, nil
+	}
+
+	h.logger.Warn("subscriber is no longer a member, auto unsubscribing...",
+		zap.Int64("chat_id", chatID),
+		zap.Int64("user_id", userID),
+	)
+
+	_, _, err = lo.AttemptWithDelay(1000, time.Minute, func(iter int, _ time.Duration) error {
+		err := h.tgchats.UnsubscribeToAutoRecaps(chatID, userID)
+		if err != nil {
+			h.logger.Error("failed to auto unsubscribe to auto recaps",
+				zap.Error(err),
+				zap.Int64("chat_id", chatID),
+				zap.Int64("user_id", userID),
+				zap.Int("iter", iter),
+				zap.Int("max_iter", 100),
+			)
+
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		h.logger.Error("failed to unsubscribe to auto recaps", zap.Error(err))
+	}
+
+	msg := tgbotapi.NewMessage(subscriber.UserID, fmt.Sprintf("由于您已不再是 <b>%s</b> 的成员，因此已自动帮您取消了您所订阅的聊天记录回顾。", tgbot.EscapeHTMLSymbols(c.Update.Message.Chat.Title)))
+	msg.ParseMode = tgbotapi.ModeHTML
+	c.Bot.MaySend(msg)
+
+	return nil, nil
 }

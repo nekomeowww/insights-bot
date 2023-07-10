@@ -26,6 +26,8 @@ type Dispatcher struct {
 	channelPostHandlers        []Handler
 	callbackQueryHandlers      map[string]HandleFunc
 	callbackQueryHandlersRoute map[string]string
+	leftChatMemberHandlers     []Handler
+	newChatMembersHandlers     []Handler
 }
 
 func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
@@ -40,6 +42,8 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 			channelPostHandlers:        make([]Handler, 0),
 			callbackQueryHandlers:      make(map[string]HandleFunc),
 			callbackQueryHandlersRoute: make(map[string]string),
+			leftChatMemberHandlers:     make([]Handler, 0),
+			newChatMembersHandlers:     make([]Handler, 0),
 		}
 
 		d.startCommandHandler.helpCommandHandler = d.helpCommand
@@ -262,6 +266,66 @@ func (d *Dispatcher) dispatchMyChatMember(c *Context) {
 	}
 }
 
+func (d *Dispatcher) OnLeftChatMember(h Handler) {
+	d.leftChatMemberHandlers = append(d.leftChatMemberHandlers, h)
+}
+
+func (d *Dispatcher) dispatchLeftChatMember(c *Context) {
+	identityStrings := make([]string, 0)
+	identityStrings = append(identityStrings, FullNameFromFirstAndLastName(c.Update.Message.LeftChatMember.FirstName, c.Update.Message.LeftChatMember.LastName))
+
+	if c.Update.Message.LeftChatMember.UserName != "" {
+		identityStrings = append(identityStrings, "@"+c.Update.Message.LeftChatMember.UserName)
+	}
+
+	d.Logger.Debug(fmt.Sprintf("[成员信息更新｜%s] [%s (%s)] %s (%s) 离开了聊天",
+		MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.Chat.ID),
+		strings.Join(identityStrings, " "),
+		color.FgYellow.Render(c.Update.Message.LeftChatMember.ID),
+	))
+
+	d.dispatchInGoroutine(func() {
+		for _, h := range d.leftChatMemberHandlers {
+			_, _ = h.Handle(c)
+		}
+	})
+}
+
+func (d *Dispatcher) OnNewChatMember(h Handler) {
+	d.leftChatMemberHandlers = append(d.leftChatMemberHandlers, h)
+}
+
+func (d *Dispatcher) dispatchNewChatMember(c *Context) {
+	identities := make([]string, len(c.Update.Message.NewChatMembers))
+
+	for _, identity := range c.Update.Message.NewChatMembers {
+		identityStrings := make([]string, 0)
+		identityStrings = append(identityStrings, FullNameFromFirstAndLastName(identity.FirstName, identity.LastName))
+
+		if identity.UserName != "" {
+			identityStrings = append(identityStrings, "@"+identity.UserName)
+		}
+
+		identityStrings = append(identityStrings, fmt.Sprintf("(%s)", color.FgYellow.Render(identity.ID)))
+		identities = append(identities, strings.Join(identityStrings, " "))
+	}
+
+	d.Logger.Debug(fmt.Sprintf("[成员信息更新｜%s] [%s (%s)] %s 离开了聊天",
+		MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.Chat.ID),
+		strings.Join(identities, ", "),
+	))
+
+	d.dispatchInGoroutine(func() {
+		for _, h := range d.newChatMembersHandlers {
+			_, _ = h.Handle(c)
+		}
+	})
+}
+
 func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update, rueidisClient rueidis.Client) {
 	for _, m := range d.middlewares {
 		m(NewContext(bot, update, d.Logger, rueidisClient), func() {})
@@ -295,10 +359,16 @@ func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update, ruei
 		d.dispatchMyChatMember(ctx)
 	case UpdateTypeChatMember:
 		d.Logger.Warn("chat member is not supported yet")
+	case UpdateTypeLeftChatMember:
+		d.dispatchLeftChatMember(ctx)
+	case UpdateTypeNewChatMembers:
+		d.dispatchNewChatMember(ctx)
 	case UpdateTypeChatJoinRequest:
 		d.Logger.Warn("chat join request is not supported yet")
 	case UpdateTypeUnknown:
 		d.Logger.Warn("unable to dispatch update due to unknown update type")
+	default:
+		d.Logger.Warn("unable to dispatch update due to unknown update type", zap.String("update_type", string(ctx.UpdateType())))
 	}
 }
 

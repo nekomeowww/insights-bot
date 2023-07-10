@@ -44,7 +44,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 			WithDeleteLater(fromID, chatID)
 	}
 
-	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您已成功订阅群组 <b>%s</b> 的定时聊天回顾！", c.Update.Message.Chat.Title))
+	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您已成功订阅群组 <b>%s</b> 的定时聊天回顾！", tgbot.EscapeHTMLSymbols(c.Update.Message.Chat.Title)))
 	msg.ParseMode = tgbotapi.ModeHTML
 
 	_, err = c.Bot.Send(msg)
@@ -125,7 +125,7 @@ func (h *CommandHandler) handleStartCommandWithRecapSubscription(c *tgbot.Contex
 	}
 
 	return c.
-		NewMessage(fmt.Sprintf("您已成功订阅群组 <b>%s</b> 的定时聊天回顾！", context.ChatTitle)).
+		NewMessage(fmt.Sprintf("您已成功订阅群组 <b>%s</b> 的定时聊天回顾！", tgbot.EscapeHTMLSymbols(context.ChatTitle))).
 		WithParseModeHTML(), nil
 }
 
@@ -156,7 +156,7 @@ func (h *CommandHandler) handleUnsubscribeRecapCommand(c *tgbot.Context) (tgbot.
 
 	c.Bot.MayRequest(tgbotapi.NewDeleteMessage(chatID, c.Update.Message.MessageID))
 
-	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您已成功取消订阅群组 <b>%s</b> 的定时聊天回顾！", chatTitle))
+	msg := tgbotapi.NewMessage(fromID, fmt.Sprintf("您已成功取消订阅群组 <b>%s</b> 的定时聊天回顾！", tgbot.EscapeHTMLSymbols(chatTitle)))
 	msg.ParseMode = tgbotapi.ModeHTML
 
 	_, err = c.Bot.Send(msg)

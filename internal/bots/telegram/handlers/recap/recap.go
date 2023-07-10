@@ -56,6 +56,8 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 	dispatcher.OnCallbackQuery("recap/configure/assign_mode", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryAssignMode))
 	dispatcher.OnCallbackQuery("recap/configure/complete", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryComplete))
 	dispatcher.OnCallbackQuery("recap/unsubscribe_recap", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryUnsubscribe))
+
+	dispatcher.OnLeftChatMember(tgbot.NewHandler(h.command.handleChatMemberLeft))
 }
 
 var (

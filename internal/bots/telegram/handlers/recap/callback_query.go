@@ -228,7 +228,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 		return nil, nil
 	}
 
-	// check actor is admin or creator, bot is admin
+	// check whether the actor is admin or creator, and whether the bot is admin
 	err = checkToggle(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {
@@ -345,7 +345,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 		return nil, nil
 	}
 
-	// check actor is admin or creator, bot is admin
+	// check whether the actor is admin or creator, and whether the bot is admin
 	err = checkAssignMode(c, chatID, c.Update.CallbackQuery.From)
 	if err != nil {
 		if errors.Is(err, errAdministratorPermissionRequired) {

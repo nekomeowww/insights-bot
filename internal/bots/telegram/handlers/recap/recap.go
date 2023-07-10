@@ -40,7 +40,7 @@ func NewHandlers() func(NewHandlersParams) *Handlers {
 func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 	dispatcher.OnCommandGroup("聊天回顾", []tgbot.Command{
 		{Command: "recap", HelpMessage: "总结过去的聊天记录并生成回顾快报", Handler: tgbot.NewHandler(h.command.handleRecapCommand)},
-		{Command: "configure_recap", HelpMessage: "配置聊天记录回顾（需要管理权限）", Handler: tgbot.NewHandler(h.command.handleConfigureRecapCommand)},
+		{Command: "configure_recap", HelpMessage: "配置聊天记录回顾（需要管理权限，<b>请在配置的时候尽量避免使用匿名用户身份或者其他群组的身份进行配置，可能会导致权限检查异常而配置失败。</b>）", Handler: tgbot.NewHandler(h.command.handleConfigureRecapCommand)},
 		{Command: "recap_forwarded_start", HelpMessage: "使 Bot 接收在私聊中转发给 Bot 的消息，并在发送 /recap_forwarded 后开始总结", Handler: tgbot.NewHandler(h.command.handleRecapForwardedStartCommand)},
 		{Command: "recap_forwarded", HelpMessage: "使 Bot 停止接收在私聊中转发给 Bot 的消息，对已经转发过的消息进行总结", Handler: tgbot.NewHandler(h.command.handleRecapForwardedCommand)},
 		{Command: "subscribe_recap", HelpMessage: "订阅当前群组的定时聊天回顾", Handler: tgbot.NewHandler(h.command.handleSubscribeRecapCommand)},

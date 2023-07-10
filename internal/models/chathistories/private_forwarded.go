@@ -208,6 +208,7 @@ func (m *Model) FindPrivateForwardedChatHistories(userID int64) ([]telegramPriva
 
 func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories []telegramPrivateForwardedReplayChatHistory) ([]string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
+	historiesIncludedMessageIDs := make([]int64, 0)
 
 	for _, message := range histories {
 		historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(
@@ -216,11 +217,13 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 			formatFullNameAndUsername(message.ActorDisplayName, message.ActorUsername),
 			message.Text,
 		))
+
+		historiesIncludedMessageIDs = append(historiesIncludedMessageIDs, int64(message.MessageID))
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 
-	summarizations, statsCompletionTokenUsage, statsPromptTokenUsage, statsTotalTokenUsage, err := m.summarizeChatHistories(chatHistories)
+	summarizations, statusUsage, err := m.summarizeChatHistories(historiesIncludedMessageIDs, chatHistories)
 	if err != nil {
 		return make([]string, 0), err
 	}
@@ -234,7 +237,7 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 		return item
 	})
 
-	ss, err := m.fillIntoRecapTemplates(0, summarizations)
+	ss, err := m.renderRecapTemplates(0, summarizations)
 	if err != nil {
 		return make([]string, 0), err
 	}
@@ -244,9 +247,9 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 		SetChatID(userID).
 		SetRecapInputs(chatHistories).
 		SetRecapOutputs(strings.Join(ss, "\n")).
-		SetCompletionTokenUsage(statsCompletionTokenUsage).
-		SetPromptTokenUsage(statsPromptTokenUsage).
-		SetTotalTokenUsage(statsTotalTokenUsage).
+		SetCompletionTokenUsage(statusUsage.CompletionTokens).
+		SetPromptTokenUsage(statusUsage.PromptTokens).
+		SetTotalTokenUsage(statusUsage.TotalTokens).
 		SetFromPlatform(int(FromPlatformTelegram)).
 		SetRecapType(int(RecapTypeForPrivateForwarded)).
 		Exec(context.Background())

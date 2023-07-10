@@ -331,6 +331,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 
 func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) ([]string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
+	historiesIncludedMessageIDs := make([]int64, 0)
 
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
@@ -340,6 +341,8 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				formatFullNameAndUsername(message.FullName, message.Username),
 				message.Text,
 			))
+
+			historiesIncludedMessageIDs = append(historiesIncludedMessageIDs, message.MessageID)
 		} else {
 			repliedToPartialContextMessage := fmt.Sprintf(
 				"%s sent msgId:%d",
@@ -353,17 +356,19 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 				repliedToPartialContextMessage,
 				message.Text,
 			))
+
+			historiesIncludedMessageIDs = append(historiesIncludedMessageIDs, message.MessageID)
 		}
 	}
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 
-	summarizations, statsCompletionTokenUsage, statsPromptTokenUsage, statsTotalTokenUsage, err := m.summarizeChatHistories(chatHistories)
+	summarizations, statusUsage, err := m.summarizeChatHistories(historiesIncludedMessageIDs, chatHistories)
 	if err != nil {
 		return make([]string, 0), err
 	}
 
-	ss, err := m.fillIntoRecapTemplates(chatID, summarizations)
+	ss, err := m.renderRecapTemplates(chatID, summarizations)
 	if err != nil {
 		return make([]string, 0), err
 	}
@@ -373,9 +378,9 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		SetChatID(chatID).
 		SetRecapInputs(chatHistories).
 		SetRecapOutputs(strings.Join(ss, "\n")).
-		SetCompletionTokenUsage(statsCompletionTokenUsage).
-		SetPromptTokenUsage(statsPromptTokenUsage).
-		SetTotalTokenUsage(statsTotalTokenUsage).
+		SetCompletionTokenUsage(statusUsage.CompletionTokens).
+		SetPromptTokenUsage(statusUsage.PromptTokens).
+		SetTotalTokenUsage(statusUsage.TotalTokens).
 		SetFromPlatform(int(FromPlatformTelegram)).
 		SetRecapType(int(RecapTypeForGroup)).
 		Exec(context.Background())

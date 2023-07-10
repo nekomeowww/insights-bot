@@ -132,6 +132,8 @@ func (m *Model) summarizeChatHistories(messageIDs []int64, llmFriendlyChatHistor
 
 		// limit key ids to 5
 		for _, o := range outputs {
+			o.ParticipantsNamesWithoutUsername = lo.Uniq(o.ParticipantsNamesWithoutUsername)
+
 			for _, d := range o.Discussion {
 				d.KeyIDs = lo.UniqBy(d.KeyIDs, func(item int64) int64 {
 					return item

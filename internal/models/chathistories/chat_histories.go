@@ -293,6 +293,18 @@ func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 	return nil
 }
 
+func (m *Model) DeleteAllChatHistoriesByChatID(chatID int64) error {
+	_, err := m.ent.ChatHistories.
+		Delete().
+		Where(chathistories.ChatID(chatID)).
+		Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
 }

@@ -71,3 +71,15 @@ func (m *Model) UnsubscribeToAutoRecaps(chatID int64, userID int64) error {
 		DeleteOne(subscriber).
 		Exec(context.Background())
 }
+
+func (m *Model) DeleteAllSubscribersByChatID(chatID int64) error {
+	_, err := m.ent.TelegramChatAutoRecapsSubscribers.
+		Delete().
+		Where(telegramchatautorecapssubscribers.ChatID(chatID)).
+		Exec(context.Background())
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

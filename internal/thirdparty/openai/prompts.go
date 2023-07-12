@@ -44,8 +44,10 @@ var ChatHistorySummarizationPrompt = lo.Must(template.New("chat histories summar
 {{ .ChatHistory }}
 """
 
-Summarize the chat history into logical topics. Output topics in the following JSON format in language {{ .Language }}:"""
+Read through the provided chat history and identify all distinct discussion topics that took place. Summarize each topic by extracting the most relevant points and key message IDs.
+
+Output topics in the following JSON format in language {{ .Language }}:"""
 [{"topicName":"Topic 1 Name","sinceId":123456789,"participantsNamesWithoutUsername":["John","Mary"],"discussion":[{"point":"Key point 1","keyIds":[123456789,987654321]},{"point":"Key point 2","keyIds":[456789123]}],"conclusion":"Optional conclusion"},{"topicName":"Topic 2 Name","sinceId":987654321,"participantsNamesWithoutUsername":["Bob","Alice"],"discussion":[{"point":"Key point 1","keyIds":[987654321]}],"conclusion":"Optional conclusion"}]
 """
 
-Only include the most relevant topics, key points, and message IDs that capture the essence of the discussion. Focus on high level summarization without verbatim repetition. Be concise and accurate.`))
+Extract all distinct topics discussed in the chat history, including the topic name, starting message ID, participating members, key discussion points, and optional conclusion. Only include the most relevant points and message IDs. Be concise yet comprehensive.`))

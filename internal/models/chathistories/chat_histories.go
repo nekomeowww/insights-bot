@@ -375,7 +375,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 
-	summarizations, statusUsage, err := m.summarizeChatHistories(historiesIncludedMessageIDs, chatHistories)
+	summarizations, statusUsage, err := m.summarizeChatHistories(chatID, historiesIncludedMessageIDs, chatHistories)
 	if err != nil {
 		return make([]string, 0), err
 	}

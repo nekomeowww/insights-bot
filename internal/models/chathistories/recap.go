@@ -46,12 +46,12 @@ var RecapOutputTemplate = lo.Must(template.
  - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if .Recap.Conclusion }}
 结论：{{ escape .Recap.Conclusion }}{{ end }}`))
 
-func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
+func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
 	if s == "" {
 		return make([]*openai.ChatHistorySummarizationOutputs, 0), goopenai.Usage{}, nil
 	}
 
-	m.logger.Info(fmt.Sprintf("✍️ summarizing chat histories:\n%s", s))
+	m.logger.Info(fmt.Sprintf("✍️ summarizing chat histories:\n%s", s), zap.Int64("chat_id", chatID))
 
 	resp, err := m.openAI.SummarizeChatHistories(context.Background(), s)
 	if err != nil {
@@ -61,7 +61,7 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 		return nil, goopenai.Usage{}, nil
 	}
 
-	m.logger.Info("✅ summarized chat histories")
+	m.logger.Info("✅ summarized chat histories", zap.Int64("chat_id", chatID))
 	if resp.Choices[0].Message.Content == "" {
 		return nil, goopenai.Usage{}, nil
 	}
@@ -70,16 +70,22 @@ func (m *Model) summarizeChatHistoriesSlice(s string) ([]*openai.ChatHistorySumm
 
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 	if err != nil {
-		m.logger.Error("failed to unmarshal chat history summarization output", zap.String("content", resp.Choices[0].Message.Content))
+		m.logger.Error("failed to unmarshal chat history summarization output",
+			zap.String("content", resp.Choices[0].Message.Content),
+			zap.Int64("chat_id", chatID),
+		)
+
 		return nil, resp.Usage, err
 	}
 
-	m.logger.Info(fmt.Sprintf("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs))))
+	m.logger.Info(fmt.Sprintf("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs))),
+		zap.Int64("chat_id", chatID),
+	)
 
 	return outputs, resp.Usage, nil
 }
 
-func (m *Model) summarizeChatHistories(messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
+func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
 	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, 15000)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 
@@ -89,13 +95,13 @@ func (m *Model) summarizeChatHistories(messageIDs []int64, llmFriendlyChatHistor
 		var outputs []*openai.ChatHistorySummarizationOutputs
 
 		_, _, err := lo.AttemptWithDelay(3, time.Second, func(tried int, delay time.Duration) error {
-			o, usage, err := m.summarizeChatHistoriesSlice(s)
+			o, usage, err := m.summarizeChatHistoriesSlice(chatID, s)
 			statusUsage.CompletionTokens += usage.CompletionTokens
 			statusUsage.PromptTokens += usage.PromptTokens
 			statusUsage.TotalTokens += usage.TotalTokens
 
 			if err != nil {
-				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried))
+				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried), zap.Int64("chat_id", chatID))
 				return err
 			}
 

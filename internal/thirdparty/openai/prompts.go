@@ -44,5 +44,8 @@ var ChatHistorySummarizationPrompt = lo.Must(template.New("chat histories summar
 {{ .ChatHistory }}
 """
 
-You are my chat histories summary and review assistant. Above are chat histories, each message starts with msgId, please summarize these chats as 1 to 5 topics, each topic should contain the following fields: sinceId (msgId at the beginning of the topic)、keyIds (key msgId in the discussion, max 5 msgIds) and conclusion (ignore this field if no clear conclusion). Please output as the following JSON format without additional explanation using {{ .Language }}:"""
-[{"topicName":"..","sinceId":123456789,"participantsNamesWithoutUsername":[".."],"discussion":[{"point":"..","keyIds":[123456789]}],"conclusion":".."}]"""`))
+Summarize the chat history into logical topics. Output topics in the following JSON format in language {{ .Language }}:"""
+[{"topicName":"Topic 1 Name","sinceId":123456789,"participantsNamesWithoutUsername":["John","Mary"],"discussion":[{"point":"Key point 1","keyIds":[123456789,987654321]},{"point":"Key point 2","keyIds":[456789123]}],"conclusion":"Optional conclusion"},{"topicName":"Topic 2 Name","sinceId":987654321,"participantsNamesWithoutUsername":["Bob","Alice"],"discussion":[{"point":"Key point 1","keyIds":[987654321]}],"conclusion":"Optional conclusion"}]
+"""
+
+Only include the most relevant topics, key points, and message IDs that capture the essence of the discussion. Focus on high level summarization without verbatim repetition. Be concise and accurate.`))

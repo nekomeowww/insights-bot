@@ -223,7 +223,7 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 
 	chatHistories := strings.Join(historiesLLMFriendly, "\n")
 
-	summarizations, statusUsage, err := m.summarizeChatHistories(historiesIncludedMessageIDs, chatHistories)
+	summarizations, statusUsage, err := m.summarizeChatHistories(userID, historiesIncludedMessageIDs, chatHistories)
 	if err != nil {
 		return make([]string, 0), err
 	}

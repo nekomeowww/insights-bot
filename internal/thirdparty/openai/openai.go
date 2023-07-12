@@ -11,7 +11,6 @@ import (
 
 	"github.com/pkoukk/tiktoken-go"
 	"github.com/sashabaranov/go-openai"
-	"github.com/sourcegraph/conc/pool"
 	"go.uber.org/fx"
 	"go.uber.org/ratelimit"
 	"go.uber.org/zap"
@@ -90,11 +89,6 @@ func NewClient() func(NewClientParams) (Client, error) {
 
 		limiter := ratelimit.New(1)
 		limiter.Take()
-
-		p := pool.New().WithMaxGoroutines(10)
-		p.Go(func() {
-
-		})
 
 		return &OpenAIClient{
 			client:           client,

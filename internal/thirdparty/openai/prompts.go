@@ -44,10 +44,10 @@ var ChatHistorySummarizationPrompt = lo.Must(template.New("chat histories summar
 {{ .ChatHistory }}
 """
 
-Read through the provided chat history and identify all distinct discussion topics that took place. Summarize each topic by extracting the most relevant points and key message IDs.
+You are a expert in summarizing the refined outlines from documents and dialogues. Please read through the provided chat history and identify the 1-10 distinct discussion topics that discussed and talked about. Summarize only those key topics by extracting the most relevant points and message IDs.
 
 Output topics in the following JSON format in language {{ .Language }}:"""
-[{"topicName":"Topic 1 Name","sinceId":123456789,"participantsNamesWithoutUsername":["John","Mary"],"discussion":[{"point":"Key point 1","keyIds":[123456789,987654321]},{"point":"Key point 2","keyIds":[456789123]}],"conclusion":"Optional conclusion"},{"topicName":"Topic 2 Name","sinceId":987654321,"participantsNamesWithoutUsername":["Bob","Alice"],"discussion":[{"point":"Key point 1","keyIds":[987654321]}],"conclusion":"Optional conclusion"}]
+[{"topicName":"Most Important Topic 1","sinceId":123456789,"participantsNamesWithoutUsername":["John","Mary"],"discussion":[{"point":"Most relevant key point","keyIds":[123456789,987654321]}],"conclusion":"Optional brief conclusion"},{"topicName":"Most Important Topic 2","sinceId":987654321,"participantsNamesWithoutUsername":["Bob","Alice"],"discussion":[{"point":"Most relevant key point","keyIds":[987654321]}],"conclusion":"Optional brief conclusion"}]
 """
 
-Extract all distinct topics discussed in the chat history, including the topic name, starting message ID, participating members, key discussion points, and optional conclusion. Only include the most relevant points and message IDs. Be concise yet comprehensive.`))
+Only summarize the 1-10 distinct topics from the chat history. For each topic, extract just the most relevant point and key message IDs. Be very concise and focused on the key essence of each topic.`))

@@ -20,7 +20,7 @@ RUN go build -a -o "release/insights-bot" "github.com/nekomeowww/insights-bot/cm
 # --- runner ---
 FROM debian as runner
 
-RUN apt update && apt upgrade -y && apt install -y ca-certificates && update-ca-certificates
+RUN apt update && apt upgrade -y && apt install -y ca-certificates curl && update-ca-certificates
 
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
 

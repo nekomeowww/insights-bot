@@ -116,11 +116,12 @@ services:
   redis_local:
     image: redis:7
     restart: unless-stopped
-    # comment the following line if you don't want to set password for redis
+    environment:
+      - REDIS_PASSWORD=123456
     command: >
-      --requirepass 123456
+      ${REDIS_PASSWORD:+--requirepass \"$REDIS_PASSWORD}\"}
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping"]
+      test: [ "CMD-SHELL", "redis-cli -e ${REDIS_PASSWORD:+-a \"$REDIS_PASSWORD\"} --no-auth-warning ping" ]
       interval: 10s
       timeout: 5s
       retries: 5

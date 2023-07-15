@@ -119,9 +119,9 @@ services:
     environment:
       - REDIS_PASSWORD=123456
     command: >
-      /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"
+      /bin/sh -c "redis-server $${REDIS_PASSWORD:+--requirepass \"$$REDIS_PASSWORD\"}"
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD --no-auth-warning ping" ]
+      test: [ "CMD-SHELL", "redis-cli -e $${REDIS_PASSWORD:+-a \"$$REDIS_PASSWORD\"} --no-auth-warning ping" ]
       interval: 10s
       timeout: 5s
       retries: 5

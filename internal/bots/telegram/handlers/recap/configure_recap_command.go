@@ -135,7 +135,7 @@ const (
 func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Response, error) {
 	chatType := telegram.ChatType(c.Update.Message.Chat.Type)
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
-		return nil, tgbot.NewMessageError("只有在群组和超级群组内猜可以配置聊天记录回顾功能哦！").WithReply(c.Update.Message)
+		return nil, tgbot.NewMessageError("只有在群组和超级群组内才可以配置聊天记录回顾功能哦！").WithReply(c.Update.Message)
 	}
 
 	err := checkBotIsAdmin(c)

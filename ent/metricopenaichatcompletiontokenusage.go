@@ -29,6 +29,8 @@ type MetricOpenAIChatCompletionTokenUsage struct {
 	CompletionTokenUsage int `json:"completion_token_usage,omitempty"`
 	// TotalTokenUsage holds the value of the "total_token_usage" field.
 	TotalTokenUsage int `json:"total_token_usage,omitempty"`
+	// ModelName holds the value of the "model_name" field.
+	ModelName string `json:"model_name,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt    int64 `json:"created_at,omitempty"`
 	selectValues sql.SelectValues
@@ -41,7 +43,7 @@ func (*MetricOpenAIChatCompletionTokenUsage) scanValues(columns []string) ([]any
 		switch columns[i] {
 		case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength, metricopenaichatcompletiontokenusage.FieldPromptTokenUsage, metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength, metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage, metricopenaichatcompletiontokenusage.FieldTotalTokenUsage, metricopenaichatcompletiontokenusage.FieldCreatedAt:
 			values[i] = new(sql.NullInt64)
-		case metricopenaichatcompletiontokenusage.FieldPromptOperation:
+		case metricopenaichatcompletiontokenusage.FieldPromptOperation, metricopenaichatcompletiontokenusage.FieldModelName:
 			values[i] = new(sql.NullString)
 		case metricopenaichatcompletiontokenusage.FieldID:
 			values[i] = new(uuid.UUID)
@@ -102,6 +104,12 @@ func (moacctu *MetricOpenAIChatCompletionTokenUsage) assignValues(columns []stri
 			} else if value.Valid {
 				moacctu.TotalTokenUsage = int(value.Int64)
 			}
+		case metricopenaichatcompletiontokenusage.FieldModelName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field model_name", values[i])
+			} else if value.Valid {
+				moacctu.ModelName = value.String
+			}
 		case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -161,6 +169,9 @@ func (moacctu *MetricOpenAIChatCompletionTokenUsage) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
 	builder.WriteString(fmt.Sprintf("%v", moacctu.TotalTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("model_name=")
+	builder.WriteString(moacctu.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", moacctu.CreatedAt))

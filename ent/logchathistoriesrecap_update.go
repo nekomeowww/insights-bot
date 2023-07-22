@@ -182,6 +182,20 @@ func (lchru *LogChatHistoriesRecapUpdate) AddRecapType(i int) *LogChatHistoriesR
 	return lchru
 }
 
+// SetModelName sets the "model_name" field.
+func (lchru *LogChatHistoriesRecapUpdate) SetModelName(s string) *LogChatHistoriesRecapUpdate {
+	lchru.mutation.SetModelName(s)
+	return lchru
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lchru *LogChatHistoriesRecapUpdate) SetNillableModelName(s *string) *LogChatHistoriesRecapUpdate {
+	if s != nil {
+		lchru.SetModelName(*s)
+	}
+	return lchru
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchru *LogChatHistoriesRecapUpdate) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdate {
 	lchru.mutation.ResetCreatedAt()
@@ -306,6 +320,9 @@ func (lchru *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (n int, e
 	}
 	if value, ok := lchru.mutation.AddedRecapType(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
+	}
+	if value, ok := lchru.mutation.ModelName(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := lchru.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
@@ -495,6 +512,20 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) AddRecapType(i int) *LogChatHistor
 	return lchruo
 }
 
+// SetModelName sets the "model_name" field.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetModelName(s string) *LogChatHistoriesRecapUpdateOne {
+	lchruo.mutation.SetModelName(s)
+	return lchruo
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableModelName(s *string) *LogChatHistoriesRecapUpdateOne {
+	if s != nil {
+		lchruo.SetModelName(*s)
+	}
+	return lchruo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchruo *LogChatHistoriesRecapUpdateOne) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
 	lchruo.mutation.ResetCreatedAt()
@@ -649,6 +680,9 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if value, ok := lchruo.mutation.AddedRecapType(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
+	}
+	if value, ok := lchruo.mutation.ModelName(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := lchruo.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

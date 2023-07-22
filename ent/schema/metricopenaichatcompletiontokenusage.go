@@ -23,6 +23,7 @@ func (MetricOpenAIChatCompletionTokenUsage) Fields() []ent.Field {
 		field.Int("completion_character_length").Default(0),
 		field.Int("completion_token_usage").Default(0),
 		field.Int("total_token_usage").Default(0),
+		field.String("model_name").Default(""),
 		field.Int64("created_at").DefaultFunc(func() int64 { return time.Now().UnixMilli() }),
 	}
 }

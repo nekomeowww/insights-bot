@@ -35,6 +35,8 @@ type LogSummarizations struct {
 	CompletionTokenUsage int `json:"completion_token_usage,omitempty"`
 	// TotalTokenUsage holds the value of the "total_token_usage" field.
 	TotalTokenUsage int `json:"total_token_usage,omitempty"`
+	// ModelName holds the value of the "model_name" field.
+	ModelName string `json:"model_name,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -49,7 +51,7 @@ func (*LogSummarizations) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case logsummarizations.FieldFromPlatform, logsummarizations.FieldPromptTokenUsage, logsummarizations.FieldCompletionTokenUsage, logsummarizations.FieldTotalTokenUsage, logsummarizations.FieldCreatedAt, logsummarizations.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case logsummarizations.FieldContentURL, logsummarizations.FieldContentTitle, logsummarizations.FieldContentAuthor, logsummarizations.FieldContentText, logsummarizations.FieldContentSummarizedOutputs:
+		case logsummarizations.FieldContentURL, logsummarizations.FieldContentTitle, logsummarizations.FieldContentAuthor, logsummarizations.FieldContentText, logsummarizations.FieldContentSummarizedOutputs, logsummarizations.FieldModelName:
 			values[i] = new(sql.NullString)
 		case logsummarizations.FieldID:
 			values[i] = new(uuid.UUID)
@@ -128,6 +130,12 @@ func (ls *LogSummarizations) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				ls.TotalTokenUsage = int(value.Int64)
 			}
+		case logsummarizations.FieldModelName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field model_name", values[i])
+			} else if value.Valid {
+				ls.ModelName = value.String
+			}
 		case logsummarizations.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -202,6 +210,9 @@ func (ls *LogSummarizations) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
 	builder.WriteString(fmt.Sprintf("%v", ls.TotalTokenUsage))
+	builder.WriteString(", ")
+	builder.WriteString("model_name=")
+	builder.WriteString(ls.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", ls.CreatedAt))

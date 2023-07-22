@@ -33,6 +33,8 @@ type LogChatHistoriesRecap struct {
 	TotalTokenUsage int `json:"total_token_usage,omitempty"`
 	// RecapType holds the value of the "recap_type" field.
 	RecapType int `json:"recap_type,omitempty"`
+	// ModelName holds the value of the "model_name" field.
+	ModelName string `json:"model_name,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -47,7 +49,7 @@ func (*LogChatHistoriesRecap) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case logchathistoriesrecap.FieldChatID, logchathistoriesrecap.FieldFromPlatform, logchathistoriesrecap.FieldPromptTokenUsage, logchathistoriesrecap.FieldCompletionTokenUsage, logchathistoriesrecap.FieldTotalTokenUsage, logchathistoriesrecap.FieldRecapType, logchathistoriesrecap.FieldCreatedAt, logchathistoriesrecap.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case logchathistoriesrecap.FieldRecapInputs, logchathistoriesrecap.FieldRecapOutputs:
+		case logchathistoriesrecap.FieldRecapInputs, logchathistoriesrecap.FieldRecapOutputs, logchathistoriesrecap.FieldModelName:
 			values[i] = new(sql.NullString)
 		case logchathistoriesrecap.FieldID:
 			values[i] = new(uuid.UUID)
@@ -120,6 +122,12 @@ func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				lchr.RecapType = int(value.Int64)
 			}
+		case logchathistoriesrecap.FieldModelName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field model_name", values[i])
+			} else if value.Valid {
+				lchr.ModelName = value.String
+			}
 		case logchathistoriesrecap.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
@@ -191,6 +199,9 @@ func (lchr *LogChatHistoriesRecap) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("recap_type=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.RecapType))
+	builder.WriteString(", ")
+	builder.WriteString("model_name=")
+	builder.WriteString(lchr.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", lchr.CreatedAt))

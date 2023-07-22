@@ -104,6 +104,20 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableTotalToke
 	return moacctuc
 }
 
+// SetModelName sets the "model_name" field.
+func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetModelName(s string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	moacctuc.mutation.SetModelName(s)
+	return moacctuc
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableModelName(s *string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if s != nil {
+		moacctuc.SetModelName(*s)
+	}
+	return moacctuc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetCreatedAt(i int64) *MetricOpenAIChatCompletionTokenUsageCreate {
 	moacctuc.mutation.SetCreatedAt(i)
@@ -191,6 +205,10 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) defaults() {
 		v := metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage
 		moacctuc.mutation.SetTotalTokenUsage(v)
 	}
+	if _, ok := moacctuc.mutation.ModelName(); !ok {
+		v := metricopenaichatcompletiontokenusage.DefaultModelName
+		moacctuc.mutation.SetModelName(v)
+	}
 	if _, ok := moacctuc.mutation.CreatedAt(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultCreatedAt()
 		moacctuc.mutation.SetCreatedAt(v)
@@ -220,6 +238,9 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) check() error {
 	}
 	if _, ok := moacctuc.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.total_token_usage"`)}
+	}
+	if _, ok := moacctuc.mutation.ModelName(); !ok {
+		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.model_name"`)}
 	}
 	if _, ok := moacctuc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.created_at"`)}
@@ -283,6 +304,10 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) createSpec() (*Metri
 	if value, ok := moacctuc.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
+	}
+	if value, ok := moacctuc.mutation.ModelName(); ok {
+		_spec.SetField(metricopenaichatcompletiontokenusage.FieldModelName, field.TypeString, value)
+		_node.ModelName = value
 	}
 	if value, ok := moacctuc.mutation.CreatedAt(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCreatedAt, field.TypeInt64, value)

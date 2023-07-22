@@ -28,6 +28,8 @@ const (
 	FieldTotalTokenUsage = "total_token_usage"
 	// FieldRecapType holds the string denoting the recap_type field in the database.
 	FieldRecapType = "recap_type"
+	// FieldModelName holds the string denoting the model_name field in the database.
+	FieldModelName = "model_name"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -47,6 +49,7 @@ var Columns = []string{
 	FieldCompletionTokenUsage,
 	FieldTotalTokenUsage,
 	FieldRecapType,
+	FieldModelName,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -78,6 +81,8 @@ var (
 	DefaultTotalTokenUsage int
 	// DefaultRecapType holds the default value on creation for the "recap_type" field.
 	DefaultRecapType int
+	// DefaultModelName holds the default value on creation for the "model_name" field.
+	DefaultModelName string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -132,6 +137,11 @@ func ByTotalTokenUsage(opts ...sql.OrderTermOption) OrderOption {
 // ByRecapType orders the results by the recap_type field.
 func ByRecapType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRecapType, opts...).ToFunc()
+}
+
+// ByModelName orders the results by the model_name field.
+func ByModelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldModelName, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

@@ -10,6 +10,16 @@ import (
 )
 
 type MockClient struct {
+	GetModelNameStub        func() string
+	getModelNameMutex       sync.RWMutex
+	getModelNameArgsForCall []struct {
+	}
+	getModelNameReturns struct {
+		result1 string
+	}
+	getModelNameReturnsOnCall map[int]struct {
+		result1 string
+	}
 	SplitContentBasedByTokenLimitationsStub        func(string, int) []string
 	splitContentBasedByTokenLimitationsMutex       sync.RWMutex
 	splitContentBasedByTokenLimitationsArgsForCall []struct {
@@ -94,6 +104,59 @@ type MockClient struct {
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
+}
+
+func (fake *MockClient) GetModelName() string {
+	fake.getModelNameMutex.Lock()
+	ret, specificReturn := fake.getModelNameReturnsOnCall[len(fake.getModelNameArgsForCall)]
+	fake.getModelNameArgsForCall = append(fake.getModelNameArgsForCall, struct {
+	}{})
+	stub := fake.GetModelNameStub
+	fakeReturns := fake.getModelNameReturns
+	fake.recordInvocation("GetModelName", []interface{}{})
+	fake.getModelNameMutex.Unlock()
+	if stub != nil {
+		return stub()
+	}
+	if specificReturn {
+		return ret.result1
+	}
+	return fakeReturns.result1
+}
+
+func (fake *MockClient) GetModelNameCallCount() int {
+	fake.getModelNameMutex.RLock()
+	defer fake.getModelNameMutex.RUnlock()
+	return len(fake.getModelNameArgsForCall)
+}
+
+func (fake *MockClient) GetModelNameCalls(stub func() string) {
+	fake.getModelNameMutex.Lock()
+	defer fake.getModelNameMutex.Unlock()
+	fake.GetModelNameStub = stub
+}
+
+func (fake *MockClient) GetModelNameReturns(result1 string) {
+	fake.getModelNameMutex.Lock()
+	defer fake.getModelNameMutex.Unlock()
+	fake.GetModelNameStub = nil
+	fake.getModelNameReturns = struct {
+		result1 string
+	}{result1}
+}
+
+func (fake *MockClient) GetModelNameReturnsOnCall(i int, result1 string) {
+	fake.getModelNameMutex.Lock()
+	defer fake.getModelNameMutex.Unlock()
+	fake.GetModelNameStub = nil
+	if fake.getModelNameReturnsOnCall == nil {
+		fake.getModelNameReturnsOnCall = make(map[int]struct {
+			result1 string
+		})
+	}
+	fake.getModelNameReturnsOnCall[i] = struct {
+		result1 string
+	}{result1}
 }
 
 func (fake *MockClient) SplitContentBasedByTokenLimitations(arg1 string, arg2 int) []string {
@@ -485,6 +548,8 @@ func (fake *MockClient) TruncateContentBasedOnTokensReturnsOnCall(i int, result1
 func (fake *MockClient) Invocations() map[string][][]interface{} {
 	fake.invocationsMutex.RLock()
 	defer fake.invocationsMutex.RUnlock()
+	fake.getModelNameMutex.RLock()
+	defer fake.getModelNameMutex.RUnlock()
 	fake.splitContentBasedByTokenLimitationsMutex.RLock()
 	defer fake.splitContentBasedByTokenLimitationsMutex.RUnlock()
 	fake.summarizeAnyMutex.RLock()

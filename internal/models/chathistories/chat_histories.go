@@ -395,6 +395,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		SetTotalTokenUsage(statusUsage.TotalTokens).
 		SetFromPlatform(int(FromPlatformTelegram)).
 		SetRecapType(int(RecapTypeForGroup)).
+		SetModelName(m.openAI.GetModelName()).
 		Exec(context.Background())
 	if err != nil {
 		return make([]string, 0), err

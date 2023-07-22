@@ -34,8 +34,10 @@ func TestMain(m *testing.M) {
 	c, err := NewClient()(NewClientParams{
 		Logger: logger,
 		Config: &configs.Config{
-			OpenAIAPISecret: "",
-			OpenAIAPIHost:   "",
+			OpenAI: configs.SectionOpenAI{
+				Host:   "",
+				Secret: "",
+			},
 		},
 		Ent: ent,
 	})

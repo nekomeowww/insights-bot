@@ -83,6 +83,11 @@ func TotalTokenUsage(v int) predicate.MetricOpenAIChatCompletionTokenUsage {
 	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldEQ(FieldTotalTokenUsage, v))
 }
 
+// ModelName applies equality check predicate on the "model_name" field. It's identical to ModelNameEQ.
+func ModelName(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldEQ(FieldModelName, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.MetricOpenAIChatCompletionTokenUsage {
 	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldEQ(FieldCreatedAt, v))
@@ -351,6 +356,71 @@ func TotalTokenUsageLT(v int) predicate.MetricOpenAIChatCompletionTokenUsage {
 // TotalTokenUsageLTE applies the LTE predicate on the "total_token_usage" field.
 func TotalTokenUsageLTE(v int) predicate.MetricOpenAIChatCompletionTokenUsage {
 	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldLTE(FieldTotalTokenUsage, v))
+}
+
+// ModelNameEQ applies the EQ predicate on the "model_name" field.
+func ModelNameEQ(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldEQ(FieldModelName, v))
+}
+
+// ModelNameNEQ applies the NEQ predicate on the "model_name" field.
+func ModelNameNEQ(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldNEQ(FieldModelName, v))
+}
+
+// ModelNameIn applies the In predicate on the "model_name" field.
+func ModelNameIn(vs ...string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldIn(FieldModelName, vs...))
+}
+
+// ModelNameNotIn applies the NotIn predicate on the "model_name" field.
+func ModelNameNotIn(vs ...string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldNotIn(FieldModelName, vs...))
+}
+
+// ModelNameGT applies the GT predicate on the "model_name" field.
+func ModelNameGT(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldGT(FieldModelName, v))
+}
+
+// ModelNameGTE applies the GTE predicate on the "model_name" field.
+func ModelNameGTE(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldGTE(FieldModelName, v))
+}
+
+// ModelNameLT applies the LT predicate on the "model_name" field.
+func ModelNameLT(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldLT(FieldModelName, v))
+}
+
+// ModelNameLTE applies the LTE predicate on the "model_name" field.
+func ModelNameLTE(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldLTE(FieldModelName, v))
+}
+
+// ModelNameContains applies the Contains predicate on the "model_name" field.
+func ModelNameContains(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldContains(FieldModelName, v))
+}
+
+// ModelNameHasPrefix applies the HasPrefix predicate on the "model_name" field.
+func ModelNameHasPrefix(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldHasPrefix(FieldModelName, v))
+}
+
+// ModelNameHasSuffix applies the HasSuffix predicate on the "model_name" field.
+func ModelNameHasSuffix(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldHasSuffix(FieldModelName, v))
+}
+
+// ModelNameEqualFold applies the EqualFold predicate on the "model_name" field.
+func ModelNameEqualFold(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldEqualFold(FieldModelName, v))
+}
+
+// ModelNameContainsFold applies the ContainsFold predicate on the "model_name" field.
+func ModelNameContainsFold(v string) predicate.MetricOpenAIChatCompletionTokenUsage {
+	return predicate.MetricOpenAIChatCompletionTokenUsage(sql.FieldContainsFold(FieldModelName, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

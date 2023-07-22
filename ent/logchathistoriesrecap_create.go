@@ -132,6 +132,20 @@ func (lchrc *LogChatHistoriesRecapCreate) SetNillableRecapType(i *int) *LogChatH
 	return lchrc
 }
 
+// SetModelName sets the "model_name" field.
+func (lchrc *LogChatHistoriesRecapCreate) SetModelName(s string) *LogChatHistoriesRecapCreate {
+	lchrc.mutation.SetModelName(s)
+	return lchrc
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lchrc *LogChatHistoriesRecapCreate) SetNillableModelName(s *string) *LogChatHistoriesRecapCreate {
+	if s != nil {
+		lchrc.SetModelName(*s)
+	}
+	return lchrc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lchrc *LogChatHistoriesRecapCreate) SetCreatedAt(i int64) *LogChatHistoriesRecapCreate {
 	lchrc.mutation.SetCreatedAt(i)
@@ -241,6 +255,10 @@ func (lchrc *LogChatHistoriesRecapCreate) defaults() {
 		v := logchathistoriesrecap.DefaultRecapType
 		lchrc.mutation.SetRecapType(v)
 	}
+	if _, ok := lchrc.mutation.ModelName(); !ok {
+		v := logchathistoriesrecap.DefaultModelName
+		lchrc.mutation.SetModelName(v)
+	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		v := logchathistoriesrecap.DefaultCreatedAt()
 		lchrc.mutation.SetCreatedAt(v)
@@ -280,6 +298,9 @@ func (lchrc *LogChatHistoriesRecapCreate) check() error {
 	}
 	if _, ok := lchrc.mutation.RecapType(); !ok {
 		return &ValidationError{Name: "recap_type", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.recap_type"`)}
+	}
+	if _, ok := lchrc.mutation.ModelName(); !ok {
+		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.model_name"`)}
 	}
 	if _, ok := lchrc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.created_at"`)}
@@ -354,6 +375,10 @@ func (lchrc *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, 
 	if value, ok := lchrc.mutation.RecapType(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 		_node.RecapType = value
+	}
+	if value, ok := lchrc.mutation.ModelName(); ok {
+		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
+		_node.ModelName = value
 	}
 	if value, ok := lchrc.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)

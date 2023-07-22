@@ -147,6 +147,20 @@ func (moacctuu *MetricOpenAIChatCompletionTokenUsageUpdate) AddTotalTokenUsage(i
 	return moacctuu
 }
 
+// SetModelName sets the "model_name" field.
+func (moacctuu *MetricOpenAIChatCompletionTokenUsageUpdate) SetModelName(s string) *MetricOpenAIChatCompletionTokenUsageUpdate {
+	moacctuu.mutation.SetModelName(s)
+	return moacctuu
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (moacctuu *MetricOpenAIChatCompletionTokenUsageUpdate) SetNillableModelName(s *string) *MetricOpenAIChatCompletionTokenUsageUpdate {
+	if s != nil {
+		moacctuu.SetModelName(*s)
+	}
+	return moacctuu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (moacctuu *MetricOpenAIChatCompletionTokenUsageUpdate) SetCreatedAt(i int64) *MetricOpenAIChatCompletionTokenUsageUpdate {
 	moacctuu.mutation.ResetCreatedAt()
@@ -241,6 +255,9 @@ func (moacctuu *MetricOpenAIChatCompletionTokenUsageUpdate) sqlSave(ctx context.
 	}
 	if value, ok := moacctuu.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(metricopenaichatcompletiontokenusage.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := moacctuu.mutation.ModelName(); ok {
+		_spec.SetField(metricopenaichatcompletiontokenusage.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := moacctuu.mutation.CreatedAt(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCreatedAt, field.TypeInt64, value)
@@ -389,6 +406,20 @@ func (moacctuuo *MetricOpenAIChatCompletionTokenUsageUpdateOne) AddTotalTokenUsa
 	return moacctuuo
 }
 
+// SetModelName sets the "model_name" field.
+func (moacctuuo *MetricOpenAIChatCompletionTokenUsageUpdateOne) SetModelName(s string) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	moacctuuo.mutation.SetModelName(s)
+	return moacctuuo
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (moacctuuo *MetricOpenAIChatCompletionTokenUsageUpdateOne) SetNillableModelName(s *string) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	if s != nil {
+		moacctuuo.SetModelName(*s)
+	}
+	return moacctuuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (moacctuuo *MetricOpenAIChatCompletionTokenUsageUpdateOne) SetCreatedAt(i int64) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
 	moacctuuo.mutation.ResetCreatedAt()
@@ -513,6 +544,9 @@ func (moacctuuo *MetricOpenAIChatCompletionTokenUsageUpdateOne) sqlSave(ctx cont
 	}
 	if value, ok := moacctuuo.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(metricopenaichatcompletiontokenusage.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := moacctuuo.mutation.ModelName(); ok {
+		_spec.SetField(metricopenaichatcompletiontokenusage.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := moacctuuo.mutation.CreatedAt(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCreatedAt, field.TypeInt64, value)

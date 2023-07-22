@@ -1665,6 +1665,7 @@ type LogChatHistoriesRecapMutation struct {
 	addtotal_token_usage      *int
 	recap_type                *int
 	addrecap_type             *int
+	model_name                *string
 	created_at                *int64
 	addcreated_at             *int64
 	updated_at                *int64
@@ -2187,6 +2188,42 @@ func (m *LogChatHistoriesRecapMutation) ResetRecapType() {
 	m.addrecap_type = nil
 }
 
+// SetModelName sets the "model_name" field.
+func (m *LogChatHistoriesRecapMutation) SetModelName(s string) {
+	m.model_name = &s
+}
+
+// ModelName returns the value of the "model_name" field in the mutation.
+func (m *LogChatHistoriesRecapMutation) ModelName() (r string, exists bool) {
+	v := m.model_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModelName returns the old "model_name" field's value of the LogChatHistoriesRecap entity.
+// If the LogChatHistoriesRecap object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogChatHistoriesRecapMutation) OldModelName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModelName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModelName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModelName: %w", err)
+	}
+	return oldValue.ModelName, nil
+}
+
+// ResetModelName resets all changes to the "model_name" field.
+func (m *LogChatHistoriesRecapMutation) ResetModelName() {
+	m.model_name = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *LogChatHistoriesRecapMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -2333,7 +2370,7 @@ func (m *LogChatHistoriesRecapMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogChatHistoriesRecapMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.chat_id != nil {
 		fields = append(fields, logchathistoriesrecap.FieldChatID)
 	}
@@ -2357,6 +2394,9 @@ func (m *LogChatHistoriesRecapMutation) Fields() []string {
 	}
 	if m.recap_type != nil {
 		fields = append(fields, logchathistoriesrecap.FieldRecapType)
+	}
+	if m.model_name != nil {
+		fields = append(fields, logchathistoriesrecap.FieldModelName)
 	}
 	if m.created_at != nil {
 		fields = append(fields, logchathistoriesrecap.FieldCreatedAt)
@@ -2388,6 +2428,8 @@ func (m *LogChatHistoriesRecapMutation) Field(name string) (ent.Value, bool) {
 		return m.TotalTokenUsage()
 	case logchathistoriesrecap.FieldRecapType:
 		return m.RecapType()
+	case logchathistoriesrecap.FieldModelName:
+		return m.ModelName()
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.CreatedAt()
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2417,6 +2459,8 @@ func (m *LogChatHistoriesRecapMutation) OldField(ctx context.Context, name strin
 		return m.OldTotalTokenUsage(ctx)
 	case logchathistoriesrecap.FieldRecapType:
 		return m.OldRecapType(ctx)
+	case logchathistoriesrecap.FieldModelName:
+		return m.OldModelName(ctx)
 	case logchathistoriesrecap.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case logchathistoriesrecap.FieldUpdatedAt:
@@ -2485,6 +2529,13 @@ func (m *LogChatHistoriesRecapMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRecapType(v)
+		return nil
+	case logchathistoriesrecap.FieldModelName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModelName(v)
 		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -2672,6 +2723,9 @@ func (m *LogChatHistoriesRecapMutation) ResetField(name string) error {
 	case logchathistoriesrecap.FieldRecapType:
 		m.ResetRecapType()
 		return nil
+	case logchathistoriesrecap.FieldModelName:
+		m.ResetModelName()
+		return nil
 	case logchathistoriesrecap.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -2749,6 +2803,7 @@ type LogSummarizationsMutation struct {
 	addcompletion_token_usage  *int
 	total_token_usage          *int
 	addtotal_token_usage       *int
+	model_name                 *string
 	created_at                 *int64
 	addcreated_at              *int64
 	updated_at                 *int64
@@ -3267,6 +3322,42 @@ func (m *LogSummarizationsMutation) ResetTotalTokenUsage() {
 	m.addtotal_token_usage = nil
 }
 
+// SetModelName sets the "model_name" field.
+func (m *LogSummarizationsMutation) SetModelName(s string) {
+	m.model_name = &s
+}
+
+// ModelName returns the value of the "model_name" field in the mutation.
+func (m *LogSummarizationsMutation) ModelName() (r string, exists bool) {
+	v := m.model_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModelName returns the old "model_name" field's value of the LogSummarizations entity.
+// If the LogSummarizations object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *LogSummarizationsMutation) OldModelName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModelName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModelName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModelName: %w", err)
+	}
+	return oldValue.ModelName, nil
+}
+
+// ResetModelName resets all changes to the "model_name" field.
+func (m *LogSummarizationsMutation) ResetModelName() {
+	m.model_name = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *LogSummarizationsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -3413,7 +3504,7 @@ func (m *LogSummarizationsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *LogSummarizationsMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.content_url != nil {
 		fields = append(fields, logsummarizations.FieldContentURL)
 	}
@@ -3440,6 +3531,9 @@ func (m *LogSummarizationsMutation) Fields() []string {
 	}
 	if m.total_token_usage != nil {
 		fields = append(fields, logsummarizations.FieldTotalTokenUsage)
+	}
+	if m.model_name != nil {
+		fields = append(fields, logsummarizations.FieldModelName)
 	}
 	if m.created_at != nil {
 		fields = append(fields, logsummarizations.FieldCreatedAt)
@@ -3473,6 +3567,8 @@ func (m *LogSummarizationsMutation) Field(name string) (ent.Value, bool) {
 		return m.CompletionTokenUsage()
 	case logsummarizations.FieldTotalTokenUsage:
 		return m.TotalTokenUsage()
+	case logsummarizations.FieldModelName:
+		return m.ModelName()
 	case logsummarizations.FieldCreatedAt:
 		return m.CreatedAt()
 	case logsummarizations.FieldUpdatedAt:
@@ -3504,6 +3600,8 @@ func (m *LogSummarizationsMutation) OldField(ctx context.Context, name string) (
 		return m.OldCompletionTokenUsage(ctx)
 	case logsummarizations.FieldTotalTokenUsage:
 		return m.OldTotalTokenUsage(ctx)
+	case logsummarizations.FieldModelName:
+		return m.OldModelName(ctx)
 	case logsummarizations.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case logsummarizations.FieldUpdatedAt:
@@ -3579,6 +3677,13 @@ func (m *LogSummarizationsMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTotalTokenUsage(v)
+		return nil
+	case logsummarizations.FieldModelName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModelName(v)
 		return nil
 	case logsummarizations.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -3745,6 +3850,9 @@ func (m *LogSummarizationsMutation) ResetField(name string) error {
 	case logsummarizations.FieldTotalTokenUsage:
 		m.ResetTotalTokenUsage()
 		return nil
+	case logsummarizations.FieldModelName:
+		m.ResetModelName()
+		return nil
 	case logsummarizations.FieldCreatedAt:
 		m.ResetCreatedAt()
 		return nil
@@ -3820,6 +3928,7 @@ type MetricOpenAIChatCompletionTokenUsageMutation struct {
 	addcompletion_token_usage      *int
 	total_token_usage              *int
 	addtotal_token_usage           *int
+	model_name                     *string
 	created_at                     *int64
 	addcreated_at                  *int64
 	clearedFields                  map[string]struct{}
@@ -4248,6 +4357,42 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetTotalTokenUsage() {
 	m.addtotal_token_usage = nil
 }
 
+// SetModelName sets the "model_name" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetModelName(s string) {
+	m.model_name = &s
+}
+
+// ModelName returns the value of the "model_name" field in the mutation.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ModelName() (r string, exists bool) {
+	v := m.model_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldModelName returns the old "model_name" field's value of the MetricOpenAIChatCompletionTokenUsage entity.
+// If the MetricOpenAIChatCompletionTokenUsage object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldModelName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldModelName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldModelName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldModelName: %w", err)
+	}
+	return oldValue.ModelName, nil
+}
+
+// ResetModelName resets all changes to the "model_name" field.
+func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetModelName() {
+	m.model_name = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -4338,7 +4483,7 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *MetricOpenAIChatCompletionTokenUsageMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 8)
 	if m.prompt_operation != nil {
 		fields = append(fields, metricopenaichatcompletiontokenusage.FieldPromptOperation)
 	}
@@ -4356,6 +4501,9 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) Fields() []string {
 	}
 	if m.total_token_usage != nil {
 		fields = append(fields, metricopenaichatcompletiontokenusage.FieldTotalTokenUsage)
+	}
+	if m.model_name != nil {
+		fields = append(fields, metricopenaichatcompletiontokenusage.FieldModelName)
 	}
 	if m.created_at != nil {
 		fields = append(fields, metricopenaichatcompletiontokenusage.FieldCreatedAt)
@@ -4380,6 +4528,8 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) Field(name string) (ent.V
 		return m.CompletionTokenUsage()
 	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
 		return m.TotalTokenUsage()
+	case metricopenaichatcompletiontokenusage.FieldModelName:
+		return m.ModelName()
 	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 		return m.CreatedAt()
 	}
@@ -4403,6 +4553,8 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) OldField(ctx context.Cont
 		return m.OldCompletionTokenUsage(ctx)
 	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
 		return m.OldTotalTokenUsage(ctx)
+	case metricopenaichatcompletiontokenusage.FieldModelName:
+		return m.OldModelName(ctx)
 	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	}
@@ -4455,6 +4607,13 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) SetField(name string, val
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTotalTokenUsage(v)
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldModelName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetModelName(v)
 		return nil
 	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -4604,6 +4763,9 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetField(name string) e
 		return nil
 	case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
 		m.ResetTotalTokenUsage()
+		return nil
+	case metricopenaichatcompletiontokenusage.FieldModelName:
+		m.ResetModelName()
 		return nil
 	case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 		m.ResetCreatedAt()

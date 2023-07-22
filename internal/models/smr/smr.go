@@ -123,6 +123,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		SetModelName(m.openai.GetModelName()).
 		Exec(context.Background())
 	if err != nil {
 		m.logger.Error("failed to create log", zap.Error(err))

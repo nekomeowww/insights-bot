@@ -48,6 +48,7 @@ var (
 		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "recap_type", Type: field.TypeInt, Default: 0},
+		{Name: "model_name", Type: field.TypeString, Default: ""},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}
@@ -69,6 +70,7 @@ var (
 		{Name: "prompt_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "model_name", Type: field.TypeString, Default: ""},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}
@@ -87,6 +89,7 @@ var (
 		{Name: "completion_character_length", Type: field.TypeInt, Default: 0},
 		{Name: "completion_token_usage", Type: field.TypeInt, Default: 0},
 		{Name: "total_token_usage", Type: field.TypeInt, Default: 0},
+		{Name: "model_name", Type: field.TypeString, Default: ""},
 		{Name: "created_at", Type: field.TypeInt64},
 	}
 	// MetricOpenAiChatCompletionTokenUsagesTable holds the schema information for the "metric_open_ai_chat_completion_token_usages" table.

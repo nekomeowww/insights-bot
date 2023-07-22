@@ -135,12 +135,16 @@ func init() {
 	logchathistoriesrecapDescRecapType := logchathistoriesrecapFields[8].Descriptor()
 	// logchathistoriesrecap.DefaultRecapType holds the default value on creation for the recap_type field.
 	logchathistoriesrecap.DefaultRecapType = logchathistoriesrecapDescRecapType.Default.(int)
+	// logchathistoriesrecapDescModelName is the schema descriptor for model_name field.
+	logchathistoriesrecapDescModelName := logchathistoriesrecapFields[9].Descriptor()
+	// logchathistoriesrecap.DefaultModelName holds the default value on creation for the model_name field.
+	logchathistoriesrecap.DefaultModelName = logchathistoriesrecapDescModelName.Default.(string)
 	// logchathistoriesrecapDescCreatedAt is the schema descriptor for created_at field.
-	logchathistoriesrecapDescCreatedAt := logchathistoriesrecapFields[9].Descriptor()
+	logchathistoriesrecapDescCreatedAt := logchathistoriesrecapFields[10].Descriptor()
 	// logchathistoriesrecap.DefaultCreatedAt holds the default value on creation for the created_at field.
 	logchathistoriesrecap.DefaultCreatedAt = logchathistoriesrecapDescCreatedAt.Default.(func() int64)
 	// logchathistoriesrecapDescUpdatedAt is the schema descriptor for updated_at field.
-	logchathistoriesrecapDescUpdatedAt := logchathistoriesrecapFields[10].Descriptor()
+	logchathistoriesrecapDescUpdatedAt := logchathistoriesrecapFields[11].Descriptor()
 	// logchathistoriesrecap.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	logchathistoriesrecap.DefaultUpdatedAt = logchathistoriesrecapDescUpdatedAt.Default.(func() int64)
 	// logchathistoriesrecapDescID is the schema descriptor for id field.
@@ -185,12 +189,16 @@ func init() {
 	logsummarizationsDescTotalTokenUsage := logsummarizationsFields[9].Descriptor()
 	// logsummarizations.DefaultTotalTokenUsage holds the default value on creation for the total_token_usage field.
 	logsummarizations.DefaultTotalTokenUsage = logsummarizationsDescTotalTokenUsage.Default.(int)
+	// logsummarizationsDescModelName is the schema descriptor for model_name field.
+	logsummarizationsDescModelName := logsummarizationsFields[10].Descriptor()
+	// logsummarizations.DefaultModelName holds the default value on creation for the model_name field.
+	logsummarizations.DefaultModelName = logsummarizationsDescModelName.Default.(string)
 	// logsummarizationsDescCreatedAt is the schema descriptor for created_at field.
-	logsummarizationsDescCreatedAt := logsummarizationsFields[10].Descriptor()
+	logsummarizationsDescCreatedAt := logsummarizationsFields[11].Descriptor()
 	// logsummarizations.DefaultCreatedAt holds the default value on creation for the created_at field.
 	logsummarizations.DefaultCreatedAt = logsummarizationsDescCreatedAt.Default.(func() int64)
 	// logsummarizationsDescUpdatedAt is the schema descriptor for updated_at field.
-	logsummarizationsDescUpdatedAt := logsummarizationsFields[11].Descriptor()
+	logsummarizationsDescUpdatedAt := logsummarizationsFields[12].Descriptor()
 	// logsummarizations.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	logsummarizations.DefaultUpdatedAt = logsummarizationsDescUpdatedAt.Default.(func() int64)
 	// logsummarizationsDescID is the schema descriptor for id field.
@@ -223,8 +231,12 @@ func init() {
 	metricopenaichatcompletiontokenusageDescTotalTokenUsage := metricopenaichatcompletiontokenusageFields[6].Descriptor()
 	// metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage holds the default value on creation for the total_token_usage field.
 	metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage = metricopenaichatcompletiontokenusageDescTotalTokenUsage.Default.(int)
+	// metricopenaichatcompletiontokenusageDescModelName is the schema descriptor for model_name field.
+	metricopenaichatcompletiontokenusageDescModelName := metricopenaichatcompletiontokenusageFields[7].Descriptor()
+	// metricopenaichatcompletiontokenusage.DefaultModelName holds the default value on creation for the model_name field.
+	metricopenaichatcompletiontokenusage.DefaultModelName = metricopenaichatcompletiontokenusageDescModelName.Default.(string)
 	// metricopenaichatcompletiontokenusageDescCreatedAt is the schema descriptor for created_at field.
-	metricopenaichatcompletiontokenusageDescCreatedAt := metricopenaichatcompletiontokenusageFields[7].Descriptor()
+	metricopenaichatcompletiontokenusageDescCreatedAt := metricopenaichatcompletiontokenusageFields[8].Descriptor()
 	// metricopenaichatcompletiontokenusage.DefaultCreatedAt holds the default value on creation for the created_at field.
 	metricopenaichatcompletiontokenusage.DefaultCreatedAt = metricopenaichatcompletiontokenusageDescCreatedAt.Default.(func() int64)
 	// metricopenaichatcompletiontokenusageDescID is the schema descriptor for id field.

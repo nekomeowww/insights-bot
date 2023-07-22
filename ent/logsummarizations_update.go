@@ -182,6 +182,20 @@ func (lsu *LogSummarizationsUpdate) AddTotalTokenUsage(i int) *LogSummarizations
 	return lsu
 }
 
+// SetModelName sets the "model_name" field.
+func (lsu *LogSummarizationsUpdate) SetModelName(s string) *LogSummarizationsUpdate {
+	lsu.mutation.SetModelName(s)
+	return lsu
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lsu *LogSummarizationsUpdate) SetNillableModelName(s *string) *LogSummarizationsUpdate {
+	if s != nil {
+		lsu.SetModelName(*s)
+	}
+	return lsu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lsu *LogSummarizationsUpdate) SetCreatedAt(i int64) *LogSummarizationsUpdate {
 	lsu.mutation.ResetCreatedAt()
@@ -303,6 +317,9 @@ func (lsu *LogSummarizationsUpdate) sqlSave(ctx context.Context) (n int, err err
 	}
 	if value, ok := lsu.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsu.mutation.ModelName(); ok {
+		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := lsu.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
@@ -492,6 +509,20 @@ func (lsuo *LogSummarizationsUpdateOne) AddTotalTokenUsage(i int) *LogSummarizat
 	return lsuo
 }
 
+// SetModelName sets the "model_name" field.
+func (lsuo *LogSummarizationsUpdateOne) SetModelName(s string) *LogSummarizationsUpdateOne {
+	lsuo.mutation.SetModelName(s)
+	return lsuo
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lsuo *LogSummarizationsUpdateOne) SetNillableModelName(s *string) *LogSummarizationsUpdateOne {
+	if s != nil {
+		lsuo.SetModelName(*s)
+	}
+	return lsuo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lsuo *LogSummarizationsUpdateOne) SetCreatedAt(i int64) *LogSummarizationsUpdateOne {
 	lsuo.mutation.ResetCreatedAt()
@@ -643,6 +674,9 @@ func (lsuo *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *Log
 	}
 	if value, ok := lsuo.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
+	}
+	if value, ok := lsuo.mutation.ModelName(); ok {
+		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
 	}
 	if value, ok := lsuo.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)

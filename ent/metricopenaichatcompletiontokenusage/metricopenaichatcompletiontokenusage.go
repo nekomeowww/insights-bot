@@ -24,6 +24,8 @@ const (
 	FieldCompletionTokenUsage = "completion_token_usage"
 	// FieldTotalTokenUsage holds the string denoting the total_token_usage field in the database.
 	FieldTotalTokenUsage = "total_token_usage"
+	// FieldModelName holds the string denoting the model_name field in the database.
+	FieldModelName = "model_name"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// Table holds the table name of the metricopenaichatcompletiontokenusage in the database.
@@ -39,6 +41,7 @@ var Columns = []string{
 	FieldCompletionCharacterLength,
 	FieldCompletionTokenUsage,
 	FieldTotalTokenUsage,
+	FieldModelName,
 	FieldCreatedAt,
 }
 
@@ -65,6 +68,8 @@ var (
 	DefaultCompletionTokenUsage int
 	// DefaultTotalTokenUsage holds the default value on creation for the "total_token_usage" field.
 	DefaultTotalTokenUsage int
+	// DefaultModelName holds the default value on creation for the "model_name" field.
+	DefaultModelName string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultID holds the default value on creation for the "id" field.
@@ -107,6 +112,11 @@ func ByCompletionTokenUsage(opts ...sql.OrderTermOption) OrderOption {
 // ByTotalTokenUsage orders the results by the total_token_usage field.
 func ByTotalTokenUsage(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTotalTokenUsage, opts...).ToFunc()
+}
+
+// ByModelName orders the results by the model_name field.
+func ByModelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldModelName, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

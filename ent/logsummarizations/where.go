@@ -98,6 +98,11 @@ func TotalTokenUsage(v int) predicate.LogSummarizations {
 	return predicate.LogSummarizations(sql.FieldEQ(FieldTotalTokenUsage, v))
 }
 
+// ModelName applies equality check predicate on the "model_name" field. It's identical to ModelNameEQ.
+func ModelName(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldEQ(FieldModelName, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.LogSummarizations {
 	return predicate.LogSummarizations(sql.FieldEQ(FieldCreatedAt, v))
@@ -591,6 +596,71 @@ func TotalTokenUsageLT(v int) predicate.LogSummarizations {
 // TotalTokenUsageLTE applies the LTE predicate on the "total_token_usage" field.
 func TotalTokenUsageLTE(v int) predicate.LogSummarizations {
 	return predicate.LogSummarizations(sql.FieldLTE(FieldTotalTokenUsage, v))
+}
+
+// ModelNameEQ applies the EQ predicate on the "model_name" field.
+func ModelNameEQ(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldEQ(FieldModelName, v))
+}
+
+// ModelNameNEQ applies the NEQ predicate on the "model_name" field.
+func ModelNameNEQ(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldNEQ(FieldModelName, v))
+}
+
+// ModelNameIn applies the In predicate on the "model_name" field.
+func ModelNameIn(vs ...string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldIn(FieldModelName, vs...))
+}
+
+// ModelNameNotIn applies the NotIn predicate on the "model_name" field.
+func ModelNameNotIn(vs ...string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldNotIn(FieldModelName, vs...))
+}
+
+// ModelNameGT applies the GT predicate on the "model_name" field.
+func ModelNameGT(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldGT(FieldModelName, v))
+}
+
+// ModelNameGTE applies the GTE predicate on the "model_name" field.
+func ModelNameGTE(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldGTE(FieldModelName, v))
+}
+
+// ModelNameLT applies the LT predicate on the "model_name" field.
+func ModelNameLT(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldLT(FieldModelName, v))
+}
+
+// ModelNameLTE applies the LTE predicate on the "model_name" field.
+func ModelNameLTE(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldLTE(FieldModelName, v))
+}
+
+// ModelNameContains applies the Contains predicate on the "model_name" field.
+func ModelNameContains(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldContains(FieldModelName, v))
+}
+
+// ModelNameHasPrefix applies the HasPrefix predicate on the "model_name" field.
+func ModelNameHasPrefix(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldHasPrefix(FieldModelName, v))
+}
+
+// ModelNameHasSuffix applies the HasSuffix predicate on the "model_name" field.
+func ModelNameHasSuffix(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldHasSuffix(FieldModelName, v))
+}
+
+// ModelNameEqualFold applies the EqualFold predicate on the "model_name" field.
+func ModelNameEqualFold(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldEqualFold(FieldModelName, v))
+}
+
+// ModelNameContainsFold applies the ContainsFold predicate on the "model_name" field.
+func ModelNameContainsFold(v string) predicate.LogSummarizations {
+	return predicate.LogSummarizations(sql.FieldContainsFold(FieldModelName, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

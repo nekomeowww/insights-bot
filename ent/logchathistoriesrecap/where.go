@@ -93,6 +93,11 @@ func RecapType(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldRecapType, v))
 }
 
+// ModelName applies equality check predicate on the "model_name" field. It's identical to ModelNameEQ.
+func ModelName(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldModelName, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldCreatedAt, v))
@@ -471,6 +476,71 @@ func RecapTypeLT(v int) predicate.LogChatHistoriesRecap {
 // RecapTypeLTE applies the LTE predicate on the "recap_type" field.
 func RecapTypeLTE(v int) predicate.LogChatHistoriesRecap {
 	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldRecapType, v))
+}
+
+// ModelNameEQ applies the EQ predicate on the "model_name" field.
+func ModelNameEQ(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEQ(FieldModelName, v))
+}
+
+// ModelNameNEQ applies the NEQ predicate on the "model_name" field.
+func ModelNameNEQ(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNEQ(FieldModelName, v))
+}
+
+// ModelNameIn applies the In predicate on the "model_name" field.
+func ModelNameIn(vs ...string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldIn(FieldModelName, vs...))
+}
+
+// ModelNameNotIn applies the NotIn predicate on the "model_name" field.
+func ModelNameNotIn(vs ...string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldNotIn(FieldModelName, vs...))
+}
+
+// ModelNameGT applies the GT predicate on the "model_name" field.
+func ModelNameGT(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGT(FieldModelName, v))
+}
+
+// ModelNameGTE applies the GTE predicate on the "model_name" field.
+func ModelNameGTE(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldGTE(FieldModelName, v))
+}
+
+// ModelNameLT applies the LT predicate on the "model_name" field.
+func ModelNameLT(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLT(FieldModelName, v))
+}
+
+// ModelNameLTE applies the LTE predicate on the "model_name" field.
+func ModelNameLTE(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldLTE(FieldModelName, v))
+}
+
+// ModelNameContains applies the Contains predicate on the "model_name" field.
+func ModelNameContains(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldContains(FieldModelName, v))
+}
+
+// ModelNameHasPrefix applies the HasPrefix predicate on the "model_name" field.
+func ModelNameHasPrefix(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldHasPrefix(FieldModelName, v))
+}
+
+// ModelNameHasSuffix applies the HasSuffix predicate on the "model_name" field.
+func ModelNameHasSuffix(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldHasSuffix(FieldModelName, v))
+}
+
+// ModelNameEqualFold applies the EqualFold predicate on the "model_name" field.
+func ModelNameEqualFold(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldEqualFold(FieldModelName, v))
+}
+
+// ModelNameContainsFold applies the ContainsFold predicate on the "model_name" field.
+func ModelNameContainsFold(v string) predicate.LogChatHistoriesRecap {
+	return predicate.LogChatHistoriesRecap(sql.FieldContainsFold(FieldModelName, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

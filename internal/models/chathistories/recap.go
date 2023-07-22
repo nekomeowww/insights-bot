@@ -51,7 +51,10 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 		return make([]*openai.ChatHistorySummarizationOutputs, 0), goopenai.Usage{}, nil
 	}
 
-	m.logger.Info(fmt.Sprintf("✍️ summarizing chat histories:\n%s", s), zap.Int64("chat_id", chatID))
+	m.logger.Info(fmt.Sprintf("✍️ summarizing chat histories:\n%s", s),
+		zap.Int64("chat_id", chatID),
+		zap.String("model_name", m.openAI.GetModelName()),
+	)
 
 	resp, err := m.openAI.SummarizeChatHistories(context.Background(), s)
 	if err != nil {
@@ -61,7 +64,10 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 		return nil, goopenai.Usage{}, nil
 	}
 
-	m.logger.Info("✅ summarized chat histories", zap.Int64("chat_id", chatID))
+	m.logger.Info("✅ summarized chat histories",
+		zap.Int64("chat_id", chatID),
+		zap.String("model_name", m.openAI.GetModelName()),
+	)
 	if resp.Choices[0].Message.Content == "" {
 		return nil, goopenai.Usage{}, nil
 	}
@@ -73,6 +79,7 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 		m.logger.Error("failed to unmarshal chat history summarization output",
 			zap.String("content", resp.Choices[0].Message.Content),
 			zap.Int64("chat_id", chatID),
+			zap.String("model_name", m.openAI.GetModelName()),
 		)
 
 		return nil, resp.Usage, err
@@ -80,6 +87,7 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 
 	m.logger.Info(fmt.Sprintf("✅ unmarshaled chat history summarization output: %s", fo.May(json.Marshal(outputs))),
 		zap.Int64("chat_id", chatID),
+		zap.String("model_name", m.openAI.GetModelName()),
 	)
 
 	return outputs, resp.Usage, nil
@@ -101,7 +109,10 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 			statusUsage.TotalTokens += usage.TotalTokens
 
 			if err != nil {
-				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried), zap.Int64("chat_id", chatID))
+				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried),
+					zap.Int64("chat_id", chatID),
+					zap.String("model_name", m.openAI.GetModelName()),
+				)
 				return err
 			}
 

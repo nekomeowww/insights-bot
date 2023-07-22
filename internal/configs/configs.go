@@ -8,6 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/samber/lo"
+	goopenai "github.com/sashabaranov/go-openai"
 )
 
 const (
@@ -26,8 +27,10 @@ const (
 	EnvDiscordBotPublicKey   = "DISCORD_BOT_PUBLIC_KEY"
 	EnvDiscordBotWebhookPort = "DISCORD_BOT_WEBHOOK_PORT"
 
-	EnvOpenAIAPISecret              = "OPENAI_API_SECRET" //nolint:gosec
-	EnvOpenAIAPIHost                = "OPENAI_API_HOST"
+	EnvOpenAIAPISecret    = "OPENAI_API_SECRET" //nolint:gosec
+	EnvOpenAIAPIHost      = "OPENAI_API_HOST"
+	EnvOpenAIAPIModelName = "OPENAI_API_MODEL_NAME"
+
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
 	EnvPineconeAPIKey               = "PINECONE_API_KEY" //nolint:gosec
@@ -99,11 +102,16 @@ type SectionHardLimit struct {
 	SummarizeWebpageRatePerSeconds int64
 }
 
+type SectionOpenAI struct {
+	Secret    string
+	Host      string
+	ModelName string
+}
+
 type Config struct {
 	TimezoneShiftSeconds int64
 	Telegram             SectionTelegram
-	OpenAIAPISecret      string
-	OpenAIAPIHost        string
+	OpenAI               SectionOpenAI
 	Pinecone             SectionPinecone
 	CloverDBPath         string
 	DB                   SectionDB
@@ -175,8 +183,11 @@ func NewConfig() func() (*Config, error) {
 				ClientID:     getEnv(EnvSlackClientID),
 				ClientSecret: getEnv(EnvSlackClientSecret),
 			},
-			OpenAIAPISecret: getEnv(EnvOpenAIAPISecret),
-			OpenAIAPIHost:   getEnv(EnvOpenAIAPIHost),
+			OpenAI: SectionOpenAI{
+				Secret:    getEnv(EnvOpenAIAPISecret),
+				Host:      getEnv(EnvOpenAIAPIHost),
+				ModelName: lo.Ternary(getEnv(EnvOpenAIAPIModelName) == "", goopenai.GPT3Dot5Turbo, getEnv(EnvOpenAIAPIModelName)),
+			},
 			Pinecone: SectionPinecone{
 				ProjectName: getEnv(EnvPineconeProjectName),
 				Environment: getEnv(EnvPineconeEnvironment),

@@ -10,6 +10,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/pkoukk/tiktoken-go"
+	"github.com/samber/lo"
 	"github.com/sashabaranov/go-openai"
 	"go.uber.org/fx"
 	"go.uber.org/ratelimit"
@@ -22,6 +23,7 @@ import (
 
 //counterfeiter:generate -o openaimock/mock_client.go --fake-name MockClient . Client
 type Client interface {
+	GetModelName() string
 	SplitContentBasedByTokenLimitations(textContent string, limits int) []string
 	SummarizeAny(ctx context.Context, content string) (*openai.ChatCompletionResponse, error)
 	SummarizeChatHistories(ctx context.Context, llmFriendlyChatHistories string) (*openai.ChatCompletionResponse, error)
@@ -33,6 +35,8 @@ type Client interface {
 var _ Client = (*OpenAIClient)(nil)
 
 type OpenAIClient struct {
+	modelName string
+
 	tiktokenEncoding *tiktoken.Tiktoken
 	client           *openai.Client
 	ent              *datastore.Ent
@@ -73,9 +77,9 @@ func NewClient() func(NewClientParams) (Client, error) {
 			return nil, err
 		}
 
-		apiHost := params.Config.OpenAIAPIHost
+		apiHost := params.Config.OpenAI.Host
 
-		config := openai.DefaultConfig(params.Config.OpenAIAPISecret)
+		config := openai.DefaultConfig(params.Config.OpenAI.Secret)
 		if apiHost != "" {
 			apiHost, err = parseOpenAIAPIHost(apiHost)
 			if err != nil {
@@ -91,6 +95,7 @@ func NewClient() func(NewClientParams) (Client, error) {
 		limiter.Take()
 
 		return &OpenAIClient{
+			modelName:        lo.Ternary(params.Config.OpenAI.ModelName == "", openai.GPT3Dot5Turbo, params.Config.OpenAI.ModelName),
 			client:           client,
 			tiktokenEncoding: tokenizer,
 			ent:              params.Ent,
@@ -98,6 +103,10 @@ func NewClient() func(NewClientParams) (Client, error) {
 			limiter:          ratelimit.New(5),
 		}, nil
 	}
+}
+
+func (c *OpenAIClient) GetModelName() string {
+	return c.modelName
 }
 
 // truncateContentBasedOnTokens 基于 token 计算的方式截断文本。
@@ -147,7 +156,7 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo16K,
+			Model: c.modelName,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role: openai.ChatMessageRoleSystem,
@@ -183,6 +192,7 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		SetModelName(c.modelName).
 		Exec(ctx)
 	if err != nil {
 		c.logger.Error("failed to create metric openai chat completion token usage", zap.Error(err),
@@ -190,6 +200,7 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
 			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
 			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+			zap.String("model_name", c.modelName),
 		)
 	}
 
@@ -202,7 +213,7 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo16K,
+			Model: c.modelName,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role: openai.ChatMessageRoleSystem,
@@ -233,6 +244,7 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		SetModelName(c.modelName).
 		Exec(ctx)
 	if err != nil {
 		c.logger.Error("failed to create metric openai chat completion token usage",
@@ -241,6 +253,7 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
 			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
 			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+			zap.String("model_name", c.modelName),
 		)
 	}
 
@@ -263,7 +276,7 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo16K,
+			Model: c.modelName,
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    openai.ChatMessageRoleSystem,
@@ -282,6 +295,7 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		SetModelName(c.modelName).
 		Exec(ctx)
 	if err != nil {
 		c.logger.Error("failed to create metric openai chat completion token usage",
@@ -290,6 +304,7 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
 			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
 			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+			zap.String("model_name", c.modelName),
 		)
 	}
 
@@ -315,7 +330,7 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 	resp, err := c.client.CreateChatCompletion(
 		ctx,
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo16K,
+			Model: c.modelName,
 			Messages: []openai.ChatCompletionMessage{{
 				Role:    openai.ChatMessageRoleSystem,
 				Content: sb.String(),
@@ -332,6 +347,7 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
+		SetModelName(c.modelName).
 		Exec(ctx)
 	if err != nil {
 		c.logger.Error("failed to create metric openai chat completion token usage",
@@ -340,6 +356,7 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
 			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
 			zap.Int("total_token_usage", resp.Usage.TotalTokens),
+			zap.String("model_name", c.modelName),
 		)
 	}
 

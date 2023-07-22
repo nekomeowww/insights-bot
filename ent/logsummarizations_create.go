@@ -146,6 +146,20 @@ func (lsc *LogSummarizationsCreate) SetNillableTotalTokenUsage(i *int) *LogSumma
 	return lsc
 }
 
+// SetModelName sets the "model_name" field.
+func (lsc *LogSummarizationsCreate) SetModelName(s string) *LogSummarizationsCreate {
+	lsc.mutation.SetModelName(s)
+	return lsc
+}
+
+// SetNillableModelName sets the "model_name" field if the given value is not nil.
+func (lsc *LogSummarizationsCreate) SetNillableModelName(s *string) *LogSummarizationsCreate {
+	if s != nil {
+		lsc.SetModelName(*s)
+	}
+	return lsc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (lsc *LogSummarizationsCreate) SetCreatedAt(i int64) *LogSummarizationsCreate {
 	lsc.mutation.SetCreatedAt(i)
@@ -259,6 +273,10 @@ func (lsc *LogSummarizationsCreate) defaults() {
 		v := logsummarizations.DefaultTotalTokenUsage
 		lsc.mutation.SetTotalTokenUsage(v)
 	}
+	if _, ok := lsc.mutation.ModelName(); !ok {
+		v := logsummarizations.DefaultModelName
+		lsc.mutation.SetModelName(v)
+	}
 	if _, ok := lsc.mutation.CreatedAt(); !ok {
 		v := logsummarizations.DefaultCreatedAt()
 		lsc.mutation.SetCreatedAt(v)
@@ -301,6 +319,9 @@ func (lsc *LogSummarizationsCreate) check() error {
 	}
 	if _, ok := lsc.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.total_token_usage"`)}
+	}
+	if _, ok := lsc.mutation.ModelName(); !ok {
+		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "LogSummarizations.model_name"`)}
 	}
 	if _, ok := lsc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogSummarizations.created_at"`)}
@@ -379,6 +400,10 @@ func (lsc *LogSummarizationsCreate) createSpec() (*LogSummarizations, *sqlgraph.
 	if value, ok := lsc.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
+	}
+	if value, ok := lsc.mutation.ModelName(); ok {
+		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
+		_node.ModelName = value
 	}
 	if value, ok := lsc.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)

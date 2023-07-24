@@ -5,6 +5,8 @@ package ent
 import (
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/feedbackchathistoriesrecapsreactions"
+	"github.com/nekomeowww/insights-bot/ent/feedbacksummarizationsreactions"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
@@ -101,6 +103,58 @@ func init() {
 	chathistoriesDescID := chathistoriesFields[0].Descriptor()
 	// chathistories.DefaultID holds the default value on creation for the id field.
 	chathistories.DefaultID = chathistoriesDescID.Default.(func() uuid.UUID)
+	feedbackchathistoriesrecapsreactionsFields := schema.FeedbackChatHistoriesRecapsReactions{}.Fields()
+	_ = feedbackchathistoriesrecapsreactionsFields
+	// feedbackchathistoriesrecapsreactionsDescChatID is the schema descriptor for chat_id field.
+	feedbackchathistoriesrecapsreactionsDescChatID := feedbackchathistoriesrecapsreactionsFields[1].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultChatID holds the default value on creation for the chat_id field.
+	feedbackchathistoriesrecapsreactions.DefaultChatID = feedbackchathistoriesrecapsreactionsDescChatID.Default.(int64)
+	// feedbackchathistoriesrecapsreactionsDescLogID is the schema descriptor for log_id field.
+	feedbackchathistoriesrecapsreactionsDescLogID := feedbackchathistoriesrecapsreactionsFields[2].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultLogID holds the default value on creation for the log_id field.
+	feedbackchathistoriesrecapsreactions.DefaultLogID = feedbackchathistoriesrecapsreactionsDescLogID.Default.(func() uuid.UUID)
+	// feedbackchathistoriesrecapsreactionsDescUserID is the schema descriptor for user_id field.
+	feedbackchathistoriesrecapsreactionsDescUserID := feedbackchathistoriesrecapsreactionsFields[3].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultUserID holds the default value on creation for the user_id field.
+	feedbackchathistoriesrecapsreactions.DefaultUserID = feedbackchathistoriesrecapsreactionsDescUserID.Default.(int64)
+	// feedbackchathistoriesrecapsreactionsDescCreatedAt is the schema descriptor for created_at field.
+	feedbackchathistoriesrecapsreactionsDescCreatedAt := feedbackchathistoriesrecapsreactionsFields[5].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultCreatedAt holds the default value on creation for the created_at field.
+	feedbackchathistoriesrecapsreactions.DefaultCreatedAt = feedbackchathistoriesrecapsreactionsDescCreatedAt.Default.(func() int64)
+	// feedbackchathistoriesrecapsreactionsDescUpdatedAt is the schema descriptor for updated_at field.
+	feedbackchathistoriesrecapsreactionsDescUpdatedAt := feedbackchathistoriesrecapsreactionsFields[6].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	feedbackchathistoriesrecapsreactions.DefaultUpdatedAt = feedbackchathistoriesrecapsreactionsDescUpdatedAt.Default.(func() int64)
+	// feedbackchathistoriesrecapsreactionsDescID is the schema descriptor for id field.
+	feedbackchathistoriesrecapsreactionsDescID := feedbackchathistoriesrecapsreactionsFields[0].Descriptor()
+	// feedbackchathistoriesrecapsreactions.DefaultID holds the default value on creation for the id field.
+	feedbackchathistoriesrecapsreactions.DefaultID = feedbackchathistoriesrecapsreactionsDescID.Default.(func() uuid.UUID)
+	feedbacksummarizationsreactionsFields := schema.FeedbackSummarizationsReactions{}.Fields()
+	_ = feedbacksummarizationsreactionsFields
+	// feedbacksummarizationsreactionsDescChatID is the schema descriptor for chat_id field.
+	feedbacksummarizationsreactionsDescChatID := feedbacksummarizationsreactionsFields[1].Descriptor()
+	// feedbacksummarizationsreactions.DefaultChatID holds the default value on creation for the chat_id field.
+	feedbacksummarizationsreactions.DefaultChatID = feedbacksummarizationsreactionsDescChatID.Default.(int64)
+	// feedbacksummarizationsreactionsDescLogID is the schema descriptor for log_id field.
+	feedbacksummarizationsreactionsDescLogID := feedbacksummarizationsreactionsFields[2].Descriptor()
+	// feedbacksummarizationsreactions.DefaultLogID holds the default value on creation for the log_id field.
+	feedbacksummarizationsreactions.DefaultLogID = feedbacksummarizationsreactionsDescLogID.Default.(func() uuid.UUID)
+	// feedbacksummarizationsreactionsDescUserID is the schema descriptor for user_id field.
+	feedbacksummarizationsreactionsDescUserID := feedbacksummarizationsreactionsFields[3].Descriptor()
+	// feedbacksummarizationsreactions.DefaultUserID holds the default value on creation for the user_id field.
+	feedbacksummarizationsreactions.DefaultUserID = feedbacksummarizationsreactionsDescUserID.Default.(int64)
+	// feedbacksummarizationsreactionsDescCreatedAt is the schema descriptor for created_at field.
+	feedbacksummarizationsreactionsDescCreatedAt := feedbacksummarizationsreactionsFields[5].Descriptor()
+	// feedbacksummarizationsreactions.DefaultCreatedAt holds the default value on creation for the created_at field.
+	feedbacksummarizationsreactions.DefaultCreatedAt = feedbacksummarizationsreactionsDescCreatedAt.Default.(func() int64)
+	// feedbacksummarizationsreactionsDescUpdatedAt is the schema descriptor for updated_at field.
+	feedbacksummarizationsreactionsDescUpdatedAt := feedbacksummarizationsreactionsFields[6].Descriptor()
+	// feedbacksummarizationsreactions.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	feedbacksummarizationsreactions.DefaultUpdatedAt = feedbacksummarizationsreactionsDescUpdatedAt.Default.(func() int64)
+	// feedbacksummarizationsreactionsDescID is the schema descriptor for id field.
+	feedbacksummarizationsreactionsDescID := feedbacksummarizationsreactionsFields[0].Descriptor()
+	// feedbacksummarizationsreactions.DefaultID holds the default value on creation for the id field.
+	feedbacksummarizationsreactions.DefaultID = feedbacksummarizationsreactionsDescID.Default.(func() uuid.UUID)
 	logchathistoriesrecapFields := schema.LogChatHistoriesRecap{}.Fields()
 	_ = logchathistoriesrecapFields
 	// logchathistoriesrecapDescChatID is the schema descriptor for chat_id field.

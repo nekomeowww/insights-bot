@@ -22,7 +22,6 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
-	"github.com/nekomeowww/insights-bot/pkg/types/bot/handlers/recap"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/nekomeowww/insights-bot/pkg/types/tgchat"
 	"github.com/nekomeowww/insights-bot/pkg/types/timecapsules"
@@ -157,7 +156,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	histories, err := m.chathistories.FindLastSixHourChatHistories(chatID)
 	if err != nil {
-		m.logger.Error("failed to find last six hour chat histories", zap.Error(err))
+		m.logger.Error("failed to find last six hour chat histories", zap.Error(err), zap.Int64("chat_id", chatID))
 		return
 	}
 	if len(histories) <= 5 {
@@ -167,15 +166,27 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	chatTitle := histories[len(histories)-1].ChatTitle
 
-	summarizations, err := m.chathistories.SummarizeChatHistories(chatID, histories)
+	logID, summarizations, err := m.chathistories.SummarizeChatHistories(chatID, histories)
 	if err != nil {
-		m.logger.Error("failed to summarize last six hour chat histories", zap.Error(err))
+		m.logger.Error("failed to summarize last six hour chat histories", zap.Error(err), zap.Int64("chat_id", chatID))
+		return
+	}
+
+	counts, err := m.chathistories.FindFeedbackRecapsReactionCountsForChatIDAndLogID(chatID, logID)
+	if err != nil {
+		m.logger.Error("failed to find feedback recaps votes for chat", zap.Error(err), zap.Int64("chat_id", chatID))
+		return
+	}
+
+	inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapInlineKeyboardMarkup(m.botService.Bot(), chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
+	if err != nil {
+		m.logger.Error("failed to create vote recap inline keyboard markup", zap.Error(err), zap.Int64("chat_id", chatID), zap.String("log_id", logID.String()))
 		return
 	}
 
 	summarizations = lo.Filter(summarizations, func(item string, _ int) bool { return item != "" })
 	if len(summarizations) == 0 {
-		m.logger.Warn("summarization is empty")
+		m.logger.Warn("summarization is empty", zap.Int64("chat_id", chatID))
 		return
 	}
 
@@ -209,7 +220,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			},
 		})
 		if err != nil {
-			m.logger.Error("failed to get chat member", zap.Error(err))
+			m.logger.Error("failed to get chat member", zap.Error(err), zap.Int64("chat_id", chatID))
 			continue
 		}
 		if !lo.Contains([]telegram.MemberStatus{
@@ -242,7 +253,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				return nil
 			})
 			if err != nil {
-				m.logger.Error("failed to unsubscribe to auto recaps", zap.Error(err))
+				m.logger.Error("failed to unsubscribe to auto recaps", zap.Error(err), zap.Int64("chat_id", chatID))
 			}
 
 			msg := tgbotapi.NewMessage(subscriber.UserID, fmt.Sprintf("由于您已不再是 <b>%s</b> 的成员，因此已自动帮您取消了您所订阅的聊天记录回顾。", tgbot.EscapeHTMLSymbols(chatTitle)))
@@ -250,7 +261,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 			_, err = m.botService.Send(msg)
 			if err != nil {
-				m.logger.Error("failed to send the auto un-subscription message", zap.Error(err), zap.Int64("user_id", subscriber.UserID))
+				m.logger.Error("failed to send the auto un-subscription message", zap.Error(err), zap.Int64("user_id", subscriber.UserID), zap.Int64("chat_id", chatID))
 			}
 
 			continue
@@ -280,24 +291,21 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			if targetChat.isPrivateSubscriber {
 				msg.Text = fmt.Sprintf("您好，这是您订阅的 <b>%s</b> 群组的定时聊天回顾。\n\n%s", tgbot.EscapeHTMLSymbols(chatTitle), content)
 
-				buttonData, err := m.botService.Bot().AssignOneCallbackQueryData("recap/unsubscribe_recap", recap.UnsubscribeRecapActionData{
-					ChatID:    chatID,
-					ChatTitle: chatTitle,
-					FromID:    targetChat.chatID,
-				})
+				inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapWithUnsubscribeInlineKeyboardMarkup(m.botService.Bot(), targetChat.chatID, chatTitle, targetChat.chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
 				if err != nil {
-					m.logger.Error("failed to assign callback query data", zap.Error(err))
+					m.logger.Error("failed to assign callback query data", zap.Error(err), zap.Int64("chat_id", chatID))
 					continue
 				}
 
-				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("取消订阅", buttonData)))
+				msg.ReplyMarkup = inlineKeyboardMarkup
 			} else {
 				msg.Text = content
+				msg.ReplyMarkup = inlineKeyboardMarkup
 			}
 
 			_, err = m.botService.Send(msg)
 			if err != nil {
-				m.logger.Error("failed to send chat histories recap", zap.Error(err))
+				m.logger.Error("failed to send chat histories recap", zap.Error(err), zap.Int64("chat_id", chatID))
 			}
 		}
 	}

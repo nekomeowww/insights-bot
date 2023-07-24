@@ -14,6 +14,10 @@ type Tx struct {
 	config
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
+	// FeedbackChatHistoriesRecapsReactions is the client for interacting with the FeedbackChatHistoriesRecapsReactions builders.
+	FeedbackChatHistoriesRecapsReactions *FeedbackChatHistoriesRecapsReactionsClient
+	// FeedbackSummarizationsReactions is the client for interacting with the FeedbackSummarizationsReactions builders.
+	FeedbackSummarizationsReactions *FeedbackSummarizationsReactionsClient
 	// LogChatHistoriesRecap is the client for interacting with the LogChatHistoriesRecap builders.
 	LogChatHistoriesRecap *LogChatHistoriesRecapClient
 	// LogSummarizations is the client for interacting with the LogSummarizations builders.
@@ -160,6 +164,8 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.ChatHistories = NewChatHistoriesClient(tx.config)
+	tx.FeedbackChatHistoriesRecapsReactions = NewFeedbackChatHistoriesRecapsReactionsClient(tx.config)
+	tx.FeedbackSummarizationsReactions = NewFeedbackSummarizationsReactionsClient(tx.config)
 	tx.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(tx.config)
 	tx.LogSummarizations = NewLogSummarizationsClient(tx.config)
 	tx.MetricOpenAIChatCompletionTokenUsage = NewMetricOpenAIChatCompletionTokenUsageClient(tx.config)

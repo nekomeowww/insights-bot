@@ -162,14 +162,35 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 			identityStrings = append(identityStrings, "@"+c.Update.CallbackQuery.From.UserName)
 		}
 
-		if c.callbackQueryHandlerRoute == "" || c.callbackQueryHandlerActionData == "" {
-			d.Logger.Debug(fmt.Sprintf("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data, missing route or action data)",
+		if c.callbackQueryHandlerRoute == "" {
+			d.Logger.Error(fmt.Sprintf("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data) \n%s\n%s\n\n%s\n%s\n",
 				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
 				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
 				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
 				strings.Join(identityStrings, " "),
 				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.Update.CallbackData(),
+				color.FgRed.Render("无法调度 Callback Query，监测到缺少路由。"),
+				color.FgRed.Render("Unable to dispatch Callback Query due to missing route DETECTED."),
+				color.FgRed.Render("大多数情况下，发生这种情况的原因是相应的处理程序没有通过 OnCallbackQuery(...) 方法正确注册，或者内部派发器未能与之匹配，请检查已注册的处理程序及其路由，然后再试一次。"),
+				color.FgRed.Render("For most of the time, this happens when the corresponding handler wasn't registered properly through OnCallbackQuery(...) method or internal dispatcher failed to match it, please check registered handlers and the route of them and then try again."),
+			),
+				zap.String("route", c.callbackQueryHandlerRoute),
+				zap.String("route_hash", c.callbackQueryHandlerRouteHash),
+				zap.String("action_data_hash", c.callbackQueryHandlerActionDataHash),
+			)
+		} else if c.callbackQueryHandlerActionData == "" {
+			d.Logger.Error(fmt.Sprintf("[回调查询｜%s] [%s (%s)] %s (%s) : %s (Raw Data) \n%s\n%s\n\n%s\n%s\n",
+				MapChatTypeToChineseText(telegram.ChatType(c.Update.CallbackQuery.Message.Chat.Type)),
+				color.FgGreen.Render(c.Update.CallbackQuery.Message.Chat.Title),
+				color.FgYellow.Render(c.Update.CallbackQuery.Message.Chat.ID),
+				strings.Join(identityStrings, " "),
+				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
+				c.Update.CallbackData(),
+				color.FgRed.Render("无法调度 Callback Query，检测到缺少操作数据。"),
+				color.FgRed.Render("Unable to dispatch Callback Query due to missing action data DETECTED."),
+				color.FgRed.Render("大多数情况下，当存储在回调查询数据中的操作数据为空、不存在于缓存中或无法从缓存中获取时会出现这种情况，请尝试刷新相应的缓存键并重试。"),
+				color.FgRed.Render("For most of the time, this happens when the action data that stored into callback query data is either empty, not exist on cache, or failed to fetch from cache, please try to flush any corresponding cache keys and try again."),
 			),
 				zap.String("route", c.callbackQueryHandlerRoute),
 				zap.String("route_hash", c.callbackQueryHandlerRouteHash),

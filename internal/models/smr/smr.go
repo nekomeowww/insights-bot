@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/imroc/req/v3"
 
 	"github.com/go-shiori/go-readability"
@@ -64,6 +65,7 @@ var (
 )
 
 type URLSummarizationOutput struct {
+	ID    uuid.UUID
 	URL   string
 	Title string
 	Msg   string
@@ -112,7 +114,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 
 	m.logger.Info("✅ summarizing article done", zap.String("title", article.Title), zap.String("url", url))
 
-	err = m.ent.LogSummarizations.
+	saved, err := m.ent.LogSummarizations.
 		Create().
 		SetContentURL(url).
 		SetContentTitle(article.Title).
@@ -124,13 +126,14 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		SetPromptTokenUsage(resp.Usage.PromptTokens).
 		SetTotalTokenUsage(resp.Usage.TotalTokens).
 		SetModelName(m.openai.GetModelName()).
-		Exec(context.Background())
+		Save(context.Background())
 	if err != nil {
 		m.logger.Error("failed to create log", zap.Error(err))
 		return nil, err
 	}
 
 	return &URLSummarizationOutput{
+		ID:    saved.ID,
 		URL:   url,
 		Title: article.Title,
 		Msg:   respMessages[0],

@@ -30,6 +30,7 @@ type Dispatcher struct {
 	leftChatMemberHandlers     []Handler
 	newChatMembersHandlers     []Handler
 	myChatMemberHandlers       []Handler
+	chatMigrationFromHandlers  []Handler
 }
 
 func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
@@ -47,6 +48,7 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 			leftChatMemberHandlers:     make([]Handler, 0),
 			newChatMembersHandlers:     make([]Handler, 0),
 			myChatMemberHandlers:       make([]Handler, 0),
+			chatMigrationFromHandlers:  make([]Handler, 0),
 		}
 
 		d.startCommandHandler.helpCommandHandler = d.helpCommand
@@ -360,6 +362,34 @@ func (d *Dispatcher) dispatchNewChatMember(c *Context) {
 	})
 }
 
+func (d *Dispatcher) OnChatMigrationFrom(h Handler) {
+	d.chatMigrationFromHandlers = append(d.chatMigrationFromHandlers, h)
+}
+
+func (d *Dispatcher) dispatchChatMigrationFrom(c *Context) {
+	d.Logger.Debug(fmt.Sprintf("[群组迁移] 超级群组 [%s (%s)] 已迁移自群组 [%s (%s)]",
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.Chat.ID),
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.MigrateFromChatID),
+	))
+
+	d.dispatchInGoroutine(func() {
+		for _, h := range d.chatMigrationFromHandlers {
+			_, _ = h.Handle(c)
+		}
+	})
+}
+
+func (d *Dispatcher) dispatchChatMigrationTo(c *Context) {
+	d.Logger.Debug(fmt.Sprintf("[群组迁移] 群组 [%s (%s)] 已迁移至超级群组 [%s (%s)]",
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.Chat.ID),
+		color.FgGreen.Render(c.Update.Message.Chat.Title),
+		color.FgYellow.Render(c.Update.Message.MigrateToChatID),
+	))
+}
+
 func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update, rueidisClient rueidis.Client) {
 	for _, m := range d.middlewares {
 		m(NewContext(bot, update, d.Logger, rueidisClient), func() {})
@@ -370,39 +400,43 @@ func (d *Dispatcher) Dispatch(bot *tgbotapi.BotAPI, update tgbotapi.Update, ruei
 	case UpdateTypeMessage:
 		d.dispatchMessage(ctx)
 	case UpdateTypeEditedMessage:
-		d.Logger.Warn("edited message is not supported yet")
+		d.Logger.Debug("edited message is not supported yet")
 	case UpdateTypeChannelPost:
 		d.dispatchChannelPost(ctx)
 	case UpdateTypeEditedChannelPost:
-		d.Logger.Warn("edited channel post is not supported yet")
+		d.Logger.Debug("edited channel post is not supported yet")
 	case UpdateTypeInlineQuery:
-		d.Logger.Warn("inline query is not supported yet")
+		d.Logger.Debug("inline query is not supported yet")
 	case UpdateTypeChosenInlineResult:
-		d.Logger.Warn("chosen inline result is not supported yet")
+		d.Logger.Debug("chosen inline result is not supported yet")
 	case UpdateTypeCallbackQuery:
 		d.dispatchCallbackQuery(ctx)
 	case UpdateTypeShippingQuery:
-		d.Logger.Warn("shipping query is not supported yet")
+		d.Logger.Debug("shipping query is not supported yet")
 	case UpdateTypePreCheckoutQuery:
-		d.Logger.Warn("pre checkout query is not supported yet")
+		d.Logger.Debug("pre checkout query is not supported yet")
 	case UpdateTypePoll:
-		d.Logger.Warn("poll is not supported yet")
+		d.Logger.Debug("poll is not supported yet")
 	case UpdateTypePollAnswer:
-		d.Logger.Warn("poll answer is not supported yet")
+		d.Logger.Debug("poll answer is not supported yet")
 	case UpdateTypeMyChatMember:
 		d.dispatchMyChatMember(ctx)
 	case UpdateTypeChatMember:
-		d.Logger.Warn("chat member is not supported yet")
+		d.Logger.Debug("chat member is not supported yet")
 	case UpdateTypeLeftChatMember:
 		d.dispatchLeftChatMember(ctx)
 	case UpdateTypeNewChatMembers:
 		d.dispatchNewChatMember(ctx)
 	case UpdateTypeChatJoinRequest:
-		d.Logger.Warn("chat join request is not supported yet")
+		d.Logger.Debug("chat join request is not supported yet")
+	case UpdateTypeChatMigrationFrom:
+		d.dispatchChatMigrationFrom(ctx)
+	case UpdateTypeChatMigrationTo:
+		d.dispatchChatMigrationTo(ctx)
 	case UpdateTypeUnknown:
-		d.Logger.Warn("unable to dispatch update due to unknown update type")
+		d.Logger.Debug("unable to dispatch update due to unknown update type")
 	default:
-		d.Logger.Warn("unable to dispatch update due to unknown update type", zap.String("update_type", string(ctx.UpdateType())))
+		d.Logger.Debug("unable to dispatch update due to unknown update type", zap.String("update_type", string(ctx.UpdateType())))
 	}
 }
 

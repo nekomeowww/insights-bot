@@ -33,6 +33,8 @@ const (
 	UpdateTypeLeftChatMember     UpdateType = "left_chat_member"
 	UpdateTypeNewChatMembers     UpdateType = "new_chat_members"
 	UpdateTypeChatJoinRequest    UpdateType = "chat_join_request"
+	UpdateTypeChatMigrationFrom  UpdateType = "chat_migration_from"
+	UpdateTypeChatMigrationTo    UpdateType = "chat_migration_to"
 )
 
 type Context struct {
@@ -76,6 +78,10 @@ func (c *Context) UpdateType() UpdateType {
 			return UpdateTypeNewChatMembers
 		case c.Update.Message.LeftChatMember != nil:
 			return UpdateTypeLeftChatMember
+		case c.Update.Message.MigrateFromChatID != 0:
+			return UpdateTypeChatMigrationFrom
+		case c.Update.Message.MigrateToChatID != 0:
+			return UpdateTypeChatMigrationTo
 		default:
 			return UpdateTypeMessage
 		}

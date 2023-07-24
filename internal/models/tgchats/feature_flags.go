@@ -226,3 +226,25 @@ func (m *Model) DeleteOneFeatureFlagByChatID(chatID int64) error {
 
 	return nil
 }
+
+func (m *Model) MigrateFeatureFlagsOfChatFromChatIDToChatID(fromChatID int64, toChatID int64) error {
+	affectedRows, err := m.ent.TelegramChatFeatureFlags.
+		Update().
+		Where(
+			telegramchatfeatureflags.ChatIDEQ(fromChatID),
+		).
+		SetChatID(toChatID).
+		SetChatType(string(telegram.ChatTypeSuperGroup)).
+		Save(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.Info("successfully migrated feature flags of chat",
+		zap.Int64("from_chat_id", fromChatID),
+		zap.Int64("to_chat_id", toChatID),
+		zap.Int("affected_rows", affectedRows),
+	)
+
+	return nil
+}

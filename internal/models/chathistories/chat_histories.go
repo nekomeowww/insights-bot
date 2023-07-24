@@ -24,6 +24,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/linkprev"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 )
 
 type FromPlatform int
@@ -302,6 +303,26 @@ func (m *Model) DeleteAllChatHistoriesByChatID(chatID int64) error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (m *Model) MigrateChatHistoriesOfChatFromChatIDToChatID(fromChatID, toChatID int64) error {
+	affectedRows, err := m.ent.ChatHistories.
+		Update().
+		Where(chathistories.ChatID(fromChatID)).
+		SetChatID(toChatID).
+		SetChatType(string(telegram.ChatTypeSuperGroup)).
+		Save(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.Info("successfully migrated options of chat",
+		zap.Int64("from_chat_id", fromChatID),
+		zap.Int64("to_chat_id", toChatID),
+		zap.Int("affected_rows", affectedRows),
+	)
 
 	return nil
 }

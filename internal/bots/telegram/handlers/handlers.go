@@ -3,6 +3,7 @@ package handlers
 import (
 	"go.uber.org/fx"
 
+	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/chatmigrate"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/recap"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/summarize"
 	"github.com/nekomeowww/insights-bot/internal/bots/telegram/handlers/welcome"
@@ -15,6 +16,7 @@ func NewModules() fx.Option {
 		fx.Options(recap.NewModules()),
 		fx.Options(summarize.NewModules()),
 		fx.Options(welcome.NewModules()),
+		fx.Options(chatmigrate.NewModules()),
 	)
 }
 
@@ -23,9 +25,10 @@ type NewHandlersParam struct {
 
 	Dispatcher *tgbot.Dispatcher
 
-	RecapHandlers     *recap.Handlers
-	SummarizeHandlers *summarize.Handlers
-	WelcomeHandlers   *welcome.Handlers
+	RecapHandlers         *recap.Handlers
+	SummarizeHandlers     *summarize.Handlers
+	WelcomeHandlers       *welcome.Handlers
+	ChatMigrationHandlers *chatmigrate.Handlers
 }
 
 type Handlers struct {
@@ -41,6 +44,7 @@ func NewHandlers() func(param NewHandlersParam) *Handlers {
 				param.SummarizeHandlers,
 				param.RecapHandlers,
 				param.WelcomeHandlers,
+				param.ChatMigrationHandlers,
 			},
 		}
 	}

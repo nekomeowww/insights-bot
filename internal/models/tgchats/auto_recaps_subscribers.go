@@ -5,6 +5,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatautorecapssubscribers"
+	"go.uber.org/zap"
 )
 
 func (m *Model) FindOneAutoRecapsSubscriber(chatID int64, userID int64) (*ent.TelegramChatAutoRecapsSubscribers, error) {
@@ -80,6 +81,25 @@ func (m *Model) DeleteAllSubscribersByChatID(chatID int64) error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (m *Model) MigrateSubscribersOfChatFromChatIDToChatID(fromChatID int64, toChatID int64) error {
+	affectedRows, err := m.ent.TelegramChatAutoRecapsSubscribers.
+		Update().
+		Where(telegramchatautorecapssubscribers.ChatID(fromChatID)).
+		SetChatID(toChatID).
+		Save(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.Info("successfully migrated options of chat",
+		zap.Int64("from_chat_id", fromChatID),
+		zap.Int64("to_chat_id", toChatID),
+		zap.Int("affected_rows", affectedRows),
+	)
 
 	return nil
 }

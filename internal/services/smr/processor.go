@@ -8,7 +8,6 @@ import (
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/snowflake/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/models/smr"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
@@ -45,42 +44,51 @@ func (s *Service) processError(err error) string {
 func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.TaskInfo, result string) {
 	switch info.Platform {
 	case bot.FromPlatformTelegram:
-		logID := uuid.Nil
-		if output != nil {
-			logID = output.ID
-		}
-
-		counts, err := s.model.FindFeedbackSummarizationsReactionCountsForChatIDAndLogID(info.ChatID, logID)
-		if err != nil {
-			s.logger.Warn("smr service: failed to send result message",
-				zap.Error(err),
-				zap.Int64("chat_id", info.ChatID),
-				zap.String("platform", info.Platform.String()),
-			)
-
-			return
-		}
-
-		inlineKeyboardMarkup, err := s.model.NewVoteSummarizationsReactionsInlineKeyboardMarkup(s.tgBot.Bot(), info.ChatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
-		if err != nil {
-			s.logger.Warn("smr service: failed to send result message",
-				zap.Error(err),
-				zap.Int64("chat_id", info.ChatID),
-				zap.String("platform", info.Platform.String()),
-			)
-
-			return
-		}
-
 		msgEdit := tgbotapi.EditMessageTextConfig{
 			BaseEdit: tgbotapi.BaseEdit{
-				ChatID:      info.ChatID,
-				MessageID:   info.MessageID,
-				ReplyMarkup: lo.ToPtr(inlineKeyboardMarkup),
+				ChatID:    info.ChatID,
+				MessageID: info.MessageID,
 			},
 			Text:      result,
 			ParseMode: tgbotapi.ModeHTML,
 		}
+
+		if output == nil {
+			_, err := s.tgBot.Send(msgEdit)
+			if err != nil {
+				s.logger.Warn("smr service: failed to send result message",
+					zap.Error(err),
+					zap.Int64("chat_id", msgEdit.ChatID),
+					zap.String("platform", info.Platform.String()),
+				)
+			}
+
+			return
+		}
+
+		counts, err := s.model.FindFeedbackSummarizationsReactionCountsForChatIDAndLogID(info.ChatID, output.ID)
+		if err != nil {
+			s.logger.Warn("smr service: failed to send result message",
+				zap.Error(err),
+				zap.Int64("chat_id", info.ChatID),
+				zap.String("platform", info.Platform.String()),
+			)
+
+			return
+		}
+
+		inlineKeyboardMarkup, err := s.model.NewVoteSummarizationsReactionsInlineKeyboardMarkup(s.tgBot.Bot(), info.ChatID, output.ID, counts.UpVotes, counts.DownVotes, counts.Lmao)
+		if err != nil {
+			s.logger.Warn("smr service: failed to send result message",
+				zap.Error(err),
+				zap.Int64("chat_id", info.ChatID),
+				zap.String("platform", info.Platform.String()),
+			)
+
+			return
+		}
+
+		msgEdit.ReplyMarkup = lo.ToPtr(inlineKeyboardMarkup)
 
 		_, err = s.tgBot.Send(msgEdit)
 		if err != nil {

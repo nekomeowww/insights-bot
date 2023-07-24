@@ -478,3 +478,47 @@ func (b *Bot) fetchCallbackQueryActionData(route string, dataHash string) (strin
 
 	return str, nil
 }
+
+func (b *Bot) RemoveInlineKeyboardButtonFromInlineKeyboardMarkupThatMatchesDataWith(inlineKeyboardMarkup tgbotapi.InlineKeyboardMarkup, callbackData string) tgbotapi.InlineKeyboardMarkup {
+	if len(inlineKeyboardMarkup.InlineKeyboard) == 0 {
+		return inlineKeyboardMarkup
+	}
+
+	for i := range inlineKeyboardMarkup.InlineKeyboard {
+		for j := range inlineKeyboardMarkup.InlineKeyboard[i] {
+			if inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == nil {
+				continue
+			}
+			if *inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == callbackData {
+				inlineKeyboardMarkup.InlineKeyboard[i] = append(inlineKeyboardMarkup.InlineKeyboard[i][:j], inlineKeyboardMarkup.InlineKeyboard[i][j+1:]...)
+				break
+			}
+		}
+	}
+
+	inlineKeyboardMarkup.InlineKeyboard = lo.Filter(inlineKeyboardMarkup.InlineKeyboard, func(row []tgbotapi.InlineKeyboardButton, _ int) bool {
+		return len(row) > 0
+	})
+
+	return inlineKeyboardMarkup
+}
+
+func (b *Bot) ReplaceInlineKeyboardButtonFromInlineKeyboardMarkupThatMatchesDataWith(inlineKeyboardMarkup tgbotapi.InlineKeyboardMarkup, callbackData string, replacedButton tgbotapi.InlineKeyboardButton) tgbotapi.InlineKeyboardMarkup {
+	if len(inlineKeyboardMarkup.InlineKeyboard) == 0 {
+		return inlineKeyboardMarkup
+	}
+
+	for i := range inlineKeyboardMarkup.InlineKeyboard {
+		for j := range inlineKeyboardMarkup.InlineKeyboard[i] {
+			if inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == nil {
+				continue
+			}
+			if *inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == callbackData {
+				inlineKeyboardMarkup.InlineKeyboard[i][j] = replacedButton
+				break
+			}
+		}
+	}
+
+	return inlineKeyboardMarkup
+}

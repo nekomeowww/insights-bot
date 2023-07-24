@@ -8,6 +8,8 @@ import "context"
 // that can be passed at runtime.
 type SchemaConfig struct {
 	ChatHistories                        string // ChatHistories table.
+	FeedbackChatHistoriesRecapsReactions string // FeedbackChatHistoriesRecapsReactions table.
+	FeedbackSummarizationsReactions      string // FeedbackSummarizationsReactions table.
 	LogChatHistoriesRecap                string // LogChatHistoriesRecap table.
 	LogSummarizations                    string // LogSummarizations table.
 	MetricOpenAIChatCompletionTokenUsage string // MetricOpenAIChatCompletionTokenUsage table.

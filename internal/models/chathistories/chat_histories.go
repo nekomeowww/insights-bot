@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/google/uuid"
 	"github.com/samber/lo"
 	lop "github.com/samber/lo/parallel"
 	"go.uber.org/fx"
@@ -341,7 +342,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
-func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) ([]string, error) {
+func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (uuid.UUID, []string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	historiesIncludedMessageIDs := make([]int64, 0)
 
@@ -377,15 +378,15 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 
 	summarizations, statusUsage, err := m.summarizeChatHistories(chatID, historiesIncludedMessageIDs, chatHistories)
 	if err != nil {
-		return make([]string, 0), err
+		return uuid.Nil, make([]string, 0), err
 	}
 
 	ss, err := m.renderRecapTemplates(chatID, summarizations)
 	if err != nil {
-		return make([]string, 0), err
+		return uuid.Nil, make([]string, 0), err
 	}
 
-	err = m.ent.LogChatHistoriesRecap.
+	saved, err := m.ent.LogChatHistoriesRecap.
 		Create().
 		SetChatID(chatID).
 		SetRecapInputs(chatHistories).
@@ -396,10 +397,10 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		SetFromPlatform(int(FromPlatformTelegram)).
 		SetRecapType(int(RecapTypeForGroup)).
 		SetModelName(m.openAI.GetModelName()).
-		Exec(context.Background())
+		Save(context.Background())
 	if err != nil {
-		return make([]string, 0), err
+		return uuid.Nil, make([]string, 0), err
 	}
 
-	return ss, nil
+	return saved.ID, ss, nil
 }

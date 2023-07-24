@@ -9,6 +9,12 @@ import (
 // ChatHistories is the predicate function for chathistories builders.
 type ChatHistories func(*sql.Selector)
 
+// FeedbackChatHistoriesRecapsReactions is the predicate function for feedbackchathistoriesrecapsreactions builders.
+type FeedbackChatHistoriesRecapsReactions func(*sql.Selector)
+
+// FeedbackSummarizationsReactions is the predicate function for feedbacksummarizationsreactions builders.
+type FeedbackSummarizationsReactions func(*sql.Selector)
+
 // LogChatHistoriesRecap is the predicate function for logchathistoriesrecap builders.
 type LogChatHistoriesRecap func(*sql.Selector)
 

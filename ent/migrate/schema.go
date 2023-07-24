@@ -37,6 +37,38 @@ var (
 		Columns:    ChatHistoriesColumns,
 		PrimaryKey: []*schema.Column{ChatHistoriesColumns[0]},
 	}
+	// FeedbackChatHistoriesRecapsReactionsColumns holds the columns for the "feedback_chat_histories_recaps_reactions" table.
+	FeedbackChatHistoriesRecapsReactionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "log_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeInt64, Default: 0},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"none", "up_vote", "down_vote", "lmao"}, Default: "none"},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// FeedbackChatHistoriesRecapsReactionsTable holds the schema information for the "feedback_chat_histories_recaps_reactions" table.
+	FeedbackChatHistoriesRecapsReactionsTable = &schema.Table{
+		Name:       "feedback_chat_histories_recaps_reactions",
+		Columns:    FeedbackChatHistoriesRecapsReactionsColumns,
+		PrimaryKey: []*schema.Column{FeedbackChatHistoriesRecapsReactionsColumns[0]},
+	}
+	// FeedbackSummarizationsReactionsColumns holds the columns for the "feedback_summarizations_reactions" table.
+	FeedbackSummarizationsReactionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "log_id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeInt64, Default: 0},
+		{Name: "type", Type: field.TypeEnum, Enums: []string{"none", "up_vote", "down_vote", "lmao"}, Default: "none"},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// FeedbackSummarizationsReactionsTable holds the schema information for the "feedback_summarizations_reactions" table.
+	FeedbackSummarizationsReactionsTable = &schema.Table{
+		Name:       "feedback_summarizations_reactions",
+		Columns:    FeedbackSummarizationsReactionsColumns,
+		PrimaryKey: []*schema.Column{FeedbackSummarizationsReactionsColumns[0]},
+	}
 	// LogChatHistoriesRecapsColumns holds the columns for the "log_chat_histories_recaps" table.
 	LogChatHistoriesRecapsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -161,6 +193,8 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ChatHistoriesTable,
+		FeedbackChatHistoriesRecapsReactionsTable,
+		FeedbackSummarizationsReactionsTable,
 		LogChatHistoriesRecapsTable,
 		LogSummarizationsTable,
 		MetricOpenAiChatCompletionTokenUsagesTable,

@@ -13,6 +13,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/feedbackchathistoriesrecapsreactions"
+	"github.com/nekomeowww/insights-bot/ent/feedbacksummarizationsreactions"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
@@ -81,6 +83,8 @@ func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			chathistories.Table:                        chathistories.ValidColumn,
+			feedbackchathistoriesrecapsreactions.Table: feedbackchathistoriesrecapsreactions.ValidColumn,
+			feedbacksummarizationsreactions.Table:      feedbacksummarizationsreactions.ValidColumn,
 			logchathistoriesrecap.Table:                logchathistoriesrecap.ValidColumn,
 			logsummarizations.Table:                    logsummarizations.ValidColumn,
 			metricopenaichatcompletiontokenusage.Table: metricopenaichatcompletiontokenusage.ValidColumn,

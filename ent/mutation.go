@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/feedbackchathistoriesrecapsreactions"
+	"github.com/nekomeowww/insights-bot/ent/feedbacksummarizationsreactions"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
@@ -32,6 +34,8 @@ const (
 
 	// Node types.
 	TypeChatHistories                        = "ChatHistories"
+	TypeFeedbackChatHistoriesRecapsReactions = "FeedbackChatHistoriesRecapsReactions"
+	TypeFeedbackSummarizationsReactions      = "FeedbackSummarizationsReactions"
 	TypeLogChatHistoriesRecap                = "LogChatHistoriesRecap"
 	TypeLogSummarizations                    = "LogSummarizations"
 	TypeMetricOpenAIChatCompletionTokenUsage = "MetricOpenAIChatCompletionTokenUsage"
@@ -1643,6 +1647,1480 @@ func (m *ChatHistoriesMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *ChatHistoriesMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown ChatHistories edge %s", name)
+}
+
+// FeedbackChatHistoriesRecapsReactionsMutation represents an operation that mutates the FeedbackChatHistoriesRecapsReactions nodes in the graph.
+type FeedbackChatHistoriesRecapsReactionsMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	chat_id       *int64
+	addchat_id    *int64
+	log_id        *uuid.UUID
+	user_id       *int64
+	adduser_id    *int64
+	_type         *feedbackchathistoriesrecapsreactions.Type
+	created_at    *int64
+	addcreated_at *int64
+	updated_at    *int64
+	addupdated_at *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*FeedbackChatHistoriesRecapsReactions, error)
+	predicates    []predicate.FeedbackChatHistoriesRecapsReactions
+}
+
+var _ ent.Mutation = (*FeedbackChatHistoriesRecapsReactionsMutation)(nil)
+
+// feedbackchathistoriesrecapsreactionsOption allows management of the mutation configuration using functional options.
+type feedbackchathistoriesrecapsreactionsOption func(*FeedbackChatHistoriesRecapsReactionsMutation)
+
+// newFeedbackChatHistoriesRecapsReactionsMutation creates new mutation for the FeedbackChatHistoriesRecapsReactions entity.
+func newFeedbackChatHistoriesRecapsReactionsMutation(c config, op Op, opts ...feedbackchathistoriesrecapsreactionsOption) *FeedbackChatHistoriesRecapsReactionsMutation {
+	m := &FeedbackChatHistoriesRecapsReactionsMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFeedbackChatHistoriesRecapsReactions,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFeedbackChatHistoriesRecapsReactionsID sets the ID field of the mutation.
+func withFeedbackChatHistoriesRecapsReactionsID(id uuid.UUID) feedbackchathistoriesrecapsreactionsOption {
+	return func(m *FeedbackChatHistoriesRecapsReactionsMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FeedbackChatHistoriesRecapsReactions
+		)
+		m.oldValue = func(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FeedbackChatHistoriesRecapsReactions.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFeedbackChatHistoriesRecapsReactions sets the old FeedbackChatHistoriesRecapsReactions of the mutation.
+func withFeedbackChatHistoriesRecapsReactions(node *FeedbackChatHistoriesRecapsReactions) feedbackchathistoriesrecapsreactionsOption {
+	return func(m *FeedbackChatHistoriesRecapsReactionsMutation) {
+		m.oldValue = func(context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FeedbackChatHistoriesRecapsReactionsMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FeedbackChatHistoriesRecapsReactionsMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of FeedbackChatHistoriesRecapsReactions entities.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FeedbackChatHistoriesRecapsReactions.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChatID sets the "chat_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetChatID(i int64) {
+	m.chat_id = &i
+	m.addchat_id = nil
+}
+
+// ChatID returns the value of the "chat_id" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ChatID() (r int64, exists bool) {
+	v := m.chat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatID returns the old "chat_id" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldChatID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
+	}
+	return oldValue.ChatID, nil
+}
+
+// AddChatID adds i to the "chat_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddChatID(i int64) {
+	if m.addchat_id != nil {
+		*m.addchat_id += i
+	} else {
+		m.addchat_id = &i
+	}
+}
+
+// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedChatID() (r int64, exists bool) {
+	v := m.addchat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChatID resets all changes to the "chat_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetChatID() {
+	m.chat_id = nil
+	m.addchat_id = nil
+}
+
+// SetLogID sets the "log_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetLogID(u uuid.UUID) {
+	m.log_id = &u
+}
+
+// LogID returns the value of the "log_id" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) LogID() (r uuid.UUID, exists bool) {
+	v := m.log_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLogID returns the old "log_id" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldLogID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLogID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLogID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLogID: %w", err)
+	}
+	return oldValue.LogID, nil
+}
+
+// ResetLogID resets all changes to the "log_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetLogID() {
+	m.log_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetUserID(i int64) {
+	m.user_id = &i
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) UserID() (r int64, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds i to the "user_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddUserID(i int64) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedUserID() (r int64, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetType sets the "type" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetType(f feedbackchathistoriesrecapsreactions.Type) {
+	m._type = &f
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) GetType() (r feedbackchathistoriesrecapsreactions.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldType(ctx context.Context) (v feedbackchathistoriesrecapsreactions.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetType() {
+	m._type = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the FeedbackChatHistoriesRecapsReactions entity.
+// If the FeedbackChatHistoriesRecapsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the FeedbackChatHistoriesRecapsReactionsMutation builder.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the FeedbackChatHistoriesRecapsReactionsMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FeedbackChatHistoriesRecapsReactions, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (FeedbackChatHistoriesRecapsReactions).
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.chat_id != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldChatID)
+	}
+	if m.log_id != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldLogID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldUserID)
+	}
+	if m._type != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldType)
+	}
+	if m.created_at != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		return m.ChatID()
+	case feedbackchathistoriesrecapsreactions.FieldLogID:
+		return m.LogID()
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		return m.UserID()
+	case feedbackchathistoriesrecapsreactions.FieldType:
+		return m.GetType()
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		return m.CreatedAt()
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		return m.OldChatID(ctx)
+	case feedbackchathistoriesrecapsreactions.FieldLogID:
+		return m.OldLogID(ctx)
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		return m.OldUserID(ctx)
+	case feedbackchathistoriesrecapsreactions.FieldType:
+		return m.OldType(ctx)
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatID(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldLogID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLogID(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldType:
+		v, ok := value.(feedbackchathistoriesrecapsreactions.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedFields() []string {
+	var fields []string
+	if m.addchat_id != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldChatID)
+	}
+	if m.adduser_id != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldUserID)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, feedbackchathistoriesrecapsreactions.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		return m.AddedChatID()
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		return m.AddedUserID()
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChatID(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetField(name string) error {
+	switch name {
+	case feedbackchathistoriesrecapsreactions.FieldChatID:
+		m.ResetChatID()
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldLogID:
+		m.ResetLogID()
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldType:
+		m.ResetType()
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FeedbackChatHistoriesRecapsReactionsMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown FeedbackChatHistoriesRecapsReactions edge %s", name)
+}
+
+// FeedbackSummarizationsReactionsMutation represents an operation that mutates the FeedbackSummarizationsReactions nodes in the graph.
+type FeedbackSummarizationsReactionsMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	chat_id       *int64
+	addchat_id    *int64
+	log_id        *uuid.UUID
+	user_id       *int64
+	adduser_id    *int64
+	_type         *feedbacksummarizationsreactions.Type
+	created_at    *int64
+	addcreated_at *int64
+	updated_at    *int64
+	addupdated_at *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*FeedbackSummarizationsReactions, error)
+	predicates    []predicate.FeedbackSummarizationsReactions
+}
+
+var _ ent.Mutation = (*FeedbackSummarizationsReactionsMutation)(nil)
+
+// feedbacksummarizationsreactionsOption allows management of the mutation configuration using functional options.
+type feedbacksummarizationsreactionsOption func(*FeedbackSummarizationsReactionsMutation)
+
+// newFeedbackSummarizationsReactionsMutation creates new mutation for the FeedbackSummarizationsReactions entity.
+func newFeedbackSummarizationsReactionsMutation(c config, op Op, opts ...feedbacksummarizationsreactionsOption) *FeedbackSummarizationsReactionsMutation {
+	m := &FeedbackSummarizationsReactionsMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeFeedbackSummarizationsReactions,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withFeedbackSummarizationsReactionsID sets the ID field of the mutation.
+func withFeedbackSummarizationsReactionsID(id uuid.UUID) feedbacksummarizationsreactionsOption {
+	return func(m *FeedbackSummarizationsReactionsMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *FeedbackSummarizationsReactions
+		)
+		m.oldValue = func(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().FeedbackSummarizationsReactions.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withFeedbackSummarizationsReactions sets the old FeedbackSummarizationsReactions of the mutation.
+func withFeedbackSummarizationsReactions(node *FeedbackSummarizationsReactions) feedbacksummarizationsreactionsOption {
+	return func(m *FeedbackSummarizationsReactionsMutation) {
+		m.oldValue = func(context.Context) (*FeedbackSummarizationsReactions, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m FeedbackSummarizationsReactionsMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m FeedbackSummarizationsReactionsMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of FeedbackSummarizationsReactions entities.
+func (m *FeedbackSummarizationsReactionsMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *FeedbackSummarizationsReactionsMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().FeedbackSummarizationsReactions.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChatID sets the "chat_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetChatID(i int64) {
+	m.chat_id = &i
+	m.addchat_id = nil
+}
+
+// ChatID returns the value of the "chat_id" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) ChatID() (r int64, exists bool) {
+	v := m.chat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatID returns the old "chat_id" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldChatID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
+	}
+	return oldValue.ChatID, nil
+}
+
+// AddChatID adds i to the "chat_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) AddChatID(i int64) {
+	if m.addchat_id != nil {
+		*m.addchat_id += i
+	} else {
+		m.addchat_id = &i
+	}
+}
+
+// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedChatID() (r int64, exists bool) {
+	v := m.addchat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChatID resets all changes to the "chat_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetChatID() {
+	m.chat_id = nil
+	m.addchat_id = nil
+}
+
+// SetLogID sets the "log_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetLogID(u uuid.UUID) {
+	m.log_id = &u
+}
+
+// LogID returns the value of the "log_id" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) LogID() (r uuid.UUID, exists bool) {
+	v := m.log_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLogID returns the old "log_id" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldLogID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLogID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLogID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLogID: %w", err)
+	}
+	return oldValue.LogID, nil
+}
+
+// ResetLogID resets all changes to the "log_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetLogID() {
+	m.log_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetUserID(i int64) {
+	m.user_id = &i
+	m.adduser_id = nil
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) UserID() (r int64, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldUserID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// AddUserID adds i to the "user_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) AddUserID(i int64) {
+	if m.adduser_id != nil {
+		*m.adduser_id += i
+	} else {
+		m.adduser_id = &i
+	}
+}
+
+// AddedUserID returns the value that was added to the "user_id" field in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedUserID() (r int64, exists bool) {
+	v := m.adduser_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetUserID() {
+	m.user_id = nil
+	m.adduser_id = nil
+}
+
+// SetType sets the "type" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetType(f feedbacksummarizationsreactions.Type) {
+	m._type = &f
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) GetType() (r feedbacksummarizationsreactions.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldType(ctx context.Context) (v feedbacksummarizationsreactions.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetType() {
+	m._type = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *FeedbackSummarizationsReactionsMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the FeedbackSummarizationsReactions entity.
+// If the FeedbackSummarizationsReactions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FeedbackSummarizationsReactionsMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *FeedbackSummarizationsReactionsMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the FeedbackSummarizationsReactionsMutation builder.
+func (m *FeedbackSummarizationsReactionsMutation) Where(ps ...predicate.FeedbackSummarizationsReactions) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the FeedbackSummarizationsReactionsMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *FeedbackSummarizationsReactionsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FeedbackSummarizationsReactions, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *FeedbackSummarizationsReactionsMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *FeedbackSummarizationsReactionsMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (FeedbackSummarizationsReactions).
+func (m *FeedbackSummarizationsReactionsMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *FeedbackSummarizationsReactionsMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.chat_id != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldChatID)
+	}
+	if m.log_id != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldLogID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldUserID)
+	}
+	if m._type != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldType)
+	}
+	if m.created_at != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *FeedbackSummarizationsReactionsMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		return m.ChatID()
+	case feedbacksummarizationsreactions.FieldLogID:
+		return m.LogID()
+	case feedbacksummarizationsreactions.FieldUserID:
+		return m.UserID()
+	case feedbacksummarizationsreactions.FieldType:
+		return m.GetType()
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		return m.CreatedAt()
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *FeedbackSummarizationsReactionsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		return m.OldChatID(ctx)
+	case feedbacksummarizationsreactions.FieldLogID:
+		return m.OldLogID(ctx)
+	case feedbacksummarizationsreactions.FieldUserID:
+		return m.OldUserID(ctx)
+	case feedbacksummarizationsreactions.FieldType:
+		return m.OldType(ctx)
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown FeedbackSummarizationsReactions field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FeedbackSummarizationsReactionsMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatID(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldLogID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLogID(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldType:
+		v, ok := value.(feedbacksummarizationsreactions.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedFields() []string {
+	var fields []string
+	if m.addchat_id != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldChatID)
+	}
+	if m.adduser_id != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldUserID)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, feedbacksummarizationsreactions.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *FeedbackSummarizationsReactionsMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		return m.AddedChatID()
+	case feedbacksummarizationsreactions.FieldUserID:
+		return m.AddedUserID()
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *FeedbackSummarizationsReactionsMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChatID(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldUserID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUserID(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *FeedbackSummarizationsReactionsMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *FeedbackSummarizationsReactionsMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *FeedbackSummarizationsReactionsMutation) ResetField(name string) error {
+	switch name {
+	case feedbacksummarizationsreactions.FieldChatID:
+		m.ResetChatID()
+		return nil
+	case feedbacksummarizationsreactions.FieldLogID:
+		m.ResetLogID()
+		return nil
+	case feedbacksummarizationsreactions.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case feedbacksummarizationsreactions.FieldType:
+		m.ResetType()
+		return nil
+	case feedbacksummarizationsreactions.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case feedbacksummarizationsreactions.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *FeedbackSummarizationsReactionsMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *FeedbackSummarizationsReactionsMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *FeedbackSummarizationsReactionsMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown FeedbackSummarizationsReactions edge %s", name)
 }
 
 // LogChatHistoriesRecapMutation represents an operation that mutates the LogChatHistoriesRecap nodes in the graph.

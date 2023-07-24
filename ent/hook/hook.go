@@ -21,6 +21,30 @@ func (f ChatHistoriesFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ChatHistoriesMutation", m)
 }
 
+// The FeedbackChatHistoriesRecapsReactionsFunc type is an adapter to allow the use of ordinary
+// function as FeedbackChatHistoriesRecapsReactions mutator.
+type FeedbackChatHistoriesRecapsReactionsFunc func(context.Context, *ent.FeedbackChatHistoriesRecapsReactionsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FeedbackChatHistoriesRecapsReactionsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FeedbackChatHistoriesRecapsReactionsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FeedbackChatHistoriesRecapsReactionsMutation", m)
+}
+
+// The FeedbackSummarizationsReactionsFunc type is an adapter to allow the use of ordinary
+// function as FeedbackSummarizationsReactions mutator.
+type FeedbackSummarizationsReactionsFunc func(context.Context, *ent.FeedbackSummarizationsReactionsMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f FeedbackSummarizationsReactionsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FeedbackSummarizationsReactionsMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FeedbackSummarizationsReactionsMutation", m)
+}
+
 // The LogChatHistoriesRecapFunc type is an adapter to allow the use of ordinary
 // function as LogChatHistoriesRecap mutator.
 type LogChatHistoriesRecapFunc func(context.Context, *ent.LogChatHistoriesRecapMutation) (ent.Value, error)

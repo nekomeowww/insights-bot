@@ -15,6 +15,8 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/ent/feedbackchathistoriesrecapsreactions"
+	"github.com/nekomeowww/insights-bot/ent/feedbacksummarizationsreactions"
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
@@ -33,6 +35,10 @@ type Client struct {
 	Schema *migrate.Schema
 	// ChatHistories is the client for interacting with the ChatHistories builders.
 	ChatHistories *ChatHistoriesClient
+	// FeedbackChatHistoriesRecapsReactions is the client for interacting with the FeedbackChatHistoriesRecapsReactions builders.
+	FeedbackChatHistoriesRecapsReactions *FeedbackChatHistoriesRecapsReactionsClient
+	// FeedbackSummarizationsReactions is the client for interacting with the FeedbackSummarizationsReactions builders.
+	FeedbackSummarizationsReactions *FeedbackSummarizationsReactionsClient
 	// LogChatHistoriesRecap is the client for interacting with the LogChatHistoriesRecap builders.
 	LogChatHistoriesRecap *LogChatHistoriesRecapClient
 	// LogSummarizations is the client for interacting with the LogSummarizations builders.
@@ -61,6 +67,8 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.ChatHistories = NewChatHistoriesClient(c.config)
+	c.FeedbackChatHistoriesRecapsReactions = NewFeedbackChatHistoriesRecapsReactionsClient(c.config)
+	c.FeedbackSummarizationsReactions = NewFeedbackSummarizationsReactionsClient(c.config)
 	c.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(c.config)
 	c.LogSummarizations = NewLogSummarizationsClient(c.config)
 	c.MetricOpenAIChatCompletionTokenUsage = NewMetricOpenAIChatCompletionTokenUsageClient(c.config)
@@ -153,6 +161,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:                                  ctx,
 		config:                               cfg,
 		ChatHistories:                        NewChatHistoriesClient(cfg),
+		FeedbackChatHistoriesRecapsReactions: NewFeedbackChatHistoriesRecapsReactionsClient(cfg),
+		FeedbackSummarizationsReactions:      NewFeedbackSummarizationsReactionsClient(cfg),
 		LogChatHistoriesRecap:                NewLogChatHistoriesRecapClient(cfg),
 		LogSummarizations:                    NewLogSummarizationsClient(cfg),
 		MetricOpenAIChatCompletionTokenUsage: NewMetricOpenAIChatCompletionTokenUsageClient(cfg),
@@ -180,6 +190,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:                                  ctx,
 		config:                               cfg,
 		ChatHistories:                        NewChatHistoriesClient(cfg),
+		FeedbackChatHistoriesRecapsReactions: NewFeedbackChatHistoriesRecapsReactionsClient(cfg),
+		FeedbackSummarizationsReactions:      NewFeedbackSummarizationsReactionsClient(cfg),
 		LogChatHistoriesRecap:                NewLogChatHistoriesRecapClient(cfg),
 		LogSummarizations:                    NewLogSummarizationsClient(cfg),
 		MetricOpenAIChatCompletionTokenUsage: NewMetricOpenAIChatCompletionTokenUsageClient(cfg),
@@ -216,10 +228,11 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.ChatHistories, c.LogChatHistoriesRecap, c.LogSummarizations,
-		c.MetricOpenAIChatCompletionTokenUsage, c.SlackOAuthCredentials,
-		c.TelegramChatAutoRecapsSubscribers, c.TelegramChatFeatureFlags,
-		c.TelegramChatRecapsOptions,
+		c.ChatHistories, c.FeedbackChatHistoriesRecapsReactions,
+		c.FeedbackSummarizationsReactions, c.LogChatHistoriesRecap,
+		c.LogSummarizations, c.MetricOpenAIChatCompletionTokenUsage,
+		c.SlackOAuthCredentials, c.TelegramChatAutoRecapsSubscribers,
+		c.TelegramChatFeatureFlags, c.TelegramChatRecapsOptions,
 	} {
 		n.Use(hooks...)
 	}
@@ -229,10 +242,11 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.ChatHistories, c.LogChatHistoriesRecap, c.LogSummarizations,
-		c.MetricOpenAIChatCompletionTokenUsage, c.SlackOAuthCredentials,
-		c.TelegramChatAutoRecapsSubscribers, c.TelegramChatFeatureFlags,
-		c.TelegramChatRecapsOptions,
+		c.ChatHistories, c.FeedbackChatHistoriesRecapsReactions,
+		c.FeedbackSummarizationsReactions, c.LogChatHistoriesRecap,
+		c.LogSummarizations, c.MetricOpenAIChatCompletionTokenUsage,
+		c.SlackOAuthCredentials, c.TelegramChatAutoRecapsSubscribers,
+		c.TelegramChatFeatureFlags, c.TelegramChatRecapsOptions,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -243,6 +257,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *ChatHistoriesMutation:
 		return c.ChatHistories.mutate(ctx, m)
+	case *FeedbackChatHistoriesRecapsReactionsMutation:
+		return c.FeedbackChatHistoriesRecapsReactions.mutate(ctx, m)
+	case *FeedbackSummarizationsReactionsMutation:
+		return c.FeedbackSummarizationsReactions.mutate(ctx, m)
 	case *LogChatHistoriesRecapMutation:
 		return c.LogChatHistoriesRecap.mutate(ctx, m)
 	case *LogSummarizationsMutation:
@@ -377,6 +395,242 @@ func (c *ChatHistoriesClient) mutate(ctx context.Context, m *ChatHistoriesMutati
 		return (&ChatHistoriesDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown ChatHistories mutation op: %q", m.Op())
+	}
+}
+
+// FeedbackChatHistoriesRecapsReactionsClient is a client for the FeedbackChatHistoriesRecapsReactions schema.
+type FeedbackChatHistoriesRecapsReactionsClient struct {
+	config
+}
+
+// NewFeedbackChatHistoriesRecapsReactionsClient returns a client for the FeedbackChatHistoriesRecapsReactions from the given config.
+func NewFeedbackChatHistoriesRecapsReactionsClient(c config) *FeedbackChatHistoriesRecapsReactionsClient {
+	return &FeedbackChatHistoriesRecapsReactionsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `feedbackchathistoriesrecapsreactions.Hooks(f(g(h())))`.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Use(hooks ...Hook) {
+	c.hooks.FeedbackChatHistoriesRecapsReactions = append(c.hooks.FeedbackChatHistoriesRecapsReactions, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `feedbackchathistoriesrecapsreactions.Intercept(f(g(h())))`.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FeedbackChatHistoriesRecapsReactions = append(c.inters.FeedbackChatHistoriesRecapsReactions, interceptors...)
+}
+
+// Create returns a builder for creating a FeedbackChatHistoriesRecapsReactions entity.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Create() *FeedbackChatHistoriesRecapsReactionsCreate {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpCreate)
+	return &FeedbackChatHistoriesRecapsReactionsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FeedbackChatHistoriesRecapsReactions entities.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) CreateBulk(builders ...*FeedbackChatHistoriesRecapsReactionsCreate) *FeedbackChatHistoriesRecapsReactionsCreateBulk {
+	return &FeedbackChatHistoriesRecapsReactionsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FeedbackChatHistoriesRecapsReactions.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Update() *FeedbackChatHistoriesRecapsReactionsUpdate {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpUpdate)
+	return &FeedbackChatHistoriesRecapsReactionsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) UpdateOne(fchrr *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpUpdateOne, withFeedbackChatHistoriesRecapsReactions(fchrr))
+	return &FeedbackChatHistoriesRecapsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) UpdateOneID(id uuid.UUID) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpUpdateOne, withFeedbackChatHistoriesRecapsReactionsID(id))
+	return &FeedbackChatHistoriesRecapsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FeedbackChatHistoriesRecapsReactions.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Delete() *FeedbackChatHistoriesRecapsReactionsDelete {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpDelete)
+	return &FeedbackChatHistoriesRecapsReactionsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) DeleteOne(fchrr *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsDeleteOne {
+	return c.DeleteOneID(fchrr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) DeleteOneID(id uuid.UUID) *FeedbackChatHistoriesRecapsReactionsDeleteOne {
+	builder := c.Delete().Where(feedbackchathistoriesrecapsreactions.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FeedbackChatHistoriesRecapsReactionsDeleteOne{builder}
+}
+
+// Query returns a query builder for FeedbackChatHistoriesRecapsReactions.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Query() *FeedbackChatHistoriesRecapsReactionsQuery {
+	return &FeedbackChatHistoriesRecapsReactionsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFeedbackChatHistoriesRecapsReactions},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FeedbackChatHistoriesRecapsReactions entity by its id.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Get(ctx context.Context, id uuid.UUID) (*FeedbackChatHistoriesRecapsReactions, error) {
+	return c.Query().Where(feedbackchathistoriesrecapsreactions.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) GetX(ctx context.Context, id uuid.UUID) *FeedbackChatHistoriesRecapsReactions {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Hooks() []Hook {
+	return c.hooks.FeedbackChatHistoriesRecapsReactions
+}
+
+// Interceptors returns the client interceptors.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) Interceptors() []Interceptor {
+	return c.inters.FeedbackChatHistoriesRecapsReactions
+}
+
+func (c *FeedbackChatHistoriesRecapsReactionsClient) mutate(ctx context.Context, m *FeedbackChatHistoriesRecapsReactionsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FeedbackChatHistoriesRecapsReactionsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FeedbackChatHistoriesRecapsReactionsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FeedbackChatHistoriesRecapsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FeedbackChatHistoriesRecapsReactionsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FeedbackChatHistoriesRecapsReactions mutation op: %q", m.Op())
+	}
+}
+
+// FeedbackSummarizationsReactionsClient is a client for the FeedbackSummarizationsReactions schema.
+type FeedbackSummarizationsReactionsClient struct {
+	config
+}
+
+// NewFeedbackSummarizationsReactionsClient returns a client for the FeedbackSummarizationsReactions from the given config.
+func NewFeedbackSummarizationsReactionsClient(c config) *FeedbackSummarizationsReactionsClient {
+	return &FeedbackSummarizationsReactionsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `feedbacksummarizationsreactions.Hooks(f(g(h())))`.
+func (c *FeedbackSummarizationsReactionsClient) Use(hooks ...Hook) {
+	c.hooks.FeedbackSummarizationsReactions = append(c.hooks.FeedbackSummarizationsReactions, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `feedbacksummarizationsreactions.Intercept(f(g(h())))`.
+func (c *FeedbackSummarizationsReactionsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FeedbackSummarizationsReactions = append(c.inters.FeedbackSummarizationsReactions, interceptors...)
+}
+
+// Create returns a builder for creating a FeedbackSummarizationsReactions entity.
+func (c *FeedbackSummarizationsReactionsClient) Create() *FeedbackSummarizationsReactionsCreate {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpCreate)
+	return &FeedbackSummarizationsReactionsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FeedbackSummarizationsReactions entities.
+func (c *FeedbackSummarizationsReactionsClient) CreateBulk(builders ...*FeedbackSummarizationsReactionsCreate) *FeedbackSummarizationsReactionsCreateBulk {
+	return &FeedbackSummarizationsReactionsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FeedbackSummarizationsReactions.
+func (c *FeedbackSummarizationsReactionsClient) Update() *FeedbackSummarizationsReactionsUpdate {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdate)
+	return &FeedbackSummarizationsReactionsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FeedbackSummarizationsReactionsClient) UpdateOne(fsr *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdateOne {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdateOne, withFeedbackSummarizationsReactions(fsr))
+	return &FeedbackSummarizationsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FeedbackSummarizationsReactionsClient) UpdateOneID(id uuid.UUID) *FeedbackSummarizationsReactionsUpdateOne {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdateOne, withFeedbackSummarizationsReactionsID(id))
+	return &FeedbackSummarizationsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FeedbackSummarizationsReactions.
+func (c *FeedbackSummarizationsReactionsClient) Delete() *FeedbackSummarizationsReactionsDelete {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpDelete)
+	return &FeedbackSummarizationsReactionsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FeedbackSummarizationsReactionsClient) DeleteOne(fsr *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDeleteOne {
+	return c.DeleteOneID(fsr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FeedbackSummarizationsReactionsClient) DeleteOneID(id uuid.UUID) *FeedbackSummarizationsReactionsDeleteOne {
+	builder := c.Delete().Where(feedbacksummarizationsreactions.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FeedbackSummarizationsReactionsDeleteOne{builder}
+}
+
+// Query returns a query builder for FeedbackSummarizationsReactions.
+func (c *FeedbackSummarizationsReactionsClient) Query() *FeedbackSummarizationsReactionsQuery {
+	return &FeedbackSummarizationsReactionsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFeedbackSummarizationsReactions},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FeedbackSummarizationsReactions entity by its id.
+func (c *FeedbackSummarizationsReactionsClient) Get(ctx context.Context, id uuid.UUID) (*FeedbackSummarizationsReactions, error) {
+	return c.Query().Where(feedbacksummarizationsreactions.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FeedbackSummarizationsReactionsClient) GetX(ctx context.Context, id uuid.UUID) *FeedbackSummarizationsReactions {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *FeedbackSummarizationsReactionsClient) Hooks() []Hook {
+	return c.hooks.FeedbackSummarizationsReactions
+}
+
+// Interceptors returns the client interceptors.
+func (c *FeedbackSummarizationsReactionsClient) Interceptors() []Interceptor {
+	return c.inters.FeedbackSummarizationsReactions
+}
+
+func (c *FeedbackSummarizationsReactionsClient) mutate(ctx context.Context, m *FeedbackSummarizationsReactionsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FeedbackSummarizationsReactionsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FeedbackSummarizationsReactionsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FeedbackSummarizationsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FeedbackSummarizationsReactionsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FeedbackSummarizationsReactions mutation op: %q", m.Op())
 	}
 }
 
@@ -1209,13 +1463,15 @@ func (c *TelegramChatRecapsOptionsClient) mutate(ctx context.Context, m *Telegra
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		ChatHistories, LogChatHistoriesRecap, LogSummarizations,
+		ChatHistories, FeedbackChatHistoriesRecapsReactions,
+		FeedbackSummarizationsReactions, LogChatHistoriesRecap, LogSummarizations,
 		MetricOpenAIChatCompletionTokenUsage, SlackOAuthCredentials,
 		TelegramChatAutoRecapsSubscribers, TelegramChatFeatureFlags,
 		TelegramChatRecapsOptions []ent.Hook
 	}
 	inters struct {
-		ChatHistories, LogChatHistoriesRecap, LogSummarizations,
+		ChatHistories, FeedbackChatHistoriesRecapsReactions,
+		FeedbackSummarizationsReactions, LogChatHistoriesRecap, LogSummarizations,
 		MetricOpenAIChatCompletionTokenUsage, SlackOAuthCredentials,
 		TelegramChatAutoRecapsSubscribers, TelegramChatFeatureFlags,
 		TelegramChatRecapsOptions []ent.Interceptor

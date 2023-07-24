@@ -11,6 +11,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
 	"github.com/nekomeowww/insights-bot/pkg/types/redis"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
 	"go.uber.org/zap"
@@ -237,7 +238,7 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 		return item
 	})
 
-	ss, err := m.renderRecapTemplates(0, summarizations)
+	ss, err := m.renderRecapTemplates(0, telegram.ChatTypePrivate, summarizations)
 	if err != nil {
 		return make([]string, 0), err
 	}

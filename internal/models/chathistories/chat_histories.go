@@ -363,7 +363,7 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
-func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistories) (uuid.UUID, []string, error) {
+func (m *Model) SummarizeChatHistories(chatID int64, chatType telegram.ChatType, histories []*ent.ChatHistories) (uuid.UUID, []string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	historiesIncludedMessageIDs := make([]int64, 0)
 
@@ -402,7 +402,7 @@ func (m *Model) SummarizeChatHistories(chatID int64, histories []*ent.ChatHistor
 		return uuid.Nil, make([]string, 0), err
 	}
 
-	ss, err := m.renderRecapTemplates(chatID, summarizations)
+	ss, err := m.renderRecapTemplates(chatID, chatType, summarizations)
 	if err != nil {
 		return uuid.Nil, make([]string, 0), err
 	}

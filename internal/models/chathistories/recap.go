@@ -16,6 +16,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 )
 
 type RecapOutputTemplateInputs struct {
@@ -44,6 +45,20 @@ var RecapOutputTemplate = lo.Must(template.
 参与人：{{ join .Recap.ParticipantsNamesWithoutUsername "，" }}
 讨论：{{ range $di, $d := .Recap.Discussion }}
  - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if .Recap.Conclusion }}
+结论：{{ escape .Recap.Conclusion }}{{ end }}`))
+
+var RecapWithoutLinksOutputTemplate = lo.Must(template.
+	New("recap output markdown template").
+	Funcs(template.FuncMap{
+		"join":   strings.Join,
+		"sub":    func(a, b int) int { return a - b },
+		"add":    func(a, b int) int { return a + b },
+		"escape": tgbot.EscapeHTMLSymbols,
+	}).
+	Parse(`{{ $chatID := .ChatID }}{{ if .Recap.SinceID }}## {{ escape .Recap.TopicName }}{{ else }}## {{ escape .Recap.TopicName }}{{ end }}
+参与人：{{ join .Recap.ParticipantsNamesWithoutUsername "，" }}
+讨论：{{ range $di, $d := .Recap.Discussion }}
+ - {{ escape $d.Point }}{{ end }}{{ if .Recap.Conclusion }}
 结论：{{ escape .Recap.Conclusion }}{{ end }}`))
 
 func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
@@ -171,21 +186,34 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 	return chatHistoriesSummarizations, statusUsage, nil
 }
 
-func (m *Model) renderRecapTemplates(chatID int64, summarizations []*openai.ChatHistorySummarizationOutputs) ([]string, error) {
+func (m *Model) renderRecapTemplates(chatID int64, chatType telegram.ChatType, summarizations []*openai.ChatHistorySummarizationOutputs) ([]string, error) {
 	ss := make([]string, 0)
 
 	for _, r := range summarizations {
 		sb := new(strings.Builder)
 
-		err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
-			ChatID: formatChatID(chatID),
-			Recap:  r,
-		})
-		if err != nil {
-			return make([]string, 0), err
-		}
+		switch chatType {
+		case telegram.ChatTypeSuperGroup:
+			err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
+				ChatID: formatChatID(chatID),
+				Recap:  r,
+			})
+			if err != nil {
+				return make([]string, 0), err
+			}
 
-		ss = append(ss, sb.String())
+			ss = append(ss, sb.String())
+		case telegram.ChatTypePrivate, telegram.ChatTypeGroup, telegram.ChatTypeChannel:
+			err := RecapWithoutLinksOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
+				ChatID: formatChatID(chatID),
+				Recap:  r,
+			})
+			if err != nil {
+				return make([]string, 0), err
+			}
+
+			ss = append(ss, sb.String())
+		}
 	}
 
 	return ss, nil

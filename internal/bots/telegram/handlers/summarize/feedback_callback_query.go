@@ -10,7 +10,6 @@ import (
 )
 
 func (h *Handlers) handleCallbackQueryReact(c *tgbot.Context) (tgbot.Response, error) {
-	h.logger.Info("handling callback query react")
 	messageID := c.Update.CallbackQuery.Message.MessageID
 
 	var data recap.FeedbackSummarizationReactionActionData

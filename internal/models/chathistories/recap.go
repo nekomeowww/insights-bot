@@ -3,6 +3,7 @@ package chathistories
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"strconv"
@@ -108,6 +109,41 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 	return outputs, resp.Usage, nil
 }
 
+func filterOutInvalidFields(messageIDs []int64, outputs []*openai.ChatHistorySummarizationOutputs) []*openai.ChatHistorySummarizationOutputs {
+	for i := range outputs {
+		// limit key ids to 5
+		outputs[i].ParticipantsNamesWithoutUsername = lo.Uniq(outputs[i].ParticipantsNamesWithoutUsername)
+
+		// filter out non-exist message ids
+		for _, d := range outputs[i].Discussion {
+			d.KeyIDs = lo.Filter(d.KeyIDs, func(item int64, _ int) bool {
+				return lo.Contains(messageIDs, item) && item != 0
+			})
+			d.KeyIDs = lo.UniqBy(d.KeyIDs, func(item int64) int64 {
+				return item
+			})
+
+			if len(d.KeyIDs) > 5 {
+				d.KeyIDs = d.KeyIDs[:5]
+			}
+		}
+
+		outputs[i].Discussion = lo.Filter(outputs[i].Discussion, func(item *openai.ChatHistorySummarizationOutputsDiscussion, _ int) bool {
+			return len(item.KeyIDs) > 0 && item.Point != ""
+		})
+	}
+
+	return outputs
+}
+
+func filterOutInvalidOutputFilterFunc(output *openai.ChatHistorySummarizationOutputs, _ int) bool {
+	return output != nil &&
+		output.TopicName != "" && // filter out empty topic name
+		output.SinceID != 0 && // filter out empty since id
+		len(output.ParticipantsNamesWithoutUsername) > 0 && // filter out empty participants
+		len(output.Discussion) > 0 // filter out empty discussion
+}
+
 func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
 	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, 15000)
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
@@ -131,6 +167,20 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 				return err
 			}
 
+			// filter out invalid fields
+			o = filterOutInvalidFields(messageIDs, o)
+			// filter out empty outputs
+			o = lo.Filter(o, filterOutInvalidOutputFilterFunc)
+
+			if len(o) == 0 {
+				m.logger.Error(fmt.Sprintf("no valid outputs from chat histories slice: %s, tried %d...", s, tried),
+					zap.Int64("chat_id", chatID),
+					zap.String("model_name", m.openAI.GetModelName()),
+				)
+
+				return errors.New("no valid outputs")
+			}
+
 			outputs = o
 			return nil
 		})
@@ -139,45 +189,6 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 		}
 		if outputs == nil {
 			continue
-		}
-
-		// filter out empty outputs
-		outputs = lo.Filter(outputs, func(item *openai.ChatHistorySummarizationOutputs, _ int) bool {
-			return item != nil &&
-				item.TopicName != "" && // filter out empty topic name
-				item.SinceID != 0 && // filter out empty since id
-				len(item.ParticipantsNamesWithoutUsername) > 0 // filter out empty participants
-		})
-
-		// filter out non-exist message ids
-		for i := range outputs {
-			for j := range outputs[i].Discussion {
-				outputs[i].Discussion[j].KeyIDs = lo.Filter(outputs[i].Discussion[j].KeyIDs, func(item int64, _ int) bool {
-					return lo.Contains(messageIDs, item)
-				})
-			}
-
-			outputs[i].Discussion = lo.Filter(outputs[i].Discussion, func(item *openai.ChatHistorySummarizationOutputsDiscussion, _ int) bool {
-				return len(item.KeyIDs) > 0 && item.Point != ""
-			})
-		}
-
-		// limit key ids to 5
-		for _, o := range outputs {
-			o.ParticipantsNamesWithoutUsername = lo.Uniq(o.ParticipantsNamesWithoutUsername)
-
-			for _, d := range o.Discussion {
-				d.KeyIDs = lo.UniqBy(d.KeyIDs, func(item int64) int64 {
-					return item
-				})
-				d.KeyIDs = lo.Filter(d.KeyIDs, func(item int64, _ int) bool {
-					return item != 0
-				})
-
-				if len(d.KeyIDs) > 5 {
-					d.KeyIDs = d.KeyIDs[:5]
-				}
-			}
 		}
 
 		chatHistoriesSummarizations = append(chatHistoriesSummarizations, outputs...)

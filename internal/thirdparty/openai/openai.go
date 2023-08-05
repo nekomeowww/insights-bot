@@ -37,11 +37,12 @@ var _ Client = (*OpenAIClient)(nil)
 type OpenAIClient struct {
 	modelName string
 
-	tiktokenEncoding *tiktoken.Tiktoken
-	client           *openai.Client
-	ent              *datastore.Ent
-	logger           *logger.Logger
-	limiter          ratelimit.Limiter
+	tiktokenEncoding            *tiktoken.Tiktoken
+	client                      *openai.Client
+	ent                         *datastore.Ent
+	logger                      *logger.Logger
+	limiter                     ratelimit.Limiter
+	enableMetricRecordForTokens bool
 }
 
 func parseOpenAIAPIHost(apiHost string) (string, error) {
@@ -70,7 +71,7 @@ type NewClientParams struct {
 	Ent    *datastore.Ent
 }
 
-func NewClient() func(NewClientParams) (Client, error) {
+func NewClient(enableMetricRecordForTokens bool) func(NewClientParams) (Client, error) {
 	return func(params NewClientParams) (Client, error) {
 		tokenizer, err := tiktoken.EncodingForModel(openai.GPT3Dot5Turbo)
 		if err != nil {
@@ -95,12 +96,13 @@ func NewClient() func(NewClientParams) (Client, error) {
 		limiter.Take()
 
 		return &OpenAIClient{
-			modelName:        lo.Ternary(params.Config.OpenAI.ModelName == "", openai.GPT3Dot5Turbo, params.Config.OpenAI.ModelName),
-			client:           client,
-			tiktokenEncoding: tokenizer,
-			ent:              params.Ent,
-			logger:           params.Logger,
-			limiter:          ratelimit.New(5),
+			modelName:                   lo.Ternary(params.Config.OpenAI.ModelName == "", openai.GPT3Dot5Turbo, params.Config.OpenAI.ModelName),
+			client:                      client,
+			tiktokenEncoding:            tokenizer,
+			ent:                         params.Ent,
+			logger:                      params.Logger,
+			limiter:                     ratelimit.New(5),
+			enableMetricRecordForTokens: enableMetricRecordForTokens,
 		}, nil
 	}
 }
@@ -186,22 +188,24 @@ func (c *OpenAIClient) SummarizeWithQuestionsAsSimplifiedChinese(ctx context.Con
 		return nil, err
 	}
 
-	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
-		Create().
-		SetPromptOperation("Summarize With Questions As Simplified Chinese").
-		SetPromptTokenUsage(resp.Usage.PromptTokens).
-		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
-		SetTotalTokenUsage(resp.Usage.TotalTokens).
-		SetModelName(c.modelName).
-		Exec(ctx)
-	if err != nil {
-		c.logger.Error("failed to create metric openai chat completion token usage", zap.Error(err),
-			zap.String("prompt_operation", "Summarize With Questions As Simplified Chinese"),
-			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
-			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
-			zap.Int("total_token_usage", resp.Usage.TotalTokens),
-			zap.String("model_name", c.modelName),
-		)
+	if c.enableMetricRecordForTokens {
+		err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+			Create().
+			SetPromptOperation("Summarize With Questions As Simplified Chinese").
+			SetPromptTokenUsage(resp.Usage.PromptTokens).
+			SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+			SetTotalTokenUsage(resp.Usage.TotalTokens).
+			SetModelName(c.modelName).
+			Exec(ctx)
+		if err != nil {
+			c.logger.Error("failed to create metric openai chat completion token usage", zap.Error(err),
+				zap.String("prompt_operation", "Summarize With Questions As Simplified Chinese"),
+				zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+				zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+				zap.Int("total_token_usage", resp.Usage.TotalTokens),
+				zap.String("model_name", c.modelName),
+			)
+		}
 	}
 
 	return &resp, nil
@@ -238,23 +242,25 @@ func (c *OpenAIClient) SummarizeOneChatHistory(ctx context.Context, llmFriendlyC
 		return nil, err
 	}
 
-	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
-		Create().
-		SetPromptOperation("Summarize One Chat History").
-		SetPromptTokenUsage(resp.Usage.PromptTokens).
-		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
-		SetTotalTokenUsage(resp.Usage.TotalTokens).
-		SetModelName(c.modelName).
-		Exec(ctx)
-	if err != nil {
-		c.logger.Error("failed to create metric openai chat completion token usage",
-			zap.Error(err),
-			zap.String("prompt_operation", "Summarize One Chat History"),
-			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
-			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
-			zap.Int("total_token_usage", resp.Usage.TotalTokens),
-			zap.String("model_name", c.modelName),
-		)
+	if c.enableMetricRecordForTokens {
+		err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+			Create().
+			SetPromptOperation("Summarize One Chat History").
+			SetPromptTokenUsage(resp.Usage.PromptTokens).
+			SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+			SetTotalTokenUsage(resp.Usage.TotalTokens).
+			SetModelName(c.modelName).
+			Exec(ctx)
+		if err != nil {
+			c.logger.Error("failed to create metric openai chat completion token usage",
+				zap.Error(err),
+				zap.String("prompt_operation", "Summarize One Chat History"),
+				zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+				zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+				zap.Int("total_token_usage", resp.Usage.TotalTokens),
+				zap.String("model_name", c.modelName),
+			)
+		}
 	}
 
 	return &resp, nil
@@ -289,23 +295,25 @@ func (c *OpenAIClient) SummarizeAny(ctx context.Context, content string) (*opena
 		return nil, err
 	}
 
-	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
-		Create().
-		SetPromptOperation("Summarize Any").
-		SetPromptTokenUsage(resp.Usage.PromptTokens).
-		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
-		SetTotalTokenUsage(resp.Usage.TotalTokens).
-		SetModelName(c.modelName).
-		Exec(ctx)
-	if err != nil {
-		c.logger.Error("failed to create metric openai chat completion token usage",
-			zap.Error(err),
-			zap.String("prompt_operation", "Summarize Any"),
-			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
-			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
-			zap.Int("total_token_usage", resp.Usage.TotalTokens),
-			zap.String("model_name", c.modelName),
-		)
+	if c.enableMetricRecordForTokens {
+		err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+			Create().
+			SetPromptOperation("Summarize Any").
+			SetPromptTokenUsage(resp.Usage.PromptTokens).
+			SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+			SetTotalTokenUsage(resp.Usage.TotalTokens).
+			SetModelName(c.modelName).
+			Exec(ctx)
+		if err != nil {
+			c.logger.Error("failed to create metric openai chat completion token usage",
+				zap.Error(err),
+				zap.String("prompt_operation", "Summarize Any"),
+				zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+				zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+				zap.Int("total_token_usage", resp.Usage.TotalTokens),
+				zap.String("model_name", c.modelName),
+			)
+		}
 	}
 
 	return &resp, nil
@@ -341,23 +349,25 @@ func (c *OpenAIClient) SummarizeChatHistories(ctx context.Context, llmFriendlyCh
 		return nil, err
 	}
 
-	err = c.ent.MetricOpenAIChatCompletionTokenUsage.
-		Create().
-		SetPromptOperation("Summarize Chat Histories").
-		SetPromptTokenUsage(resp.Usage.PromptTokens).
-		SetCompletionTokenUsage(resp.Usage.CompletionTokens).
-		SetTotalTokenUsage(resp.Usage.TotalTokens).
-		SetModelName(c.modelName).
-		Exec(ctx)
-	if err != nil {
-		c.logger.Error("failed to create metric openai chat completion token usage",
-			zap.Error(err),
-			zap.String("prompt_operation", "Summarize Chat Histories"),
-			zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
-			zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
-			zap.Int("total_token_usage", resp.Usage.TotalTokens),
-			zap.String("model_name", c.modelName),
-		)
+	if c.enableMetricRecordForTokens {
+		err = c.ent.MetricOpenAIChatCompletionTokenUsage.
+			Create().
+			SetPromptOperation("Summarize Chat Histories").
+			SetPromptTokenUsage(resp.Usage.PromptTokens).
+			SetCompletionTokenUsage(resp.Usage.CompletionTokens).
+			SetTotalTokenUsage(resp.Usage.TotalTokens).
+			SetModelName(c.modelName).
+			Exec(ctx)
+		if err != nil {
+			c.logger.Error("failed to create metric openai chat completion token usage",
+				zap.Error(err),
+				zap.String("prompt_operation", "Summarize Chat Histories"),
+				zap.Int("prompt_token_usage", resp.Usage.PromptTokens),
+				zap.Int("completion_token_usage", resp.Usage.CompletionTokens),
+				zap.Int("total_token_usage", resp.Usage.TotalTokens),
+				zap.String("model_name", c.modelName),
+			)
+		}
 	}
 
 	return &resp, nil

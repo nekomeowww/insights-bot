@@ -8,6 +8,6 @@ import (
 
 func NewModules() fx.Option {
 	return fx.Options(
-		fx.Provide(openai.NewClient()),
+		fx.Provide(openai.NewClient(true)),
 	)
 }

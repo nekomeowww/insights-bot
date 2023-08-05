@@ -43,7 +43,7 @@ var RecapOutputTemplate = lo.Must(template.
 		"escape": tgbot.EscapeHTMLSymbols,
 	}).
 	Parse(`{{ $chatID := .ChatID }}{{ if .Recap.SinceID }}## <a href="https://t.me/c/{{ $chatID }}/{{ .Recap.SinceID }}">{{ escape .Recap.TopicName }}</a>{{ else }}## {{ escape .Recap.TopicName }}{{ end }}
-参与人：{{ join .Recap.ParticipantsNamesWithoutUsername "，" }}
+参与人：{{ join .Recap.Participants "，" }}
 讨论：{{ range $di, $d := .Recap.Discussion }}
  - {{ escape $d.Point }}{{ if len $d.KeyIDs }} {{ range $cIndex, $c := $d.KeyIDs }}<a href="https://t.me/c/{{ $chatID }}/{{ $c }}">[{{ add $cIndex 1 }}]</a>{{ if not (eq $cIndex (sub (len $d.KeyIDs) 1)) }} {{ end }}{{ end }}{{ end }}{{ end }}{{ if .Recap.Conclusion }}
 结论：{{ escape .Recap.Conclusion }}{{ end }}`))
@@ -57,7 +57,7 @@ var RecapWithoutLinksOutputTemplate = lo.Must(template.
 		"escape": tgbot.EscapeHTMLSymbols,
 	}).
 	Parse(`{{ $chatID := .ChatID }}{{ if .Recap.SinceID }}## {{ escape .Recap.TopicName }}{{ else }}## {{ escape .Recap.TopicName }}{{ end }}
-参与人：{{ join .Recap.ParticipantsNamesWithoutUsername "，" }}
+参与人：{{ join .Recap.Participants "，" }}
 讨论：{{ range $di, $d := .Recap.Discussion }}
  - {{ escape $d.Point }}{{ end }}{{ if .Recap.Conclusion }}
 结论：{{ escape .Recap.Conclusion }}{{ end }}`))
@@ -112,7 +112,7 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 func filterOutInvalidFields(messageIDs []int64, outputs []*openai.ChatHistorySummarizationOutputs) []*openai.ChatHistorySummarizationOutputs {
 	for i := range outputs {
 		// limit key ids to 5
-		outputs[i].ParticipantsNamesWithoutUsername = lo.Uniq(outputs[i].ParticipantsNamesWithoutUsername)
+		outputs[i].Participants = lo.Uniq(outputs[i].Participants)
 
 		// filter out non-exist message ids
 		for _, d := range outputs[i].Discussion {
@@ -140,7 +140,7 @@ func filterOutInvalidOutputFilterFunc(output *openai.ChatHistorySummarizationOut
 	return output != nil &&
 		output.TopicName != "" && // filter out empty topic name
 		output.SinceID != 0 && // filter out empty since id
-		len(output.ParticipantsNamesWithoutUsername) > 0 && // filter out empty participants
+		len(output.Participants) > 0 && // filter out empty participants
 		len(output.Discussion) > 0 // filter out empty discussion
 }
 

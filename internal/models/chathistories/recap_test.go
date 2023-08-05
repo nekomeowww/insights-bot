@@ -10,14 +10,14 @@ import (
 )
 
 func TestFilterOutInvalidFields(t *testing.T) {
-	t.Run("UniqParticipantsNamesWithoutUsername", func(t *testing.T) {
+	t.Run("UniqParticipants", func(t *testing.T) {
 		outputs := filterOutInvalidFields([]int64{}, []*openai.ChatHistorySummarizationOutputs{
 			{
-				ParticipantsNamesWithoutUsername: []string{"User 1", "User 1"},
+				Participants: []string{"User 1", "User 1"},
 			},
 		})
 
-		assert.Equal(t, []string{"User 1"}, outputs[0].ParticipantsNamesWithoutUsername)
+		assert.Equal(t, []string{"User 1"}, outputs[0].Participants)
 	})
 
 	t.Run("FilterOutNonExistMessageIDAndZeroMessageID", func(t *testing.T) {
@@ -55,7 +55,7 @@ func TestFilterOutInvalidFields(t *testing.T) {
 	t.Run("LimitKeyIDsTo5", func(t *testing.T) {
 		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4, 5, 6, 7, 8, 9}, []*openai.ChatHistorySummarizationOutputs{
 			{
-				ParticipantsNamesWithoutUsername: []string{"a"},
+				Participants: []string{"a"},
 				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{Point: "Point 1", KeyIDs: []int64{1, 2, 3, 4, 5, 6, 7, 8, 9}},
 				},
@@ -70,7 +70,7 @@ func TestFilterOutInvalidFields(t *testing.T) {
 	t.Run("FilterOutEmptyKeyIDsAndEmptyPointFromDiscussion", func(t *testing.T) {
 		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4}, []*openai.ChatHistorySummarizationOutputs{
 			{
-				ParticipantsNamesWithoutUsername: []string{"a"},
+				Participants: []string{"a"},
 				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
 					{Point: "Point 1", KeyIDs: []int64{1, 2}},
 					{Point: "", KeyIDs: []int64{}},
@@ -94,11 +94,11 @@ func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err := RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 1",
-			SinceID:                          1,
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
-			Conclusion:                       "Conclusion 1",
+			TopicName:    "Topic 1",
+			SinceID:      1,
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
+			Conclusion:   "Conclusion 1",
 		},
 	})
 	require.NoError(t, err)
@@ -114,9 +114,9 @@ func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err = RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 3",
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1"}, {Point: "Point 2", KeyIDs: []int64{1, 2}}},
+			TopicName:    "Topic 3",
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1"}, {Point: "Point 2", KeyIDs: []int64{1, 2}}},
 		},
 	})
 	require.NoError(t, err)
@@ -131,11 +131,11 @@ func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err = RecapOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 1",
-			SinceID:                          2,
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
-			Conclusion:                       "Conclusion 2",
+			TopicName:    "Topic 1",
+			SinceID:      2,
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
+			Conclusion:   "Conclusion 2",
 		},
 	})
 	require.NoError(t, err)
@@ -154,11 +154,11 @@ func TestRecapWithoutLinksOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err := RecapWithoutLinksOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 1",
-			SinceID:                          1,
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
-			Conclusion:                       "Conclusion 1",
+			TopicName:    "Topic 1",
+			SinceID:      1,
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
+			Conclusion:   "Conclusion 1",
 		},
 	})
 	require.NoError(t, err)
@@ -174,9 +174,9 @@ func TestRecapWithoutLinksOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err = RecapWithoutLinksOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 3",
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1"}, {Point: "Point 2", KeyIDs: []int64{1, 2}}},
+			TopicName:    "Topic 3",
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1"}, {Point: "Point 2", KeyIDs: []int64{1, 2}}},
 		},
 	})
 	require.NoError(t, err)
@@ -191,11 +191,11 @@ func TestRecapWithoutLinksOutputTemplateExecute(t *testing.T) { //nolint:dupl
 	err = RecapWithoutLinksOutputTemplate.Execute(sb, RecapOutputTemplateInputs{
 		ChatID: formatChatID(-100123456789),
 		Recap: &openai.ChatHistorySummarizationOutputs{
-			TopicName:                        "Topic 1",
-			SinceID:                          2,
-			ParticipantsNamesWithoutUsername: []string{"User 1", "User 2"},
-			Discussion:                       []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
-			Conclusion:                       "Conclusion 2",
+			TopicName:    "Topic 1",
+			SinceID:      2,
+			Participants: []string{"User 1", "User 2"},
+			Discussion:   []*openai.ChatHistorySummarizationOutputsDiscussion{{Point: "Point 1", KeyIDs: []int64{1, 2}}, {Point: "Point 2"}},
+			Conclusion:   "Conclusion 2",
 		},
 	})
 	require.NoError(t, err)

@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 		panic(err)
 	}
 
-	c, err := NewClient()(NewClientParams{
+	c, err := NewClient(false)(NewClientParams{
 		Logger: logger,
 		Config: &configs.Config{
 			OpenAI: configs.SectionOpenAI{

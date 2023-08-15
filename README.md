@@ -28,8 +28,12 @@
 
 A bot works with OpenAI GPT models to provide insights for your info flows.
 
+[简体中文](./README.zh-CN.md)
+
 ---
+
 ## Supported IMs
+
 - Telegram
 - Slack
 - Discord
@@ -74,7 +78,7 @@ Arguments: None
 /configure_recap
 ```
 
-By sending `/configure_recap` command, the bot will send you a message with options you can interact with. Click the buttons to choose the group you want to configure.
+By sending `/configure_recap` command, the bot will send you a message with options you can interact with. Click the buttons to choose the settings you want to configure.
 
 #### Summarize chat histories or Recap
 
@@ -119,7 +123,7 @@ Arguments: None
 /unsubscribe_recap
 ```
 
-By sending `/unsubscribe_recap` command, the bot will no longer send the copy of the recap message for the group you subscribe. Such as:
+By sending `/unsubscribe_recap` command, the bot will no longer send the copy of the recap message for the group you subscribe.
 
 #### Summarize forwarded messages in private chat
 
@@ -247,8 +251,7 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | `REDIS_DB`                  | `false`     | `0`                               | Redis database, default is `0`                                                                                                                                                                                                                                                                                                                                                                                          |
 | `REDIS_CLIENT_CACHE_ENABLED` | `false`     | `false`                           | Redis client cache enabled, default is `false`, read more about client cache at [https://redis.io/docs/manual/client-side-caching/](https://redis.io/docs/manual/client-side-caching/) and [https://github.com/redis/rueidis#client-side-caching](https://github.com/redis/rueidis#client-side-caching) for more details.                                                                                                                                                                                                                                                                                                                                                                          |
 | `LOG_FILE_PATH`             | `false`     | `<insights-bot_executable>/logs/insights-bot.log`                           | Log file path, you can specify one if you want to specify a path to store logs when executed and ran with binary. The default path is `/var/log/insights-bot/insights-bot.log` in Docker volume, you can override the defaults `-e LOG_FILE_PATH=<path>` when executing `docker run` command or modify and prepend a new `LOG_FILE_PATH` the `docker-compose.yml` file.                                                                                                                                                                                                                                          |
-| `LOG_LEVEL`                 | `false`     | `info`                            | Log level, available values are `debug`, `info`, `warn`, `error`, `error`                                                                                                                                                                                                                                                                                                                                               |
-| ~~`CLOVER_DB_PATH`~~        | ~~`false`~~ | ~~`insights_bot_clover_data.db`~~ | **Deprecated**. ~~Path to Clover database file, you can specify one if you want to specify a path to store data when executed and ran with binary. The default path is `/var/lib/insights-bot/insights_bot_clover_data.db` in Docker volume, you can override the defaults `-e CLOVER_DB_PATH=<path>` when executing `docker run` command or modify and prepend a new `CLOVER_DB_PATH` the `docker-compose.yml` file.~~ |
+| `LOG_LEVEL`                 | `false`     | `info`                            | Log level, available values are `debug`, `info`, `warn`, `error`                                                                                                                                                                                                                                                                                                                                               |
 
 ## Acknowledgements
 

@@ -23,6 +23,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/linkprev"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/bot"
 )
@@ -37,11 +38,12 @@ type NewModelParams struct {
 }
 
 type Model struct {
-	config *configs.Config
-	openai openai.Client
-	logger *logger.Logger
-	req    *req.Client
-	ent    *datastore.Ent
+	config   *configs.Config
+	openai   openai.Client
+	logger   *logger.Logger
+	req      *req.Client
+	linkprev *linkprev.Client
+	ent      *datastore.Ent
 }
 
 func NewModel() func(NewModelParams) *Model {
@@ -50,10 +52,12 @@ func NewModel() func(NewModelParams) *Model {
 			config: param.Config,
 			req: req.
 				C().
-				SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54"),
-			logger: param.Logger,
-			openai: param.OpenAIClient,
-			ent:    param.Ent,
+				SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
+				EnableDumpEachRequest(),
+			linkprev: linkprev.NewClient(),
+			logger:   param.Logger,
+			openai:   param.OpenAIClient,
+			ent:      param.Ent,
 		}
 	}
 }
@@ -147,6 +151,20 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	}
 	if parsedURL == nil {
 		return nil, errors.New("empty url")
+	}
+
+	if lo.Contains([]string{"twitter.com", "vxtwitter.com", "fxtwitter.com"}, parsedURL.Host) {
+		meta, err := m.linkprev.Preview(ctx, urlString)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
+		}
+
+		return &readability.Article{
+			Title:       "Tweet",
+			Byline:      meta.OpenGraph.Title,
+			Content:     meta.OpenGraph.Description,
+			TextContent: meta.OpenGraph.Description,
+		}, nil
 	}
 
 	resp, err := m.req.

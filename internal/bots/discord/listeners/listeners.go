@@ -88,7 +88,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 	err = b.smrQueue.AddTask(types.TaskInfo{
 		Platform:  bot.FromPlatformDiscord,
 		URL:       urlString,
-		ChannelID: event.Channel().ID.String(),
+		ChannelID: event.Channel().ID().String(),
 	})
 	if err != nil {
 		b.logger.Warn("discord: failed to add task", zap.Error(err))

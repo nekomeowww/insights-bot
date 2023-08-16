@@ -68,7 +68,7 @@ func (c *Client) newRequest(ctx context.Context, urlStr string) *req.Request {
 
 // requestForTwitter is a special request for Twitter.
 //
-// We need to ask Twitter server to generate a SSR rendered HTML for us to get the metadatas
+// We need to ask Twitter server to generate a SSR rendered HTML for us to get the metadata
 // Learn more at:
 //  1. https://stackoverflow.com/a/64332370/19954520
 //  2. https://stackoverflow.com/a/64164115/19954520

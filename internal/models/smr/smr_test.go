@@ -40,7 +40,7 @@ func TestExtractContentFromURL(t *testing.T) {
 		require.Nil(article)
 
 		assert.ErrorIs(err, ErrNetworkError)
-		assert.True(strings.Contains(err.Error(), `no such host`))
+		assert.Contains(err.Error(), `no such host`)
 	})
 
 	t.Run("WeChatOfficialAccount", func(t *testing.T) {
@@ -54,6 +54,50 @@ func TestExtractContentFromURL(t *testing.T) {
 
 		assert.NotEmpty(article.Title)
 		assert.NotEmpty(article.TextContent)
+	})
+
+	t.Run("Twitter", func(t *testing.T) {
+		t.Run("twitter.com", func(t *testing.T) {
+			assert := assert.New(t)
+			require := require.New(t)
+
+			article, err := model.extractContentFromURL(context.Background(), "https://twitter.com/GoogleDevEurope/status/1640667303158198272")
+			require.NoError(err)
+			require.NotNil(article)
+
+			assert.NotEmpty(article.Title)
+			assert.NotEmpty(article.Byline)
+			assert.NotEmpty(article.Content)
+			assert.NotEmpty(article.TextContent)
+		})
+
+		t.Run("vxtwitter.com", func(t *testing.T) {
+			assert := assert.New(t)
+			require := require.New(t)
+
+			article, err := model.extractContentFromURL(context.Background(), "https://vxtwitter.com/GoogleDevEurope/status/1640667303158198272")
+			require.NoError(err)
+			require.NotNil(article)
+
+			assert.NotEmpty(article.Title)
+			assert.NotEmpty(article.Byline)
+			assert.NotEmpty(article.Content)
+			assert.NotEmpty(article.TextContent)
+		})
+
+		t.Run("fxtwitter.com", func(t *testing.T) {
+			assert := assert.New(t)
+			require := require.New(t)
+
+			article, err := model.extractContentFromURL(context.Background(), "https://fxtwitter.com/GoogleDevEurope/status/1640667303158198272")
+			require.NoError(err)
+			require.NotNil(article)
+
+			assert.NotEmpty(article.Title)
+			assert.NotEmpty(article.Byline)
+			assert.NotEmpty(article.Content)
+			assert.NotEmpty(article.TextContent)
+		})
 	})
 }
 

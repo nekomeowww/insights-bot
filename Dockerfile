@@ -2,7 +2,7 @@
 
 # --- builder ---
 
-FROM golang:1.20 as builder
+FROM golang:1.21 as builder
 
 RUN GO111MODULE=on
 

@@ -39,7 +39,7 @@ func TestPreview(t *testing.T) {
 			meta, err := NewClient().Preview(context.Background(), "https://twitter.com/GoogleDevEurope/status/1640667303158198272")
 			require.NoError(t, err)
 			assert.Equal(t, Meta{
-				Title: "Google for Developers Europe on Twitter: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / Twitter",
+				Title: "Google for Developers Europe on Twitter: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / X",
 				OpenGraph: opengraph.OpenGraph{
 					Title:       "Google for Developers Europe on Twitter",
 					Type:        "article",
@@ -60,7 +60,7 @@ func TestPreview(t *testing.T) {
 				OpenGraph: opengraph.OpenGraph{
 					Title:       "Google for Developers Europe (@GoogleDevEurope)",
 					Image:       "https://pbs.twimg.com/media/FsTSN8nWwAA278D.png",
-					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll",
+					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://goo.gle/3zaGgRi\n🎁 Trying out the Go Playground → https://goo.gle/3zaGurC\n\nRT if you are a fellow Gopher!",
 					SiteName:    "FixTweet",
 				},
 			}, meta)
@@ -70,7 +70,7 @@ func TestPreview(t *testing.T) {
 			meta, err := NewClient().Preview(context.Background(), "https://vxtwitter.com/GoogleDevEurope/status/1640667303158198272")
 			require.NoError(t, err)
 			assert.Equal(t, Meta{
-				Title: "Google for Developers Europe on Twitter: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / Twitter",
+				Title: "Google for Developers Europe on Twitter: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / X",
 				OpenGraph: opengraph.OpenGraph{
 					Title:       "Google for Developers Europe on Twitter",
 					Type:        "article",

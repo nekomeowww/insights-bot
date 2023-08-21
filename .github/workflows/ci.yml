@@ -114,7 +114,8 @@ jobs:
         uses: golangci/golangci-lint-action@v3.4.0
         with:
           # Optional: golangci-lint command line arguments.
-          args: '--timeout=10m'
+          version: v1.54.1
+          args: "--timeout=10m"
 
   unittest:
     name: Unit Test
@@ -127,7 +128,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: '123456'
+          POSTGRES_PASSWORD: "123456"
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready

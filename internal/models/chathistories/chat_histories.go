@@ -363,9 +363,42 @@ func formatFullNameAndUsername(fullName, username string) string {
 	return strings.ReplaceAll(fullName, "#", "")
 }
 
+func (m *Model) encodeMessageIDIntoVirtualMessageID(histories []*ent.ChatHistories) map[int64]int64 {
+	virtualMessageID := int64(1)
+	mMessageIDToVirtualMessageID := make(map[int64]int64)
+
+	for _, message := range histories {
+		mMessageIDToVirtualMessageID[virtualMessageID] = message.MessageID
+		message.MessageID = virtualMessageID
+		virtualMessageID++
+
+		if message.RepliedToMessageID != 0 {
+			mMessageIDToVirtualMessageID[virtualMessageID] = message.RepliedToMessageID
+			message.RepliedToMessageID = virtualMessageID
+			virtualMessageID++
+		}
+	}
+
+	return mMessageIDToVirtualMessageID
+}
+
+func (m *Model) decodeMessageIDFromVirtualMessageID(mMessageIDToVirtualMessageID map[int64]int64, outputs []*openai.ChatHistorySummarizationOutputs) {
+	for _, o := range outputs {
+		for _, d := range o.Discussion {
+			d.KeyIDs = lo.Map(d.KeyIDs, func(virtualMessageID int64, i int) int64 {
+				return mMessageIDToVirtualMessageID[virtualMessageID]
+			})
+		}
+
+		o.SinceID = mMessageIDToVirtualMessageID[o.SinceID]
+	}
+}
+
 func (m *Model) SummarizeChatHistories(chatID int64, chatType telegram.ChatType, histories []*ent.ChatHistories) (uuid.UUID, []string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
 	historiesIncludedMessageIDs := make([]int64, 0)
+
+	mMessageIDToVirtualMessageID := m.encodeMessageIDIntoVirtualMessageID(histories)
 
 	for _, message := range histories {
 		if message.RepliedToMessageID == 0 {
@@ -401,6 +434,9 @@ func (m *Model) SummarizeChatHistories(chatID int64, chatType telegram.ChatType,
 	if err != nil {
 		return uuid.Nil, make([]string, 0), err
 	}
+
+	// reverse virtual message id to real message id
+	m.decodeMessageIDFromVirtualMessageID(mMessageIDToVirtualMessageID, summarizations)
 
 	ss, err := m.renderRecapTemplates(chatID, chatType, summarizations)
 	if err != nil {

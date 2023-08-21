@@ -109,13 +109,13 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 	return outputs, resp.Usage, nil
 }
 
-func filterOutInvalidFields(messageIDs []int64, outputs []*openai.ChatHistorySummarizationOutputs) []*openai.ChatHistorySummarizationOutputs {
-	for i := range outputs {
+func filterOutInvalidFields(messageIDs []int64) func(output *openai.ChatHistorySummarizationOutputs, _ int) *openai.ChatHistorySummarizationOutputs {
+	return func(output *openai.ChatHistorySummarizationOutputs, _ int) *openai.ChatHistorySummarizationOutputs {
 		// limit key ids to 5
-		outputs[i].Participants = lo.Uniq(outputs[i].Participants)
+		output.Participants = lo.Uniq(output.Participants)
 
 		// filter out non-exist message ids
-		for _, d := range outputs[i].Discussion {
+		for _, d := range output.Discussion {
 			d.KeyIDs = lo.Filter(d.KeyIDs, func(item int64, _ int) bool {
 				return lo.Contains(messageIDs, item) && item != 0
 			})
@@ -128,12 +128,12 @@ func filterOutInvalidFields(messageIDs []int64, outputs []*openai.ChatHistorySum
 			}
 		}
 
-		outputs[i].Discussion = lo.Filter(outputs[i].Discussion, func(item *openai.ChatHistorySummarizationOutputsDiscussion, _ int) bool {
+		output.Discussion = lo.Filter(output.Discussion, func(item *openai.ChatHistorySummarizationOutputsDiscussion, _ int) bool {
 			return len(item.KeyIDs) > 0 && item.Point != ""
 		})
-	}
 
-	return outputs
+		return output
+	}
 }
 
 func filterOutInvalidOutputFilterFunc(output *openai.ChatHistorySummarizationOutputs, _ int) bool {
@@ -142,6 +142,14 @@ func filterOutInvalidOutputFilterFunc(output *openai.ChatHistorySummarizationOut
 		output.SinceID != 0 && // filter out empty since id
 		len(output.Participants) > 0 && // filter out empty participants
 		len(output.Discussion) > 0 // filter out empty discussion
+}
+
+func filterOutMention(output *openai.ChatHistorySummarizationOutputs, _ int) *openai.ChatHistorySummarizationOutputs {
+	output.Participants = lo.Map(output.Participants, func(item string, _ int) string {
+		return strings.TrimPrefix(item, "@")
+	})
+
+	return output
 }
 
 func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
@@ -168,9 +176,11 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 			}
 
 			// filter out invalid fields
-			o = filterOutInvalidFields(messageIDs, o)
+			o = lo.Map(o, filterOutInvalidFields(messageIDs))
 			// filter out empty outputs
 			o = lo.Filter(o, filterOutInvalidOutputFilterFunc)
+			// filter out mentions
+			o = lo.Map(o, filterOutMention)
 
 			if len(o) == 0 {
 				m.logger.Error(fmt.Sprintf("no valid outputs from chat histories slice: %s, tried %d...", s, tried),

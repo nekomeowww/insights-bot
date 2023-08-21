@@ -17,6 +17,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/lib"
+	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai/openaimock"
 	"github.com/nekomeowww/insights-bot/pkg/tutils"
 	"github.com/nekomeowww/xo"
@@ -232,4 +233,64 @@ func TestFindLastOneHourChatHistories(t *testing.T) {
 	assert.Equal([]int64{1, 2, 3}, lo.Map(histories, func(item *ent.ChatHistories, _ int) int64 {
 		return item.MessageID
 	}))
+}
+
+func TestEncodeMessageIDIntoVirtualMessageID(t *testing.T) {
+	messageID1 := xo.RandomInt64()
+	messageID2 := xo.RandomInt64()
+	messageID3 := xo.RandomInt64()
+	replyToMessageID1 := xo.RandomInt64()
+
+	mVirtualIDs := model.encodeMessageIDIntoVirtualMessageID([]*ent.ChatHistories{
+		{MessageID: messageID1, RepliedToMessageID: replyToMessageID1},
+		{MessageID: messageID2},
+		{MessageID: messageID3},
+	})
+
+	assert.Equal(t, map[int64]int64{
+		1: messageID1,
+		2: replyToMessageID1,
+		3: messageID2,
+		4: messageID3,
+	}, mVirtualIDs)
+}
+
+func TestDecodeMessageIDFromVirtualMessageID(t *testing.T) {
+	messageID1 := xo.RandomInt64()
+	messageID2 := xo.RandomInt64()
+	messageID3 := xo.RandomInt64()
+	replyToMessageID1 := xo.RandomInt64()
+
+	mVirtualIDs := map[int64]int64{
+		1: messageID1,
+		2: replyToMessageID1,
+		3: messageID2,
+		4: messageID3,
+	}
+
+	outputs := []*openai.ChatHistorySummarizationOutputs{
+		{SinceID: 1, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{1, 2}},
+		}},
+		{SinceID: 3, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{3}},
+		}},
+		{SinceID: 4, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{4}},
+		}},
+	}
+
+	model.decodeMessageIDFromVirtualMessageID(mVirtualIDs, outputs)
+
+	assert.Equal(t, []*openai.ChatHistorySummarizationOutputs{
+		{SinceID: messageID1, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{messageID1, replyToMessageID1}},
+		}},
+		{SinceID: messageID2, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{messageID2}},
+		}},
+		{SinceID: messageID3, Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+			{KeyIDs: []int64{messageID3}},
+		}},
+	}, outputs)
 }

@@ -11,82 +11,80 @@ import (
 
 func TestFilterOutInvalidFields(t *testing.T) {
 	t.Run("UniqParticipants", func(t *testing.T) {
-		outputs := filterOutInvalidFields([]int64{}, []*openai.ChatHistorySummarizationOutputs{
-			{
-				Participants: []string{"User 1", "User 1"},
-			},
-		})
+		output := filterOutInvalidFields([]int64{})(&openai.ChatHistorySummarizationOutputs{
+			Participants: []string{"User 1", "User 1"},
+		}, 0)
 
-		assert.Equal(t, []string{"User 1"}, outputs[0].Participants)
+		assert.Equal(t, []string{"User 1"}, output.Participants)
 	})
 
 	t.Run("FilterOutNonExistMessageIDAndZeroMessageID", func(t *testing.T) {
-		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4}, []*openai.ChatHistorySummarizationOutputs{
-			{
-				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
-					{Point: "Point 1", KeyIDs: []int64{0, 1, 2}},
-					{Point: "Point 2", KeyIDs: []int64{3, 4, 5}},
-				},
+		output := filterOutInvalidFields([]int64{1, 2, 3, 4})(&openai.ChatHistorySummarizationOutputs{
+			Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+				{Point: "Point 1", KeyIDs: []int64{0, 1, 2}},
+				{Point: "Point 2", KeyIDs: []int64{3, 4, 5}},
 			},
-		})
+		}, 0)
 
 		assert.Equal(t, []*openai.ChatHistorySummarizationOutputsDiscussion{
 			{Point: "Point 1", KeyIDs: []int64{1, 2}},
 			{Point: "Point 2", KeyIDs: []int64{3, 4}},
-		}, outputs[0].Discussion)
+		}, output.Discussion)
 	})
 
 	t.Run("UniqKeyID", func(t *testing.T) {
-		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4}, []*openai.ChatHistorySummarizationOutputs{
-			{
-				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
-					{Point: "Point 1", KeyIDs: []int64{1, 2, 2}},
-					{Point: "Point 2", KeyIDs: []int64{3, 4, 4}},
-				},
+		output := filterOutInvalidFields([]int64{1, 2, 3, 4})(&openai.ChatHistorySummarizationOutputs{
+			Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+				{Point: "Point 1", KeyIDs: []int64{1, 2, 2}},
+				{Point: "Point 2", KeyIDs: []int64{3, 4, 4}},
 			},
-		})
+		}, 0)
 
 		assert.Equal(t, []*openai.ChatHistorySummarizationOutputsDiscussion{
 			{Point: "Point 1", KeyIDs: []int64{1, 2}},
 			{Point: "Point 2", KeyIDs: []int64{3, 4}},
-		}, outputs[0].Discussion)
+		}, output.Discussion)
 	})
 
 	t.Run("LimitKeyIDsTo5", func(t *testing.T) {
-		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4, 5, 6, 7, 8, 9}, []*openai.ChatHistorySummarizationOutputs{
-			{
-				Participants: []string{"a"},
-				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
-					{Point: "Point 1", KeyIDs: []int64{1, 2, 3, 4, 5, 6, 7, 8, 9}},
-				},
+		output := filterOutInvalidFields([]int64{1, 2, 3, 4, 5, 6, 7, 8, 9})(&openai.ChatHistorySummarizationOutputs{
+			Participants: []string{"a"},
+			Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+				{Point: "Point 1", KeyIDs: []int64{1, 2, 3, 4, 5, 6, 7, 8, 9}},
 			},
-		})
+		}, 0)
 
 		assert.Equal(t, []*openai.ChatHistorySummarizationOutputsDiscussion{
 			{Point: "Point 1", KeyIDs: []int64{1, 2, 3, 4, 5}},
-		}, outputs[0].Discussion)
+		}, output.Discussion)
 	})
 
 	t.Run("FilterOutEmptyKeyIDsAndEmptyPointFromDiscussion", func(t *testing.T) {
-		outputs := filterOutInvalidFields([]int64{1, 2, 3, 4}, []*openai.ChatHistorySummarizationOutputs{
-			{
-				Participants: []string{"a"},
-				Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
-					{Point: "Point 1", KeyIDs: []int64{1, 2}},
-					{Point: "", KeyIDs: []int64{}},
-					{Point: "", KeyIDs: []int64{3, 4}},
-				},
+		output := filterOutInvalidFields([]int64{1, 2, 3, 4})(&openai.ChatHistorySummarizationOutputs{
+			Participants: []string{"a"},
+			Discussion: []*openai.ChatHistorySummarizationOutputsDiscussion{
+				{Point: "Point 1", KeyIDs: []int64{1, 2}},
+				{Point: "", KeyIDs: []int64{}},
+				{Point: "", KeyIDs: []int64{3, 4}},
 			},
-		})
+		}, 0)
 
 		assert.Equal(t, []*openai.ChatHistorySummarizationOutputsDiscussion{
 			{Point: "Point 1", KeyIDs: []int64{1, 2}},
-		}, outputs[0].Discussion)
+		}, output.Discussion)
 	})
 }
 
 func TestFilterOutInvalidOutputFilterFunc(t *testing.T) {
 	assert.False(t, filterOutInvalidOutputFilterFunc(&openai.ChatHistorySummarizationOutputs{}, 0))
+}
+
+func TestFilterOutMention(t *testing.T) {
+	output := filterOutMention(&openai.ChatHistorySummarizationOutputs{
+		Participants: []string{"@User 1", "@User 2"},
+	}, 0)
+
+	assert.Equal(t, []string{"User 1", "User 2"}, output.Participants)
 }
 
 func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl

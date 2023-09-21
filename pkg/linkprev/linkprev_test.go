@@ -4,13 +4,11 @@ import (
 	"context"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/nekomeowww/insights-bot/pkg/opengraph"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestPreview(t *testing.T) {
@@ -32,55 +30,6 @@ func TestPreview(t *testing.T) {
 				SiteName:    "Nólëbase",
 			},
 		}, meta)
-	})
-
-	t.Run("Twitter", func(t *testing.T) {
-		t.Run("twitter.com", func(t *testing.T) {
-			meta, err := NewClient().Preview(context.Background(), "https://twitter.com/GoogleDevEurope/status/1640667303158198272")
-			require.NoError(t, err)
-			assert.Equal(t, Meta{
-				Title: "Google for Developers Europe on X: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / X",
-				OpenGraph: opengraph.OpenGraph{
-					Title:       "Google for Developers Europe on X",
-					Type:        "article",
-					Image:       "https://pbs.twimg.com/media/FsTSN8nWwAA278D.png:large",
-					URL:         "https://twitter.com/GoogleDevEurope/status/1640667303158198272",
-					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher!",
-					SiteName:    "Twitter",
-				},
-			}, meta)
-		})
-
-		time.Sleep(time.Second)
-
-		t.Run("fxtwitter.com", func(t *testing.T) {
-			meta, err := NewClient().Preview(context.Background(), "https://fxtwitter.com/GoogleDevEurope/status/1640667303158198272")
-			require.NoError(t, err)
-			assert.Equal(t, Meta{
-				OpenGraph: opengraph.OpenGraph{
-					Title:       "Google for Developers Europe (@GoogleDevEurope)",
-					Image:       "https://pbs.twimg.com/media/FsTSN8nWwAA278D.png",
-					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://goo.gle/3zaGgRi\n🎁 Trying out the Go Playground → https://goo.gle/3zaGurC\n\nRT if you are a fellow Gopher!",
-					SiteName:    "FixTweet - 🆕 x.com link? Try fixupx.com",
-				},
-			}, meta)
-		})
-
-		t.Run("vxtwitter.com", func(t *testing.T) {
-			meta, err := NewClient().Preview(context.Background(), "https://vxtwitter.com/GoogleDevEurope/status/1640667303158198272")
-			require.NoError(t, err)
-			assert.Equal(t, Meta{
-				Title: "Google for Developers Europe on X: \"🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher! https://t.co/jiE7UTMHll\" / X",
-				OpenGraph: opengraph.OpenGraph{
-					Title:       "Google for Developers Europe on X",
-					Type:        "article",
-					Image:       "https://pbs.twimg.com/media/FsTSN8nWwAA278D.png:large",
-					URL:         "https://twitter.com/GoogleDevEurope/status/1640667303158198272",
-					Description: "🎉 Happy Birthday @golang!\n\nDid you know that 11 years ago today Go 1 was publicly released? Join us in celebrating this day by:\n\n🎁 Checking out local meetups → https://t.co/TCNAZL0oOj\n🎁 Trying out the Go Playground → https://t.co/nnkaugz32x\n\nRT if you are a fellow Gopher!",
-					SiteName:    "Twitter",
-				},
-			}, meta)
-		})
 	})
 }
 

@@ -149,6 +149,8 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/nekomeowww/fo v1.1.2 h1:nc5cvBY9rCOYFI169LvuGeHk17QM3pG7p4+QdwRFQoA=
 github.com/nekomeowww/fo v1.1.2/go.mod h1:9avQL8Q+yJPkoy/UtHVm58Tk38cPQmbIoTf/Wtv6l1s=
+github.com/nekomeowww/fo v1.2.1 h1:7bb3x2Kz7NAoPVvYnvZf5wdpjsg9QvxgmGpcFMJd/9o=
+github.com/nekomeowww/fo v1.2.1/go.mod h1:9avQL8Q+yJPkoy/UtHVm58Tk38cPQmbIoTf/Wtv6l1s=
 github.com/nekomeowww/go-pinecone v0.1.0 h1:byYmyHQJ4velNUeECvNuCN6KbXGuyVjSFlvO9VV2zj8=
 github.com/nekomeowww/go-pinecone v0.1.0/go.mod h1:p8I6F7G7fSrfaa9k3HpsWNxf2y+W1wqn8tw0jsV9e1s=
 github.com/nekomeowww/timecapsule/v2 v2.1.3 h1:KIg6jZSg4RkQG9qV2k5TMq9LUzM6cO3MiXvTyLnqZ9U=

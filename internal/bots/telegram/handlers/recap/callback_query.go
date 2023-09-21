@@ -358,12 +358,12 @@ func (h *CallbackQueryHandler) handleCallbackQueryUnsubscribe(c *tgbot.Context) 
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
-	if actionData.ChatID != chatID || actionData.FromID != fromID {
+	if actionData.FromID != fromID {
 		h.logger.Warn("action skipped, callback query is not from the same actor or the same chat", zap.Int64("from_id", fromID), zap.Int64("chat_id", chatID))
 		return nil, nil
 	}
 
-	err = h.tgchats.UnsubscribeToAutoRecaps(chatID, fromID)
+	err = h.tgchats.UnsubscribeToAutoRecaps(actionData.ChatID, fromID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

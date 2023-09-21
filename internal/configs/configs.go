@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 	goopenai "github.com/sashabaranov/go-openai"
 )
@@ -125,7 +126,7 @@ type Config struct {
 
 func NewConfig() func() (*Config, error) {
 	return func() (*Config, error) {
-		envs, err := godotenv.Read()
+		envs, err := godotenv.Read(xo.RelativePathOf("../../.env"))
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
 			return nil, err
 		}

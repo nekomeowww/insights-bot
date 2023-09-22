@@ -311,7 +311,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			if targetChat.isPrivateSubscriber {
 				msg.Text = fmt.Sprintf("您好，这是您订阅的 <b>%s</b> 群组的定时聊天回顾。\n\n%s", tgbot.EscapeHTMLSymbols(chatTitle), content)
 
-				inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapWithUnsubscribeInlineKeyboardMarkup(m.botService.Bot(), targetChat.chatID, chatTitle, targetChat.chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
+				inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapWithUnsubscribeInlineKeyboardMarkup(m.botService.Bot(), chatID, chatTitle, targetChat.chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
 				if err != nil {
 					m.logger.Error("failed to assign callback query data", zap.Error(err), zap.Int64("chat_id", chatID))
 					continue

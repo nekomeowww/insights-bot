@@ -230,11 +230,15 @@ func (socc *SlackOAuthCredentialsCreate) createSpec() (*SlackOAuthCredentials, *
 // SlackOAuthCredentialsCreateBulk is the builder for creating many SlackOAuthCredentials entities in bulk.
 type SlackOAuthCredentialsCreateBulk struct {
 	config
+	err      error
 	builders []*SlackOAuthCredentialsCreate
 }
 
 // Save creates the SlackOAuthCredentials entities in the database.
 func (soccb *SlackOAuthCredentialsCreateBulk) Save(ctx context.Context) ([]*SlackOAuthCredentials, error) {
+	if soccb.err != nil {
+		return nil, soccb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(soccb.builders))
 	nodes := make([]*SlackOAuthCredentials, len(soccb.builders))
 	mutators := make([]Mutator, len(soccb.builders))

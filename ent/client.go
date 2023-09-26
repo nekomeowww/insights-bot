@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"reflect"
 
 	"github.com/google/uuid"
 	"github.com/nekomeowww/insights-bot/ent/migrate"
@@ -145,11 +146,14 @@ func Open(driverName, dataSourceName string, options ...Option) (*Client, error)
 	}
 }
 
+// ErrTxStarted is returned when trying to start a new transaction from a transactional client.
+var ErrTxStarted = errors.New("ent: cannot start a transaction within a transaction")
+
 // Tx returns a new transactional client. The provided context
 // is used until the transaction is committed or rolled back.
 func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	if _, ok := c.driver.(*txDriver); ok {
-		return nil, errors.New("ent: cannot start a transaction within a transaction")
+		return nil, ErrTxStarted
 	}
 	tx, err := newTx(ctx, c.driver)
 	if err != nil {
@@ -313,6 +317,21 @@ func (c *ChatHistoriesClient) CreateBulk(builders ...*ChatHistoriesCreate) *Chat
 	return &ChatHistoriesCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ChatHistoriesClient) MapCreateBulk(slice any, setFunc func(*ChatHistoriesCreate, int)) *ChatHistoriesCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ChatHistoriesCreateBulk{err: fmt.Errorf("calling to ChatHistoriesClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ChatHistoriesCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ChatHistoriesCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for ChatHistories.
 func (c *ChatHistoriesClient) Update() *ChatHistoriesUpdate {
 	mutation := newChatHistoriesMutation(c.config, OpUpdate)
@@ -428,6 +447,21 @@ func (c *FeedbackChatHistoriesRecapsReactionsClient) Create() *FeedbackChatHisto
 
 // CreateBulk returns a builder for creating a bulk of FeedbackChatHistoriesRecapsReactions entities.
 func (c *FeedbackChatHistoriesRecapsReactionsClient) CreateBulk(builders ...*FeedbackChatHistoriesRecapsReactionsCreate) *FeedbackChatHistoriesRecapsReactionsCreateBulk {
+	return &FeedbackChatHistoriesRecapsReactionsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FeedbackChatHistoriesRecapsReactionsClient) MapCreateBulk(slice any, setFunc func(*FeedbackChatHistoriesRecapsReactionsCreate, int)) *FeedbackChatHistoriesRecapsReactionsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FeedbackChatHistoriesRecapsReactionsCreateBulk{err: fmt.Errorf("calling to FeedbackChatHistoriesRecapsReactionsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FeedbackChatHistoriesRecapsReactionsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &FeedbackChatHistoriesRecapsReactionsCreateBulk{config: c.config, builders: builders}
 }
 
@@ -549,6 +583,21 @@ func (c *FeedbackSummarizationsReactionsClient) CreateBulk(builders ...*Feedback
 	return &FeedbackSummarizationsReactionsCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FeedbackSummarizationsReactionsClient) MapCreateBulk(slice any, setFunc func(*FeedbackSummarizationsReactionsCreate, int)) *FeedbackSummarizationsReactionsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FeedbackSummarizationsReactionsCreateBulk{err: fmt.Errorf("calling to FeedbackSummarizationsReactionsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FeedbackSummarizationsReactionsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FeedbackSummarizationsReactionsCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for FeedbackSummarizationsReactions.
 func (c *FeedbackSummarizationsReactionsClient) Update() *FeedbackSummarizationsReactionsUpdate {
 	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdate)
@@ -664,6 +713,21 @@ func (c *LogChatHistoriesRecapClient) Create() *LogChatHistoriesRecapCreate {
 
 // CreateBulk returns a builder for creating a bulk of LogChatHistoriesRecap entities.
 func (c *LogChatHistoriesRecapClient) CreateBulk(builders ...*LogChatHistoriesRecapCreate) *LogChatHistoriesRecapCreateBulk {
+	return &LogChatHistoriesRecapCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LogChatHistoriesRecapClient) MapCreateBulk(slice any, setFunc func(*LogChatHistoriesRecapCreate, int)) *LogChatHistoriesRecapCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LogChatHistoriesRecapCreateBulk{err: fmt.Errorf("calling to LogChatHistoriesRecapClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LogChatHistoriesRecapCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &LogChatHistoriesRecapCreateBulk{config: c.config, builders: builders}
 }
 
@@ -785,6 +849,21 @@ func (c *LogSummarizationsClient) CreateBulk(builders ...*LogSummarizationsCreat
 	return &LogSummarizationsCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *LogSummarizationsClient) MapCreateBulk(slice any, setFunc func(*LogSummarizationsCreate, int)) *LogSummarizationsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &LogSummarizationsCreateBulk{err: fmt.Errorf("calling to LogSummarizationsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*LogSummarizationsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &LogSummarizationsCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for LogSummarizations.
 func (c *LogSummarizationsClient) Update() *LogSummarizationsUpdate {
 	mutation := newLogSummarizationsMutation(c.config, OpUpdate)
@@ -900,6 +979,21 @@ func (c *MetricOpenAIChatCompletionTokenUsageClient) Create() *MetricOpenAIChatC
 
 // CreateBulk returns a builder for creating a bulk of MetricOpenAIChatCompletionTokenUsage entities.
 func (c *MetricOpenAIChatCompletionTokenUsageClient) CreateBulk(builders ...*MetricOpenAIChatCompletionTokenUsageCreate) *MetricOpenAIChatCompletionTokenUsageCreateBulk {
+	return &MetricOpenAIChatCompletionTokenUsageCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *MetricOpenAIChatCompletionTokenUsageClient) MapCreateBulk(slice any, setFunc func(*MetricOpenAIChatCompletionTokenUsageCreate, int)) *MetricOpenAIChatCompletionTokenUsageCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &MetricOpenAIChatCompletionTokenUsageCreateBulk{err: fmt.Errorf("calling to MetricOpenAIChatCompletionTokenUsageClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*MetricOpenAIChatCompletionTokenUsageCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &MetricOpenAIChatCompletionTokenUsageCreateBulk{config: c.config, builders: builders}
 }
 
@@ -1021,6 +1115,21 @@ func (c *SlackOAuthCredentialsClient) CreateBulk(builders ...*SlackOAuthCredenti
 	return &SlackOAuthCredentialsCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *SlackOAuthCredentialsClient) MapCreateBulk(slice any, setFunc func(*SlackOAuthCredentialsCreate, int)) *SlackOAuthCredentialsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &SlackOAuthCredentialsCreateBulk{err: fmt.Errorf("calling to SlackOAuthCredentialsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*SlackOAuthCredentialsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &SlackOAuthCredentialsCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for SlackOAuthCredentials.
 func (c *SlackOAuthCredentialsClient) Update() *SlackOAuthCredentialsUpdate {
 	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdate)
@@ -1136,6 +1245,21 @@ func (c *TelegramChatAutoRecapsSubscribersClient) Create() *TelegramChatAutoReca
 
 // CreateBulk returns a builder for creating a bulk of TelegramChatAutoRecapsSubscribers entities.
 func (c *TelegramChatAutoRecapsSubscribersClient) CreateBulk(builders ...*TelegramChatAutoRecapsSubscribersCreate) *TelegramChatAutoRecapsSubscribersCreateBulk {
+	return &TelegramChatAutoRecapsSubscribersCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TelegramChatAutoRecapsSubscribersClient) MapCreateBulk(slice any, setFunc func(*TelegramChatAutoRecapsSubscribersCreate, int)) *TelegramChatAutoRecapsSubscribersCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TelegramChatAutoRecapsSubscribersCreateBulk{err: fmt.Errorf("calling to TelegramChatAutoRecapsSubscribersClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TelegramChatAutoRecapsSubscribersCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &TelegramChatAutoRecapsSubscribersCreateBulk{config: c.config, builders: builders}
 }
 
@@ -1257,6 +1381,21 @@ func (c *TelegramChatFeatureFlagsClient) CreateBulk(builders ...*TelegramChatFea
 	return &TelegramChatFeatureFlagsCreateBulk{config: c.config, builders: builders}
 }
 
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TelegramChatFeatureFlagsClient) MapCreateBulk(slice any, setFunc func(*TelegramChatFeatureFlagsCreate, int)) *TelegramChatFeatureFlagsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TelegramChatFeatureFlagsCreateBulk{err: fmt.Errorf("calling to TelegramChatFeatureFlagsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TelegramChatFeatureFlagsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TelegramChatFeatureFlagsCreateBulk{config: c.config, builders: builders}
+}
+
 // Update returns an update builder for TelegramChatFeatureFlags.
 func (c *TelegramChatFeatureFlagsClient) Update() *TelegramChatFeatureFlagsUpdate {
 	mutation := newTelegramChatFeatureFlagsMutation(c.config, OpUpdate)
@@ -1372,6 +1511,21 @@ func (c *TelegramChatRecapsOptionsClient) Create() *TelegramChatRecapsOptionsCre
 
 // CreateBulk returns a builder for creating a bulk of TelegramChatRecapsOptions entities.
 func (c *TelegramChatRecapsOptionsClient) CreateBulk(builders ...*TelegramChatRecapsOptionsCreate) *TelegramChatRecapsOptionsCreateBulk {
+	return &TelegramChatRecapsOptionsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TelegramChatRecapsOptionsClient) MapCreateBulk(slice any, setFunc func(*TelegramChatRecapsOptionsCreate, int)) *TelegramChatRecapsOptionsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TelegramChatRecapsOptionsCreateBulk{err: fmt.Errorf("calling to TelegramChatRecapsOptionsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TelegramChatRecapsOptionsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
 	return &TelegramChatRecapsOptionsCreateBulk{config: c.config, builders: builders}
 }
 

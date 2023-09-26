@@ -319,11 +319,15 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) createSpec() (*Metri
 // MetricOpenAIChatCompletionTokenUsageCreateBulk is the builder for creating many MetricOpenAIChatCompletionTokenUsage entities in bulk.
 type MetricOpenAIChatCompletionTokenUsageCreateBulk struct {
 	config
+	err      error
 	builders []*MetricOpenAIChatCompletionTokenUsageCreate
 }
 
 // Save creates the MetricOpenAIChatCompletionTokenUsage entities in the database.
 func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx context.Context) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
+	if moacctucb.err != nil {
+		return nil, moacctucb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(moacctucb.builders))
 	nodes := make([]*MetricOpenAIChatCompletionTokenUsage, len(moacctucb.builders))
 	mutators := make([]Mutator, len(moacctucb.builders))

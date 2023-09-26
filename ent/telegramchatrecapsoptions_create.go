@@ -232,11 +232,15 @@ func (tcroc *TelegramChatRecapsOptionsCreate) createSpec() (*TelegramChatRecapsO
 // TelegramChatRecapsOptionsCreateBulk is the builder for creating many TelegramChatRecapsOptions entities in bulk.
 type TelegramChatRecapsOptionsCreateBulk struct {
 	config
+	err      error
 	builders []*TelegramChatRecapsOptionsCreate
 }
 
 // Save creates the TelegramChatRecapsOptions entities in the database.
 func (tcrocb *TelegramChatRecapsOptionsCreateBulk) Save(ctx context.Context) ([]*TelegramChatRecapsOptions, error) {
+	if tcrocb.err != nil {
+		return nil, tcrocb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(tcrocb.builders))
 	nodes := make([]*TelegramChatRecapsOptions, len(tcrocb.builders))
 	mutators := make([]Mutator, len(tcrocb.builders))

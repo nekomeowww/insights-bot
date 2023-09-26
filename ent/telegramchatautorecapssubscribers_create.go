@@ -219,11 +219,15 @@ func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) createSpec() (*TelegramCh
 // TelegramChatAutoRecapsSubscribersCreateBulk is the builder for creating many TelegramChatAutoRecapsSubscribers entities in bulk.
 type TelegramChatAutoRecapsSubscribersCreateBulk struct {
 	config
+	err      error
 	builders []*TelegramChatAutoRecapsSubscribersCreate
 }
 
 // Save creates the TelegramChatAutoRecapsSubscribers entities in the database.
 func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Context) ([]*TelegramChatAutoRecapsSubscribers, error) {
+	if tcarscb.err != nil {
+		return nil, tcarscb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(tcarscb.builders))
 	nodes := make([]*TelegramChatAutoRecapsSubscribers, len(tcarscb.builders))
 	mutators := make([]Mutator, len(tcarscb.builders))

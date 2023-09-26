@@ -274,11 +274,15 @@ func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) createSpec() (*Feedbac
 // FeedbackChatHistoriesRecapsReactionsCreateBulk is the builder for creating many FeedbackChatHistoriesRecapsReactions entities in bulk.
 type FeedbackChatHistoriesRecapsReactionsCreateBulk struct {
 	config
+	err      error
 	builders []*FeedbackChatHistoriesRecapsReactionsCreate
 }
 
 // Save creates the FeedbackChatHistoriesRecapsReactions entities in the database.
 func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.Context) ([]*FeedbackChatHistoriesRecapsReactions, error) {
+	if fchrrcb.err != nil {
+		return nil, fchrrcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fchrrcb.builders))
 	nodes := make([]*FeedbackChatHistoriesRecapsReactions, len(fchrrcb.builders))
 	mutators := make([]Mutator, len(fchrrcb.builders))

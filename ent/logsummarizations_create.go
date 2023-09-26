@@ -419,11 +419,15 @@ func (lsc *LogSummarizationsCreate) createSpec() (*LogSummarizations, *sqlgraph.
 // LogSummarizationsCreateBulk is the builder for creating many LogSummarizations entities in bulk.
 type LogSummarizationsCreateBulk struct {
 	config
+	err      error
 	builders []*LogSummarizationsCreate
 }
 
 // Save creates the LogSummarizations entities in the database.
 func (lscb *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummarizations, error) {
+	if lscb.err != nil {
+		return nil, lscb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(lscb.builders))
 	nodes := make([]*LogSummarizations, len(lscb.builders))
 	mutators := make([]Mutator, len(lscb.builders))

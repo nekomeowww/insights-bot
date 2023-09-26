@@ -274,11 +274,15 @@ func (fsrc *FeedbackSummarizationsReactionsCreate) createSpec() (*FeedbackSummar
 // FeedbackSummarizationsReactionsCreateBulk is the builder for creating many FeedbackSummarizationsReactions entities in bulk.
 type FeedbackSummarizationsReactionsCreateBulk struct {
 	config
+	err      error
 	builders []*FeedbackSummarizationsReactionsCreate
 }
 
 // Save creates the FeedbackSummarizationsReactions entities in the database.
 func (fsrcb *FeedbackSummarizationsReactionsCreateBulk) Save(ctx context.Context) ([]*FeedbackSummarizationsReactions, error) {
+	if fsrcb.err != nil {
+		return nil, fsrcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(fsrcb.builders))
 	nodes := make([]*FeedbackSummarizationsReactions, len(fsrcb.builders))
 	mutators := make([]Mutator, len(fsrcb.builders))

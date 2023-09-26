@@ -233,11 +233,15 @@ func (tcffc *TelegramChatFeatureFlagsCreate) createSpec() (*TelegramChatFeatureF
 // TelegramChatFeatureFlagsCreateBulk is the builder for creating many TelegramChatFeatureFlags entities in bulk.
 type TelegramChatFeatureFlagsCreateBulk struct {
 	config
+	err      error
 	builders []*TelegramChatFeatureFlagsCreate
 }
 
 // Save creates the TelegramChatFeatureFlags entities in the database.
 func (tcffcb *TelegramChatFeatureFlagsCreateBulk) Save(ctx context.Context) ([]*TelegramChatFeatureFlags, error) {
+	if tcffcb.err != nil {
+		return nil, tcffcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(tcffcb.builders))
 	nodes := make([]*TelegramChatFeatureFlags, len(tcffcb.builders))
 	mutators := make([]Mutator, len(tcffcb.builders))

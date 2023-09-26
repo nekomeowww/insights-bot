@@ -594,11 +594,15 @@ func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSp
 // ChatHistoriesCreateBulk is the builder for creating many ChatHistories entities in bulk.
 type ChatHistoriesCreateBulk struct {
 	config
+	err      error
 	builders []*ChatHistoriesCreate
 }
 
 // Save creates the ChatHistories entities in the database.
 func (chcb *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories, error) {
+	if chcb.err != nil {
+		return nil, chcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(chcb.builders))
 	nodes := make([]*ChatHistories, len(chcb.builders))
 	mutators := make([]Mutator, len(chcb.builders))

@@ -394,11 +394,15 @@ func (lchrc *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, 
 // LogChatHistoriesRecapCreateBulk is the builder for creating many LogChatHistoriesRecap entities in bulk.
 type LogChatHistoriesRecapCreateBulk struct {
 	config
+	err      error
 	builders []*LogChatHistoriesRecapCreate
 }
 
 // Save creates the LogChatHistoriesRecap entities in the database.
 func (lchrcb *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*LogChatHistoriesRecap, error) {
+	if lchrcb.err != nil {
+		return nil, lchrcb.err
+	}
 	specs := make([]*sqlgraph.CreateSpec, len(lchrcb.builders))
 	nodes := make([]*LogChatHistoriesRecap, len(lchrcb.builders))
 	mutators := make([]Mutator, len(lchrcb.builders))

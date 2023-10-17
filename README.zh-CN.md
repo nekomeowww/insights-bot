@@ -185,20 +185,37 @@ $ ./insights-bot
 docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API 令牌> -e OPENAI_API_SECRET=<OpenAI API 密钥y> -e DB_CONNECTION_STR="<PostgresSQL 连接 URL>" insights-bot ghcr.io/nekomeowww/insights-bot:latest
 ```
 
-### 使用 docker-compose 运行
+### 使用 Docker Compose 运行
+
+克隆这个项目：
+
+```shell
+git clone github.com/nekomeowww/insights-bot
+```
+
+或者只复制或下载必要的`.env.example`和`docker-compose.yml`文件（但只能使用预构建的 Docker 镜像来运行 insights-bot）：
+
+```shell
+curl -O https://raw.githubusercontent.com/nekomeowww/insights-bot/main/.env.example
+curl -O https://raw.githubusercontent.com/nekomeowww/insights-bot/main/docker-compose.yml
+```
 
 通过复制 `.env.example` 文件中的内容来创建 `.env` 文件。`.env` 文件应该放在项目根目录下，与 `docker-compose.yml` 文件同级。
+
+```shell
+cp .env.example .env
+```
 
 通过替换 `.env` 文件中的 OpenAI 令牌和其他环境变量，然后运行：
 
 ```shell
-docker-compose --profile hub up -d
+docker compose --profile hub up -d
 ```
 
-如果你想从本地代码编译、构建并运行 Docker 镜像，那么运行：
+如果你想从本地代码编译、构建并运行 Docker 镜像（也就是手动构建，你需要这个项目的全部源代码，可以选择先克隆下来），那么运行：
 
 ```shell
-docker-compose --profile local up -d --build
+docker compose --profile local up -d --build
 ```
 
 ### 亲自构建
@@ -238,7 +255,8 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | `OPENAI_API_SECRET`         | `true`      |                                   | OpenAI API 密钥，通常类似于 `sk-************************************************` 的结构，你可以登录到 Open AI 并在 [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys) 上创建一个。                                                                                                                                                          |
 | `OPENAI_API_HOST`           | `false`     | `https://api.openai.com`          | OpenAI API 的域名，如果配置了中继或反向代理，则可以指定一个。比如 `https://openai.example.workers.dev`                                                                                                                                                                                                                                                                                     |
 | `OPENAI_API_MODEL_NAME`     | `false` | `gpt-3.5-turbo` | OpenAI API 模型名称，默认为 `gpt-3.5-turbo`，如果你使用其他模型，比如  `gpt-4` 则可以制指定一个。                                                                                                                                                                                                                                                                                                 |
-| `DB_CONNECTION_STR`         | `true`      |                                   | PostgreSQL 数据库连接 URL。结构类似于 `postgres://postgres:postgres@localhost:5432/postgres`。如果你需要指定 schema，则可以通过在后缀加上 `?search_path=<schema name>` 来实现。                                                                                                                                                                                                                                        |
+| `OPENAI_API_TOKEN_LIMIT`    | `false`     | `4096`                            | OpenAI API Token 限制，用于在调用 Chat Completion API 之前计算文本的分割和截断，一般设置为模型的最大令牌限制，然后交由 insights-bot 决定如何处理，默认为 `4096`。                                                                                                                          |
+| `DB_CONNECTION_STR`         | `true`      | `postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable`                                  | PostgreSQL 数据库连接 URL。结构类似于 `postgres://postgres:postgres@localhost:5432/postgres`。如果你需要指定 schema，则可以通过在后缀加上 `?search_path=<schema name>` 来实现。                                                                                                                                                                                                                                        |
 | `SLACK_CLIENT_ID`           | `false`     |                                   | Slack app client id，你可以参考[教程](https://api.slack.com/tutorials/slack-apps-and-postman)来创建一个。                                                                                                                                                                                                                                                                                     |
 | `SLACK_CLIENT_SECRET`       | `false`     |                                   | Slack app client secret，你可以参考[教程](https://api.slack.com/tutorials/slack-apps-and-postman)来创建一个。                                                                                                                                                                                                                                                                                 |
 | `SLACK_WEBHOOK_PORT`        | `false`     | `7070`                            | Slack Bot/App Webhook 服务监听端口，默认为 7070。                                                                                                                                                                                                                                                                                                                                                                  |

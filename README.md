@@ -139,7 +139,7 @@ Arguments: None
 ```
 
 ```txt
-[Forward a message]
+<Forwarded messages>
 ```
 
 ```txt
@@ -183,20 +183,37 @@ $ ./insights-bot
 docker run -it --rm -e TELEGRAM_BOT_TOKEN=<Telegram Bot API Token> -e OPENAI_API_SECRET=<OpenAI API Secret Key> -e DB_CONNECTION_STR="<PostgresSQL connection URL>" insights-bot ghcr.io/nekomeowww/insights-bot:latest
 ```
 
-### Run with docker-compose
+### Run with Docker Compose
+
+Clone this project:
+
+```shell
+git clone github.com/nekomeowww/insights-bot
+```
+
+Or only copy or download the necessary `.env.example` and `docker-compose.yml` files (but you will only be able to run the bot with pre-bundled docker image):
+
+```shell
+curl -O https://raw.githubusercontent.com/nekomeowww/insights-bot/main/.env.example
+curl -O https://raw.githubusercontent.com/nekomeowww/insights-bot/main/docker-compose.yml
+```
 
 Create your `.env` by making a copy of the contents from `.env.example` file. The .env file should be placed at the root of the project directory next to your `docker-compose.yml` file.
+
+```shell
+cp .env.example .env
+```
 
 Replace your OpenAI token and other environment variables in `.env`, and then run:
 
 ```shell
-docker-compose --profile hub up -d
+docker compose --profile hub up -d
 ```
 
-If you prefer run docker image from local codes, then run:
+If you prefer run docker image from local codes (which means build it manually, you will need the entire source code of this project), then run:
 
 ```shell
-docker-compose --profile local up -d --build
+docker compose --profile local up -d --build
 ```
 
 ### Build on your own
@@ -236,7 +253,8 @@ docker buildx build --platform linux/arm64,linux/amd64 -t <tag> -f Dockerfile .
 | `OPENAI_API_SECRET`         | `true`      |                                   | OpenAI API Secret Key that looks like `sk-************************************************`, you can obtain one by signing in to OpenAI platform and create one at [http://platform.openai.com/account/api-keys](http://platform.openai.com/account/api-keys).                                                                                                                                                          |
 | `OPENAI_API_HOST`           | `false`     | `https://api.openai.com`          | OpenAI API Host, you can specify one if you have a relay or reversed proxy configured. Such as `https://openai.example.workers.dev`                                                                                                                                                                                                                                                                                     |
 | `OPENAI_API_MODEL_NAME`     | `false` | `gpt-3.5-turbo` | OpenAI API model name, default is `gpt-3.5-turbo`, you can specify one if you want to use another model. Such as `gpt-4`                                                                                                                                                                                                                                                                                                 |
-| `DB_CONNECTION_STR`         | `true`      |                                   | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema                                                                                                                                                                                                                                        |
+| `OPENAI_API_TOKEN_LIMIT`    | `false`     | `4096`                            | OpenAI API token limit used to computed the splits and truncations of texts before calling Chat Completion API generally set to the maximum token limit of a model, and let insights-bot to determine how to process it, default is `4096`                                                                                                                           |
+| `DB_CONNECTION_STR`         | `true`      | `postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable`                                  | PostgreSQL database URL. Such as `postgres://postgres:postgres@localhost:5432/postgres`. You could also suffix with `?search_path=<schema name>` if you want to specify a schema.                                                                                                                                                                                                                                        |
 | `SLACK_CLIENT_ID`           | `false`     |                                   | Slack app client id, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman)                                                                                                                                                                                                                                                                                     |
 | `SLACK_CLIENT_SECRET`       | `false`     |                                   | Slack app client secret, you can create a slack app and get it, see: [tutorial](https://api.slack.com/tutorials/slack-apps-and-postman)                                                                                                                                                                                                                                                                                 |
 | `SLACK_WEBHOOK_PORT`        | `false`     | `7070`                            | Port for Slack Bot/App Webhook server, default is 7070                                                                                                                                                                                                                                                                                                                                                                  |

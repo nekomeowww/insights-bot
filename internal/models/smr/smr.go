@@ -95,7 +95,7 @@ func (m *Model) SummarizeInputURL(ctx context.Context, url string, fromPlatform 
 		return nil, fmt.Errorf("failed to parse %s, %w", url, err)
 	}
 
-	textContent := m.openai.TruncateContentBasedOnTokens(article.TextContent, 14000)
+	textContent := m.openai.TruncateContentBasedOnTokens(article.TextContent, int(m.config.OpenAI.TokenLimit)-1200)
 
 	m.logger.Info("✍️ summarizing article...", zap.String("title", article.Title), zap.String("url", url))
 

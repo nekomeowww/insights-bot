@@ -27,9 +27,10 @@ const (
 	EnvDiscordBotPublicKey   = "DISCORD_BOT_PUBLIC_KEY"
 	EnvDiscordBotWebhookPort = "DISCORD_BOT_WEBHOOK_PORT"
 
-	EnvOpenAIAPISecret    = "OPENAI_API_SECRET" //nolint:gosec
-	EnvOpenAIAPIHost      = "OPENAI_API_HOST"
-	EnvOpenAIAPIModelName = "OPENAI_API_MODEL_NAME"
+	EnvOpenAIAPISecret     = "OPENAI_API_SECRET" //nolint:gosec
+	EnvOpenAIAPIHost       = "OPENAI_API_HOST"
+	EnvOpenAIAPIModelName  = "OPENAI_API_MODEL_NAME"
+	EnvOpenAIAPITokenLimit = "OPENAI_API_TOKEN_LIMIT" //nolint:gosec
 
 	EnvPineconeProjectName          = "PINECONE_PROJECT_NAME"
 	EnvPineconeEnvironment          = "PINECONE_ENVIRONMENT"
@@ -103,9 +104,10 @@ type SectionHardLimit struct {
 }
 
 type SectionOpenAI struct {
-	Secret    string
-	Host      string
-	ModelName string
+	Secret     string
+	Host       string
+	ModelName  string
+	TokenLimit int64
 }
 
 type Config struct {
@@ -170,6 +172,15 @@ func NewConfig() func() (*Config, error) {
 			log.Printf("%s value %v is less than 0, fallbacks to 0", EnvHardLimitSummarizeWebpageRatePerSeconds, getEnv(EnvHardLimitSummarizeWebpageRatePerSeconds))
 		}
 
+		tokenLimit, tokenLimitParseErr := strconv.ParseInt(getEnv(EnvOpenAIAPITokenLimit), 10, 64)
+		log.Printf("failed to parse %s %v: %v, should be number", EnvOpenAIAPITokenLimit, getEnv(EnvOpenAIAPITokenLimit), tokenLimitParseErr)
+
+		if tokenLimit < 0 {
+			tokenLimit = 4096
+
+			log.Printf("%s value %v is less than 0, fallbacks to 4096", EnvOpenAIAPITokenLimit, getEnv(EnvOpenAIAPITokenLimit))
+		}
+
 		return &Config{
 			TimezoneShiftSeconds: lo.Ternary(timezoneShiftSecondsParseErr == nil, lo.Ternary(timezoneShiftSeconds != 0, timezoneShiftSeconds, 0), 0),
 			Telegram: SectionTelegram{
@@ -184,9 +195,10 @@ func NewConfig() func() (*Config, error) {
 				ClientSecret: getEnv(EnvSlackClientSecret),
 			},
 			OpenAI: SectionOpenAI{
-				Secret:    getEnv(EnvOpenAIAPISecret),
-				Host:      getEnv(EnvOpenAIAPIHost),
-				ModelName: lo.Ternary(getEnv(EnvOpenAIAPIModelName) == "", goopenai.GPT3Dot5Turbo, getEnv(EnvOpenAIAPIModelName)),
+				Secret:     getEnv(EnvOpenAIAPISecret),
+				Host:       getEnv(EnvOpenAIAPIHost),
+				ModelName:  lo.Ternary(getEnv(EnvOpenAIAPIModelName) == "", goopenai.GPT3Dot5Turbo, getEnv(EnvOpenAIAPIModelName)),
+				TokenLimit: lo.Ternary(tokenLimitParseErr == nil, lo.Ternary(tokenLimit != 0, tokenLimit, 4096), 4096),
 			},
 			Pinecone: SectionPinecone{
 				ProjectName: getEnv(EnvPineconeProjectName),

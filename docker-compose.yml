@@ -4,25 +4,35 @@ services:
   # default insights-bot service that would pull the image from docker hub
   # and runs on production environment with db_local service and redis_local
   # service
+  #
+  # you need to use either docker compose up --profile hub -d or docker-compose --profile hub up -d
+  # to ask docker compose to run this service
   insights_bot:
     profiles:
       - hub
     image: ghcr.io/nekomeowww/insights-bot:latest
     restart: always
     environment:
+      - TIMEZONE_SHIFT_SECONDS
       - TELEGRAM_BOT_TOKEN
       - OPENAI_API_SECRET
       - OPENAI_API_HOST
       - OPENAI_API_MODEL_NAME
-      - SLACK_CLIENT_ID
-      - SLACK_CLIENT_SECRET
-      - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
+      - OPENAI_API_TOKEN_LIMIT
+      - DB_CONNECTION_STR
       - REDIS_HOST=redis_local
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
       - LOG_LEVEL
-      # # uncomment the following lines if you want to enable discord bot webhook
+      # # uncomment the following lines if you configured telegram webhook in .env file
+      # - TELEGRAM_BOT_WEBHOOK_URL
+      # - TELEGRAM_BOT_WEBHOOK_PORT
+      # # uncomment the following lines if you configured slack and it's webhook options in .env file
+      # - SLACK_CLIENT_ID
+      # - SLACK_CLIENT_SECRET
+      # - SLACK_WEBHOOK_PORT
+      # # uncomment the following lines if you configured discord bot webhook in .env file
       # - DISCORD_BOT_TOKEN
       # - DISCORD_BOT_PUBLIC_KEY
       # - DISCORD_BOT_WEBHOOK_PORT
@@ -45,6 +55,9 @@ services:
   # On-demand build insights-bot service that would build the image from
   # source code and runs on production environment with db_local service
   # and redis_local service
+  #
+  # you need to use either docker compose up --profile local -d or docker-compose --profile local up -d
+  # to ask docker compose to run this service
   insights_bot_local:
     profiles:
       - local
@@ -54,19 +67,26 @@ services:
     image: insights-bot
     restart: always
     environment:
+      - TIMEZONE_SHIFT_SECONDS
       - TELEGRAM_BOT_TOKEN
       - OPENAI_API_SECRET
       - OPENAI_API_HOST
       - OPENAI_API_MODEL_NAME
-      - SLACK_CLIENT_ID
-      - SLACK_CLIENT_SECRET
-      - DB_CONNECTION_STR=postgresql://postgres:123456@db_local:5432/postgres?search_path=public&sslmode=disable
+      - OPENAI_API_TOKEN_LIMIT
+      - DB_CONNECTION_STR
       - REDIS_HOST=redis_local
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
       - LOG_LEVEL
-      # # uncomment the following lines if you want to enable discord bot webhook
+      # # uncomment the following lines if you configured telegram webhook in .env file
+      # - TELEGRAM_BOT_WEBHOOK_URL
+      # - TELEGRAM_BOT_WEBHOOK_PORT
+      # # uncomment the following lines if you configured slack and it's webhook options in .env file
+      # - SLACK_CLIENT_ID
+      # - SLACK_CLIENT_SECRET
+      # - SLACK_WEBHOOK_PORT
+      # # uncomment the following lines if you configured discord bot webhook in .env file
       # - DISCORD_BOT_TOKEN
       # - DISCORD_BOT_PUBLIC_KEY
       # - DISCORD_BOT_WEBHOOK_PORT

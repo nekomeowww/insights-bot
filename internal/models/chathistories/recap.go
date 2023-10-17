@@ -153,7 +153,8 @@ func filterOutMention(output *openai.ChatHistorySummarizationOutputs, _ int) *op
 }
 
 func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
-	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, 15000)
+	tokenLimit := m.config.OpenAI.TokenLimit - 1000
+	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, int(tokenLimit))
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 
 	var statusUsage goopenai.Usage
@@ -171,6 +172,8 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried),
 					zap.Int64("chat_id", chatID),
 					zap.String("model_name", m.openAI.GetModelName()),
+					zap.Int64("token_limit", tokenLimit),
+					zap.Int64("configured_token_limit", m.config.OpenAI.TokenLimit),
 				)
 				return err
 			}
@@ -186,6 +189,8 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 				m.logger.Error(fmt.Sprintf("no valid outputs from chat histories slice: %s, tried %d...", s, tried),
 					zap.Int64("chat_id", chatID),
 					zap.String("model_name", m.openAI.GetModelName()),
+					zap.Int64("token_limit", tokenLimit),
+					zap.Int64("configured_token_limit", m.config.OpenAI.TokenLimit),
 				)
 
 				return errors.New("no valid outputs")

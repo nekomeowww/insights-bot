@@ -19,6 +19,7 @@ import (
 
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/chathistories"
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/internal/thirdparty/openai"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
@@ -45,6 +46,7 @@ type NewModelParams struct {
 
 	Lifecycle fx.Lifecycle
 
+	Config *configs.Config
 	Logger *logger.Logger
 	Ent    *datastore.Ent
 	OpenAI openai.Client
@@ -52,6 +54,7 @@ type NewModelParams struct {
 }
 
 type Model struct {
+	config   *configs.Config
 	logger   *logger.Logger
 	ent      *datastore.Ent
 	openAI   openai.Client
@@ -62,6 +65,7 @@ type Model struct {
 func NewModel() func(NewModelParams) (*Model, error) {
 	return func(param NewModelParams) (*Model, error) {
 		return &Model{
+			config:   param.Config,
 			logger:   param.Logger,
 			ent:      param.Ent,
 			openAI:   param.OpenAI,

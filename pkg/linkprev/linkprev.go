@@ -33,11 +33,6 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) Debug() *Client {
-	c.reqClient.EnableDumpAll()
-	return c
-}
-
 func (c *Client) Preview(ctx context.Context, urlStr string) (Meta, error) {
 	r := c.newRequest(ctx, urlStr)
 
@@ -59,7 +54,6 @@ func (c *Client) Preview(ctx context.Context, urlStr string) (Meta, error) {
 func (c *Client) newRequest(ctx context.Context, urlStr string) *req.Request {
 	request := c.reqClient.
 		R().
-		EnableDump().
 		SetContext(ctx)
 
 	c.alterRequestForTwitter(request, urlStr)
@@ -92,12 +86,17 @@ func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *re
 }
 
 func (c *Client) request(r *req.Request, urlStr string) (io.Reader, error) {
-	resp, err := r.Get(urlStr)
+	dumpBuffer := new(bytes.Buffer)
+	defer dumpBuffer.Reset()
+
+	resp, err := r.
+		EnableDumpTo(dumpBuffer).
+		Get(urlStr)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", urlStr, ErrNetworkError, err)
 	}
 	if !resp.IsSuccessState() {
-		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", urlStr, ErrRequestFailed, resp.StatusCode, resp.Dump())
+		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", urlStr, ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
 	}
 
 	defer resp.Body.Close()

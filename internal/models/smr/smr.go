@@ -167,16 +167,19 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 		}, nil
 	}
 
+	dumpBuffer := new(bytes.Buffer)
+	defer dumpBuffer.Reset()
+
 	resp, err := m.req.
 		R().
-		EnableDump().
+		EnableDumpTo(dumpBuffer).
 		SetContext(ctx).
 		Get(parsedURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
 	}
 	if !resp.IsSuccessState() {
-		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, resp.Dump())
+		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
 	}
 	if !strings.Contains(resp.Header.Get("Content-Type"), "text/html") {
 		return nil, fmt.Errorf("url fetched, but content-type not supported yet, %w, content-type: %s", ErrContentNotSupported, resp.Header.Get("Content-Type"))

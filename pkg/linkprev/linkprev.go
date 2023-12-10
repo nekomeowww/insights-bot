@@ -26,10 +26,7 @@ type Client struct {
 
 func NewClient() *Client {
 	return &Client{
-		reqClient: req.
-			C().
-			SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54").
-			EnableDumpEachRequest(),
+		reqClient: req.C().SetUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54"),
 	}
 }
 
@@ -40,6 +37,8 @@ func (c *Client) Preview(ctx context.Context, urlStr string) (Meta, error) {
 	if err != nil {
 		return Meta{}, err
 	}
+
+	defer body.Reset()
 
 	doc, err := goquery.NewDocumentFromReader(body)
 	if err != nil {
@@ -85,18 +84,30 @@ func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *re
 	return request.SetHeader("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
 }
 
-func (c *Client) request(r *req.Request, urlStr string) (io.Reader, error) {
+func (c *Client) request(r *req.Request, urlStr string) (*bytes.Buffer, error) {
 	dumpBuffer := new(bytes.Buffer)
 	defer dumpBuffer.Reset()
 
 	resp, err := r.
 		EnableDumpTo(dumpBuffer).
+		DisableAutoReadResponse().
 		Get(urlStr)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", urlStr, ErrNetworkError, err)
 	}
 	if !resp.IsSuccessState() {
-		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", urlStr, ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
+		errorBuf := new(bytes.Buffer)
+		defer errorBuf.Reset()
+
+		_, err = io.Copy(errorBuf, resp.Body)
+		if err != nil {
+			fmt.Fprintf(errorBuf, "failed to read response body: %v", err)
+		}
+
+		dumpBuffer.WriteString("\n")
+		dumpBuffer.Write(errorBuf.Bytes())
+
+		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump:\n%s", urlStr, ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
 	}
 
 	defer resp.Body.Close()

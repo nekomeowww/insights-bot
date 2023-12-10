@@ -198,7 +198,9 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	}
 
 	defer resp.Body.Close()
+
 	buffer := new(bytes.Buffer)
+	defer buffer.Reset()
 
 	_, err = io.Copy(buffer, resp.Body)
 	if err != nil {

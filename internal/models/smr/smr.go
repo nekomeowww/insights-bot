@@ -173,12 +173,24 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	resp, err := m.req.
 		R().
 		EnableDumpTo(dumpBuffer).
+		DisableAutoReadResponse().
 		SetContext(ctx).
 		Get(parsedURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
 	}
 	if !resp.IsSuccessState() {
+		errorBuf := new(bytes.Buffer)
+		defer errorBuf.Reset()
+
+		_, err = io.Copy(errorBuf, resp.Body)
+		if err != nil {
+			fmt.Fprintf(errorBuf, "failed to read response body: %v", err)
+		}
+
+		dumpBuffer.WriteString("\n")
+		dumpBuffer.Write(errorBuf.Bytes())
+
 		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
 	}
 	if !strings.Contains(resp.Header.Get("Content-Type"), "text/html") {

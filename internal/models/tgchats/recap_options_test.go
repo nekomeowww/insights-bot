@@ -17,7 +17,7 @@ func TestFindOneOrCreateRecapsOption(t *testing.T) {
 
 	assert.Equal(t, chatID, option.ChatID)
 	assert.Empty(t, option.AutoRecapSendMode)
-	assert.Zero(t, option.AutoRecapRatesPerDay)
+	assert.Equal(t, 4, option.AutoRecapRatesPerDay)
 
 	option2, err := model.FindOneRecapsOption(chatID)
 	require.NoError(t, err)

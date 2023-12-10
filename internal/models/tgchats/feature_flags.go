@@ -222,12 +222,13 @@ func (m *Model) newNextScheduleTimeForChatHistoriesRecapTasksForChatID(chatID in
 		if now.Hour() < int(target) {
 			nextScheduleTime = time.Date(now.Year(), now.Month(), now.Day(), int(target), 0, 0, 0, location)
 			nextScheduleTimeSet = true
+
 			break
 		}
 	}
+
 	if !nextScheduleTimeSet {
 		nextScheduleTime = time.Date(now.Year(), now.Month(), now.Day()+1, int(scheduleTargets[0]), 0, 0, 0, location)
-		nextScheduleTimeSet = true
 	}
 
 	return nextScheduleTime
@@ -275,6 +276,7 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64, option
 			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
 			zap.Error(err),
 		)
+
 		return err
 	}
 

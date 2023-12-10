@@ -35,6 +35,14 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) SetChatID(i int64) *TelegramChatRe
 	return tcrou
 }
 
+// SetNillableChatID sets the "chat_id" field if the given value is not nil.
+func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableChatID(i *int64) *TelegramChatRecapsOptionsUpdate {
+	if i != nil {
+		tcrou.SetChatID(*i)
+	}
+	return tcrou
+}
+
 // AddChatID adds i to the "chat_id" field.
 func (tcrou *TelegramChatRecapsOptionsUpdate) AddChatID(i int64) *TelegramChatRecapsOptionsUpdate {
 	tcrou.mutation.AddChatID(i)
@@ -249,6 +257,14 @@ type TelegramChatRecapsOptionsUpdateOne struct {
 func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetChatID(i int64) *TelegramChatRecapsOptionsUpdateOne {
 	tcrouo.mutation.ResetChatID()
 	tcrouo.mutation.SetChatID(i)
+	return tcrouo
+}
+
+// SetNillableChatID sets the "chat_id" field if the given value is not nil.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableChatID(i *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if i != nil {
+		tcrouo.SetChatID(*i)
+	}
 	return tcrouo
 }
 

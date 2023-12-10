@@ -57,6 +57,7 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 	dispatcher.OnCallbackQuery("recap/configure/complete", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryComplete))
 	dispatcher.OnCallbackQuery("recap/unsubscribe_recap", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryUnsubscribe))
 	dispatcher.OnCallbackQuery("recap/recap/feedback/react", tgbot.NewHandler(h.callbackQuery.handleCallbackQueryReact))
+	dispatcher.OnCallbackQuery("recap/configure/auto_recap_rates_per_day", tgbot.NewHandler(h.callbackQuery.handleAutoRecapRatesPerDaySelect))
 
 	dispatcher.OnLeftChatMember(tgbot.NewHandler(h.command.handleChatMemberLeft))
 }

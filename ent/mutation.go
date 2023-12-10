@@ -8262,6 +8262,8 @@ type TelegramChatRecapsOptionsMutation struct {
 	addauto_recap_send_mode          *int
 	manual_recap_rate_per_seconds    *int64
 	addmanual_recap_rate_per_seconds *int64
+	auto_recap_rates_per_day         *int
+	addauto_recap_rates_per_day      *int
 	created_at                       *int64
 	addcreated_at                    *int64
 	updated_at                       *int64
@@ -8544,6 +8546,62 @@ func (m *TelegramChatRecapsOptionsMutation) ResetManualRecapRatePerSeconds() {
 	m.addmanual_recap_rate_per_seconds = nil
 }
 
+// SetAutoRecapRatesPerDay sets the "auto_recap_rates_per_day" field.
+func (m *TelegramChatRecapsOptionsMutation) SetAutoRecapRatesPerDay(i int) {
+	m.auto_recap_rates_per_day = &i
+	m.addauto_recap_rates_per_day = nil
+}
+
+// AutoRecapRatesPerDay returns the value of the "auto_recap_rates_per_day" field in the mutation.
+func (m *TelegramChatRecapsOptionsMutation) AutoRecapRatesPerDay() (r int, exists bool) {
+	v := m.auto_recap_rates_per_day
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoRecapRatesPerDay returns the old "auto_recap_rates_per_day" field's value of the TelegramChatRecapsOptions entity.
+// If the TelegramChatRecapsOptions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TelegramChatRecapsOptionsMutation) OldAutoRecapRatesPerDay(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoRecapRatesPerDay is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoRecapRatesPerDay requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoRecapRatesPerDay: %w", err)
+	}
+	return oldValue.AutoRecapRatesPerDay, nil
+}
+
+// AddAutoRecapRatesPerDay adds i to the "auto_recap_rates_per_day" field.
+func (m *TelegramChatRecapsOptionsMutation) AddAutoRecapRatesPerDay(i int) {
+	if m.addauto_recap_rates_per_day != nil {
+		*m.addauto_recap_rates_per_day += i
+	} else {
+		m.addauto_recap_rates_per_day = &i
+	}
+}
+
+// AddedAutoRecapRatesPerDay returns the value that was added to the "auto_recap_rates_per_day" field in this mutation.
+func (m *TelegramChatRecapsOptionsMutation) AddedAutoRecapRatesPerDay() (r int, exists bool) {
+	v := m.addauto_recap_rates_per_day
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetAutoRecapRatesPerDay resets all changes to the "auto_recap_rates_per_day" field.
+func (m *TelegramChatRecapsOptionsMutation) ResetAutoRecapRatesPerDay() {
+	m.auto_recap_rates_per_day = nil
+	m.addauto_recap_rates_per_day = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *TelegramChatRecapsOptionsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -8690,7 +8748,7 @@ func (m *TelegramChatRecapsOptionsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TelegramChatRecapsOptionsMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.chat_id != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldChatID)
 	}
@@ -8699,6 +8757,9 @@ func (m *TelegramChatRecapsOptionsMutation) Fields() []string {
 	}
 	if m.manual_recap_rate_per_seconds != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldManualRecapRatePerSeconds)
+	}
+	if m.auto_recap_rates_per_day != nil {
+		fields = append(fields, telegramchatrecapsoptions.FieldAutoRecapRatesPerDay)
 	}
 	if m.created_at != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldCreatedAt)
@@ -8720,6 +8781,8 @@ func (m *TelegramChatRecapsOptionsMutation) Field(name string) (ent.Value, bool)
 		return m.AutoRecapSendMode()
 	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
 		return m.ManualRecapRatePerSeconds()
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		return m.AutoRecapRatesPerDay()
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.CreatedAt()
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -8739,6 +8802,8 @@ func (m *TelegramChatRecapsOptionsMutation) OldField(ctx context.Context, name s
 		return m.OldAutoRecapSendMode(ctx)
 	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
 		return m.OldManualRecapRatePerSeconds(ctx)
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		return m.OldAutoRecapRatesPerDay(ctx)
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -8773,6 +8838,13 @@ func (m *TelegramChatRecapsOptionsMutation) SetField(name string, value ent.Valu
 		}
 		m.SetManualRecapRatePerSeconds(v)
 		return nil
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoRecapRatesPerDay(v)
+		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		v, ok := value.(int64)
 		if !ok {
@@ -8804,6 +8876,9 @@ func (m *TelegramChatRecapsOptionsMutation) AddedFields() []string {
 	if m.addmanual_recap_rate_per_seconds != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldManualRecapRatePerSeconds)
 	}
+	if m.addauto_recap_rates_per_day != nil {
+		fields = append(fields, telegramchatrecapsoptions.FieldAutoRecapRatesPerDay)
+	}
 	if m.addcreated_at != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldCreatedAt)
 	}
@@ -8824,6 +8899,8 @@ func (m *TelegramChatRecapsOptionsMutation) AddedField(name string) (ent.Value, 
 		return m.AddedAutoRecapSendMode()
 	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
 		return m.AddedManualRecapRatePerSeconds()
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		return m.AddedAutoRecapRatesPerDay()
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.AddedCreatedAt()
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -8857,6 +8934,13 @@ func (m *TelegramChatRecapsOptionsMutation) AddField(name string, value ent.Valu
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddManualRecapRatePerSeconds(v)
+		return nil
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAutoRecapRatesPerDay(v)
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -8907,6 +8991,9 @@ func (m *TelegramChatRecapsOptionsMutation) ResetField(name string) error {
 		return nil
 	case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
 		m.ResetManualRecapRatePerSeconds()
+		return nil
+	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
+		m.ResetAutoRecapRatesPerDay()
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		m.ResetCreatedAt()

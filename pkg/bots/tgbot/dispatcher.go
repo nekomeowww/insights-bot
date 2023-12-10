@@ -58,6 +58,9 @@ func NewDispatcher() func(logger *logger.Logger) *Dispatcher {
 			{Command: d.cancelCommand.Command(), HelpMessage: d.cancelCommand.CommandHelp(), Handler: NewHandler(d.cancelCommand.handle)},
 			{Command: d.startCommandHandler.Command(), HelpMessage: d.startCommandHandler.CommandHelp(), Handler: NewHandler(d.startCommandHandler.handle)},
 		})
+		d.OnCallbackQuery("nop", NewHandler(func(ctx *Context) (Response, error) {
+			return nil, nil
+		}))
 
 		return d
 	}
@@ -172,7 +175,7 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 				strings.Join(identityStrings, " "),
 				color.FgYellow.Render(c.Update.CallbackQuery.From.ID),
 				c.Update.CallbackData(),
-				color.FgRed.Render("无法调度 Callback Query，监测到缺少路由。"),
+				color.FgRed.Render("无法调度 Callback Query，检测到缺少路由。"),
 				color.FgRed.Render("Unable to dispatch Callback Query due to missing route DETECTED."),
 				color.FgRed.Render("大多数情况下，发生这种情况的原因是相应的处理程序没有通过 OnCallbackQuery(...) 方法正确注册，或者内部派发器未能与之匹配，请检查已注册的处理程序及其路由，然后再试一次。"),
 				color.FgRed.Render("For most of the time, this happens when the corresponding handler wasn't registered properly through OnCallbackQuery(...) method or internal dispatcher failed to match it, please check registered handlers and the route of them and then try again."),

@@ -181,6 +181,7 @@ var (
 		{Name: "chat_id", Type: field.TypeInt64, Unique: true},
 		{Name: "auto_recap_send_mode", Type: field.TypeInt, Default: 0},
 		{Name: "manual_recap_rate_per_seconds", Type: field.TypeInt64, Default: 0},
+		{Name: "auto_recap_rates_per_day", Type: field.TypeInt, Default: 0},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}

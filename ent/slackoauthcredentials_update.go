@@ -48,6 +48,14 @@ func (socu *SlackOAuthCredentialsUpdate) SetAccessToken(s string) *SlackOAuthCre
 	return socu
 }
 
+// SetNillableAccessToken sets the "access_token" field if the given value is not nil.
+func (socu *SlackOAuthCredentialsUpdate) SetNillableAccessToken(s *string) *SlackOAuthCredentialsUpdate {
+	if s != nil {
+		socu.SetAccessToken(*s)
+	}
+	return socu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (socu *SlackOAuthCredentialsUpdate) SetCreatedAt(i int64) *SlackOAuthCredentialsUpdate {
 	socu.mutation.ResetCreatedAt()
@@ -201,6 +209,14 @@ func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableRefreshToken(s *string) 
 // SetAccessToken sets the "access_token" field.
 func (socuo *SlackOAuthCredentialsUpdateOne) SetAccessToken(s string) *SlackOAuthCredentialsUpdateOne {
 	socuo.mutation.SetAccessToken(s)
+	return socuo
+}
+
+// SetNillableAccessToken sets the "access_token" field if the given value is not nil.
+func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableAccessToken(s *string) *SlackOAuthCredentialsUpdateOne {
+	if s != nil {
+		socuo.SetAccessToken(*s)
+	}
 	return socuo
 }
 

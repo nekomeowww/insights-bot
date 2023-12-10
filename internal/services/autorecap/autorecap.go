@@ -121,7 +121,7 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 
 	may.HandleErrors(func(errs []error) {
 		// requeue if failed
-		queueErr := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+		queueErr := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID, options)
 		if queueErr != nil {
 			m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(queueErr))
 		}
@@ -135,7 +135,7 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 	}
 
 	// always requeue
-	err := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID)
+	err := m.tgchats.QueueOneSendChatHistoriesRecapTaskForChatID(capsule.Payload.ChatID, options)
 	if err != nil {
 		m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(err))
 	}

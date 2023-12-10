@@ -164,16 +164,42 @@ func (m *Model) QueueSendChatHistoriesRecapTask() {
 		return
 	}
 
+	mChatOptions := make(map[int64]*ent.TelegramChatRecapsOptions)
+
 	for _, chat := range chats {
-		err = m.QueueOneSendChatHistoriesRecapTaskForChatID(chat.ChatID)
+		options, err := m.FindOneOrCreateRecapsOption(chat.ChatID)
 		if err != nil {
-			m.logger.Error("failed to queue send chat histories recap task", zap.Error(err))
+			m.logger.Error("failed to find one or create recaps option",
+				zap.Int64("chat_id", chat.ChatID),
+				zap.Error(err),
+			)
+
+			continue
+		}
+
+		mChatOptions[chat.ChatID] = options
+	}
+
+	for _, chat := range chats {
+		options, ok := mChatOptions[chat.ChatID]
+		if !ok {
+			continue
+		}
+
+		err := m.QueueOneSendChatHistoriesRecapTaskForChatID(chat.ChatID, options)
+		if err != nil {
 			continue
 		}
 	}
 }
 
-func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error {
+var MapScheduleHours = map[int][]int64{
+	2: {8, 20},        // queue for 08:00, 20:00
+	3: {0, 8, 16},     // queue for 00:00, 08:00, 16:00
+	4: {2, 8, 14, 20}, // queue for 02:00, 08:00, 14:00, 20:00
+}
+
+func (m *Model) newNextScheduleTimeForChatHistoriesRecapTasksForChatID(chatID int64, rate int) time.Time {
 	location := time.UTC
 	if m.config.TimezoneShiftSeconds != 0 {
 		location = time.FixedZone("Local", int(m.config.TimezoneShiftSeconds))
@@ -184,32 +210,74 @@ func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64) error 
 		UTC().       // Resets to UTC.
 		In(location) // Align current timezone with the configured offset (if any) for later calculation.
 
-	scheduleTargets := []int64{2, 8, 14, 20} // queue for 02:00, 08:00, 14:00, 20:00
-	scheduleSets := make([]time.Time, 0, len(scheduleTargets))
+	scheduleTargets, ok := MapScheduleHours[rate]
+	if !ok {
+		scheduleTargets = MapScheduleHours[4]
+	}
+
+	var nextScheduleTimeSet bool
+	var nextScheduleTime time.Time
 
 	for _, target := range scheduleTargets {
 		if now.Hour() < int(target) {
-			scheduleSets = append(scheduleSets, time.Date(now.Year(), now.Month(), now.Day(), int(target), 0, 0, 0, location))
+			nextScheduleTime = time.Date(now.Year(), now.Month(), now.Day(), int(target), 0, 0, 0, location)
+			nextScheduleTimeSet = true
+
 			break
 		}
 	}
-	if len(scheduleSets) == 0 {
-		scheduleSets = append(scheduleSets, time.Date(now.Year(), now.Month(), now.Day()+1, int(scheduleTargets[0]), 0, 0, 0, location))
+
+	if !nextScheduleTimeSet {
+		nextScheduleTime = time.Date(now.Year(), now.Month(), now.Day()+1, int(scheduleTargets[0]), 0, 0, 0, location)
 	}
 
-	for _, schedule := range scheduleSets {
-		m.logger.Info("scheduled one send chat histories recap task for chat", zap.Int64("chat_id", chatID), zap.Time("schedule", schedule))
+	return nextScheduleTime
+}
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+func (m *Model) queueOneSendChatHistoriesRecapTaskForChatIDBasedOnScheduleSets(chatID int64, nextScheduleTime time.Time) error {
+	m.logger.Info("scheduled one send chat histories recap task for chat",
+		zap.Int64("chat_id", chatID),
+		zap.Time("schedule", nextScheduleTime),
+	)
 
-		err := m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
-			ChatID: chatID,
-		}, schedule.UnixMilli())
-		if err != nil {
-			m.logger.Error("failed to bury one send chat histories recap task for chat", zap.Int64("chat_id", chatID), zap.Error(err))
-		}
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	defer cancel()
 
-		cancel()
+	err := m.digger.BuryUtil(ctx, timecapsules.AutoRecapCapsule{
+		ChatID: chatID,
+	}, nextScheduleTime.UnixMilli())
+	if err != nil {
+		m.logger.Error("failed to bury one send chat histories recap task for chat",
+			zap.Int64("chat_id", chatID),
+			zap.Time("schedule", nextScheduleTime),
+			zap.Error(err),
+		)
+	}
+
+	return nil
+}
+
+func (m *Model) QueueOneSendChatHistoriesRecapTaskForChatID(chatID int64, options *ent.TelegramChatRecapsOptions) error {
+	if !lo.Contains([]int{2, 3, 4}, options.AutoRecapRatesPerDay) {
+		m.logger.Error("invalid auto recap rates per day, fallbacks, to 4 times a day",
+			zap.Int64("chat_id", chatID),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+		)
+
+		options.AutoRecapRatesPerDay = 4
+	}
+
+	nextScheduleTime := m.newNextScheduleTimeForChatHistoriesRecapTasksForChatID(chatID, options.AutoRecapRatesPerDay)
+
+	err := m.queueOneSendChatHistoriesRecapTaskForChatIDBasedOnScheduleSets(chatID, nextScheduleTime)
+	if err != nil {
+		m.logger.Error("failed to queue send chat histories recap task",
+			zap.Int64("chat_id", chatID),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
+		return err
 	}
 
 	return nil

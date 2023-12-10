@@ -421,6 +421,10 @@ func (b *Bot) DeleteAllDeleteLaterMessages(forUserID int64) error {
 	return res.Error()
 }
 
+func (b *Bot) AssignOneNopCallbackQueryData() (string, error) {
+	return b.AssignOneCallbackQueryData("nop", "")
+}
+
 func (b *Bot) AssignOneCallbackQueryData(route string, data any) (string, error) {
 	jsonData, err := json.Marshal(data)
 	if err != nil {

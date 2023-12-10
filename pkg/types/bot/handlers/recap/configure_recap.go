@@ -23,6 +23,12 @@ type ConfigureRecapCompleteActionData struct {
 	FromID int64 `json:"fromId"`
 }
 
+type ConfigureAutoRecapRatesPerDayActionData struct {
+	Rates  int   `json:"rates"`
+	ChatID int64 `json:"chatId"`
+	FromID int64 `json:"fromId"`
+}
+
 type FeedbackRecapReactionActionData struct {
 	ChatID int64                                     `json:"chatId"`
 	LogID  string                                    `json:"logId"`

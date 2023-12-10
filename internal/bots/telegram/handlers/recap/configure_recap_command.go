@@ -93,34 +93,103 @@ func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) erro
 	return nil
 }
 
-func newRecapInlineKeyboardMarkup(ctx *tgbot.Context, chatID int64, fromID int64, currentRecapStatus bool, currentRecapMode tgchat.AutoRecapSendMode) (tgbotapi.InlineKeyboardMarkup, error) {
-	data, err := ctx.Bot.AssignOneCallbackQueryData("recap/configure/toggle", recap.ConfigureRecapToggleActionData{Status: !currentRecapStatus, ChatID: chatID, FromID: fromID})
+func newRecapInlineKeyboardMarkup(
+	c *tgbot.Context,
+	chatID int64,
+	fromID int64,
+	currentRecapStatusOn bool,
+	currentRecapMode tgchat.AutoRecapSendMode,
+	currentAutoRecapRatesPerDay int,
+) (tgbotapi.InlineKeyboardMarkup, error) {
+	nopData, err := c.Bot.AssignOneNopCallbackQueryData()
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
 
-	publicData, err := ctx.Bot.AssignOneCallbackQueryData("recap/configure/assign_mode", recap.ConfigureRecapAssignModeActionData{Mode: tgchat.AutoRecapSendModePublicly, ChatID: chatID, FromID: fromID})
+	toggleOnData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/toggle", recap.ConfigureRecapToggleActionData{Status: true, ChatID: chatID, FromID: fromID})
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
 
-	privateData, err := ctx.Bot.AssignOneCallbackQueryData("recap/configure/assign_mode", recap.ConfigureRecapAssignModeActionData{Mode: tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, ChatID: chatID, FromID: fromID})
+	toggleOffData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/toggle", recap.ConfigureRecapToggleActionData{Status: false, ChatID: chatID, FromID: fromID})
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
 
-	completeData, err := ctx.Bot.AssignOneCallbackQueryData("recap/configure/complete", recap.ConfigureRecapCompleteActionData{ChatID: chatID, FromID: fromID})
+	publicData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/assign_mode", recap.ConfigureRecapAssignModeActionData{Mode: tgchat.AutoRecapSendModePublicly, ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	privateData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/assign_mode", recap.ConfigureRecapAssignModeActionData{Mode: tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	completeData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/complete", recap.ConfigureRecapCompleteActionData{ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	if !currentRecapStatusOn {
+		return tgbotapi.NewInlineKeyboardMarkup(
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("🔈 聊天记录回顾", nopData),
+			),
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapStatusOn, "🔘 开启", "开启"), toggleOnData),
+				tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(!currentRecapStatusOn, "🔘 关闭", "关闭"), toggleOffData),
+			),
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("📩 聊天记录回顾投递方式", nopData),
+			),
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModePublicly, "🔘 "+tgchat.AutoRecapSendModePublicly.String(), tgchat.AutoRecapSendModePublicly.String()), publicData),
+				tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, "🔘 "+tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String(), tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String()), privateData),
+			),
+			tgbotapi.NewInlineKeyboardRow(
+				tgbotapi.NewInlineKeyboardButtonData("✅ 完成", completeData),
+			),
+		), nil
+	}
+
+	twoTimePerDayData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/auto_recap_rates_per_day", recap.ConfigureAutoRecapRatesPerDayActionData{Rates: 2, ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	threeTimePerDayData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/auto_recap_rates_per_day", recap.ConfigureAutoRecapRatesPerDayActionData{Rates: 3, ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	fourTimePerDayData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/auto_recap_rates_per_day", recap.ConfigureAutoRecapRatesPerDayActionData{Rates: 4, ChatID: chatID, FromID: fromID})
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
 
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(!currentRecapStatus, "🔈 开启聊天记录回顾", "🔇 关闭聊天记录回顾"), data),
+			tgbotapi.NewInlineKeyboardButtonData("🔈 聊天记录回顾", nopData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapStatusOn, "🔘 开启", "开启"), toggleOnData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(!currentRecapStatusOn, "🔘 关闭", "关闭"), toggleOffData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("📩 聊天记录回顾投递方式", nopData),
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModePublicly, "🔘 "+tgchat.AutoRecapSendModePublicly.String(), tgchat.AutoRecapSendModePublicly.String()), publicData),
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentRecapMode == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions, "🔘 "+tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String(), tgchat.AutoRecapSendModeOnlyPrivateSubscriptions.String()), privateData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("🛎️ 每天自动创建回顾次数", nopData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 2, "🔘 2 次", "2 次"), twoTimePerDayData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 3, "🔘 3 次", "3 次"), threeTimePerDayData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 4, "🔘 4 次", "4 次"), fourTimePerDayData),
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData("✅ 完成", completeData),
@@ -185,7 +254,14 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 		options = &ent.TelegramChatRecapsOptions{AutoRecapSendMode: int(tgchat.AutoRecapSendModePublicly)}
 	}
 
-	markup, err := newRecapInlineKeyboardMarkup(c, chatID, c.Update.Message.From.ID, has, tgchat.AutoRecapSendMode(options.AutoRecapSendMode))
+	markup, err := newRecapInlineKeyboardMarkup(
+		c,
+		chatID,
+		c.Update.Message.From.ID,
+		has,
+		tgchat.AutoRecapSendMode(options.AutoRecapSendMode),
+		lo.Ternary(options.AutoRecapRatesPerDay == 0, 4, options.AutoRecapRatesPerDay),
+	)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").WithReply(c.Update.Message)
 	}

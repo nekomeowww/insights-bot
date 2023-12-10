@@ -10,10 +10,10 @@ const (
 func (a AutoRecapSendMode) String() string {
 	switch a {
 	case AutoRecapSendModePublicly:
-		return "公开模式"
+		return "公开"
 	case AutoRecapSendModeOnlyPrivateSubscriptions:
-		return "私聊订阅模式"
+		return "私聊"
 	default:
-		return "其他模式"
+		return "其他"
 	}
 }

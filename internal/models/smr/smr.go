@@ -26,6 +26,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/linkprev"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/bot"
+	"github.com/nekomeowww/xo"
 )
 
 type NewModelParams struct {
@@ -168,14 +169,21 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	}
 
 	dumpBuffer := new(bytes.Buffer)
-	defer dumpBuffer.Reset()
+	defer func() {
+		dumpBuffer.Reset()
+		dumpBuffer = nil
+	}()
 
-	resp, err := m.req.
+	request := m.req.
 		R().
 		EnableDumpTo(dumpBuffer).
 		DisableAutoReadResponse().
-		SetContext(ctx).
-		Get(parsedURL.String())
+		SetContext(ctx)
+	defer func() {
+		request.EnableDumpTo(xo.NewNopIoWriter())
+	}()
+
+	resp, err := request.Get(parsedURL.String())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
 	}

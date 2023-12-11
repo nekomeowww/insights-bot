@@ -12,6 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/imroc/req/v3"
 	"github.com/nekomeowww/insights-bot/pkg/opengraph"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 )
 
@@ -86,12 +87,19 @@ func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *re
 
 func (c *Client) request(r *req.Request, urlStr string) (*bytes.Buffer, error) {
 	dumpBuffer := new(bytes.Buffer)
-	defer dumpBuffer.Reset()
+	defer func() {
+		dumpBuffer.Reset()
+		dumpBuffer = nil
+	}()
 
-	resp, err := r.
+	request := r.
 		EnableDumpTo(dumpBuffer).
-		DisableAutoReadResponse().
-		Get(urlStr)
+		DisableAutoReadResponse()
+	defer func() {
+		request.EnableDumpTo(xo.NewNopIoWriter())
+	}()
+
+	resp, err := request.Get(urlStr)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", urlStr, ErrNetworkError, err)
 	}

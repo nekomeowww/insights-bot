@@ -152,7 +152,11 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 }
 
 func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatRecapsOptions, subscribers []*ent.TelegramChatAutoRecapsSubscribers) {
-	m.logger.Info("generating chat histories recap for chat", zap.Int64("chat_id", chatID))
+	m.logger.Info("generating chat histories recap for chat",
+		zap.Int64("chat_id", chatID),
+		zap.String("module", "autorecap"),
+		zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+	)
 
 	chat, err := m.botService.GetChat(tgbotapi.ChatInfoConfig{
 		ChatConfig: tgbotapi.ChatConfig{
@@ -160,15 +164,49 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 		},
 	})
 	if err != nil {
-		m.logger.Error("failed to get chat", zap.Error(err), zap.Int64("chat_id", chatID))
+		m.logger.Error("failed to get chat",
+			zap.Int64("chat_id", chatID),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
 		return
 	}
 
 	chatType := telegram.ChatType(chat.Type)
 
-	histories, err := m.chathistories.FindLastSixHourChatHistories(chatID)
+	mAutoRecapRatesPerDayHours := map[int]int{
+		4: 6,
+		3: 8,
+		2: 12,
+	}
+
+	hours, ok := mAutoRecapRatesPerDayHours[options.AutoRecapRatesPerDay]
+	if !ok {
+		hours = 6
+	}
+
+	mFindChatHistoriesHoursBefore := map[int]func(chatID int64) ([]*ent.ChatHistories, error){
+		6:  m.chathistories.FindLast6HourChatHistories,
+		8:  m.chathistories.FindLast8HourChatHistories,
+		12: m.chathistories.FindLast12HourChatHistories,
+	}
+
+	findChatHistories, ok := mFindChatHistoriesHoursBefore[hours]
+	if !ok {
+		findChatHistories = m.chathistories.FindLast6HourChatHistories
+	}
+
+	histories, err := findChatHistories(chatID)
 	if err != nil {
-		m.logger.Error("failed to find last six hour chat histories", zap.Error(err), zap.Int64("chat_id", chatID))
+		m.logger.Error(fmt.Sprintf("failed to find last %d hour chat histories", hours),
+			zap.Int64("chat_id", chatID),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
 		return
 	}
 	if len(histories) <= 5 {
@@ -180,25 +218,49 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	logID, summarizations, err := m.chathistories.SummarizeChatHistories(chatID, chatType, histories)
 	if err != nil {
-		m.logger.Error("failed to summarize last six hour chat histories", zap.Error(err), zap.Int64("chat_id", chatID))
+		m.logger.Error("failed to summarize last six hour chat histories",
+			zap.Int64("chat_id", chatID),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
 		return
 	}
 
 	counts, err := m.chathistories.FindFeedbackRecapsReactionCountsForChatIDAndLogID(chatID, logID)
 	if err != nil {
-		m.logger.Error("failed to find feedback recaps votes for chat", zap.Error(err), zap.Int64("chat_id", chatID))
+		m.logger.Error("failed to find feedback recaps votes for chat",
+			zap.Int64("chat_id", chatID),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
 		return
 	}
 
 	inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapInlineKeyboardMarkup(m.botService.Bot(), chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
 	if err != nil {
-		m.logger.Error("failed to create vote recap inline keyboard markup", zap.Error(err), zap.Int64("chat_id", chatID), zap.String("log_id", logID.String()))
+		m.logger.Error("failed to create vote recap inline keyboard markup",
+			zap.Int64("chat_id", chatID),
+			zap.String("log_id", logID.String()),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+			zap.Error(err),
+		)
+
 		return
 	}
 
 	summarizations = lo.Filter(summarizations, func(item string, _ int) bool { return item != "" })
 	if len(summarizations) == 0 {
-		m.logger.Warn("summarization is empty", zap.Int64("chat_id", chatID))
+		m.logger.Warn("summarization is empty",
+			zap.Int64("chat_id", chatID),
+			zap.String("module", "autorecap"),
+			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+		)
+
 		return
 	}
 
@@ -245,6 +307,8 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				zap.String("status", member.Status),
 				zap.Int64("chat_id", chatID),
 				zap.Int64("user_id", subscriber.UserID),
+				zap.String("module", "autorecap"),
+				zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
 			)
 
 			_, _, err := lo.AttemptWithDelay(1000, time.Minute, func(iter int, _ time.Duration) error {
@@ -257,6 +321,8 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 						zap.Int64("user_id", subscriber.UserID),
 						zap.Int("iter", iter),
 						zap.Int("max_iter", 100),
+						zap.String("module", "autorecap"),
+						zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
 					)
 
 					return err
@@ -265,7 +331,11 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				return nil
 			})
 			if err != nil {
-				m.logger.Error("failed to unsubscribe to auto recaps", zap.Error(err), zap.Int64("chat_id", chatID))
+				m.logger.Error("failed to unsubscribe to auto recaps",
+					zap.Int64("chat_id", chatID),
+					zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+					zap.Error(err),
+				)
 			}
 
 			msg := tgbotapi.NewMessage(subscriber.UserID, fmt.Sprintf("由于您已不再是 <b>%s</b> 的成员，因此已自动帮您取消了您所订阅的聊天记录回顾。", tgbot.EscapeHTMLSymbols(chatTitle)))
@@ -273,7 +343,12 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 			_, err = m.botService.Send(msg)
 			if err != nil {
-				m.logger.Error("failed to send the auto un-subscription message", zap.Error(err), zap.Int64("user_id", subscriber.UserID), zap.Int64("chat_id", chatID))
+				m.logger.Error("failed to send the auto un-subscription message",
+					zap.Int64("user_id", subscriber.UserID),
+					zap.Int64("chat_id", chatID),
+					zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+					zap.Error(err),
+				)
 			}
 
 			continue
@@ -313,7 +388,12 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 				inlineKeyboardMarkup, err := m.chathistories.NewVoteRecapWithUnsubscribeInlineKeyboardMarkup(m.botService.Bot(), chatID, chatTitle, targetChat.chatID, logID, counts.UpVotes, counts.DownVotes, counts.Lmao)
 				if err != nil {
-					m.logger.Error("failed to assign callback query data", zap.Error(err), zap.Int64("chat_id", chatID))
+					m.logger.Error("failed to assign callback query data",
+						zap.Int64("chat_id", chatID),
+						zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+						zap.Error(err),
+					)
+
 					continue
 				}
 
@@ -325,7 +405,11 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 			_, err = m.botService.Send(msg)
 			if err != nil {
-				m.logger.Error("failed to send chat histories recap", zap.Error(err), zap.Int64("chat_id", chatID))
+				m.logger.Error("failed to send chat histories recap",
+					zap.Int64("chat_id", chatID),
+					zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
+					zap.Error(err),
+				)
 			}
 		}
 	}

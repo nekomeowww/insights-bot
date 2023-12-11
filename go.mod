@@ -20,7 +20,7 @@ require (
 	github.com/nekomeowww/fo v1.2.1
 	github.com/nekomeowww/go-pinecone v0.1.0
 	github.com/nekomeowww/timecapsule/v2 v2.2.0
-	github.com/nekomeowww/xo v1.2.0
+	github.com/nekomeowww/xo v1.3.0
 	github.com/pkoukk/tiktoken-go v0.1.6
 	github.com/redis/rueidis v1.0.23
 	github.com/samber/lo v1.39.0

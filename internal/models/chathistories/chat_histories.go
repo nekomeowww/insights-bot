@@ -335,8 +335,16 @@ func (m *Model) FindLastOneHourChatHistories(chatID int64) ([]*ent.ChatHistories
 	return m.FindChatHistoriesByTimeBefore(chatID, time.Hour)
 }
 
-func (m *Model) FindLastSixHourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
+func (m *Model) FindLast6HourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
 	return m.FindChatHistoriesByTimeBefore(chatID, 6*time.Hour)
+}
+
+func (m *Model) FindLast8HourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
+	return m.FindChatHistoriesByTimeBefore(chatID, 8*time.Hour)
+}
+
+func (m *Model) FindLast12HourChatHistories(chatID int64) ([]*ent.ChatHistories, error) {
+	return m.FindChatHistoriesByTimeBefore(chatID, 12*time.Hour)
 }
 
 func (m *Model) FindChatHistoriesByTimeBefore(chatID int64, before time.Duration) ([]*ent.ChatHistories, error) {

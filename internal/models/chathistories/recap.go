@@ -153,7 +153,7 @@ func filterOutMention(output *openai.ChatHistorySummarizationOutputs, _ int) *op
 }
 
 func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFriendlyChatHistories string) ([]*openai.ChatHistorySummarizationOutputs, goopenai.Usage, error) {
-	tokenLimit := m.config.OpenAI.TokenLimit - 1000
+	tokenLimit := m.config.OpenAI.TokenLimit - m.config.OpenAI.ChatHistoriesRecapTokenLimit
 	chatHistoriesSlices := m.openAI.SplitContentBasedByTokenLimitations(llmFriendlyChatHistories, int(tokenLimit))
 	chatHistoriesSummarizations := make([]*openai.ChatHistorySummarizationOutputs, 0, len(chatHistoriesSlices))
 
@@ -162,7 +162,7 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 	for _, s := range chatHistoriesSlices {
 		var outputs []*openai.ChatHistorySummarizationOutputs
 
-		_, _, err := lo.AttemptWithDelay(3, time.Second, func(tried int, delay time.Duration) error {
+		_, _, err := lo.AttemptWithDelay(5, time.Second, func(tried int, delay time.Duration) error {
 			o, usage, err := m.summarizeChatHistoriesSlice(chatID, s)
 			statusUsage.CompletionTokens += usage.CompletionTokens
 			statusUsage.PromptTokens += usage.PromptTokens
@@ -172,8 +172,9 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 				m.logger.Error(fmt.Sprintf("failed to summarize chat histories slice: %s, tried %d...", s, tried),
 					zap.Int64("chat_id", chatID),
 					zap.String("model_name", m.openAI.GetModelName()),
-					zap.Int64("token_limit", tokenLimit),
+					zap.Int64("configured_chat_histories_recap_token_limit", m.config.OpenAI.ChatHistoriesRecapTokenLimit),
 					zap.Int64("configured_token_limit", m.config.OpenAI.TokenLimit),
+					zap.Int64("calculated_token_limit", tokenLimit),
 				)
 				return err
 			}
@@ -189,8 +190,9 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 				m.logger.Error(fmt.Sprintf("no valid outputs from chat histories slice: %s, tried %d...", s, tried),
 					zap.Int64("chat_id", chatID),
 					zap.String("model_name", m.openAI.GetModelName()),
-					zap.Int64("token_limit", tokenLimit),
+					zap.Int64("configured_chat_histories_recap_token_limit", m.config.OpenAI.ChatHistoriesRecapTokenLimit),
 					zap.Int64("configured_token_limit", m.config.OpenAI.TokenLimit),
+					zap.Int64("calculated_token_limit", tokenLimit),
 				)
 
 				return errors.New("no valid outputs")

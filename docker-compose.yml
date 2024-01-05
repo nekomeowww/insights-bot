@@ -15,19 +15,21 @@ services:
     environment:
       - TIMEZONE_SHIFT_SECONDS
       - TELEGRAM_BOT_TOKEN
+      # # uncomment the following lines if you configured telegram webhook in .env file
+      # - TELEGRAM_BOT_WEBHOOK_URL
+      # - TELEGRAM_BOT_WEBHOOK_PORT
       - OPENAI_API_SECRET
       - OPENAI_API_HOST
       - OPENAI_API_MODEL_NAME
       - OPENAI_API_TOKEN_LIMIT
+      - OPENAI_API_CHAT_HISTORIES_RECAP_TOKEN_LIMIT
       - DB_CONNECTION_STR
       - REDIS_HOST=redis_local
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
+      - REDIS_CLIENT_CACHE_ENABLED
       - LOG_LEVEL
-      # # uncomment the following lines if you configured telegram webhook in .env file
-      # - TELEGRAM_BOT_WEBHOOK_URL
-      # - TELEGRAM_BOT_WEBHOOK_PORT
       # # uncomment the following lines if you configured slack and it's webhook options in .env file
       # - SLACK_CLIENT_ID
       # - SLACK_CLIENT_SECRET
@@ -69,19 +71,21 @@ services:
     environment:
       - TIMEZONE_SHIFT_SECONDS
       - TELEGRAM_BOT_TOKEN
+      # # uncomment the following lines if you configured telegram webhook in .env file
+      # - TELEGRAM_BOT_WEBHOOK_URL
+      # - TELEGRAM_BOT_WEBHOOK_PORT
       - OPENAI_API_SECRET
       - OPENAI_API_HOST
       - OPENAI_API_MODEL_NAME
       - OPENAI_API_TOKEN_LIMIT
+      - OPENAI_API_CHAT_HISTORIES_RECAP_TOKEN_LIMIT
       - DB_CONNECTION_STR
       - REDIS_HOST=redis_local
       - REDIS_PORT=6379
       - REDIS_TLS_ENABLED=false
       - REDIS_PASSWORD=123456
+      - REDIS_CLIENT_CACHE_ENABLED
       - LOG_LEVEL
-      # # uncomment the following lines if you configured telegram webhook in .env file
-      # - TELEGRAM_BOT_WEBHOOK_URL
-      # - TELEGRAM_BOT_WEBHOOK_PORT
       # # uncomment the following lines if you configured slack and it's webhook options in .env file
       # - SLACK_CLIENT_ID
       # - SLACK_CLIENT_SECRET

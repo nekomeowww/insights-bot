@@ -25,7 +25,7 @@ const (
 
 	EnvDiscordBotToken       = "DISCORD_BOT_TOKEN" //nolint:gosec
 	EnvDiscordBotPublicKey   = "DISCORD_BOT_PUBLIC_KEY"
-	EnvDiscordBotWebhookPort = "DISCORD_BOT_WEBHOOK_PORT" //nolint:gosec
+	EnvDiscordBotWebhookPort = "DISCORD_BOT_WEBHOOK_PORT"
 
 	EnvOpenAIAPISecret                       = "OPENAI_API_SECRET" //nolint:gosec
 	EnvOpenAIAPIHost                         = "OPENAI_API_HOST"

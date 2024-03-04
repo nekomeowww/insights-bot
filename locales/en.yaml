@@ -1,0 +1,15 @@
+system:
+  commands:
+    start:
+      help: Start interacting with the bot
+    help:
+      help: Get help
+      message: |
+        Hi! 👋 Welcome using Insights Bot!
+
+        I currently support these commands:
+
+        {{ .Commands }}
+    cancel:
+      help: Cancel the current activated operation
+      alreadyCancelledAll: There is no activated operation to cancel

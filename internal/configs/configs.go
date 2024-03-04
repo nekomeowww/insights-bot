@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
+	"github.com/nekomeowww/xo"
 	"github.com/samber/lo"
 	goopenai "github.com/sashabaranov/go-openai"
 )
@@ -53,6 +54,8 @@ const (
 
 	EnvHardLimitManualRecapRatePerSeconds      = "HARD_LIMIT_MANUAL_RECAP_RATE_PER_SECONDS"
 	EnvHardLimitSummarizeWebpageRatePerSeconds = "HARD_LIMIT_SMR_WEBPAGE_RATE_PER_SECONDS"
+
+	EnvLocalesDir = "LOCALES_DIR"
 )
 
 type SectionPineconeIndexes struct {
@@ -125,6 +128,7 @@ type Config struct {
 	LogLevel             string
 	LogFilePath          string
 	HardLimit            SectionHardLimit
+	LocalesDir           string
 }
 
 func NewConfig() func() (*Config, error) {
@@ -250,6 +254,7 @@ func NewConfig() func() (*Config, error) {
 				ManualRecapRatePerSeconds:      manualRecapRatePerSecondsHardLimit,
 				SummarizeWebpageRatePerSeconds: summarizeWebpageRatePerSecondsHardLimit,
 			},
+			LocalesDir: getEnv(EnvLocalesDir),
 		}, nil
 	}
 }
@@ -270,7 +275,8 @@ func NewTestConfig() func() *Config {
 				TLSEnabled:         false,
 				ClientCacheEnabled: false,
 			},
-			LogLevel: "debug",
+			LogLevel:   "debug",
+			LocalesDir: xo.RelativePathOf("../locales"),
 		}
 	}
 }

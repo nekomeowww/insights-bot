@@ -1,0 +1,15 @@
+system:
+  commands:
+    start:
+      help: 开始与 Bot 的交互
+    help:
+      help: 获取帮助
+      message: |
+        你好！👋 欢迎使用 Insights Bot！
+
+        我当前支持这些命令：
+
+        {{ .Commands }}
+    cancel:
+      help: 取消当前操作
+      alreadyCancelledAll: 已经没有正在进行的操作了

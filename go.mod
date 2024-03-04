@@ -21,6 +21,7 @@ require (
 	github.com/nekomeowww/go-pinecone v0.1.0
 	github.com/nekomeowww/timecapsule/v2 v2.2.0
 	github.com/nekomeowww/xo v1.3.0
+	github.com/nicksnyder/go-i18n/v2 v2.4.0
 	github.com/pkoukk/tiktoken-go v0.1.6
 	github.com/redis/rueidis v1.0.23
 	github.com/samber/lo v1.39.0
@@ -33,6 +34,8 @@ require (
 	go.uber.org/multierr v1.11.0
 	go.uber.org/ratelimit v0.3.0
 	go.uber.org/zap v1.26.0
+	golang.org/x/text v0.14.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -101,8 +104,6 @@ require (
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.16.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

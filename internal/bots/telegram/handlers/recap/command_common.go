@@ -168,7 +168,7 @@ func newSubscribeRecapCommandWhenUserBlockedMessage(bot *tgbot.Bot, hashKey stri
 		"", bot.Self.UserName, bot.Self.UserName, hashKey)
 }
 
-func (h *CommandHandler) handleUserNeverStartedChatOrBlockedErr(c *tgbot.Context, chatID int64, chatTitle string, message string) (tgbot.Response, error) {
+func (h *CommandHandler) handleUserNeverStartedChatOrBlockedErr(c *tgbot.Context, chatID int64, _ string, message string) (tgbot.Response, error) {
 	msg := tgbotapi.NewMessage(chatID, message)
 	msg.ReplyToMessageID = c.Update.Message.MessageID
 	msg.ParseMode = tgbotapi.ModeHTML

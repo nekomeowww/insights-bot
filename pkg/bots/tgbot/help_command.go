@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/samber/lo"
 )
 
 type Command struct {
 	Command     string
-	HelpMessage string
+	HelpMessage func(*Context) string
 	Handler     Handler
 }
 
@@ -36,8 +37,8 @@ func (h *helpCommandHandler) Command() string {
 	return "help"
 }
 
-func (h *helpCommandHandler) CommandHelp() string {
-	return "获取帮助"
+func (h *helpCommandHandler) CommandHelp(c *Context) string {
+	return c.T("system.commands.help.help")
 }
 
 func (h *helpCommandHandler) handle(c *Context) (Response, error) {
@@ -56,10 +57,6 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 		return nil, nil
 	}
 
-	helpMessage := strings.Builder{}
-	helpMessage.WriteString("你好，欢迎使用 Insights Bot！\n\n")
-	helpMessage.WriteString("我当前支持这些命令：\n\n")
-
 	commandGroupHelpMessages := make([]string, 0)
 
 	if len(h.defaultGroup.commands) > 0 {
@@ -77,9 +74,12 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 			commandHelpMessage.WriteString("@")
 			commandHelpMessage.WriteString(c.Bot.Self.UserName)
 
-			if cmd.HelpMessage != "" {
-				commandHelpMessage.WriteString(" - ")
-				commandHelpMessage.WriteString(cmd.HelpMessage)
+			if cmd.HelpMessage != nil {
+				message := cmd.HelpMessage(c)
+				if message != "" {
+					commandHelpMessage.WriteString(" - ")
+					commandHelpMessage.WriteString(message)
+				}
 			}
 
 			commandHelpMessages = append(commandHelpMessages, commandHelpMessage.String())
@@ -88,7 +88,5 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 		commandGroupHelpMessages = append(commandGroupHelpMessages, fmt.Sprintf("%s%s", lo.Ternary(group.name != "", fmt.Sprintf("<b>%s</b>\n\n", EscapeHTMLSymbols(group.name)), ""), strings.Join(commandHelpMessages, "\n")))
 	}
 
-	helpMessage.WriteString(strings.Join(commandGroupHelpMessages, "\n\n"))
-
-	return c.NewMessageReplyTo(helpMessage.String(), c.Update.Message.MessageID).WithParseModeHTML(), nil
+	return c.NewMessageReplyTo(c.T("system.commands.help.message", i18n.M{"Commands": strings.Join(commandGroupHelpMessages, "\n\n")}), c.Update.Message.MessageID).WithParseModeHTML(), nil
 }

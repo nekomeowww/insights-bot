@@ -8,9 +8,11 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/redis/rueidis"
+	"go.uber.org/zap"
 )
 
 type UpdateType string
@@ -41,6 +43,7 @@ type Context struct {
 	Bot    *Bot
 	Update tgbotapi.Update
 	Logger *logger.Logger
+	I18n   *i18n.I18n
 
 	mutex         sync.Mutex
 	rueidisClient rueidis.Client
@@ -55,11 +58,12 @@ type Context struct {
 	callbackQueryHandlerActionDataIsEmpty bool
 }
 
-func NewContext(bot *tgbotapi.BotAPI, update tgbotapi.Update, logger *logger.Logger, rueidisClient rueidis.Client) *Context {
+func NewContext(bot *tgbotapi.BotAPI, update tgbotapi.Update, logger *logger.Logger, i18n *i18n.I18n, rueidisClient rueidis.Client) *Context {
 	return &Context{
 		Bot:                                   &Bot{BotAPI: bot, logger: logger, rueidisClient: rueidisClient},
 		Update:                                update,
 		Logger:                                logger,
+		I18n:                                  i18n,
 		rueidisClient:                         rueidisClient,
 		isCallbackQuery:                       false,
 		callbackQueryHandlerRoute:             "",
@@ -128,6 +132,27 @@ func (c *Context) IsAborted() bool {
 	defer c.mutex.Unlock()
 
 	return c.abort
+}
+
+func (c *Context) T(key string, args ...any) string {
+	return c.I18n.TWithLanguage(c.Language(), key, args...)
+}
+
+func (c *Context) Language() string {
+	if c.Update.SentFrom() == nil {
+		c.Logger.Warn("update.SentFrom() is nil, fallback to 'en' language.")
+		return "en"
+	}
+
+	languageCode := c.Update.SentFrom().LanguageCode
+	if languageCode == "" {
+		c.Logger.Warn("update.SentFrom().LanguageCode is empty, fallback to 'en' language.")
+		return "en"
+	}
+
+	c.Logger.Debug("resolved language code", zap.String("languageCode", languageCode))
+
+	return languageCode
 }
 
 func (c *Context) initForCallbackQuery(route, routeHash, actionDataHash string) {

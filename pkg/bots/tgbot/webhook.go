@@ -17,9 +17,11 @@ func newWebhookServer(patternPath, port string, bot *tgbotapi.BotAPI, updateChan
 		update, err := bot.HandleUpdate(r)
 		if err != nil {
 			errMsg, _ := json.Marshal(map[string]string{"error": err.Error()})
+
 			w.WriteHeader(http.StatusBadRequest)
 			w.Header().Set("Content-Type", "application/json")
 			_, _ = w.Write(errMsg)
+
 			return
 		}
 

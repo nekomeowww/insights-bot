@@ -29,7 +29,7 @@ func TestBindFromCallbackQueryData(t *testing.T) {
 		Hello: "world",
 	}
 
-	ctx := NewContext(nil, tgbotapi.Update{}, logger, c)
+	ctx := NewContext(nil, tgbotapi.Update{}, logger, nil, c)
 	ctx.isCallbackQuery = true
 
 	ctx.callbackQueryHandlerActionData = string(lo.Must(json.Marshal(data)))

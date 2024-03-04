@@ -229,6 +229,7 @@ func (b *BotService) Start(ctx context.Context) error {
 
 		b.startPullUpdates()
 		b.webhookStarted = true
+
 		return nil
 	})
 }

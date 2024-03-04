@@ -24,8 +24,8 @@ func (h *startCommandHandler) Command() string {
 	return "start"
 }
 
-func (h *startCommandHandler) CommandHelp() string {
-	return "开始与 Bot 的交互"
+func (h *startCommandHandler) CommandHelp(c *Context) string {
+	return c.T("system.commands.start.help")
 }
 
 func (h *startCommandHandler) handle(c *Context) (Response, error) {

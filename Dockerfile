@@ -1,7 +1,6 @@
 # syntax=docker/dockerfile:1
 
 # --- builder ---
-
 FROM golang:1.21 as builder
 
 RUN GO111MODULE=on
@@ -23,8 +22,10 @@ FROM debian as runner
 RUN apt update && apt upgrade -y && apt install -y ca-certificates curl && update-ca-certificates
 
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
+COPY --from=builder /app/insights-bot/locales /etc/insights-bot/locales
 
 ENV LOG_FILE_PATH /var/log/insights-bot/insights-bot.log
+ENV LOCALES_DIR /etc/insights-bot/locales
 
 EXPOSE 7069
 

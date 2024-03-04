@@ -34,7 +34,7 @@ func checkBotIsAdmin(ctx *tgbot.Context) error {
 	return nil
 }
 
-func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
+func checkToggle(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	err := checkBotIsAdmin(ctx)
 	if err != nil {
 		return err
@@ -61,7 +61,7 @@ func checkToggle(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
 	return nil
 }
 
-func checkAssignMode(ctx *tgbot.Context, chatID int64, user *tgbotapi.User) error {
+func checkAssignMode(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	err := checkBotIsAdmin(ctx)
 	if err != nil {
 		return err

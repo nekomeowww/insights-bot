@@ -29,8 +29,8 @@ func (h *cancelCommandHandler) Command() string {
 	return "cancel"
 }
 
-func (h *cancelCommandHandler) CommandHelp() string {
-	return "取消正在进行的操作"
+func (h *cancelCommandHandler) CommandHelp(c *Context) string {
+	return c.T("system.commands.cancel.help")
 }
 
 func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
@@ -59,5 +59,5 @@ func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
 		return nil, err
 	}
 
-	return c.NewMessageReplyTo("已经没有正在进行的操作了", c.Update.Message.MessageID), nil
+	return c.NewMessageReplyTo(c.T("system.commands.cancel.alreadyCancelledAll"), c.Update.Message.MessageID), nil
 }

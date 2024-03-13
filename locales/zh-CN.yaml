@@ -1,15 +1,34 @@
 system:
   commands:
-    start:
-      help: 开始与 Bot 的交互
-    help:
-      help: 获取帮助
-      message: |
-        你好！👋 欢迎使用 Insights Bot！
+    groups:
+      basic:
+        name: 基础命令
+        commands:
+          start:
+            help: 开始与 Bot 的交互
+          help:
+            help: 获取帮助
+            message: |
+              你好！👋 欢迎使用 Insights Bot！
 
-        我当前支持这些命令：
+              我当前支持这些命令：
 
-        {{ .Commands }}
-    cancel:
-      help: 取消当前操作
-      alreadyCancelledAll: 已经没有正在进行的操作了
+              {{ .Commands }}
+          cancel:
+            help: 取消当前操作
+            alreadyCancelledAll: 已经没有正在进行的操作了
+
+commands:
+  groups:
+    summarization:
+      name: 量子速读
+      commands:
+        smr:
+          help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
+          noLinksFound: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
+          invalidLink: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+          reading: 请稍等，量子速读中...
+          rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
+          failedToRead: 量子速读失败了，可以再试试？
+          failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
+          contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。

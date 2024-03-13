@@ -56,7 +56,9 @@ func NewDispatcher() func(logger *logger.Logger, i18n *i18n.I18n) *Dispatcher {
 
 		d.startCommandHandler.helpCommandHandler = d.helpCommand
 
-		d.OnCommandGroup("基础命令", []Command{
+		d.OnCommandGroup(func(c *Context) string {
+			return c.T("system.commands.groups.basic.name")
+		}, []Command{
 			{Command: d.helpCommand.Command(), HelpMessage: d.helpCommand.CommandHelp, Handler: NewHandler(d.helpCommand.handle)},
 			{Command: d.cancelCommand.Command(), HelpMessage: d.cancelCommand.CommandHelp, Handler: NewHandler(d.cancelCommand.handle)},
 			{Command: d.startCommandHandler.Command(), HelpMessage: d.startCommandHandler.CommandHelp, Handler: NewHandler(d.startCommandHandler.handle)},
@@ -82,7 +84,7 @@ func (d *Dispatcher) OnCommand(cmd string, commandHelp func(c *Context) string, 
 	d.commandHandlers[cmd] = h.Handle
 }
 
-func (d *Dispatcher) OnCommandGroup(groupName string, group []Command) {
+func (d *Dispatcher) OnCommandGroup(groupName func(*Context) string, group []Command) {
 	d.helpCommand.commandGroups = append(d.helpCommand.commandGroups, commandGroup{name: groupName, commands: group})
 
 	for _, c := range group {

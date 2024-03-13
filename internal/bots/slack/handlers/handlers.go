@@ -93,7 +93,8 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
 		if smr.IsUrlCheckError(err) {
-			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smr.FormatUrlCheckError(err, bot.FromPlatformSlack)))
+			// TODO: i18n support for slack
+			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smr.FormatUrlCheckError(err, bot.FromPlatformSlack, "", nil)))
 			return
 		}
 
@@ -125,6 +126,8 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		URL:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,
+		// TODO: support i18n for discord and slack
+		Language: "zh-CN",
 	})
 	if err != nil {
 		h.logger.Warn("slack: failed to add task", zap.Error(err))

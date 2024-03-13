@@ -16,7 +16,7 @@ type Command struct {
 }
 
 type commandGroup struct {
-	name     string
+	name     func(*Context) string
 	commands []Command
 }
 
@@ -38,7 +38,7 @@ func (h *helpCommandHandler) Command() string {
 }
 
 func (h *helpCommandHandler) CommandHelp(c *Context) string {
-	return c.T("system.commands.help.help")
+	return c.T("system.commands.groups.basic.commands.help.help")
 }
 
 func (h *helpCommandHandler) handle(c *Context) (Response, error) {
@@ -85,8 +85,18 @@ func (h *helpCommandHandler) handle(c *Context) (Response, error) {
 			commandHelpMessages = append(commandHelpMessages, commandHelpMessage.String())
 		}
 
-		commandGroupHelpMessages = append(commandGroupHelpMessages, fmt.Sprintf("%s%s", lo.Ternary(group.name != "", fmt.Sprintf("<b>%s</b>\n\n", EscapeHTMLSymbols(group.name)), ""), strings.Join(commandHelpMessages, "\n")))
+		commandGroupHelpMessages = append(commandGroupHelpMessages, fmt.Sprintf("%s%s", lo.Ternary(
+			group.name(c) != "",
+			fmt.Sprintf("<b>%s</b>\n\n", EscapeHTMLSymbols(group.name(c))), ""),
+			strings.Join(commandHelpMessages, "\n"),
+		))
 	}
 
-	return c.NewMessageReplyTo(c.T("system.commands.help.message", i18n.M{"Commands": strings.Join(commandGroupHelpMessages, "\n\n")}), c.Update.Message.MessageID).WithParseModeHTML(), nil
+	return c.
+		NewMessageReplyTo(
+			c.T("system.commands.groups.basic.commands.help.message", i18n.M{
+				"Commands": strings.Join(commandGroupHelpMessages, "\n\n"),
+			}),
+			c.Update.Message.MessageID).
+		WithParseModeHTML(), nil
 }

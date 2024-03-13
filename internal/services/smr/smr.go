@@ -13,6 +13,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/bots/discordbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
@@ -34,6 +35,7 @@ type NewServiceParam struct {
 
 	Config *configs.Config
 	Logger *logger.Logger
+	I18n   *i18n.I18n
 
 	RedisClient *datastore.Redis
 	Ent         *datastore.Ent
@@ -49,6 +51,7 @@ type NewServiceParam struct {
 type Service struct {
 	logger *logger.Logger
 	config *configs.Config
+	i18n   *i18n.I18n
 
 	ent *datastore.Ent
 
@@ -73,8 +76,9 @@ func NewService() func(param NewServiceParam) (*Service, error) {
 	return func(param NewServiceParam) (*Service, error) {
 		s := &Service{
 			logger:     param.Logger,
-			ent:        param.Ent,
+			i18n:       param.I18n,
 			config:     param.Config,
+			ent:        param.Ent,
 			model:      param.Model,
 			queue:      param.Queue,
 			tgBot:      param.TgBot,

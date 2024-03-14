@@ -9,6 +9,7 @@ import (
 type TaskInfo struct {
 	Platform bot.FromPlatform `json:"platform"`
 	URL      string           `json:"url"` // url to summarize
+	Language string           `json:"language"`
 
 	ChatID    int64 `json:"chatID"`    // only for telegram
 	MessageID int   `json:"messageID"` // used to edit the reply message of request, not work in slack or discordbot currently

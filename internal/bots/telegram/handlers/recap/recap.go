@@ -38,7 +38,9 @@ func NewHandlers() func(NewHandlersParams) *Handlers {
 }
 
 func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
-	dispatcher.OnCommandGroup("聊天回顾", []tgbot.Command{
+	dispatcher.OnCommandGroup(func(c *tgbot.Context) string {
+		return "聊天回顾"
+	}, []tgbot.Command{
 		{
 			Command: "recap",
 			Handler: tgbot.NewHandler(h.command.handleRecapCommand),

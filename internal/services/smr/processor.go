@@ -31,14 +31,14 @@ func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizatio
 	}
 }
 
-func (s *Service) processError(err error) string {
+func (s *Service) processError(err error, language string) string {
 	if errors.Is(err, smr.ErrContentNotSupported) {
-		return "暂时不支持量子速读这样的内容呢，可以换个别的链接试试。"
+		return s.i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.contentNotSupported")
 	} else if errors.Is(err, smr.ErrNetworkError) || errors.Is(err, smr.ErrRequestFailed) {
-		return "量子速读的链接读取失败了哦。可以再试试？"
+		return s.i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.failedToReadDueToFailedToFetch")
 	}
 
-	return "量子速读失败了。可以再试试？"
+	return s.i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.failedToRead")
 }
 
 func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.TaskInfo, result string) {
@@ -174,7 +174,8 @@ func (s *Service) processor(info types.TaskInfo) {
 	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
 		s.logger.Warn("smr service: summarization failed", zap.Error(err))
-		errStr := s.processError(err)
+		// TODO: support i18n for discord and slack
+		errStr := s.processError(err, lo.Ternary(info.Language == "", "en", info.Language))
 		s.sendResult(nil, info, errStr)
 
 		return

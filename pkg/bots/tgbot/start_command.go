@@ -25,7 +25,7 @@ func (h *startCommandHandler) Command() string {
 }
 
 func (h *startCommandHandler) CommandHelp(c *Context) string {
-	return c.T("system.commands.start.help")
+	return c.T("system.commands.groups.basic.commands.start.help")
 }
 
 func (h *startCommandHandler) handle(c *Context) (Response, error) {

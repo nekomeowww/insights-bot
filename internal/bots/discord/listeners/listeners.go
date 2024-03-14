@@ -58,7 +58,8 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		if smr.IsUrlCheckError(err) {
 			err = event.CreateMessage(
 				discord.NewMessageCreateBuilder().
-					SetContent(smr.FormatUrlCheckError(err, bot.FromPlatformDiscord)).
+					// TODO: i18n support for discord
+					SetContent(smr.FormatUrlCheckError(err, bot.FromPlatformDiscord, "", nil)).
 					Build(),
 			)
 			if err != nil {
@@ -89,6 +90,8 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		Platform:  bot.FromPlatformDiscord,
 		URL:       urlString,
 		ChannelID: event.Channel().ID().String(),
+		// TODO: support i18n for discord and slack
+		Language: "zh-CN",
 	})
 	if err != nil {
 		b.logger.Warn("discord: failed to add task", zap.Error(err))

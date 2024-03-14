@@ -30,7 +30,7 @@ func (h *cancelCommandHandler) Command() string {
 }
 
 func (h *cancelCommandHandler) CommandHelp(c *Context) string {
-	return c.T("system.commands.cancel.help")
+	return c.T("system.commands.groups.basic.commands.cancel.help")
 }
 
 func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
@@ -59,5 +59,5 @@ func (h *cancelCommandHandler) handle(c *Context) (Response, error) {
 		return nil, err
 	}
 
-	return c.NewMessageReplyTo(c.T("system.commands.cancel.alreadyCancelledAll"), c.Update.Message.MessageID), nil
+	return c.NewMessageReplyTo(c.T("system.commands.groups.basic.commands.cancel.alreadyCancelledAll"), c.Update.Message.MessageID), nil
 }

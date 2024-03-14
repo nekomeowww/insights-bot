@@ -1,15 +1,54 @@
 system:
   commands:
-    start:
-      help: 开始与 Bot 的交互
-    help:
-      help: 获取帮助
-      message: |
-        你好！👋 欢迎使用 Insights Bot！
+    groups:
+      basic:
+        name: 基础命令
+        commands:
+          start:
+            help: 开始与 Bot 的交互
+          help:
+            help: 获取帮助
+            message: |
+              你好！👋 欢迎使用 Insights Bot！
 
-        我当前支持这些命令：
+              我当前支持这些命令：
 
-        {{ .Commands }}
-    cancel:
-      help: 取消当前操作
-      alreadyCancelledAll: 已经没有正在进行的操作了
+              {{ .Commands }}
+          cancel:
+            help: 取消当前操作
+            alreadyCancelledAll: 已经没有正在进行的操作了
+
+commands:
+  groups:
+    summarization:
+      name: 量子速读
+      commands:
+        smr:
+          help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
+          noLinksFound: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
+          invalidLink: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+          reading: 请稍等，量子速读中...
+          rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
+          failedToRead: 量子速读失败了，可以再试试？
+          failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
+          contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
+
+prompts:
+  smr:
+    - role: system
+      content: |
+        你是我的网页文章阅读助理。我将为你提供文章的标题、作
+        者、所抓取的网页中的正文等信息，然后你将对文章做出总结。\n请你在总结时满足以下要求：
+        1. 首先如果文章的标题不是中文的请依据上下文将标题信达雅的翻译为简体中文并放在第一行
+        2. 然后从我提供的文章信息中总结出一个三百字以内的文章的摘要
+        3. 最后，你将利用你已有的知识和经验，对我提供的文章信息提出 3 个具有创造性和发散思维的问题
+        4. 请用简体中文进行回复
+        最终你回复的消息格式应像这个例句一样（例句中的双花括号为需要替换的内容）：\n
+        {{简体中文标题，可省略}}\n\n摘要：{{文章的摘要}}\n\n关联提问：\n1. {{关联提问 1}}\n2. {{关联提问 2}}\n2. {{关联提问 3}}
+    - role: user
+      content: |
+        我的第一个要求相关的信息如下：
+        文章标题：{{ .Title }}
+        文章作者：{{ .By }}
+        文章正文：{{ .Content }}
+        接下来请你完成我所要求的任务。

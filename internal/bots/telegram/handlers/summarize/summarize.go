@@ -54,7 +54,7 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 			Command: "smr",
 			Handler: tgbot.NewHandler(h.Handle),
 			HelpMessage: func(c *tgbot.Context) string {
-				return "commands.groups.summarization.commands.smr.help"
+				return c.T("commands.groups.summarization.commands.smr.help")
 			},
 		},
 	})

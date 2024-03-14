@@ -30,4 +30,5 @@ commands:
           reading: 请稍等，量子速读中...
           rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
           failedToRead: 量子速读失败了，可以再试试？
+          failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
           contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。

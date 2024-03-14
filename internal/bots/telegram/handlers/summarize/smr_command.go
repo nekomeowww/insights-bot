@@ -70,7 +70,10 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 		Language:  c.Language(),
 	})
 	if err != nil {
-		return nil, tgbot.NewExceptionError(err).WithMessage("commands.groups.summarization.commands.smr.failedToRead").WithEdit(&processingMessage)
+		return nil, tgbot.
+			NewExceptionError(err).
+			WithMessage(c.T("commands.groups.summarization.commands.smr.failedToRead")).
+			WithEdit(&processingMessage)
 	}
 
 	return nil, nil

@@ -2,14 +2,14 @@ system:
   commands:
     groups:
       basic:
-        name: 基础命令
+        name: Basic Commands
         commands:
           start:
             help: Start interacting with the bot
           help:
             help: Get help
             message: |
-              Hi! 👋 Welcome using Insights Bot!
+              Hi! 👋 Welcome to using Insights Bot!
 
               I currently support these commands:
 
@@ -21,34 +21,35 @@ system:
 commands:
   groups:
     summarization:
-      name: 量子速读
+      name: Quantum Speed Reading
       commands:
         smr:
-          help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
-          noLinksFound: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
-          invalidLink: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
-          reading: 请稍等，量子速读中...
-          rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
-          failedToRead: 量子速读失败了，可以再试试？
-          failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
-          contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
+          help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command: /smr <code>&lt;link&gt;</code>.
+          noLinksFound: It appears no link was detected. Could you kindly provide a valid URL? For usage: <code>/smr &lt;link&gt;</code>.
+          invalidLink: We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage: <code>/smr &lt;link&gt;</code>.
+          reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
+          rateLimitExceeded: Our apologies, but your recent action has activated our rate limiting system to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
+          failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
+          failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
+          contentNotSupported: The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.
+
+
 
 prompts:
   smr:
     - role: system
       content: |
-        你是我的网页文章阅读助理。我将为你提供文章的标题、作
-        者、所抓取的网页中的正文等信息，然后你将对文章做出总结。\n请你在总结时满足以下要求：
-        1. 首先如果文章的标题不是中文的请依据上下文将标题信达雅的翻译为简体中文并放在第一行
-        2. 然后从我提供的文章信息中总结出一个三百字以内的文章的摘要
-        3. 最后，你将利用你已有的知识和经验，对我提供的文章信息提出 3 个具有创造性和发散思维的问题
-        4. 请用简体中文进行回复
-        最终你回复的消息格式应像这个例句一样（例句中的双花括号为需要替换的内容）：\n
-        {{简体中文标题，可省略}}\n\n摘要：{{文章的摘要}}\n\n关联提问：\n1. {{关联提问 1}}\n2. {{关联提问 2}}\n2. {{关联提问 3}}
+        You are my web article reading assistant. I will provide you with the article's title, author, and the main content captured from the web page, and then you will summarize the article. \nPlease meet the following requirements when summarizing:
+        1. First, if the article's title is not in Chinese, please translate it into simplified Chinese elegantly according to the context and place it at the first line
+        2. Then, summarize the article in no more than 300 words based on the information I provided
+        3. Lastly, using your existing knowledge and experience, propose 3 creative and divergent questions regarding the information I provided
+        4. Please reply in Simplified Chinese
+        The format of your reply should be like this example (where double curly braces need to be replaced): \n
+        {{Simplified Chinese title, optional}}\n\nSummary: {{Summary of the article}}\n\nRelated Questions:\n1. {{Related Question 1}}\n2. {{Related Question 2}}\n3. {{Related Question 3}}
     - role: user
       content: |
-        我的第一个要求相关的信息如下：
-        文章标题：{{ .Title }}
-        文章作者：{{ .By }}
-        文章正文：{{ .Content }}
-        接下来请你完成我所要求的任务。
+        The information related to my first request is as follows:
+        Article title: {{ .Title }}
+        Article author: {{ .By }}
+        Article content: {{ .Content }}
+        Please complete the task I requested.

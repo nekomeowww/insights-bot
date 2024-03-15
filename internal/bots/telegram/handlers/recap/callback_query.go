@@ -156,7 +156,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 	if actionData.Status {
 		errMessage := configureRecapGeneralInstructionMessage + "\n\n" + "聊天记录回顾功能开启失败，请稍后再试！"
 
-		err = h.tgchats.EnableChatHistoriesRecap(chatID, telegram.ChatType(chatType), chatTitle)
+		err = h.tgchats.EnableChatHistoriesRecapForGroups(chatID, telegram.ChatType(chatType), chatTitle)
 		if err != nil {
 			return nil, tgbot.
 				NewExceptionError(err).
@@ -176,7 +176,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 	} else {
 		errMessage := configureRecapGeneralInstructionMessage + "\n\n" + "聊天记录回顾功能关闭失败，请稍后再试！"
 
-		err = h.tgchats.DisableChatHistoriesRecap(chatID, telegram.ChatType(chatType), chatTitle)
+		err = h.tgchats.DisableChatHistoriesRecapForGroups(chatID, telegram.ChatType(chatType), chatTitle)
 		if err != nil {
 			return nil, tgbot.
 				NewExceptionError(err).
@@ -276,7 +276,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 
 	h.logger.Info("assigned recap mode for chat", zap.String("recap_mode", actionData.Mode.String()))
 
-	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
+	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, chatTitle)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).
@@ -489,7 +489,7 @@ func (h *CallbackQueryHandler) handleAutoRecapRatesPerDaySelect(c *tgbot.Context
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
+	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, chatTitle)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

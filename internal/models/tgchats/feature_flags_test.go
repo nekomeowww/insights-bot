@@ -20,7 +20,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.EnableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
+		err := model.EnableChatHistoriesRecapForGroups(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -34,7 +34,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 
 		assert.True(featureFlag.FeatureChatHistoriesRecap)
 
-		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, "")
+		enabled, err := model.HasChatHistoriesRecapEnabledForGroups(chatID, "")
 		require.NoError(err)
 		assert.True(enabled)
 	})
@@ -43,7 +43,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		assert := assert.New(t)
 		require := require.New(t)
 
-		err := model.DisableChatHistoriesRecap(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
+		err := model.DisableChatHistoriesRecapForGroups(chatID, telegram.ChatTypeGroup, xo.RandomHashString(6))
 		require.NoError(err)
 
 		featureFlag, err := model.ent.TelegramChatFeatureFlags.
@@ -56,7 +56,7 @@ func TestChatHistoriesRecap(t *testing.T) {
 		require.NotNil(featureFlag)
 		assert.False(featureFlag.FeatureChatHistoriesRecap)
 
-		enabled, err := model.HasChatHistoriesRecapEnabled(chatID, "")
+		enabled, err := model.HasChatHistoriesRecapEnabledForGroups(chatID, "")
 		require.NoError(err)
 		assert.False(enabled)
 	})
@@ -73,13 +73,13 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 	chatID3 := xo.RandomInt64()
 	chatTitle3 := xo.RandomHashString(6)
 
-	err := model.EnableChatHistoriesRecap(chatID1, telegram.ChatTypeGroup, chatTitle1)
+	err := model.EnableChatHistoriesRecapForGroups(chatID1, telegram.ChatTypeGroup, chatTitle1)
 	require.NoError(err)
 
-	err = model.EnableChatHistoriesRecap(chatID2, telegram.ChatTypeGroup, chatTitle2)
+	err = model.EnableChatHistoriesRecapForGroups(chatID2, telegram.ChatTypeGroup, chatTitle2)
 	require.NoError(err)
 
-	err = model.EnableChatHistoriesRecap(chatID3, telegram.ChatTypeGroup, chatTitle3)
+	err = model.EnableChatHistoriesRecapForGroups(chatID3, telegram.ChatTypeGroup, chatTitle3)
 	require.NoError(err)
 
 	defer func() {
@@ -87,7 +87,7 @@ func TestListChatHistoriesRecapEnabledChats(t *testing.T) {
 		assert.NoError(err)
 	}()
 
-	chats, err := model.ListChatHistoriesRecapEnabledChats()
+	chats, err := model.ListChatHistoriesRecapEnabledChatsForGroups()
 	require.NoError(err)
 	require.Len(chats, 3)
 	assert.ElementsMatch([]int64{chatID1, chatID2, chatID3}, lo.Map(chats, func(item *ent.TelegramChatFeatureFlags, _ int) int64 { return item.ChatID }))

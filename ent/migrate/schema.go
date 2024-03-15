@@ -165,7 +165,8 @@ var (
 		{Name: "chat_id", Type: field.TypeInt64, Unique: true},
 		{Name: "chat_type", Type: field.TypeString, Size: 2147483647},
 		{Name: "chat_title", Type: field.TypeString, Size: 2147483647, Default: ""},
-		{Name: "feature_chat_histories_recap", Type: field.TypeBool},
+		{Name: "feature_chat_histories_recap", Type: field.TypeBool, Default: false},
+		{Name: "feature_language", Type: field.TypeString, Size: 2147483647, Default: ""},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}

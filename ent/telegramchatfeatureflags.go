@@ -25,6 +25,8 @@ type TelegramChatFeatureFlags struct {
 	ChatTitle string `json:"chat_title,omitempty"`
 	// FeatureChatHistoriesRecap holds the value of the "feature_chat_histories_recap" field.
 	FeatureChatHistoriesRecap bool `json:"feature_chat_histories_recap,omitempty"`
+	// FeatureLanguage holds the value of the "feature_language" field.
+	FeatureLanguage string `json:"feature_language,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -41,7 +43,7 @@ func (*TelegramChatFeatureFlags) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case telegramchatfeatureflags.FieldChatID, telegramchatfeatureflags.FieldCreatedAt, telegramchatfeatureflags.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
-		case telegramchatfeatureflags.FieldChatType, telegramchatfeatureflags.FieldChatTitle:
+		case telegramchatfeatureflags.FieldChatType, telegramchatfeatureflags.FieldChatTitle, telegramchatfeatureflags.FieldFeatureLanguage:
 			values[i] = new(sql.NullString)
 		case telegramchatfeatureflags.FieldID:
 			values[i] = new(uuid.UUID)
@@ -89,6 +91,12 @@ func (tcff *TelegramChatFeatureFlags) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field feature_chat_histories_recap", values[i])
 			} else if value.Valid {
 				tcff.FeatureChatHistoriesRecap = value.Bool
+			}
+		case telegramchatfeatureflags.FieldFeatureLanguage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field feature_language", values[i])
+			} else if value.Valid {
+				tcff.FeatureLanguage = value.String
 			}
 		case telegramchatfeatureflags.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -149,6 +157,9 @@ func (tcff *TelegramChatFeatureFlags) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("feature_chat_histories_recap=")
 	builder.WriteString(fmt.Sprintf("%v", tcff.FeatureChatHistoriesRecap))
+	builder.WriteString(", ")
+	builder.WriteString("feature_language=")
+	builder.WriteString(tcff.FeatureLanguage)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", tcff.CreatedAt))

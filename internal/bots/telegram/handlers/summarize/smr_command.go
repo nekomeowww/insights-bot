@@ -20,6 +20,11 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	if urlString == "" && c.Update.Message.ReplyToMessage != nil && c.Update.Message.ReplyToMessage.Text != "" {
 		urlString = c.Update.Message.ReplyToMessage.Text
 	}
+	if urlString == "" {
+		return nil, tgbot.
+			NewMessageError(c.T("commands.groups.summarization.commands.smr.noLinksFound")).
+			WithReply(c.Update.Message)
+	}
 
 	urlString = strings.TrimSpace(urlString)
 	if !strings.HasPrefix(urlString, "http://") && !strings.HasPrefix(urlString, "https://") {

@@ -52,6 +52,28 @@ func (tcffc *TelegramChatFeatureFlagsCreate) SetFeatureChatHistoriesRecap(b bool
 	return tcffc
 }
 
+// SetNillableFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field if the given value is not nil.
+func (tcffc *TelegramChatFeatureFlagsCreate) SetNillableFeatureChatHistoriesRecap(b *bool) *TelegramChatFeatureFlagsCreate {
+	if b != nil {
+		tcffc.SetFeatureChatHistoriesRecap(*b)
+	}
+	return tcffc
+}
+
+// SetFeatureLanguage sets the "feature_language" field.
+func (tcffc *TelegramChatFeatureFlagsCreate) SetFeatureLanguage(s string) *TelegramChatFeatureFlagsCreate {
+	tcffc.mutation.SetFeatureLanguage(s)
+	return tcffc
+}
+
+// SetNillableFeatureLanguage sets the "feature_language" field if the given value is not nil.
+func (tcffc *TelegramChatFeatureFlagsCreate) SetNillableFeatureLanguage(s *string) *TelegramChatFeatureFlagsCreate {
+	if s != nil {
+		tcffc.SetFeatureLanguage(*s)
+	}
+	return tcffc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcffc *TelegramChatFeatureFlagsCreate) SetCreatedAt(i int64) *TelegramChatFeatureFlagsCreate {
 	tcffc.mutation.SetCreatedAt(i)
@@ -133,6 +155,14 @@ func (tcffc *TelegramChatFeatureFlagsCreate) defaults() {
 		v := telegramchatfeatureflags.DefaultChatTitle
 		tcffc.mutation.SetChatTitle(v)
 	}
+	if _, ok := tcffc.mutation.FeatureChatHistoriesRecap(); !ok {
+		v := telegramchatfeatureflags.DefaultFeatureChatHistoriesRecap
+		tcffc.mutation.SetFeatureChatHistoriesRecap(v)
+	}
+	if _, ok := tcffc.mutation.FeatureLanguage(); !ok {
+		v := telegramchatfeatureflags.DefaultFeatureLanguage
+		tcffc.mutation.SetFeatureLanguage(v)
+	}
 	if _, ok := tcffc.mutation.CreatedAt(); !ok {
 		v := telegramchatfeatureflags.DefaultCreatedAt()
 		tcffc.mutation.SetCreatedAt(v)
@@ -160,6 +190,9 @@ func (tcffc *TelegramChatFeatureFlagsCreate) check() error {
 	}
 	if _, ok := tcffc.mutation.FeatureChatHistoriesRecap(); !ok {
 		return &ValidationError{Name: "feature_chat_histories_recap", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.feature_chat_histories_recap"`)}
+	}
+	if _, ok := tcffc.mutation.FeatureLanguage(); !ok {
+		return &ValidationError{Name: "feature_language", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.feature_language"`)}
 	}
 	if _, ok := tcffc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "TelegramChatFeatureFlags.created_at"`)}
@@ -218,6 +251,10 @@ func (tcffc *TelegramChatFeatureFlagsCreate) createSpec() (*TelegramChatFeatureF
 	if value, ok := tcffc.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
 		_node.FeatureChatHistoriesRecap = value
+	}
+	if value, ok := tcffc.mutation.FeatureLanguage(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldFeatureLanguage, field.TypeString, value)
+		_node.FeatureLanguage = value
 	}
 	if value, ok := tcffc.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)

@@ -20,6 +20,8 @@ const (
 	FieldChatTitle = "chat_title"
 	// FieldFeatureChatHistoriesRecap holds the string denoting the feature_chat_histories_recap field in the database.
 	FieldFeatureChatHistoriesRecap = "feature_chat_histories_recap"
+	// FieldFeatureLanguage holds the string denoting the feature_language field in the database.
+	FieldFeatureLanguage = "feature_language"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -35,6 +37,7 @@ var Columns = []string{
 	FieldChatType,
 	FieldChatTitle,
 	FieldFeatureChatHistoriesRecap,
+	FieldFeatureLanguage,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 }
@@ -52,6 +55,10 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultChatTitle holds the default value on creation for the "chat_title" field.
 	DefaultChatTitle string
+	// DefaultFeatureChatHistoriesRecap holds the default value on creation for the "feature_chat_histories_recap" field.
+	DefaultFeatureChatHistoriesRecap bool
+	// DefaultFeatureLanguage holds the default value on creation for the "feature_language" field.
+	DefaultFeatureLanguage string
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() int64
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -86,6 +93,11 @@ func ByChatTitle(opts ...sql.OrderTermOption) OrderOption {
 // ByFeatureChatHistoriesRecap orders the results by the feature_chat_histories_recap field.
 func ByFeatureChatHistoriesRecap(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFeatureChatHistoriesRecap, opts...).ToFunc()
+}
+
+// ByFeatureLanguage orders the results by the feature_language field.
+func ByFeatureLanguage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFeatureLanguage, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

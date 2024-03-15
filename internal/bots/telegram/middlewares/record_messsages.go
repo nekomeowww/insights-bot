@@ -19,7 +19,7 @@ func RecordMessage(chatHistories *chathistories.Model, tgchats *tgchats.Model) f
 			return
 		}
 		if lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
-			enabled, err := tgchats.HasChatHistoriesRecapEnabled(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
+			enabled, err := tgchats.HasChatHistoriesRecapEnabledForGroups(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
 			if err != nil {
 				c.Logger.Error(err.Error())
 				return

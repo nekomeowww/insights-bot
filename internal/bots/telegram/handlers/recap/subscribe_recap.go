@@ -29,7 +29,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 
 	chatTitle := c.Update.Message.Chat.Title
 
-	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
+	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, chatTitle)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

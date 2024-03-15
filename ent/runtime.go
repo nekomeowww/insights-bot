@@ -351,12 +351,20 @@ func init() {
 	telegramchatfeatureflagsDescChatTitle := telegramchatfeatureflagsFields[3].Descriptor()
 	// telegramchatfeatureflags.DefaultChatTitle holds the default value on creation for the chat_title field.
 	telegramchatfeatureflags.DefaultChatTitle = telegramchatfeatureflagsDescChatTitle.Default.(string)
+	// telegramchatfeatureflagsDescFeatureChatHistoriesRecap is the schema descriptor for feature_chat_histories_recap field.
+	telegramchatfeatureflagsDescFeatureChatHistoriesRecap := telegramchatfeatureflagsFields[4].Descriptor()
+	// telegramchatfeatureflags.DefaultFeatureChatHistoriesRecap holds the default value on creation for the feature_chat_histories_recap field.
+	telegramchatfeatureflags.DefaultFeatureChatHistoriesRecap = telegramchatfeatureflagsDescFeatureChatHistoriesRecap.Default.(bool)
+	// telegramchatfeatureflagsDescFeatureLanguage is the schema descriptor for feature_language field.
+	telegramchatfeatureflagsDescFeatureLanguage := telegramchatfeatureflagsFields[5].Descriptor()
+	// telegramchatfeatureflags.DefaultFeatureLanguage holds the default value on creation for the feature_language field.
+	telegramchatfeatureflags.DefaultFeatureLanguage = telegramchatfeatureflagsDescFeatureLanguage.Default.(string)
 	// telegramchatfeatureflagsDescCreatedAt is the schema descriptor for created_at field.
-	telegramchatfeatureflagsDescCreatedAt := telegramchatfeatureflagsFields[5].Descriptor()
+	telegramchatfeatureflagsDescCreatedAt := telegramchatfeatureflagsFields[6].Descriptor()
 	// telegramchatfeatureflags.DefaultCreatedAt holds the default value on creation for the created_at field.
 	telegramchatfeatureflags.DefaultCreatedAt = telegramchatfeatureflagsDescCreatedAt.Default.(func() int64)
 	// telegramchatfeatureflagsDescUpdatedAt is the schema descriptor for updated_at field.
-	telegramchatfeatureflagsDescUpdatedAt := telegramchatfeatureflagsFields[6].Descriptor()
+	telegramchatfeatureflagsDescUpdatedAt := telegramchatfeatureflagsFields[7].Descriptor()
 	// telegramchatfeatureflags.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	telegramchatfeatureflags.DefaultUpdatedAt = telegramchatfeatureflagsDescUpdatedAt.Default.(func() int64)
 	// telegramchatfeatureflagsDescID is the schema descriptor for id field.

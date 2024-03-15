@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # --- builder ---
-FROM golang:1.21 as builder
+FROM golang:1.22 as builder
 
 RUN GO111MODULE=on
 

@@ -102,6 +102,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 
 	slackCli := slackbot.NewSlackCli(nil, h.config.Slack.ClientID, h.config.Slack.ClientSecret, token.RefreshToken, token.AccessToken)
 	user, err := slackCli.GetUserInfoWithTokenExpirationCheck(body.UserID, h.services.NewStoreFuncForRefresh(body.TeamID))
+
 	if err != nil {
 		h.logger.Warn("smr service: failed to user locale",
 			zap.Error(err),

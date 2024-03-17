@@ -174,7 +174,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
 		s.logger.Warn("smr service: summarization failed", zap.Error(err))
-		// TODO: support i18n for discord and slack
+		// TODO: support i18n for discord
 		errStr := s.processError(err, lo.Ternary(info.Language == "", "en", info.Language))
 		s.sendResult(nil, info, errStr)
 

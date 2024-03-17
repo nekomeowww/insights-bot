@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/internal/services/smr"
 	"github.com/nekomeowww/insights-bot/internal/services/smr/smrqueue"
 
-	"github.com/gin-gonic/gin"
 	"github.com/nekomeowww/insights-bot/ent"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot"
 	"github.com/nekomeowww/insights-bot/pkg/bots/slackbot/services"
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"github.com/nekomeowww/insights-bot/pkg/types/bot"
 	types "github.com/nekomeowww/insights-bot/pkg/types/smr"
@@ -38,6 +39,7 @@ type NewHandlersParam struct {
 	Ent      *datastore.Ent
 	SmrQueue *smrqueue.Queue
 	Services *services.Services
+	I18n     *i18n.I18n
 }
 
 type Handlers struct {
@@ -46,6 +48,7 @@ type Handlers struct {
 	ent      *datastore.Ent
 	smrQueue *smrqueue.Queue
 	services *services.Services
+	i18n     *i18n.I18n
 }
 
 func NewHandlers() func(param NewHandlersParam) *Handlers {
@@ -56,6 +59,7 @@ func NewHandlers() func(param NewHandlersParam) *Handlers {
 			logger:   param.Logger,
 			smrQueue: param.SmrQueue,
 			services: param.Services,
+			i18n:     param.I18n,
 		}
 	}
 }
@@ -83,6 +87,29 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		zap.String("channel_id", body.ChannelID),
 	)
 
+	// get user locale, navie code, maybe need to refactor
+	token, err := h.ent.SlackOAuthCredentials.Query().
+		Where(slackoauthcredentials.TeamID(body.TeamID)).
+		First(context.Background())
+
+	if err != nil {
+		h.logger.Warn("smr service: failed to get team's access token when get user locale",
+			zap.Error(err),
+		)
+
+		return
+	}
+
+	slackCli := slackbot.NewSlackCli(nil, h.config.Slack.ClientID, h.config.Slack.ClientSecret, token.RefreshToken, token.AccessToken)
+	user, err := slackCli.GetUserInfoWithTokenExpirationCheck(body.UserID, h.services.NewStoreFuncForRefresh(body.TeamID))
+	if err != nil {
+		h.logger.Warn("smr service: failed to user locale",
+			zap.Error(err),
+		)
+
+		return
+	}
+
 	urlString := body.Text
 
 	urlString = strings.TrimSpace(urlString)
@@ -93,13 +120,12 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
 		if smr.IsUrlCheckError(err) {
-			// TODO: i18n support for slack
-			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smr.FormatUrlCheckError(err, bot.FromPlatformSlack, "", nil)))
+			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(smr.FormatUrlCheckError(err, bot.FromPlatformSlack, user.Locale, nil)))
 			return
 		}
 
-		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("出现了一些问题，可以再试试？"))
-		h.logger.Warn("discord: failed to send error message", zap.Error(err), zap.NamedError("original_error", originErr))
+		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.failedToRead")))
+		h.logger.Warn("slack: failed to send error message", zap.Error(err), zap.NamedError("original_error", originErr))
 
 		return
 	}
@@ -111,11 +137,11 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	if err != nil {
 		h.logger.Warn("slack: failed to get team's access token", zap.Error(err))
 		if ent.IsNotFound(err) {
-			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("本应用没有权限向这个频道发送消息，尝试重新安装一下？"))
+			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.permissionDenied")))
 			return
 		}
 
-		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("出现了一些问题，可以再试试？"))
+		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.failedToRead")))
 
 		return
 	}
@@ -126,18 +152,18 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		URL:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,
-		// TODO: support i18n for discord and slack
+		// TODO: support i18n for discord
 		Language: "zh-CN",
 	})
 	if err != nil {
 		h.logger.Warn("slack: failed to add task", zap.Error(err))
-		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("量子速读请求发送失败了，可以再试试？"))
+		ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.failedToRead")))
 
 		return
 	}
 
 	// response
-	ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage("请稍等，量子速读中..."))
+	ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.reading")))
 }
 
 // GetInstallAuth Receive auth code and request for access token.

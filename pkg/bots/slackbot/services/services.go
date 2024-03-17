@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 
+	"github.com/nekomeowww/insights-bot/internal/configs"
 	"github.com/nekomeowww/insights-bot/internal/datastore"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 	"go.uber.org/fx"
@@ -16,18 +17,21 @@ type NewServicesParam struct {
 
 	Logger *logger.Logger
 	Ent    *datastore.Ent
+	Config *configs.Config
 }
 
 type Services struct {
 	logger *logger.Logger
-	ent    *datastore.Ent
+	Ent    *datastore.Ent
+	Config *configs.Config
 }
 
 func NewServices() func(param NewServicesParam) *Services {
 	return func(param NewServicesParam) *Services {
 		return &Services{
 			logger: param.Logger,
-			ent:    param.Ent,
+			Ent:    param.Ent,
+			Config: param.Config,
 		}
 	}
 }
@@ -39,7 +43,7 @@ func (b *Services) NewStoreFuncForRefresh(teamID string) func(accessToken, refre
 }
 
 func (b *Services) CreateOrUpdateSlackCredential(teamID, accessToken, refreshToken string) error {
-	affectRows, err := b.ent.SlackOAuthCredentials.Update().
+	affectRows, err := b.Ent.SlackOAuthCredentials.Update().
 		Where(slackoauthcredentials.TeamID(teamID)).
 		SetAccessToken(accessToken).
 		SetRefreshToken(refreshToken).
@@ -51,7 +55,7 @@ func (b *Services) CreateOrUpdateSlackCredential(teamID, accessToken, refreshTok
 
 	if affectRows == 0 {
 		// create
-		err = b.ent.SlackOAuthCredentials.Create().
+		err = b.Ent.SlackOAuthCredentials.Create().
 			SetTeamID(teamID).
 			SetAccessToken(accessToken).
 			SetRefreshToken(refreshToken).

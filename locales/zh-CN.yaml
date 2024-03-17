@@ -25,13 +25,18 @@ commands:
       commands:
         smr:
           help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
-          noLinksFound: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
-          invalidLink: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+          noLinksFound: 
+            telegram: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
+            slackOrDiscord: 没有找到链接，可以发送一个有效的链接吗？用法：`/smr <链接>`
+          invalidLink: 
+            telegram: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+            slackOrDiscord: 你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`
           reading: 请稍等，量子速读中...
           rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
           failedToRead: 量子速读失败了，可以再试试？
           failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
           contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
+          permissionDenied: 本应用没有权限向这个频道发送消息，尝试重新安装一下？
 
 modules:
   telegram:

@@ -22,7 +22,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	}
 	if urlString == "" {
 		return nil, tgbot.
-			NewMessageError(c.T("commands.groups.summarization.commands.smr.noLinksFound")).
+			NewMessageError(c.T("commands.groups.summarization.commands.smr.noLinksFound.telegram")).
 			WithReply(c.Update.Message)
 	}
 

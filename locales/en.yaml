@@ -2,7 +2,7 @@ system:
   commands:
     groups:
       basic:
-        name: 基础命令
+        name: Basic Commands
         commands:
           start:
             help: Start interacting with the bot
@@ -21,84 +21,141 @@ system:
 modules:
   telegram:
     chatMigration:
-      notification: |
-        {{.Name}} @{{.Username}} 监测到您的群组已从 <b>群组（group）</b> 升级为了 <b>超级群组（supergroup）</b>，届时，群组的 ID 将会发生变更，<b>现已自动将过去的历史记录和数据留存自动迁移到了新的群组 ID 名下</b>，之前的设置将会保留并继续沿用，不过需要注意的是，由于 Telegram 官方的限制，迁移事件前的消息 ID 将无法与今后发送的消息 ID 相兼容，所以当下一次总结消息时将不会包含在迁移事件发生前所发送的消息，由此带来的不便敬请谅解。
+  notification: |
+    {{.Name}} @{{.Username}} has upgraded your group to a <b>supergroup</b>, resulting in a change of group ID. <b>We have automatically migrated all historical records and data to the new group ID</b>. All previous settings will remain in effect. However, due to Telegram's restrictions, message IDs from before the migration won't match those sent afterwards. This means messages sent before the upgrade won't be included in future summaries. We apologize for any inconvenience.
 
-    welcome:
-      messageSuperGroup: |
-        🤗 欢迎使用 @{{.Username}}！
+welcome:
+  messageSuperGroup: |
+    🤗 Welcome to @{{.Username}}!
 
-        - 如果要让我帮忙阅读网页文章，请直接使用开箱即用的命令 /smr@{{.Username}} <code>要阅读的链接</code>；
+    - For web page article reading, use the command /smr@{{.Username}} <code>article link</code>.
 
-        - 如果想要我帮忙总结本群组的聊天记录，请以<b>管理员</b>身份将我配置为本群组的管理员（可以关闭所有权限），然后在<b>非匿名和非其他身份的身份</b>下（推荐，否则容易出现权限识别错误的情况）发送 /configure_recap@{{.Username}} 来开始配置本群组的聊天回顾功能。
+    - To summarize this group's chat history, set me as this group's admin (permissions can be off) under a <b>recognizable identity</b> (recommended to avoid permission errors), then send /configure_recap@{{.Username}} to activate the chat recap feature.
 
-        - 如果你在授权 Bot 管理员之后希望 Bot 将已经记录的消息全数移除，可以通过撤销 Bot 的管理员权限来触发 Bot 的历史数据自动清理（如果该部分代码未经其他 Bot 实例维护者修改的话）。
+    - To delete all messages recorded by the bot, simply revoke my admin rights. This will trigger an automatic cleanup of the bot’s historical data (unless this feature has been altered by another bot maintainer).
 
-        如果还有疑问的话可以通过
+    For questions:
 
-        1. 执行帮助命令 /help@{{.Username}} 来查看支持的命令；
-        2. 前往 Bot 所在的<a href="https://github.com/nekomeowww/insights-bot">开源仓库</a>提交 Issue 问询开发者。
+    1. Use /help@{{.Username}} to view supported commands.
+    2. Visit the bot's <a href="https://github.com/nekomeowww/insights-bot">GitHub repository</a> to ask the developer.
 
-        祝你使用愉快！
-      messageNormalGroup: |
-        🤗 欢迎使用 @{{.Username}}！
+    Enjoy your use!
 
-        - 如果要让我帮忙阅读网页文章，请直接使用开箱即用的命令 /smr@{{.Username}} <code>要阅读的链接</code>；
+  messageNormalGroup: |
+    🤗 Welcome to @{{.Username}}!
 
-        - 如果想要我帮忙总结本群组的聊天记录，请以<b>管理员</b>身份将我配置为本群组的管理员（可以关闭所有权限），然后在<b>非匿名和非其他身份的身份</b>下（推荐，否则容易出现权限识别错误的情况）发送 /configure_recap@{{.Username}} 来开始配置本群组的聊天回顾功能。
+    - For web page article reading, use the command /smr@{{.Username}} <code>article link</code>.
 
-        - 如果你在授权 Bot 管理员之后希望 Bot 将已经记录的消息全数移除，可以通过撤销 Bot 的管理员权限来触发 Bot 的历史数据自动清理（如果该部分代码未经其他 Bot 实例维护者修改的话）。
+    - To summarize this group's chat history, set me as this group's admin (permissions can be off) under a <b>recognizable identity</b> (recommended to avoid permission errors), then send /configure_recap@{{.Username}} to activate the chat recap feature.
 
-        ⚠️ 警告：你的群组尚未是超级群组（supergroup）。<b>普通群组的消息链接引用功能无法正常工作。</b>
+    - To delete all messages recorded by the bot, simply revoke my admin rights. This triggers an automatic cleanup of the bot’s historical data (unless altered by another maintainer).
 
-        如果你希望使用消息链接引用功能，请通过下面任意操作使其正常运作：
+    ⚠️ Your group is not a supergroup yet, which means the message link reference feature won't work properly.
 
-        - 短时间内将群组开放为公共群组并快速还原回私有群组；
-        - 通过其他操作将本群组升级为超级群组；
+    To enable message linking:
 
-        如果还有疑问的话可以通过
+    - Temporarily set your group to public, then revert it to private.
+    - Upgrade to a supergroup through other methods.
 
-        1. 执行帮助命令 /help@{{.Username}} 来查看支持的命令；
-        2. 前往 Bot 所在的<a href="https://github.com/nekomeowww/insights-bot">开源仓库</a>提交 Issue 问询开发者。
+    For questions:
 
-        祝你使用愉快！
+    1. Use /help@{{.Username}} to view commands.
+    2. Visit the bot's <a href="https://github.com/nekomeowww/insights-bot">GitHub repository</a> for developer queries.
+
+    Enjoy your use!
+
 
 commands:
   groups:
     summarization:
-      name: 量子速读
+      name: Quantum Speed-Reading
       commands:
         smr:
-          help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
+          help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command :/smr <code>&lt;链接&gt;</code>
           noLinksFound: 
-            telegram: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
-            slackOrDiscord: 你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`
+            telegram: It appears no link was detected. Could you kindly provide a valid URL? For usage:<code>/smr &lt;link&gt;</code>.
+            slackOrDiscord: It appears no link was detected. Could you kindly provide a valid URL? For usage:`/smr <link>`
           invalidLink: 
-            telegram: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
-            slackOrDiscord: 你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`
-          reading: 请稍等，量子速读中...
-          rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
-          failedToRead: 量子速读失败了，可以再试试？
-          failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
-          contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
+            telegram:  We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
+            slackOrDiscord:  We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage:`/smr <link>`
+          reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
+          rateLimitExceeded: Our apologies, but your recent action has has reached the rate limit  maintain due to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
+          failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
+          failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
+          contentNotSupported:  The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.
           permissionDenied: No permission to send message, please try to reinstall this APP
 
 prompts:
   smr:
     - role: system
+    content: |
+    You are my web article reading assistant. I will provide you with the title, author, and the main text from the webpage I've captured, and then you will summarize the article. Please meet the following requirements when summarizing:
+    1. First, if the article's title is not in Chinese, translate it into simplified Chinese in a faithful, expressive, and elegant manner and place it on the first line.
+    2. Then, summarize the article in under 300 words based on the information I've provided.
+    3. Lastly, using your existing knowledge and experience, propose 3 questions that are creative and involve divergent thinking based on the information I've provided about the article.
+    4. Please reply in simplified Chinese.
+    The format of your reply should be like this example (where the double curly braces need to be replaced):\n
+    {{Simplified Chinese title, can be omitted}}\n\nSummary: {{Summary of the article}}\n\nRelated Questions:\n1. {{Related Question 1}}\n2. {{Related Question 2}}\n3. {{Related Question 3}}
+- role: user
+  content: |
+    The information related to my first request is as follows:
+    Article Title: {{ .Title }}
+    Article Author: {{ .By }}
+    Article Content: {{ .Content }}
+    Please complete the task as requested.
+
+system:
+  commands:
+    groups:
+      basic:
+        name: Basic Commands
+        commands:
+          start:
+            help: Start interacting with the bot
+          help:
+            help: Get help
+            message: |
+              Hi! 👋 Welcome to using Insights Bot!
+
+              I currently support these commands:
+
+              {{ .Commands }}
+          cancel:
+            help: Cancel the current activated operation
+            alreadyCancelledAll: There is no activated operation to cancel
+
+commands:
+  groups:
+    summarization:
+      name: Quantum Speed-Reading
+      commands:
+        smr:
+          help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command: /smr <code>&lt;link&gt;</code>.
+          noLinksFound: It appears no link was detected. Could you kindly provide a valid URL? For usage: <code>/smr &lt;link&gt;</code>.
+          invalidLink: We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage: <code>/smr &lt;link&gt;</code>.
+          reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
+          rateLimitExceeded: Our apologies, but your recent action has has reached the rate limit  maintain due to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
+          failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
+          failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
+          contentNotSupported: The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.
+
+
+
+prompts:
+  smr:
+    - role: system
       content: |
-        你是我的网页文章阅读助理。我将为你提供文章的标题、作
-        者、所抓取的网页中的正文等信息，然后你将对文章做出总结。\n请你在总结时满足以下要求：
-        1. 首先如果文章的标题不是中文的请依据上下文将标题信达雅的翻译为简体中文并放在第一行
-        2. 然后从我提供的文章信息中总结出一个三百字以内的文章的摘要
-        3. 最后，你将利用你已有的知识和经验，对我提供的文章信息提出 3 个具有创造性和发散思维的问题
-        4. 请用简体中文进行回复
-        最终你回复的消息格式应像这个例句一样（例句中的双花括号为需要替换的内容）：\n
-        {{简体中文标题，可省略}}\n\n摘要：{{文章的摘要}}\n\n关联提问：\n1. {{关联提问 1}}\n2. {{关联提问 2}}\n2. {{关联提问 3}}
+        You are my web article reading assistant. I will provide you with the article's title, author, and the main content captured from the web page, and then you will summarize the article. \nPlease meet the following requirements when summarizing:
+        1. First, if the article's title is not in Chinese, please translate it into simplified Chinese elegantly according to the context and place it at the first line
+        2. Then, summarize the article in no more than 300 words based on the information I provided
+        3. Lastly, using your existing knowledge and experience, propose 3 creative and divergent questions regarding the information I provided
+        4. Please reply in Simplified Chinese
+        The format of your reply should be like this example (where double curly braces need to be replaced): \n
+        {{Simplified Chinese title, optional}}\n\nSummary: {{Summary of the article}}\n\nRelated Questions:\n1. {{Related Question 1}}\n2. {{Related Question 2}}\n3. {{Related Question 3}}
     - role: user
       content: |
-        我的第一个要求相关的信息如下：
-        文章标题：{{ .Title }}
-        文章作者：{{ .By }}
-        文章正文：{{ .Content }}
-        接下来请你完成我所要求的任务。
+        The information related to my first request is as follows:
+        Article title: {{ .Title }}
+        Article author: {{ .By }}
+        Article content: {{ .Content }}
+        Please complete the task I requested.

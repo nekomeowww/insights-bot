@@ -15,54 +15,54 @@ system:
 
               {{ .Commands }}
           cancel:
-            help: Cancel the current activated operation
-            alreadyCancelledAll: There is no activated operation to cancel
+            help: Cancel the current operation
+            alreadyCancelledAll: There is no operation to cancel
 
 modules:
   telegram:
     chatMigration:
   notification: |
-    {{.Name}} @{{.Username}} has detected that your group has been upgraded to to a <b>supergroup</b>, resulting in a change of group ID. <b>We have automatically migrated all historical records and data to the new group ID</b>. All previous settings will stay the same. However, due to Telegram's restrictions, message IDs from before the migration won't match those sent afterwards. This means messages sent before the upgrade won't be included in future summaries. We apologize for any inconvenience.
+    {{.Name}} @{{.Username}} has noticed your group's upgrade to a <b>supergroup</b>, which has resulted in a change of the group ID. Rest assured, we have seamlessly migrated all historical data to the new ID, with all your settings preserved intact. Due to Telegram's restrictions, however, message IDs from before the upgrade will not correspond with those sent afterwards, meaning they will be omitted from future summaries. We apologize for any inconvenience this adjustment may cause.
 
 welcome:
   messageSuperGroup: |
     🤗 Welcome to @{{.Username}}!
 
-    - For web page article reading, use the command /smr@{{.Username}} <code>article link</code>.
+    - Use /smr@{{.Username}} <code>article link</code> for web article summaries.
 
-    - To summarize this group's chat history, set me as this group's admin (permissions can be off) under a <b>recognizable identity</b> (recommended to avoid permission errors), then send /configure_recap@{{.Username}} to activate the chat recap feature.
+    - For chat history summaries, assign me as admin (with or without permissions) using a <b>recognizable identity</b> to avoid errors. Then, initiate /configure_recap@{{.Username}} to set up chat recap.
 
-    - To delete all messages recorded by the bot, simply revoke my admin rights. This will trigger an automatic cleanup of the bot’s historical data (unless this feature has been altered by another bot maintainer).
+    - Revoking my admin rights will erase all recorded messages, cleaning historical data unless modified by another bot manager.
 
-    For questions:
+    Questions?
 
-    1. Use /help@{{.Username}} to view supported commands.
-    2. Visit the bot's <a href="https://github.com/nekomeowww/insights-bot">GitHub repository</a> to ask the developer.
+    1. Type /help@{{.Username}} for commands.
+    2. Check our <a href="https://github.com/nekomeowww/insights-bot">GitHub</a> for more info.
 
-    Enjoy your use!
+    Happy to assist!
 
   messageNormalGroup: |
     🤗 Welcome to @{{.Username}}!
 
-    - For web page article reading, use the command /smr@{{.Username}} <code>article link</code>.
+    - Use /smr@{{.Username}} <code>article link</code> for reading articles.
 
-    - To summarize this group's chat history, set me as this group's admin (permissions can be off) under a <b>recognizable identity</b> (recommended to avoid permission errors), then send /configure_recap@{{.Username}} to activate the chat recap feature.
+    - To get chat summaries, make me an admin (permissions optional) under a <b>recognizable identity</b> for error-free setup, then trigger /configure_recap@{{.Username}}.
 
-    - To delete all messages recorded by the bot, simply revoke my admin rights. This triggers an automatic cleanup of the bot’s historical data (unless altered by another maintainer).
+    - Deleting all bot-recorded messages is as simple as removing my admin status, automatically purging bot data unless another maintainer has made changes.
 
-    ⚠️ Your group is not a supergroup yet, which means the message link reference feature won't work properly.
+    ⚠️ Your group isn't a supergroup, affecting message link functionality.
 
-    To enable message linking:
+    To enable linking:
 
-    - Temporarily set your group to public, then revert it to private.
-    - Upgrade to a supergroup through other methods.
+    - Briefly switch your group to public, then back to private.
+    - Upgrade to a supergroup by other means.
 
-    For questions:
+    Questions?
 
-    1. Use /help@{{.Username}} to view commands.
-    2. Visit the bot's <a href="https://github.com/nekomeowww/insights-bot">GitHub repository</a> for developer queries.
+    1. See /help@{{.Username}} for command details.
+    2. Visit our <a href="https://github.com/nekomeowww/insights-bot">GitHub</a> for support.
 
-    Enjoy your use!
+    Enjoy your experience!
 
 
 commands:
@@ -70,20 +70,21 @@ commands:
     summarization:
       name: Quantum Speed-Reading
       commands:
-        smr:
-          help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command :/smr <code>&lt;链接&gt;</code>
-          noLinksFound: 
-            telegram: It appears no link was detected. Could you kindly provide a valid URL? For usage:<code>/smr &lt;link&gt;</code>.
-            slackOrDiscord: It appears no link was detected. Could you kindly provide a valid URL? For usage:`/smr <link>`
-          invalidLink: 
-            telegram:  We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
-            slackOrDiscord:  We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage:`/smr <link>`
-          reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
-          rateLimitExceeded: Our apologies, but your recent action has has reached the rate limit  maintain due to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
-          failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
-          failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
-          contentNotSupported:  The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.
-          permissionDenied: No permission to send message, please try to reinstall this APP
+          smr:
+            help: Enhance your article reading with Quantum Speed-Reading. This tool enables fast comprehension of web content and is compatible across messaging platforms. Start with :/smr <code>&lt;link&gt;</code>.
+            noLinksFound: 
+              telegram: No link detected. Please provide a valid URL to proceed. Example usage:<code>/smr &lt;link&gt;</code>.
+              slackOrDiscord: No link detected. Please provide a valid URL to proceed. Example usage:`/smr <link>`.
+            invalidLink: 
+              telegram: The link provided could not be processed. Please verify the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
+              slackOrDiscord: The link provided could not be processed. Please verify the URL is correct and try again. Usage:`/smr <link>`.
+            reading: Quantum Speed-Reading is now processing your request, please wait...
+            rateLimitExceeded: We're sorry, but you've hit the rate limit to ensure service stability. This command is available once every {{ .Seconds }} seconds. Please wait {{ .SecondsToBeWaited }} seconds before trying again. Thank you for your patience and understanding.
+            failedToRead: Quantum Speed-Reading did not succeed. Would you like to try again?
+            failedToReadDueToFailedToFetch: There was an issue fetching the content for Quantum Speed-Reading. Maybe another attempt will be successful?
+            contentNotSupported: This content is not compatible with Quantum Speed-Reading. It might be worth trying a different link.
+            permissionDenied: Unable to send message, please consider reinstalling the app.
+
 
 prompts:
   smr:
@@ -130,16 +131,18 @@ commands:
       name: Quantum Speed-Reading
       commands:
         smr:
-          help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command: /smr <code>&lt;link&gt;</code>.
-          noLinksFound: It appears no link was detected. Could you kindly provide a valid URL? For usage: <code>/smr &lt;link&gt;</code>.
-          invalidLink: We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage: <code>/smr &lt;link&gt;</code>.
-          reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
-          rateLimitExceeded: Our apologies, but your recent action has has reached the rate limit  maintain due to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
-          failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
-          failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
-          contentNotSupported: The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.
-
-
+          help: Enhance your article reading with Quantum Speed-Reading. This tool enables fast comprehension of web content and is compatible across messaging platforms. Start with :/smr <code>&lt;link&gt;</code>.
+            noLinksFound: 
+              telegram: No link detected. Please provide a valid URL to proceed. Example usage:<code>/smr &lt;link&gt;</code>.
+              slackOrDiscord: No link detected. Please provide a valid URL to proceed. Example usage:`/smr <link>`.
+            invalidLink: 
+              telegram: The link provided could not be processed. Please verify the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
+              slackOrDiscord: The link provided could not be processed. Please verify the URL is correct and try again. Usage:`/smr <link>`.
+            reading: Quantum Speed-Reading is now processing your request, please wait...
+            rateLimitExceeded: We're sorry, but you've hit the rate limit to ensure service stability. This command is available once every {{ .Seconds }} seconds. Please wait {{ .SecondsToBeWaited }} seconds before trying again. Thank you for your patience and understanding.
+            failedToRead: Quantum Speed-Reading did not succeed. Would you like to try again?
+            failedToReadDueToFailedToFetch: There was an issue fetching the content for Quantum Speed-Reading. Maybe another attempt will be successful?
+            contentNotSupported: This content is not compatible with Quantum Speed-Reading. It might be worth trying a different link.
 
 prompts:
   smr:

@@ -91,6 +91,20 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableFeatureChatHistoriesReca
 	return tcffu
 }
 
+// SetFeatureLanguage sets the "feature_language" field.
+func (tcffu *TelegramChatFeatureFlagsUpdate) SetFeatureLanguage(s string) *TelegramChatFeatureFlagsUpdate {
+	tcffu.mutation.SetFeatureLanguage(s)
+	return tcffu
+}
+
+// SetNillableFeatureLanguage sets the "feature_language" field if the given value is not nil.
+func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableFeatureLanguage(s *string) *TelegramChatFeatureFlagsUpdate {
+	if s != nil {
+		tcffu.SetFeatureLanguage(*s)
+	}
+	return tcffu
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcffu *TelegramChatFeatureFlagsUpdate) SetCreatedAt(i int64) *TelegramChatFeatureFlagsUpdate {
 	tcffu.mutation.ResetCreatedAt()
@@ -189,6 +203,9 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) sqlSave(ctx context.Context) (n int
 	if value, ok := tcffu.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
 	}
+	if value, ok := tcffu.mutation.FeatureLanguage(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldFeatureLanguage, field.TypeString, value)
+	}
 	if value, ok := tcffu.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)
 	}
@@ -282,6 +299,20 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetFeatureChatHistoriesRecap(b 
 func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureChatHistoriesRecap(b *bool) *TelegramChatFeatureFlagsUpdateOne {
 	if b != nil {
 		tcffuo.SetFeatureChatHistoriesRecap(*b)
+	}
+	return tcffuo
+}
+
+// SetFeatureLanguage sets the "feature_language" field.
+func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetFeatureLanguage(s string) *TelegramChatFeatureFlagsUpdateOne {
+	tcffuo.mutation.SetFeatureLanguage(s)
+	return tcffuo
+}
+
+// SetNillableFeatureLanguage sets the "feature_language" field if the given value is not nil.
+func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureLanguage(s *string) *TelegramChatFeatureFlagsUpdateOne {
+	if s != nil {
+		tcffuo.SetFeatureLanguage(*s)
 	}
 	return tcffuo
 }
@@ -413,6 +444,9 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if value, ok := tcffuo.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
+	}
+	if value, ok := tcffuo.mutation.FeatureLanguage(); ok {
+		_spec.SetField(telegramchatfeatureflags.FieldFeatureLanguage, field.TypeString, value)
 	}
 	if value, ok := tcffuo.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)

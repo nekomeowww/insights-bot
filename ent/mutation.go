@@ -7557,6 +7557,7 @@ type TelegramChatFeatureFlagsMutation struct {
 	chat_type                    *string
 	chat_title                   *string
 	feature_chat_histories_recap *bool
+	feature_language             *string
 	created_at                   *int64
 	addcreated_at                *int64
 	updated_at                   *int64
@@ -7835,6 +7836,42 @@ func (m *TelegramChatFeatureFlagsMutation) ResetFeatureChatHistoriesRecap() {
 	m.feature_chat_histories_recap = nil
 }
 
+// SetFeatureLanguage sets the "feature_language" field.
+func (m *TelegramChatFeatureFlagsMutation) SetFeatureLanguage(s string) {
+	m.feature_language = &s
+}
+
+// FeatureLanguage returns the value of the "feature_language" field in the mutation.
+func (m *TelegramChatFeatureFlagsMutation) FeatureLanguage() (r string, exists bool) {
+	v := m.feature_language
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFeatureLanguage returns the old "feature_language" field's value of the TelegramChatFeatureFlags entity.
+// If the TelegramChatFeatureFlags object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TelegramChatFeatureFlagsMutation) OldFeatureLanguage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFeatureLanguage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFeatureLanguage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFeatureLanguage: %w", err)
+	}
+	return oldValue.FeatureLanguage, nil
+}
+
+// ResetFeatureLanguage resets all changes to the "feature_language" field.
+func (m *TelegramChatFeatureFlagsMutation) ResetFeatureLanguage() {
+	m.feature_language = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *TelegramChatFeatureFlagsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -7981,7 +8018,7 @@ func (m *TelegramChatFeatureFlagsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TelegramChatFeatureFlagsMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.chat_id != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldChatID)
 	}
@@ -7993,6 +8030,9 @@ func (m *TelegramChatFeatureFlagsMutation) Fields() []string {
 	}
 	if m.feature_chat_histories_recap != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldFeatureChatHistoriesRecap)
+	}
+	if m.feature_language != nil {
+		fields = append(fields, telegramchatfeatureflags.FieldFeatureLanguage)
 	}
 	if m.created_at != nil {
 		fields = append(fields, telegramchatfeatureflags.FieldCreatedAt)
@@ -8016,6 +8056,8 @@ func (m *TelegramChatFeatureFlagsMutation) Field(name string) (ent.Value, bool) 
 		return m.ChatTitle()
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		return m.FeatureChatHistoriesRecap()
+	case telegramchatfeatureflags.FieldFeatureLanguage:
+		return m.FeatureLanguage()
 	case telegramchatfeatureflags.FieldCreatedAt:
 		return m.CreatedAt()
 	case telegramchatfeatureflags.FieldUpdatedAt:
@@ -8037,6 +8079,8 @@ func (m *TelegramChatFeatureFlagsMutation) OldField(ctx context.Context, name st
 		return m.OldChatTitle(ctx)
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		return m.OldFeatureChatHistoriesRecap(ctx)
+	case telegramchatfeatureflags.FieldFeatureLanguage:
+		return m.OldFeatureLanguage(ctx)
 	case telegramchatfeatureflags.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case telegramchatfeatureflags.FieldUpdatedAt:
@@ -8077,6 +8121,13 @@ func (m *TelegramChatFeatureFlagsMutation) SetField(name string, value ent.Value
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFeatureChatHistoriesRecap(v)
+		return nil
+	case telegramchatfeatureflags.FieldFeatureLanguage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFeatureLanguage(v)
 		return nil
 	case telegramchatfeatureflags.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -8191,6 +8242,9 @@ func (m *TelegramChatFeatureFlagsMutation) ResetField(name string) error {
 		return nil
 	case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 		m.ResetFeatureChatHistoriesRecap()
+		return nil
+	case telegramchatfeatureflags.FieldFeatureLanguage:
+		m.ResetFeatureLanguage()
 		return nil
 	case telegramchatfeatureflags.FieldCreatedAt:
 		m.ResetCreatedAt()

@@ -12,6 +12,7 @@ import (
 	"github.com/nekomeowww/insights-bot/internal/models/logs"
 	"github.com/nekomeowww/insights-bot/internal/models/tgchats"
 	"github.com/nekomeowww/insights-bot/pkg/bots/tgbot"
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"github.com/nekomeowww/insights-bot/pkg/logger"
 )
 
@@ -28,6 +29,7 @@ type NewHandlersParams struct {
 	ChatHistories *chathistories.Model
 	Logs          *logs.Model
 	Logger        *logger.Logger
+	I18n          *i18n.I18n
 }
 
 type Handlers struct {
@@ -35,6 +37,7 @@ type Handlers struct {
 	chatHistories *chathistories.Model
 	logs          *logs.Model
 	logger        *logger.Logger
+	i18n          *i18n.I18n
 }
 
 func NewHandlers() func(param NewHandlersParams) *Handlers {
@@ -44,6 +47,7 @@ func NewHandlers() func(param NewHandlersParams) *Handlers {
 			chatHistories: param.ChatHistories,
 			logs:          param.Logs,
 			logger:        param.Logger,
+			i18n:          param.I18n,
 		}
 	}
 }
@@ -66,7 +70,7 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 	may := fo.
 		NewMay0().
 		Use(fo.WithLogFuncHandler(func(a ...any) {
-			h.logger.Error(fmt.Sprint(a...))
+			h.logger.Error(fmt.Sprint(a...), zap.Int64("from_chat_id", fromChatID), zap.Int64("to_chat_id", toChatID))
 		}))
 
 	may.Invoke(func() error {
@@ -74,6 +78,11 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 		if err != nil {
 			return fmt.Errorf("failed to migrate all feature flags of chat from chat id %d to chat id %d: %w", fromChatID, toChatID, err)
 		}
+
+		h.logger.Info("successfully migrated feature flags of chat",
+			zap.Int64("from_chat_id", fromChatID),
+			zap.Int64("to_chat_id", toChatID),
+		)
 
 		return nil
 	}())
@@ -83,6 +92,11 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 			return fmt.Errorf("failed to migrate all options of chat from chat id %d to chat id %d: %w", fromChatID, toChatID, err)
 		}
 
+		h.logger.Info("successfully migrated options of chat",
+			zap.Int64("from_chat_id", fromChatID),
+			zap.Int64("to_chat_id", toChatID),
+		)
+
 		return nil
 	}())
 	may.Invoke(func() error {
@@ -90,6 +104,11 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 		if err != nil {
 			return fmt.Errorf("failed to migrate all subscribers of chat from chat id %d to chat id %d: %w", fromChatID, toChatID, err)
 		}
+
+		h.logger.Info("successfully migrated subscribers of chat",
+			zap.Int64("from_chat_id", fromChatID),
+			zap.Int64("to_chat_id", toChatID),
+		)
 
 		return nil
 	}())
@@ -99,6 +118,11 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 			return fmt.Errorf("failed to migrate all chat histories of chat from chat id %d to chat id %d: %w", fromChatID, toChatID, err)
 		}
 
+		h.logger.Info("successfully migrated chat histories of chat",
+			zap.Int64("from_chat_id", fromChatID),
+			zap.Int64("to_chat_id", toChatID),
+		)
+
 		return nil
 	}())
 	may.Invoke(func() error {
@@ -107,21 +131,36 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 			return fmt.Errorf("failed to migrate all logs of chat from chat id %d to chat id %d: %w", fromChatID, toChatID, err)
 		}
 
+		h.logger.Info("successfully migrated logs of chat",
+			zap.Int64("from_chat_id", fromChatID),
+			zap.Int64("to_chat_id", toChatID),
+		)
+
 		return nil
 	}())
 
-	h.logger.Info(fmt.Sprintf("成功将群组 %d 的所有数据迁移到群组 %d", fromChatID, toChatID), zap.Int64("from_chat_id", fromChatID), zap.Int64("to_chat_id", toChatID))
+	h.logger.Info(
+		fmt.Sprintf("Successfully migrated all data with chat id %d to supergroup chat id %d", fromChatID, toChatID),
+		zap.Int64("from_chat_id", fromChatID),
+		zap.Int64("to_chat_id", toChatID),
+	)
 
-	message := tgbotapi.NewMessage(toChatID,
-		fmt.Sprintf(""+
-			"%s @%s 监测到您的群组已从 <b>群组（group）</b> 升级为了 <b>超级群组（supergroup）</b>，届时"+
-			"，群组的 ID 将会发生变更，<b>现已自动将过去的历史记录和数据留存自动迁移到了新的群组 ID 名下</b>，"+
-			"之前的设置将会保留并继续沿用，不过需要注意的是，由于 Telegram 官方的限制，迁移事件前的消息 ID 将无"+
-			"法与今后发送的消息 ID 相兼容，所以当下一次总结消息时将不会包含在迁移事件发生前所发送的消息，由此带来"+
-			"的不便敬请谅解。",
-			tgbot.FullNameFromFirstAndLastName(c.Bot.Self.FirstName, c.Bot.Self.LastName),
-			c.Bot.Self.UserName,
-		))
+	language, err := h.tgchats.FindLanguageForGroups(toChatID, "")
+	if err != nil {
+		h.logger.Error("failed to find language for groups",
+			zap.Int64("chat_id", toChatID),
+			zap.Error(err),
+		)
+	}
+
+	message := tgbotapi.NewMessage(
+		toChatID,
+		h.i18n.TWithLanguage(language, "modules.chatMigration.notification", i18n.M{
+			"Name":     tgbot.FullNameFromFirstAndLastName(c.Bot.Self.FirstName, c.Bot.Self.LastName),
+			"Username": c.Bot.Self.UserName,
+		}),
+	)
+
 	message.ParseMode = tgbotapi.ModeHTML
 
 	c.Bot.MaySend(message)

@@ -52,7 +52,7 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 	chatID := c.Update.Message.Chat.ID
 	chatTitle := c.Update.Message.Chat.Title
 
-	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, chatTitle)
+	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, chatTitle)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

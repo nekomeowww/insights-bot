@@ -24,10 +24,11 @@ func TestPreview(t *testing.T) {
 				"markdown, knowledgebase, 知识库, vitepress, obsidian, notebook, notes, nekomeowww, littlesound",
 			},
 			OpenGraph: opengraph.OpenGraph{
-				Title:       "Nólëbase",
-				Image:       "https://nolebase.ayaka.io/og.png",
-				Description: "记录回忆，知识和畅想的地方",
-				SiteName:    "Nólëbase",
+				Title:           "Nólëbase",
+				Image:           "https://nolebase.ayaka.io/og.png",
+				Description:     "记录回忆，知识和畅想的地方",
+				SiteName:        "Nólëbase",
+				LocaleAlternate: make([]string, 0),
 			},
 		}, meta)
 	})
@@ -59,6 +60,7 @@ func TestNewMetaFrom(t *testing.T) {
 		Title:       "Example Movie",
 		Description: "Example description",
 		Favicon:     "/logo.svg",
+		Keywords:    make([]string, 0),
 		OpenGraph: opengraph.OpenGraph{
 			Title:       "Example Movie",
 			Type:        "video.movie",

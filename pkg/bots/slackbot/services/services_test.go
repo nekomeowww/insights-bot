@@ -32,13 +32,13 @@ func newTestServices() *Services {
 	}
 
 	return &Services{
-		ent:    ent,
+		Ent:    ent,
 		logger: logger,
 	}
 }
 
 func cleanSlackCredential(s *Services, r *require.Assertions) {
-	_, err := s.ent.SlackOAuthCredentials.Delete().Exec(context.Background())
+	_, err := s.Ent.SlackOAuthCredentials.Delete().Exec(context.Background())
 	r.Empty(err)
 }
 
@@ -58,7 +58,7 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
-		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
+		cre, err := s.Ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
 		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)
@@ -79,7 +79,7 @@ func TestSlackBot_createNewSlackCredential(t *testing.T) {
 		r.Empty(s.CreateOrUpdateSlackCredential(expectTeamID, expectAccessToken, expectRefreshToken))
 
 		// query
-		cre, err := s.ent.SlackOAuthCredentials.Query().First(context.Background())
+		cre, err := s.Ent.SlackOAuthCredentials.Query().First(context.Background())
 		r.Empty(err)
 		a.Equal(expectTeamID, cre.TeamID)
 		a.Equal(expectAccessToken, cre.AccessToken)

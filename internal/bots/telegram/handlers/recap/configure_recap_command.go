@@ -241,7 +241,7 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 
 	chatID := c.Update.Message.Chat.ID
 
-	has, err := h.tgchats.HasChatHistoriesRecapEnabled(chatID, c.Update.Message.Chat.Title)
+	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, c.Update.Message.Chat.Title)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").WithReply(c.Update.Message)
 	}

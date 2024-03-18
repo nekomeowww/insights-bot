@@ -25,13 +25,63 @@ commands:
       commands:
         smr:
           help: 量子速读网页文章（也支持在频道中使用） 用法：/smr <code>&lt;链接&gt;</code>
-          noLinksFound: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
-          invalidLink: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+          noLinksFound: 
+            telegram: 没有找到链接，可以发送一个有效的链接吗？用法：<code>/smr &lt;链接&gt;</code>
+            slackOrDiscord: 没有找到链接，可以发送一个有效的链接吗？用法：`/smr <链接>`
+          invalidLink: 
+            telegram: 你发来的链接无法被理解，可以重新发一个试试。用法：<code>/smr &lt;链接&gt;</code>
+            slackOrDiscord: 你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`
           reading: 请稍等，量子速读中...
           rateLimitExceeded: 很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 {{ .Seconds }} 秒使用一次，请您耐心等待 {{ .SecondsToBeWaited }} 秒后再试，感谢您的理解和支持。
           failedToRead: 量子速读失败了，可以再试试？
           failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
           contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
+          permissionDenied: 本应用没有权限向这个频道发送消息，尝试重新安装一下？
+
+modules:
+  telegram:
+    chatMigration:
+      notification: |
+        {{.Name}} @{{.Username}} 监测到您的群组已从 <b>群组（group）</b> 升级为了 <b>超级群组（supergroup）</b>，届时，群组的 ID 将会发生变更，<b>现已自动将过去的历史记录和数据留存自动迁移到了新的群组 ID 名下</b>，之前的设置将会保留并继续沿用，不过需要注意的是，由于 Telegram 官方的限制，迁移事件前的消息 ID 将无法与今后发送的消息 ID 相兼容，所以当下一次总结消息时将不会包含在迁移事件发生前所发送的消息，由此带来的不便敬请谅解。
+
+    welcome:
+      messageSuperGroup: |
+        🤗 欢迎使用 @{{.Username}}！
+
+        - 如果要让我帮忙阅读网页文章，请直接使用开箱即用的命令 /smr@{{.Username}} <code>要阅读的链接</code>；
+
+        - 如果想要我帮忙总结本群组的聊天记录，请以<b>管理员</b>身份将我配置为本群组的管理员（可以关闭所有权限），然后在<b>非匿名和非其他身份的身份</b>下（推荐，否则容易出现权限识别错误的情况）发送 /configure_recap@{{.Username}} 来开始配置本群组的聊天回顾功能。
+
+        - 如果你在授权 Bot 管理员之后希望 Bot 将已经记录的消息全数移除，可以通过撤销 Bot 的管理员权限来触发 Bot 的历史数据自动清理（如果该部分代码未经其他 Bot 实例维护者修改的话）。
+
+        如果还有疑问的话可以通过
+
+        1. 执行帮助命令 /help@{{.Username}} 来查看支持的命令；
+        2. 前往 Bot 所在的<a href="https://github.com/nekomeowww/insights-bot">开源仓库</a>提交 Issue 问询开发者。
+
+        祝你使用愉快！
+      messageNormalGroup: |
+        🤗 欢迎使用 @{{.Username}}！
+
+        - 如果要让我帮忙阅读网页文章，请直接使用开箱即用的命令 /smr@{{.Username}} <code>要阅读的链接</code>；
+
+        - 如果想要我帮忙总结本群组的聊天记录，请以<b>管理员</b>身份将我配置为本群组的管理员（可以关闭所有权限），然后在<b>非匿名和非其他身份的身份</b>下（推荐，否则容易出现权限识别错误的情况）发送 /configure_recap@{{.Username}} 来开始配置本群组的聊天回顾功能。
+
+        - 如果你在授权 Bot 管理员之后希望 Bot 将已经记录的消息全数移除，可以通过撤销 Bot 的管理员权限来触发 Bot 的历史数据自动清理（如果该部分代码未经其他 Bot 实例维护者修改的话）。
+
+        ⚠️ 警告：你的群组尚未是超级群组（supergroup）。<b>普通群组的消息链接引用功能无法正常工作。</b>
+
+        如果你希望使用消息链接引用功能，请通过下面任意操作使其正常运作：
+
+        - 短时间内将群组开放为公共群组并快速还原回私有群组；
+        - 通过其他操作将本群组升级为超级群组；
+
+        如果还有疑问的话可以通过
+
+        1. 执行帮助命令 /help@{{.Username}} 来查看支持的命令；
+        2. 前往 Bot 所在的<a href="https://github.com/nekomeowww/insights-bot">开源仓库</a>提交 Issue 问询开发者。
+
+        祝你使用愉快！
 
 prompts:
   smr:

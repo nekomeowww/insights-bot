@@ -30,20 +30,18 @@ func FormatUrlCheckError(err error, platform bot.FromPlatform, language string, 
 	case errors.Is(err, ErrNoLink):
 		switch platform {
 		case bot.FromPlatformTelegram:
-			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.noLinksFound")
-			// TODO: support i18n for discord and slack
+			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.noLinksFound.telegram")
 		case bot.FromPlatformDiscord, bot.FromPlatformSlack:
-			return "没有找到链接，可以发送一个有效的链接吗？用法：`/smr <链接>`"
+			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.noLinksFound.slackOrDiscord")
 		default:
 			return err.Error()
 		}
 	case errors.Is(err, ErrParse), errors.Is(err, ErrScheme):
 		switch platform {
 		case bot.FromPlatformTelegram:
-			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.invalidLink")
+			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.invalidLink.telegram")
 		case bot.FromPlatformDiscord, bot.FromPlatformSlack:
-			// TODO: support i18n for discord and slack
-			return "你发来的链接无法被理解，可以重新发一个试试。用法：`/smr <链接>`"
+			return i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.invalidLink.slackOrDiscord")
 		default:
 			return err.Error()
 		}

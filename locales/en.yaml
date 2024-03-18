@@ -22,7 +22,8 @@ modules:
   telegram:
     chatMigration:
   notification: |
-    {{.Name}} @{{.Username}} has noticed your group's upgrade to a <b>supergroup</b>, which has resulted in a change of the group ID. Rest assured, we have seamlessly migrated all historical data to the new ID, with all your settings preserved intact. Due to Telegram's restrictions, however, message IDs from before the upgrade will not correspond with those sent afterwards, meaning they will be omitted from future summaries. We apologize for any inconvenience this adjustment may cause.
+    {{.Name}} @{{.Username}} has noticed your group's upgrade to a <b>supergroup</b>, which has resulted in a change of the group ID. Rest assured, we have seamlessly migrated all historical data to the new ID, with all your settings preserved intact. Due to Telegram's restrictions, message IDs sent before the upgrade will not correspond with those sent afterwards, meaning they will be omitted from future summaries. We apologize for any inconvenience this adjustment may cause. 
+
 
 welcome:
   messageSuperGroup: |
@@ -30,23 +31,21 @@ welcome:
 
     - Use /smr@{{.Username}} <code>article link</code> for web article summaries.
 
-    - For chat history summaries, assign me as admin (with or without permissions) using a <b>recognizable identity</b> to avoid errors. Then, initiate /configure_recap@{{.Username}} to set up chat recap.
+    - For chat history summaries, assign me as admin (with or without permissions) using a <b>non-anonymous identity</b> to avoid permission detection errors. Then, initiate /configure_recap@{{.Username}} to set up chat recap.
 
-    - Revoking my admin rights will erase all recorded messages, cleaning historical data unless modified by another bot manager.
+    - Revoking my admin role will trigger myself to clean up erase all recorded messages, as well as historical data and logs (only when the actual implemented haven't modified by the other operators of bot instances).
 
     Questions?
 
     1. Type /help@{{.Username}} for commands.
-    2. Check our <a href="https://github.com/nekomeowww/insights-bot">GitHub</a> for more info.
-
-    Happy to assist!
+    2. Raise an issue at the <a href="https://github.com/nekomeowww/insights-bot">open sourced repository</a> for more info from the developers.
 
   messageNormalGroup: |
     🤗 Welcome to @{{.Username}}!
 
     - Use /smr@{{.Username}} <code>article link</code> for reading articles.
 
-    - To get chat summaries, make me an admin (permissions optional) under a <b>recognizable identity</b> for error-free setup, then trigger /configure_recap@{{.Username}}.
+    - For chat history summaries, assign me as admin (with or without permissions) using a <b>non-anonymous identity</b> to avoid permission detection errors. Then, initiate /configure_recap@{{.Username}} to set up chat recap.
 
     - Deleting all bot-recorded messages is as simple as removing my admin status, automatically purging bot data unless another maintainer has made changes.
 

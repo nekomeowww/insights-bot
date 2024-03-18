@@ -21,14 +21,14 @@ system:
 commands:
   groups:
     summarization:
-      name: Quantum Speed Reading
+      name: Quantum Speed-Reading
       commands:
         smr:
           help: Streamline your reading process with Quantum Speed-Reading. This feature allows you to quickly digest web articles and is also channel-compatible. To initiate, use the command: /smr <code>&lt;link&gt;</code>.
           noLinksFound: It appears no link was detected. Could you kindly provide a valid URL? For usage: <code>/smr &lt;link&gt;</code>.
           invalidLink: We were unable to process the link you provided. Please ensure the URL is correct and try again. Usage: <code>/smr &lt;link&gt;</code>.
           reading: Quantum Speed-Reading is currently in action, please hold on for a moment...
-          rateLimitExceeded: Our apologies, but your recent action has activated our rate limiting system to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
+          rateLimitExceeded: Our apologies, but your recent action has has reached the rate limit  maintain due to maintain service stability. This command may be utilized once every {{ .Seconds }} seconds. We kindly ask you to wait {{ .SecondsToBeWaited }} seconds before your next attempt. Your understanding and cooperation are greatly appreciated.
           failedToRead: Unfortunately, Quantum Speed-Reading was unsuccessful. Would you like to attempt it once more?
           failedToReadDueToFailedToFetch: We encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another try might yield success?
           contentNotSupported: The content provided does not currently support Quantum Speed-Reading. Considering another link may be beneficial.

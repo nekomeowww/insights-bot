@@ -16,7 +16,7 @@ system:
               {{ .Commands }}
           cancel:
             help: Cancel any ongoing operations.
-            alreadyCancelledAll: No ongoing operations to terminate
+            alreadyCancelledAll: No ongoing operations to cancel
 
 modules:
   telegram:

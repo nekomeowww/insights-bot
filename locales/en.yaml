@@ -48,7 +48,7 @@ welcome:
 
     - Removing my admin status is a simple way to delete all bot-recorded messages, automatically purging bot data unless modifications have been made by another maintainer.
 
-    ⚠️ Your group isn't a supergroup, impacting message link functionality.
+    ⚠️ Your group isn't a supergroup yet; message reference linking will not work.
 
     To enable linking:
 

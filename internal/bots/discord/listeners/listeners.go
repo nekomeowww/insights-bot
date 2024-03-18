@@ -90,7 +90,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		Platform:  bot.FromPlatformDiscord,
 		URL:       urlString,
 		ChannelID: event.Channel().ID().String(),
-		// TODO: support i18n for discord and slack
+		// TODO: support i18n for discord
 		Language: "zh-CN",
 	})
 	if err != nil {

@@ -83,6 +83,29 @@ func (cli *Client) SendMessageWithTokenExpirationCheck(channel string, storeFn S
 	return cli.SendMessageWithTokenExpirationCheck(channel, storeFn, options...)
 }
 
+// GetUserInfoWithTokenExpirationCheck will checks if the error is "token_expired" error,
+// if so, will get new token and try again.
+func (cli *Client) GetUserInfoWithTokenExpirationCheck(channel string, storeFn StoreNewTokenFunc, options ...slack.MsgOption) (slackUser *slack.User, err error) {
+	slackUser, err = cli.GetUserInfo(channel)
+	if err == nil || err.Error() != "token_expired" {
+		return
+	}
+
+	resp, err := slack.RefreshOAuthV2Token(cli.httpClient, cli.clientID, cli.clientSecret, cli.refreshToken)
+	if err != nil {
+		return
+	}
+
+	err = storeFn(resp.AccessToken, resp.RefreshToken)
+	if err != nil {
+		return
+	}
+	// create new slack client
+	cli.Client = newOriginSlackCli(cli.httpClient, resp.AccessToken)
+
+	return cli.GetUserInfoWithTokenExpirationCheck(channel, storeFn, options...)
+}
+
 var _ healthchecker.HealthChecker = (*BotService)(nil)
 
 type BotService struct {

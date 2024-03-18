@@ -44,7 +44,7 @@ welcome:
 
     - Use /smr@{{.Username}} <code>article link</code> for article readings.
 
-    - For chat history summaries, appoint me as admin (with or without permissions) using a <b>non-anonymous identity</b> to bypass permission detection issues. Then, start /configure_recap@{{.Username}} to configure chat recap.
+    - For chat history summaries, please assign me as admin (all permissions can be omitted) using a <b>non-anonymous identity</b> (recommended, otherwise permission validation may fail. Then, start /configure_recap@{{.Username}} to configure chat recap.
 
     - Removing my admin status is a simple way to delete all bot-recorded messages, automatically purging bot data unless modifications have been made by another maintainer.
 

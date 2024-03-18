@@ -22,7 +22,7 @@ modules:
   telegram:
     chatMigration:
   notification: |
-    {{.Name}} @{{.Username}} has observed your group's transition to a <b>supergroup</b>, leading to a change in the group ID. Rest assured, we've smoothly transitioned all historical data to the new ID, maintaining all your settings unaltered. Due to Telegram's limitations, message IDs from before the upgrade won't match those sent after, and will thus be excluded from future summaries. We regret any inconvenience caused by this adjustment.
+    {{.Name}} @{{.Username}} has observed your group's upgrading to a <b>supergroup</b>, where the group ID will change. Rest assured, we've smoothly transitioned all historical data to the new group ID, while maintaining all your settings unaltered. However, due to Telegram's limitations, message IDs from before the upgrade won't match those sent after and will thus be excluded from future summaries. We regret any inconvenience caused by such migrations.
 
 welcome:
   messageSuperGroup: |

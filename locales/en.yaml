@@ -69,17 +69,17 @@ commands:
       commands:
         smr:
           help: Enhance your article reading with Quantum Speed-Reading. This feature enables rapid understanding of web content and is compatible across messaging platforms. Initiate with :/smr <code>&lt;link&gt;</code>.
-            noLinksFound: 
-              telegram: No link detected. Please provide a valid URL to proceed. Example usage:<code>/smr &lt;link&gt;</code>.
-              slackOrDiscord: No link detected. Please provide a valid URL to proceed. Example usage:`/smr <link>`.
-            invalidLink: 
-              telegram: The link provided could not be processed. Please ensure the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
-              slackOrDiscord: The link provided could not be processed. Please ensure the URL is correct and try again. Usage:`/smr <link>`.
-            reading: Quantum Speed-Reading is currently processing your request, please wait...
-            rateLimitExceeded: Apologies, but you've reached the rate limit to maintain service stability. This command is accessible once every {{ .Seconds }} seconds. Kindly wait {{ .SecondsToBeWaited }} seconds before attempting again. We appreciate your patience and comprehension.
-            failedToRead: Quantum Speed-Reading was unsuccessful. Would you like to retry?
-            failedToReadDueToFailedToFetch: Encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another attempt might succeed?
-            contentNotSupported: This content is not supported by Quantum Speed-Reading. Considering another link might be beneficial.
+          noLinksFound:
+            telegram: No link detected. Please provide a valid URL to proceed. Example usage:<code>/smr &lt;link&gt;</code>.
+            slackOrDiscord: No link detected. Please provide a valid URL to proceed. Example usage:`/smr <link>`.
+          invalidLink:
+            telegram: The link provided could not be processed. Please ensure the URL is correct and try again. Usage:<code>/smr &lt;link&gt;</code>.
+            slackOrDiscord: The link provided could not be processed. Please ensure the URL is correct and try again. Usage:`/smr <link>`.
+          reading: Quantum Speed-Reading is currently processing your request, please wait...
+          rateLimitExceeded: Apologies, but you've reached the rate limit to maintain service stability. This command is accessible once every {{ .Seconds }} seconds. Kindly wait {{ .SecondsToBeWaited }} seconds before attempting again. We appreciate your patience and comprehension.
+          failedToRead: Quantum Speed-Reading was unsuccessful. Would you like to retry?
+          failedToReadDueToFailedToFetch: Encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another attempt might succeed?
+          contentNotSupported: This content is not supported by Quantum Speed-Reading. Considering another link might be beneficial.
 
 prompts:
   smr:

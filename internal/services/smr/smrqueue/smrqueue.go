@@ -61,7 +61,6 @@ func (q *Queue) AddTask(taskInfo types.TaskInfo) error {
 		zap.String("platform", taskInfo.Platform.String()),
 	)
 
-	// TODO: #111 should reject ongoing smr request in the same chat
 	return nil
 }
 

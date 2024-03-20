@@ -153,8 +153,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 		URL:       urlString,
 		ChannelID: body.ChannelID,
 		TeamID:    body.TeamID,
-		// TODO: support i18n for discord
-		Language: "zh-CN",
+		Language:  user.Locale,
 	})
 	if err != nil {
 		h.logger.Warn("slack: failed to add task", zap.Error(err))

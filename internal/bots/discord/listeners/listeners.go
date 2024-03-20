@@ -2,6 +2,7 @@ package listeners
 
 import (
 	"fmt"
+	"github.com/nekomeowww/insights-bot/pkg/i18n"
 	"strings"
 
 	"github.com/disgoorg/disgo/discord"
@@ -26,11 +27,13 @@ type NewListenersParam struct {
 
 	Logger   *logger.Logger
 	SmrQueue *smrqueue.Queue
+	I18n     *i18n.I18n
 }
 
 type Listeners struct {
 	logger   *logger.Logger
 	smrQueue *smrqueue.Queue
+	i18n     *i18n.I18n
 }
 
 func NewListeners() func(param NewListenersParam) *Listeners {
@@ -38,6 +41,7 @@ func NewListeners() func(param NewListenersParam) *Listeners {
 		return &Listeners{
 			logger:   param.Logger,
 			smrQueue: param.SmrQueue,
+			i18n:     param.I18n,
 		}
 	}
 }
@@ -52,14 +56,15 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 	b.logger.Info(fmt.Sprintf("discord: command received: /smr %s", urlString))
 
+	lang := event.Locale().String()
+
 	// url check
 	err, originErr := smr.CheckUrl(urlString)
 	if err != nil {
 		if smr.IsUrlCheckError(err) {
 			err = event.CreateMessage(
 				discord.NewMessageCreateBuilder().
-					// TODO: i18n support for discord
-					SetContent(smr.FormatUrlCheckError(err, bot.FromPlatformDiscord, "", nil)).
+					SetContent(smr.FormatUrlCheckError(err, bot.FromPlatformDiscord, lang, nil)).
 					Build(),
 			)
 			if err != nil {
@@ -69,7 +74,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 			return
 		}
 
-		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
+		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent(b.i18n.TWithLanguage(lang, "commands.groups.summarization.commands.smr.failedToRead")).Build())
 		if err != nil {
 			b.logger.Warn("discord: failed to send error message", zap.Error(err), zap.NamedError("original_error", originErr))
 		}
@@ -79,7 +84,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 	// must reply the interaction as soon as possible
 	err = event.CreateMessage(discord.NewMessageCreateBuilder().
-		SetContent("请稍等，量子速读中...").
+		SetContent(b.i18n.TWithLanguage(lang, "commands.groups.summarization.commands.smr.reading")).
 		Build())
 	if err != nil {
 		b.logger.Warn("discord: failed to send response message", zap.Error(err))
@@ -90,13 +95,12 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 		Platform:  bot.FromPlatformDiscord,
 		URL:       urlString,
 		ChannelID: event.Channel().ID().String(),
-		// TODO: support i18n for discord
-		Language: "zh-CN",
+		Language:  lang,
 	})
 	if err != nil {
 		b.logger.Warn("discord: failed to add task", zap.Error(err))
 
-		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("出现了一些问题，可以再试试？").Build())
+		err = event.CreateMessage(discord.NewMessageCreateBuilder().SetContent("commands.groups.summarization.commands.smr.failedToRead").Build())
 		if err != nil {
 			b.logger.Warn("discord: failed to send error message", zap.Error(err))
 		}

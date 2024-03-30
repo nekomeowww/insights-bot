@@ -19,9 +19,9 @@ func TestPreview(t *testing.T) {
 			Title:       "Nólëbase | 记录回忆，知识和畅想的地方",
 			Description: "记录回忆，知识和畅想的地方",
 			Favicon:     "/logo.svg",
-			Author:      "Ayaka Neko, Ayaka Rizumu",
+			Author:      "絢香猫, 絢香音",
 			Keywords: []string{
-				"markdown, knowledgebase, 知识库, vitepress, obsidian, notebook, notes, nekomeowww, littlesound",
+				"markdown, knowledge-base, 知识库, vitepress, obsidian, notebook, notes, nekomeowww, LittleSound",
 			},
 			OpenGraph: opengraph.OpenGraph{
 				Title:           "Nólëbase",

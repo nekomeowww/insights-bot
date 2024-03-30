@@ -10,7 +10,12 @@ var commands = []discord.ApplicationCommandCreate{
 			discord.ApplicationCommandOptionString{
 				Required:    true,
 				Name:        "link",
-				Description: "网页链接",
+				Description: "Article link",
+				DescriptionLocalizations: map[discord.Locale]string{
+					discord.LocaleChineseCN: "文章链接",
+					discord.LocaleEnglishUS: "Article link",
+					discord.LocaleEnglishGB: "Article link",
+				},
 			},
 		},
 	},

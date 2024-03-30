@@ -6,6 +6,11 @@ var commands = []discord.ApplicationCommandCreate{
 	discord.SlashCommandCreate{
 		Name:        "smr",
 		Description: "对网页进行总结",
+		DescriptionLocalizations: map[discord.Locale]string{
+			discord.LocaleChineseCN: "对网页进行总结",
+			discord.LocaleEnglishUS: "Summarize a web article",
+			discord.LocaleEnglishGB: "Summarize a web article",
+		},
 		Options: []discord.ApplicationCommandOption{
 			discord.ApplicationCommandOptionString{
 				Required:    true,

@@ -13,13 +13,18 @@ var commands = []discord.ApplicationCommandCreate{
 		},
 		Options: []discord.ApplicationCommandOption{
 			discord.ApplicationCommandOptionString{
-				Required:    true,
-				Name:        "link",
-				Description: "Article link",
-				DescriptionLocalizations: map[discord.Locale]string{
+				Required: true,
+				Name:     "link",
+				NameLocalizations: map[discord.Locale]string{
 					discord.LocaleChineseCN: "文章链接",
-					discord.LocaleEnglishUS: "Article link",
-					discord.LocaleEnglishGB: "Article link",
+					discord.LocaleEnglishUS: "link",
+					discord.LocaleEnglishGB: "link",
+				},
+				Description: "The link of web article",
+				DescriptionLocalizations: map[discord.Locale]string{
+					discord.LocaleChineseCN: "需要被总结的文章的链接",
+					discord.LocaleEnglishUS: "The link of web article",
+					discord.LocaleEnglishGB: "The link of web article",
 				},
 			},
 		},

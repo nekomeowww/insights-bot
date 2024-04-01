@@ -56,7 +56,7 @@ func (b *Listeners) smrCmd(event *events.ApplicationCommandInteractionCreate, da
 
 	b.logger.Info(fmt.Sprintf("discord: command received: /smr %s", urlString))
 
-	lang := event.Locale().String()
+	lang := event.Locale().Code()
 
 	// url check
 	err, originErr := smr.CheckUrl(urlString)

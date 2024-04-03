@@ -84,7 +84,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
-	github.com/quic-go/quic-go v0.41.0 // indirect
+	github.com/quic-go/quic-go v0.42.0 // indirect
 	github.com/redis/go-redis/v9 v9.5.1 // indirect
 	github.com/refraction-networking/utls v1.6.3 // indirect
 	github.com/samber/mo v1.11.0 // indirect

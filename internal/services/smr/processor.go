@@ -18,7 +18,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) string {
+func (s *Service) formatOutput(info types.TaskInfo, result *smr.URLSummarizationOutput) string {
 	switch info.Platform {
 	case bot.FromPlatformTelegram:
 		return result.FormatSummarizationAsHTML()
@@ -31,7 +31,7 @@ func (s *Service) processOutput(info types.TaskInfo, result *smr.URLSummarizatio
 	}
 }
 
-func (s *Service) processError(err error, language string) string {
+func (s *Service) formatError(err error, language string) string {
 	if errors.Is(err, smr.ErrContentNotSupported) {
 		return s.i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.contentNotSupported")
 	} else if errors.Is(err, smr.ErrNetworkError) || errors.Is(err, smr.ErrRequestFailed) {
@@ -41,7 +41,22 @@ func (s *Service) processError(err error, language string) string {
 	return s.i18n.TWithLanguage(language, "commands.groups.summarization.commands.smr.failedToRead")
 }
 
-func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.TaskInfo, result string) {
+func (s *Service) newRetryButtonMarkup(info types.TaskInfo) (tgbotapi.InlineKeyboardMarkup, error) {
+	data, err := s.tgBot.Bot().AssignOneCallbackQueryData("smr/summarization/retry", &info)
+
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	return tgbotapi.NewInlineKeyboardMarkup([]tgbotapi.InlineKeyboardButton{
+		{
+			Text:         s.i18n.TWithLanguage(info.Language, "commands.groups.summarization.commands.smr.retry"),
+			CallbackData: &data,
+		},
+	}), nil
+}
+
+func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.TaskInfo, result string, provideRetryButton bool) {
 	switch info.Platform {
 	case bot.FromPlatformTelegram:
 		msgEdit := tgbotapi.EditMessageTextConfig{
@@ -51,6 +66,22 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 			},
 			Text:      result,
 			ParseMode: tgbotapi.ModeHTML,
+		}
+
+		if provideRetryButton {
+			var err error
+			retryButtonMarkup, err := s.newRetryButtonMarkup(info)
+			if err != nil {
+				s.logger.Error("smr service: failed to create retry button markup",
+					zap.Error(err),
+					zap.Int64("chat_id", info.ChatID),
+					zap.String("platform", info.Platform.String()),
+				)
+
+				return
+			}
+
+			msgEdit.ReplyMarkup = &retryButtonMarkup
 		}
 
 		if output == nil {
@@ -99,6 +130,7 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 			)
 		}
 	case bot.FromPlatformSlack:
+		// TODO: provide retry button
 		token, err := s.ent.SlackOAuthCredentials.Query().
 			Where(slackoauthcredentials.TeamID(info.TeamID)).
 			First(context.Background())
@@ -127,6 +159,7 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 			)
 		}
 	case bot.FromPlatformDiscord:
+		// TODO: provide retry button
 		channelID, _ := snowflake.Parse(info.ChannelID)
 		_, err := s.discordBot.Rest().
 			CreateMessage(channelID, discord.NewMessageCreateBuilder().
@@ -174,12 +207,12 @@ func (s *Service) processor(info types.TaskInfo) {
 	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
 		s.logger.Warn("smr service: summarization failed", zap.Error(err))
-		errStr := s.processError(err, lo.Ternary(info.Language == "", "en", info.Language))
-		s.sendResult(nil, info, errStr)
+		errStr := s.formatError(err, lo.Ternary(info.Language == "", "en", info.Language))
+		s.sendResult(nil, info, errStr, true)
 
 		return
 	}
 
-	finalResult := s.processOutput(info, smrResult)
-	s.sendResult(smrResult, info, finalResult)
+	finalResult := s.formatOutput(info, smrResult)
+	s.sendResult(smrResult, info, finalResult, false)
 }

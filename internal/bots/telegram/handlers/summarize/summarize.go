@@ -61,4 +61,5 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 
 	dispatcher.OnChannelPost(tgbot.NewHandler(h.HandleChannelPost))
 	dispatcher.OnCallbackQuery("smr/summarization/feedback/react", tgbot.NewHandler(h.handleCallbackQueryReact))
+	dispatcher.OnCallbackQuery("smr/summarization/retry", tgbot.NewHandler(h.handleCallbackQueryRetry))
 }

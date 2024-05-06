@@ -37,6 +37,7 @@ commands:
           failedToReadDueToFailedToFetch: 量子速读的链接读取失败了哦。可以再试试？
           contentNotSupported: 暂时不支持量子速读这样的内容呢，可以换个别的链接试试。
           permissionDenied: 本应用没有权限向这个频道发送消息，尝试重新安装一下？
+          retry: 重试
 
 modules:
   telegram:

@@ -208,7 +208,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	if err != nil {
 		s.logger.Warn("smr service: summarization failed", zap.Error(err))
 		errStr := s.formatError(err, lo.Ternary(info.Language == "", "en", info.Language))
-		s.sendResult(nil, info, errStr, true)
+		s.sendResult(nil, info, errStr, !errors.Is(err, smr.ErrContentNotSupported))
 
 		return
 	}

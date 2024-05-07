@@ -71,6 +71,7 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 		if provideRetryButton {
 			var err error
 			retryButtonMarkup, err := s.newRetryButtonMarkup(info)
+
 			if err != nil {
 				s.logger.Error("smr service: failed to create retry button markup",
 					zap.Error(err),

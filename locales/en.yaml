@@ -80,6 +80,7 @@ commands:
           failedToRead: Quantum Speed-Reading was unsuccessful. Would you like to retry?
           failedToReadDueToFailedToFetch: Encountered an issue retrieving the content for Quantum Speed-Reading. Perhaps another attempt might succeed?
           contentNotSupported: This content is not supported by Quantum Speed-Reading. Considering another link might be beneficial.
+          retry: Retry
 
 prompts:
   smr:

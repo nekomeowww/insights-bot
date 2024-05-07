@@ -24,9 +24,21 @@ func (h *Handlers) handleCallbackQueryRetry(c *tgbot.Context) (tgbot.Response, e
 		return nil, nil
 	}
 
-	h.smrQueue.AddTask(data)
+	err = h.smrQueue.AddTask(data)
+
+	if err != nil {
+		h.logger.Error("failed to move task back to queue", zap.Error(err))
+		return nil, nil
+	}
+
 	// remove the retry button
-	c.Bot.MayRequest(tgbotapi.NewEditMessageTextAndMarkup(data.ChatID, messageID, h.i18n.TWithLanguage(data.Language, "commands.groups.summarization.commands.smr.reading"), tgbotapi.InlineKeyboardMarkup{}))
+	c.Bot.MayRequest(tgbotapi.NewEditMessageTextAndMarkup(
+		data.ChatID,
+		messageID,
+		h.i18n.TWithLanguage(data.Language, "commands.groups.summarization.commands.smr.reading"),
+		tgbotapi.InlineKeyboardMarkup{
+			InlineKeyboard: [][]tgbotapi.InlineKeyboardButton{},
+		}))
 
 	return nil, nil
 }

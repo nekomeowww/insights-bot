@@ -274,6 +274,14 @@ func (b *Bot) MayRequest(chattable tgbotapi.Chattable) *tgbotapi.APIResponse {
 	return may.Invoke(b.Request(chattable))
 }
 
+func (b *Bot) MayMakeRequest(endpoint string, params tgbotapi.Params) *tgbotapi.APIResponse {
+	may := fo.NewMay[*tgbotapi.APIResponse]().Use(func(err error, messageArgs ...any) {
+		b.logger.Error("failed to send request to telegram endpoint: "+endpoint, zap.String("request", xo.SprintJSON(params)), zap.Error(err))
+	})
+
+	return may.Invoke(b.MakeRequest(endpoint, params))
+}
+
 func (b *Bot) IsCannotInitiateChatWithUserErr(err error) bool {
 	if err == nil {
 		return false
@@ -526,4 +534,24 @@ func (b *Bot) ReplaceInlineKeyboardButtonFromInlineKeyboardMarkupThatMatchesData
 	}
 
 	return inlineKeyboardMarkup
+}
+
+func (b *Bot) PinChatMessage(config PinChatMessageConfig) error {
+	params, err := config.params()
+	if err != nil {
+		return err
+	}
+
+	b.MayMakeRequest(config.method(), params)
+	return err
+}
+
+func (b *Bot) UnPinChatMessage(config UnpinChatMessageConfig) error {
+	params, err := config.params()
+	if err != nil {
+		return err
+	}
+
+	b.MayMakeRequest(config.method(), params)
+	return err
 }

@@ -44,7 +44,7 @@ var ChatHistorySummarizationPrompt = lo.Must(template.New("chat histories summar
 {{ .ChatHistory }}
 """
 
-You are a expert in summarizing the refined outlines from documents and dialogues. Please read through the provided chat history and identify the 1-10 distinct discussion topics that discussed and talked about.
+You are an expert in summarizing the refined outlines from documents and dialogues. Please read through the provided chat history and identify the 1-10 distinct discussion topics that discussed and talked about.
 
 Output topics correspond the following JSON Schema types, and output the result in language {{ .Language }}:"""
 {"$schema":"http://json-schema.org/draft-07/schema#","title":"Chat Histories Summarization Schema","type":"array","items":{"type":"object","properties":{"topicName":{"type":"string","description":"The title, brief short title of the topic that talked, discussed in the chat history."},"sinceId":{"type":"number","description":"The id of the message from which the topic initially starts."},"participants":{"type":"array","description":"The list of the names of the participated users in the topic.","items":{"type":"string"}},"discussion":{"type":"array","description":"The list of the points that discussed during the topic.","items":{"type":"object","properties":{"point":{"type":"string","description":"The key point that talked, expressed, mentioned, or discussed during the topic."},"keyIds":{"type":"array","description":"The list of the ids of the messages that contain the key point.","items":{"type":"number"}}},"required":["point","keyIds"]},"minItems": 1,"maxItems": 5},"conclusion":{"type":"string","description":"The conclusion of the topic, optional."}},"required":["topicName","sinceId","participants","discussion"]}}

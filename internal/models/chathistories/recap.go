@@ -89,6 +89,9 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 	}
 
 	var outputs []*openai.ChatHistorySummarizationOutputs
+	resp.Choices[0].Message.Content = strings.TrimPrefix(resp.Choices[0].Message.Content, "```json")
+	resp.Choices[0].Message.Content = strings.TrimPrefix(resp.Choices[0].Message.Content, "```")
+	resp.Choices[0].Message.Content = strings.TrimSuffix(resp.Choices[0].Message.Content, "```")
 
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &outputs)
 	if err != nil {

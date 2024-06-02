@@ -265,7 +265,7 @@ func NewTestConfig() func() *Config {
 			DB: SectionDB{
 				ConnectionString: lo.Ternary(
 					os.Getenv(EnvDBConnectionString) == "",
-					"postgresql://postgres:123456@localhost:5432/postgres?search_path=public&sslmode=disable",
+					"postgresql://postgres:pan123456@localhost:5432/postgres?search_path=public&sslmode=disable",
 					os.Getenv(EnvDBConnectionString),
 				),
 			},

@@ -218,7 +218,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	logID, summarizations, err := m.chathistories.SummarizeChatHistories(chatID, chatType, histories)
 	if err != nil {
-		m.logger.Error("failed to summarize last six hour chat histories",
+		m.logger.Error(fmt.Sprintf("failed to summarize last %d hour chat histories", hours),
 			zap.Int64("chat_id", chatID),
 			zap.String("module", "autorecap"),
 			zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
@@ -403,13 +403,61 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				msg.ReplyMarkup = inlineKeyboardMarkup
 			}
 
-			_, err = m.botService.Send(msg)
+			sent_msg, err := m.botService.Send(msg)
 			if err != nil {
 				m.logger.Error("failed to send chat histories recap",
 					zap.Int64("chat_id", chatID),
 					zap.Int("auto_recap_rates", options.AutoRecapRatesPerDay),
 					zap.Error(err),
 				)
+			}
+
+			// Check whether the first message of the batch needs to be pinned
+			if i == 1 && options.PinAutoRecapMessage {
+				// Unpin the last pinned message
+				lastPinnedMessage, err := m.chathistories.FindLastTelegramPinnedMessage(chatID)
+				if err != nil {
+					m.logger.Error("failed to find last pinned message",
+						zap.Int64("chat_id", chatID),
+						zap.Error(err),
+					)
+				} else {
+					err := m.botService.UnpinChatMessage(tgbot.NewUnpinChatMessageConfig(chatID, lastPinnedMessage.MessageID))
+					if err != nil {
+						m.logger.Error("failed to unpin chat message",
+							zap.Int64("chat_id", chatID),
+							zap.Error(err),
+						)
+					} else {
+						err = m.chathistories.UpdatePinnedMessage(lastPinnedMessage.ChatID, lastPinnedMessage.MessageID, false)
+						if err != nil {
+							m.logger.Error("failed to save one telegram sent message",
+								zap.Int64("chat_id", chatID),
+								zap.Error(err))
+						}
+					}
+				}
+
+				err = m.botService.PinChatMessage(tgbot.NewPinChatMessageConfig(chatID, sent_msg.MessageID))
+				if err != nil {
+					m.logger.Error("failed to pin chat message",
+						zap.Int64("chat_id", chatID),
+						zap.Error(err),
+					)
+				}
+				err = m.chathistories.SaveOneTelegramSentMessage(&sent_msg, true)
+				if err != nil {
+					m.logger.Error("failed to save one telegram sent message",
+						zap.Int64("chat_id", chatID),
+						zap.Error(err))
+				}
+			} else {
+				err = m.chathistories.SaveOneTelegramSentMessage(&sent_msg, false)
+				if err != nil {
+					m.logger.Error("failed to save one telegram sent message",
+						zap.Int64("chat_id", chatID),
+						zap.Error(err))
+				}
 			}
 		}
 	}

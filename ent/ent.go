@@ -18,6 +18,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/logchathistoriesrecap"
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
+	"github.com/nekomeowww/insights-bot/ent/sentmessages"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatautorecapssubscribers"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -88,6 +89,7 @@ func checkColumn(table, column string) error {
 			logchathistoriesrecap.Table:                logchathistoriesrecap.ValidColumn,
 			logsummarizations.Table:                    logsummarizations.ValidColumn,
 			metricopenaichatcompletiontokenusage.Table: metricopenaichatcompletiontokenusage.ValidColumn,
+			sentmessages.Table:                         sentmessages.ValidColumn,
 			slackoauthcredentials.Table:                slackoauthcredentials.ValidColumn,
 			telegramchatautorecapssubscribers.Table:    telegramchatautorecapssubscribers.ValidColumn,
 			telegramchatfeatureflags.Table:             telegramchatfeatureflags.ValidColumn,

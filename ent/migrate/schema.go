@@ -130,6 +130,24 @@ var (
 		Columns:    MetricOpenAiChatCompletionTokenUsagesColumns,
 		PrimaryKey: []*schema.Column{MetricOpenAiChatCompletionTokenUsagesColumns[0]},
 	}
+	// SentMessagesColumns holds the columns for the "sent_messages" table.
+	SentMessagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "chat_id", Type: field.TypeInt64, Default: 0},
+		{Name: "message_id", Type: field.TypeInt, Default: 0},
+		{Name: "text", Type: field.TypeString, Size: 2147483647, Default: ""},
+		{Name: "is_pinned", Type: field.TypeBool, Default: false},
+		{Name: "from_platform", Type: field.TypeInt, Default: 0},
+		{Name: "message_type", Type: field.TypeInt, Default: 0},
+		{Name: "created_at", Type: field.TypeInt64},
+		{Name: "updated_at", Type: field.TypeInt64},
+	}
+	// SentMessagesTable holds the schema information for the "sent_messages" table.
+	SentMessagesTable = &schema.Table{
+		Name:       "sent_messages",
+		Columns:    SentMessagesColumns,
+		PrimaryKey: []*schema.Column{SentMessagesColumns[0]},
+	}
 	// SlackOauthCredentialsColumns holds the columns for the "slack_oauth_credentials" table.
 	SlackOauthCredentialsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
@@ -183,6 +201,7 @@ var (
 		{Name: "auto_recap_send_mode", Type: field.TypeInt, Default: 0},
 		{Name: "manual_recap_rate_per_seconds", Type: field.TypeInt64, Default: 0},
 		{Name: "auto_recap_rates_per_day", Type: field.TypeInt, Default: 0},
+		{Name: "pin_auto_recap_message", Type: field.TypeBool, Default: false},
 		{Name: "created_at", Type: field.TypeInt64},
 		{Name: "updated_at", Type: field.TypeInt64},
 	}
@@ -200,6 +219,7 @@ var (
 		LogChatHistoriesRecapsTable,
 		LogSummarizationsTable,
 		MetricOpenAiChatCompletionTokenUsagesTable,
+		SentMessagesTable,
 		SlackOauthCredentialsTable,
 		TelegramChatAutoRecapsSubscribersTable,
 		TelegramChatFeatureFlagsTable,

@@ -139,3 +139,65 @@ func (m *Model) MigrateOptionOfChatFromChatIDToChatID(fromChatID int64, toChatID
 
 	return nil
 }
+
+func (m *Model) EnablePinAutoRecapMessage(chatID int64) error {
+	option, err := m.FindOneOrCreateRecapsOption(chatID)
+	if err != nil {
+		return err
+	}
+	if option.PinAutoRecapMessage {
+		return nil
+	}
+
+	_, err = m.ent.TelegramChatRecapsOptions.
+		UpdateOne(option).
+		SetPinAutoRecapMessage(true).
+		Save(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.Info("enabled pin auto recap message",
+		zap.Int64("chat_id", chatID),
+	)
+
+	return nil
+}
+
+func (m *Model) DisablePinAutoRecapMessage(chatID int64) error {
+	option, err := m.FindOneRecapsOption(chatID)
+	if err != nil {
+		return err
+	}
+	if option == nil {
+		_, err = m.ent.TelegramChatRecapsOptions.
+			Create().
+			SetChatID(chatID).
+			SetAutoRecapSendMode(int(tgchat.AutoRecapSendModePublicly)).
+			SetAutoRecapRatesPerDay(4).
+			SetPinAutoRecapMessage(false).
+			Save(context.Background())
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+	if !option.PinAutoRecapMessage {
+		return nil
+	}
+
+	_, err = m.ent.TelegramChatRecapsOptions.
+		UpdateOne(option).
+		SetPinAutoRecapMessage(false).
+		Save(context.Background())
+	if err != nil {
+		return err
+	}
+
+	m.logger.Info("disabled pin auto recap message",
+		zap.Int64("chat_id", chatID),
+	)
+
+	return nil
+}

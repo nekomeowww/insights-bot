@@ -413,7 +413,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			}
 
 			// Check whether the first message of the batch needs to be pinned
-			if i == 1 && options.PinAutoRecapMessage {
+			if i == 0 && options.PinAutoRecapMessage {
 				// Unpin the last pinned message
 				lastPinnedMessage, err := m.chathistories.FindLastTelegramPinnedMessage(chatID)
 				if err != nil {

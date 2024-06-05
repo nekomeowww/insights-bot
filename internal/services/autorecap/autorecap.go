@@ -403,7 +403,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				msg.ReplyMarkup = inlineKeyboardMarkup
 			}
 
-			sent_msg, err := m.botService.Send(msg)
+			sentMsg, err := m.botService.Send(msg)
 			if err != nil {
 				m.logger.Error("failed to send chat histories recap",
 					zap.Int64("chat_id", chatID),
@@ -414,7 +414,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 			// Check whether the first message of the batch needs to be pinned
 			if i != 0 || !options.PinAutoRecapMessage {
-				err = m.chathistories.SaveOneTelegramSentMessage(&sent_msg, false)
+				err = m.chathistories.SaveOneTelegramSentMessage(&sentMsg, false)
 				if err != nil {
 					m.logger.Error("failed to save one telegram sent message",
 						zap.Int64("chat_id", chatID),

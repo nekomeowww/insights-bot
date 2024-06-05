@@ -412,7 +412,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				)
 			}
 
-			// Check whether the first message of the batch needs to be pinned
+			// Check whether the first message of the batch needs to be pinned, if not, skip the pinning process
 			if i != 0 || !options.PinAutoRecapMessage {
 				err = m.chathistories.SaveOneTelegramSentMessage(&sentMsg, false)
 				if err != nil {
@@ -424,6 +424,32 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				return
 			}
 
+			may := fo.NewMay0().Use(func(err error, messageArgs ...any) {
+				if len(messageArgs) == 0 {
+					m.logger.Error(err.Error())
+					return
+				}
+				prefix, _ := messageArgs[0].(string)
+
+				if len(messageArgs) == 1 {
+					m.logger.Error(prefix, zap.Error(err))
+					return
+				}
+				fields := make([]zap.Field, 0)
+				fields = append(fields, zap.Error(err))
+
+				for i, v := range messageArgs[1:] {
+					field, ok := v.(zap.Field)
+					if !ok {
+						fields = append(fields, zap.Any(fmt.Sprintf("error_field_%d", i), field))
+					} else {
+						fields = append(fields, field)
+					}
+				}
+
+				m.logger.Error(prefix, fields...)
+			})
+
 			// Unpin the last pinned message
 			lastPinnedMessage, err := m.chathistories.FindLastTelegramPinnedMessage(chatID)
 			if err != nil {
@@ -433,31 +459,10 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 				)
 			}
 
-			if err = m.botService.UnpinChatMessage(tgbot.NewUnpinChatMessageConfig(chatID, lastPinnedMessage.MessageID)); err != nil {
-				m.logger.Error("failed to unpin chat message",
-					zap.Int64("chat_id", chatID),
-					zap.Error(err),
-				)
-			}
-
-			if err = m.chathistories.UpdatePinnedMessage(lastPinnedMessage.ChatID, lastPinnedMessage.MessageID, false); err != nil {
-				m.logger.Error("failed to save one telegram sent message",
-					zap.Int64("chat_id", chatID),
-					zap.Error(err))
-			}
-
-			if err = m.botService.PinChatMessage(tgbot.NewPinChatMessageConfig(chatID, sent_msg.MessageID)); err != nil {
-				m.logger.Error("failed to pin chat message",
-					zap.Int64("chat_id", chatID),
-					zap.Error(err),
-				)
-			}
-
-			if err = m.chathistories.SaveOneTelegramSentMessage(&sent_msg, true); err != nil {
-				m.logger.Error("failed to save one telegram sent message",
-					zap.Int64("chat_id", chatID),
-					zap.Error(err))
-			}
+			may.Invoke(m.botService.UnpinChatMessage(tgbot.NewUnpinChatMessageConfig(chatID, lastPinnedMessage.MessageID)), "failed to unpin chat message", zap.Int64("chat_id", chatID), zap.Int("message_id", lastPinnedMessage.MessageID))
+			may.Invoke(m.chathistories.UpdatePinnedMessage(lastPinnedMessage.ChatID, lastPinnedMessage.MessageID, false), "failed to save one telegram sent message", zap.Int64("chat_id", lastPinnedMessage.ChatID), zap.Int("message_id", lastPinnedMessage.MessageID))
+			may.Invoke(m.botService.PinChatMessage(tgbot.NewPinChatMessageConfig(chatID, sentMsg.MessageID)), "failed to pin chat message", zap.Int64("chat_id", chatID), zap.Int("message_id", sentMsg.MessageID))
+			may.Invoke(m.chathistories.SaveOneTelegramSentMessage(&sentMsg, true), "failed to save one telegram sent message")
 		}
 	}
 }

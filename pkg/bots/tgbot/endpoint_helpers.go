@@ -20,6 +20,7 @@ func (config PinChatMessageConfig) params() (tgbotapi.Params, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	params.AddNonZero("message_id", config.MessageID)
 	params.AddBool("disable_notification", true)
 
@@ -51,6 +52,7 @@ func (config UnpinChatMessageConfig) params() (tgbotapi.Params, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	params.AddNonZero("message_id", config.MessageID)
 
 	return params, err

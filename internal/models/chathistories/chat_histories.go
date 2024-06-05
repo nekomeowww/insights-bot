@@ -90,6 +90,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 		endIndex := startIndex + entity.Length
 		var title string
 		var href string
+
 		switch entity.Type {
 		case "url":
 			href = string(utf16.Decode(textUTF16[startIndex:endIndex]))

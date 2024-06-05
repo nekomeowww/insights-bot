@@ -267,6 +267,7 @@ func (b *BotService) PinChatMessage(config PinChatMessageConfig) error {
 	}
 
 	b.MayMakeRequest(config.method(), params)
+
 	return err
 }
 
@@ -277,6 +278,7 @@ func (b *BotService) UnpinChatMessage(config UnpinChatMessageConfig) error {
 	}
 
 	b.MayMakeRequest(config.method(), params)
+
 	return err
 }
 

@@ -68,10 +68,12 @@ func (m *Model) UpdatePinnedMessage(chatID int64, messageID int, isPinned bool) 
 	if err != nil {
 		return err
 	}
+
 	m.logger.Debug("updated one pinned message",
 		zap.Int64("chat_id", chatID),
 		zap.Int("message_id", messageID),
 		zap.Bool("is_pinned", isPinned),
 	)
+
 	return nil
 }

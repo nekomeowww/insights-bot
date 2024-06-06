@@ -24,6 +24,8 @@ type Tx struct {
 	LogSummarizations *LogSummarizationsClient
 	// MetricOpenAIChatCompletionTokenUsage is the client for interacting with the MetricOpenAIChatCompletionTokenUsage builders.
 	MetricOpenAIChatCompletionTokenUsage *MetricOpenAIChatCompletionTokenUsageClient
+	// SentMessages is the client for interacting with the SentMessages builders.
+	SentMessages *SentMessagesClient
 	// SlackOAuthCredentials is the client for interacting with the SlackOAuthCredentials builders.
 	SlackOAuthCredentials *SlackOAuthCredentialsClient
 	// TelegramChatAutoRecapsSubscribers is the client for interacting with the TelegramChatAutoRecapsSubscribers builders.
@@ -169,6 +171,7 @@ func (tx *Tx) init() {
 	tx.LogChatHistoriesRecap = NewLogChatHistoriesRecapClient(tx.config)
 	tx.LogSummarizations = NewLogSummarizationsClient(tx.config)
 	tx.MetricOpenAIChatCompletionTokenUsage = NewMetricOpenAIChatCompletionTokenUsageClient(tx.config)
+	tx.SentMessages = NewSentMessagesClient(tx.config)
 	tx.SlackOAuthCredentials = NewSlackOAuthCredentialsClient(tx.config)
 	tx.TelegramChatAutoRecapsSubscribers = NewTelegramChatAutoRecapsSubscribersClient(tx.config)
 	tx.TelegramChatFeatureFlags = NewTelegramChatFeatureFlagsClient(tx.config)

@@ -235,6 +235,7 @@ func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories [
 			item.KeyIDs = nil
 			return item
 		})
+
 		return item
 	})
 

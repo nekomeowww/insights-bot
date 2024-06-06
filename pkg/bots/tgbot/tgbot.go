@@ -252,6 +252,36 @@ func (b *BotService) Bot() *Bot {
 	}
 }
 
+func (b *BotService) MayMakeRequest(endpoint string, params tgbotapi.Params) *tgbotapi.APIResponse {
+	may := fo.NewMay[*tgbotapi.APIResponse]().Use(func(err error, messageArgs ...any) {
+		b.logger.Error("failed to send request to telegram endpoint: "+endpoint, zap.String("request", xo.SprintJSON(params)), zap.Error(err))
+	})
+
+	return may.Invoke(b.MakeRequest(endpoint, params))
+}
+
+func (b *BotService) PinChatMessage(config PinChatMessageConfig) error {
+	params, err := config.params()
+	if err != nil {
+		return err
+	}
+
+	b.MayMakeRequest(config.method(), params)
+
+	return err
+}
+
+func (b *BotService) UnpinChatMessage(config UnpinChatMessageConfig) error {
+	params, err := config.params()
+	if err != nil {
+		return err
+	}
+
+	b.MayMakeRequest(config.method(), params)
+
+	return err
+}
+
 type Bot struct {
 	*tgbotapi.BotAPI
 	logger        *logger.Logger

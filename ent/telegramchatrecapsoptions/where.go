@@ -73,6 +73,11 @@ func AutoRecapRatesPerDay(v int) predicate.TelegramChatRecapsOptions {
 	return predicate.TelegramChatRecapsOptions(sql.FieldEQ(FieldAutoRecapRatesPerDay, v))
 }
 
+// PinAutoRecapMessage applies equality check predicate on the "pin_auto_recap_message" field. It's identical to PinAutoRecapMessageEQ.
+func PinAutoRecapMessage(v bool) predicate.TelegramChatRecapsOptions {
+	return predicate.TelegramChatRecapsOptions(sql.FieldEQ(FieldPinAutoRecapMessage, v))
+}
+
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
 func CreatedAt(v int64) predicate.TelegramChatRecapsOptions {
 	return predicate.TelegramChatRecapsOptions(sql.FieldEQ(FieldCreatedAt, v))
@@ -241,6 +246,16 @@ func AutoRecapRatesPerDayLT(v int) predicate.TelegramChatRecapsOptions {
 // AutoRecapRatesPerDayLTE applies the LTE predicate on the "auto_recap_rates_per_day" field.
 func AutoRecapRatesPerDayLTE(v int) predicate.TelegramChatRecapsOptions {
 	return predicate.TelegramChatRecapsOptions(sql.FieldLTE(FieldAutoRecapRatesPerDay, v))
+}
+
+// PinAutoRecapMessageEQ applies the EQ predicate on the "pin_auto_recap_message" field.
+func PinAutoRecapMessageEQ(v bool) predicate.TelegramChatRecapsOptions {
+	return predicate.TelegramChatRecapsOptions(sql.FieldEQ(FieldPinAutoRecapMessage, v))
+}
+
+// PinAutoRecapMessageNEQ applies the NEQ predicate on the "pin_auto_recap_message" field.
+func PinAutoRecapMessageNEQ(v bool) predicate.TelegramChatRecapsOptions {
+	return predicate.TelegramChatRecapsOptions(sql.FieldNEQ(FieldPinAutoRecapMessage, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.

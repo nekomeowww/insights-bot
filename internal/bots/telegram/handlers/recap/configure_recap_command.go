@@ -100,6 +100,7 @@ func newRecapInlineKeyboardMarkup(
 	currentRecapStatusOn bool,
 	currentRecapMode tgchat.AutoRecapSendMode,
 	currentAutoRecapRatesPerDay int,
+	currentPinStatusOn bool,
 ) (tgbotapi.InlineKeyboardMarkup, error) {
 	nopData, err := c.Bot.AssignOneNopCallbackQueryData()
 	if err != nil {
@@ -127,6 +128,16 @@ func newRecapInlineKeyboardMarkup(
 	}
 
 	completeData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/complete", recap.ConfigureRecapCompleteActionData{ChatID: chatID, FromID: fromID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	togglePinData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/pin", recap.ConfigureRecapPinMessageData{Status: true, ChatID: chatID})
+	if err != nil {
+		return tgbotapi.InlineKeyboardMarkup{}, err
+	}
+
+	toggleUnpinData, err := c.Bot.AssignOneCallbackQueryData("recap/configure/pin", recap.ConfigureRecapPinMessageData{Status: false, ChatID: chatID})
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
@@ -190,6 +201,13 @@ func newRecapInlineKeyboardMarkup(
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 2, "🔘 2 次", "2 次"), twoTimePerDayData),
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 3, "🔘 3 次", "3 次"), threeTimePerDayData),
 			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentAutoRecapRatesPerDay == 4, "🔘 4 次", "4 次"), fourTimePerDayData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("🪧 置顶聊天记录回顾", nopData),
+		),
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(currentPinStatusOn, "🔘 开启", "开启"), togglePinData),
+			tgbotapi.NewInlineKeyboardButtonData(lo.Ternary(!currentPinStatusOn, "🔘 关闭", "关闭"), toggleUnpinData),
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData("✅ 完成", completeData),
@@ -261,6 +279,7 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 		has,
 		tgchat.AutoRecapSendMode(options.AutoRecapSendMode),
 		lo.Ternary(options.AutoRecapRatesPerDay == 0, 4, options.AutoRecapRatesPerDay),
+		options.PinAutoRecapMessage,
 	)
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").WithReply(c.Update.Message)

@@ -68,6 +68,20 @@ func (tcroc *TelegramChatRecapsOptionsCreate) SetNillableAutoRecapRatesPerDay(i 
 	return tcroc
 }
 
+// SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
+func (tcroc *TelegramChatRecapsOptionsCreate) SetPinAutoRecapMessage(b bool) *TelegramChatRecapsOptionsCreate {
+	tcroc.mutation.SetPinAutoRecapMessage(b)
+	return tcroc
+}
+
+// SetNillablePinAutoRecapMessage sets the "pin_auto_recap_message" field if the given value is not nil.
+func (tcroc *TelegramChatRecapsOptionsCreate) SetNillablePinAutoRecapMessage(b *bool) *TelegramChatRecapsOptionsCreate {
+	if b != nil {
+		tcroc.SetPinAutoRecapMessage(*b)
+	}
+	return tcroc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcroc *TelegramChatRecapsOptionsCreate) SetCreatedAt(i int64) *TelegramChatRecapsOptionsCreate {
 	tcroc.mutation.SetCreatedAt(i)
@@ -157,6 +171,10 @@ func (tcroc *TelegramChatRecapsOptionsCreate) defaults() {
 		v := telegramchatrecapsoptions.DefaultAutoRecapRatesPerDay
 		tcroc.mutation.SetAutoRecapRatesPerDay(v)
 	}
+	if _, ok := tcroc.mutation.PinAutoRecapMessage(); !ok {
+		v := telegramchatrecapsoptions.DefaultPinAutoRecapMessage
+		tcroc.mutation.SetPinAutoRecapMessage(v)
+	}
 	if _, ok := tcroc.mutation.CreatedAt(); !ok {
 		v := telegramchatrecapsoptions.DefaultCreatedAt()
 		tcroc.mutation.SetCreatedAt(v)
@@ -184,6 +202,9 @@ func (tcroc *TelegramChatRecapsOptionsCreate) check() error {
 	}
 	if _, ok := tcroc.mutation.AutoRecapRatesPerDay(); !ok {
 		return &ValidationError{Name: "auto_recap_rates_per_day", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.auto_recap_rates_per_day"`)}
+	}
+	if _, ok := tcroc.mutation.PinAutoRecapMessage(); !ok {
+		return &ValidationError{Name: "pin_auto_recap_message", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.pin_auto_recap_message"`)}
 	}
 	if _, ok := tcroc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "TelegramChatRecapsOptions.created_at"`)}
@@ -242,6 +263,10 @@ func (tcroc *TelegramChatRecapsOptionsCreate) createSpec() (*TelegramChatRecapsO
 	if value, ok := tcroc.mutation.AutoRecapRatesPerDay(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
 		_node.AutoRecapRatesPerDay = value
+	}
+	if value, ok := tcroc.mutation.PinAutoRecapMessage(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldPinAutoRecapMessage, field.TypeBool, value)
+		_node.PinAutoRecapMessage = value
 	}
 	if value, ok := tcroc.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)

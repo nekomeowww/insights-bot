@@ -40,3 +40,8 @@ type FeedbackSummarizationReactionActionData struct {
 	LogID  string                               `json:"logId"`
 	Type   feedbacksummarizationsreactions.Type `json:"type"`
 }
+
+type ConfigureRecapPinMessageData struct {
+	Status bool  `json:"status"`
+	ChatID int64 `json:"chatId"`
+}

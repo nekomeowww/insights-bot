@@ -25,6 +25,8 @@ type TelegramChatRecapsOptions struct {
 	ManualRecapRatePerSeconds int64 `json:"manual_recap_rate_per_seconds,omitempty"`
 	// AutoRecapRatesPerDay holds the value of the "auto_recap_rates_per_day" field.
 	AutoRecapRatesPerDay int `json:"auto_recap_rates_per_day,omitempty"`
+	// PinAutoRecapMessage holds the value of the "pin_auto_recap_message" field.
+	PinAutoRecapMessage bool `json:"pin_auto_recap_message,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -37,6 +39,8 @@ func (*TelegramChatRecapsOptions) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+			values[i] = new(sql.NullBool)
 		case telegramchatrecapsoptions.FieldChatID, telegramchatrecapsoptions.FieldAutoRecapSendMode, telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, telegramchatrecapsoptions.FieldCreatedAt, telegramchatrecapsoptions.FieldUpdatedAt:
 			values[i] = new(sql.NullInt64)
 		case telegramchatrecapsoptions.FieldID:
@@ -85,6 +89,12 @@ func (tcro *TelegramChatRecapsOptions) assignValues(columns []string, values []a
 				return fmt.Errorf("unexpected type %T for field auto_recap_rates_per_day", values[i])
 			} else if value.Valid {
 				tcro.AutoRecapRatesPerDay = int(value.Int64)
+			}
+		case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field pin_auto_recap_message", values[i])
+			} else if value.Valid {
+				tcro.PinAutoRecapMessage = value.Bool
 			}
 		case telegramchatrecapsoptions.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -145,6 +155,9 @@ func (tcro *TelegramChatRecapsOptions) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("auto_recap_rates_per_day=")
 	builder.WriteString(fmt.Sprintf("%v", tcro.AutoRecapRatesPerDay))
+	builder.WriteString(", ")
+	builder.WriteString("pin_auto_recap_message=")
+	builder.WriteString(fmt.Sprintf("%v", tcro.PinAutoRecapMessage))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", tcro.CreatedAt))

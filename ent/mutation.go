@@ -18,6 +18,7 @@ import (
 	"github.com/nekomeowww/insights-bot/ent/logsummarizations"
 	"github.com/nekomeowww/insights-bot/ent/metricopenaichatcompletiontokenusage"
 	"github.com/nekomeowww/insights-bot/ent/predicate"
+	"github.com/nekomeowww/insights-bot/ent/sentmessages"
 	"github.com/nekomeowww/insights-bot/ent/slackoauthcredentials"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatautorecapssubscribers"
 	"github.com/nekomeowww/insights-bot/ent/telegramchatfeatureflags"
@@ -39,6 +40,7 @@ const (
 	TypeLogChatHistoriesRecap                = "LogChatHistoriesRecap"
 	TypeLogSummarizations                    = "LogSummarizations"
 	TypeMetricOpenAIChatCompletionTokenUsage = "MetricOpenAIChatCompletionTokenUsage"
+	TypeSentMessages                         = "SentMessages"
 	TypeSlackOAuthCredentials                = "SlackOAuthCredentials"
 	TypeTelegramChatAutoRecapsSubscribers    = "TelegramChatAutoRecapsSubscribers"
 	TypeTelegramChatFeatureFlags             = "TelegramChatFeatureFlags"
@@ -6300,6 +6302,917 @@ func (m *MetricOpenAIChatCompletionTokenUsageMutation) ResetEdge(name string) er
 	return fmt.Errorf("unknown MetricOpenAIChatCompletionTokenUsage edge %s", name)
 }
 
+// SentMessagesMutation represents an operation that mutates the SentMessages nodes in the graph.
+type SentMessagesMutation struct {
+	config
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	chat_id          *int64
+	addchat_id       *int64
+	message_id       *int
+	addmessage_id    *int
+	text             *string
+	is_pinned        *bool
+	from_platform    *int
+	addfrom_platform *int
+	message_type     *int
+	addmessage_type  *int
+	created_at       *int64
+	addcreated_at    *int64
+	updated_at       *int64
+	addupdated_at    *int64
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*SentMessages, error)
+	predicates       []predicate.SentMessages
+}
+
+var _ ent.Mutation = (*SentMessagesMutation)(nil)
+
+// sentmessagesOption allows management of the mutation configuration using functional options.
+type sentmessagesOption func(*SentMessagesMutation)
+
+// newSentMessagesMutation creates new mutation for the SentMessages entity.
+func newSentMessagesMutation(c config, op Op, opts ...sentmessagesOption) *SentMessagesMutation {
+	m := &SentMessagesMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeSentMessages,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withSentMessagesID sets the ID field of the mutation.
+func withSentMessagesID(id uuid.UUID) sentmessagesOption {
+	return func(m *SentMessagesMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *SentMessages
+		)
+		m.oldValue = func(ctx context.Context) (*SentMessages, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().SentMessages.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withSentMessages sets the old SentMessages of the mutation.
+func withSentMessages(node *SentMessages) sentmessagesOption {
+	return func(m *SentMessagesMutation) {
+		m.oldValue = func(context.Context) (*SentMessages, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m SentMessagesMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m SentMessagesMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of SentMessages entities.
+func (m *SentMessagesMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *SentMessagesMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *SentMessagesMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().SentMessages.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetChatID sets the "chat_id" field.
+func (m *SentMessagesMutation) SetChatID(i int64) {
+	m.chat_id = &i
+	m.addchat_id = nil
+}
+
+// ChatID returns the value of the "chat_id" field in the mutation.
+func (m *SentMessagesMutation) ChatID() (r int64, exists bool) {
+	v := m.chat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldChatID returns the old "chat_id" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldChatID(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldChatID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldChatID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldChatID: %w", err)
+	}
+	return oldValue.ChatID, nil
+}
+
+// AddChatID adds i to the "chat_id" field.
+func (m *SentMessagesMutation) AddChatID(i int64) {
+	if m.addchat_id != nil {
+		*m.addchat_id += i
+	} else {
+		m.addchat_id = &i
+	}
+}
+
+// AddedChatID returns the value that was added to the "chat_id" field in this mutation.
+func (m *SentMessagesMutation) AddedChatID() (r int64, exists bool) {
+	v := m.addchat_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetChatID resets all changes to the "chat_id" field.
+func (m *SentMessagesMutation) ResetChatID() {
+	m.chat_id = nil
+	m.addchat_id = nil
+}
+
+// SetMessageID sets the "message_id" field.
+func (m *SentMessagesMutation) SetMessageID(i int) {
+	m.message_id = &i
+	m.addmessage_id = nil
+}
+
+// MessageID returns the value of the "message_id" field in the mutation.
+func (m *SentMessagesMutation) MessageID() (r int, exists bool) {
+	v := m.message_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMessageID returns the old "message_id" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldMessageID(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMessageID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMessageID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMessageID: %w", err)
+	}
+	return oldValue.MessageID, nil
+}
+
+// AddMessageID adds i to the "message_id" field.
+func (m *SentMessagesMutation) AddMessageID(i int) {
+	if m.addmessage_id != nil {
+		*m.addmessage_id += i
+	} else {
+		m.addmessage_id = &i
+	}
+}
+
+// AddedMessageID returns the value that was added to the "message_id" field in this mutation.
+func (m *SentMessagesMutation) AddedMessageID() (r int, exists bool) {
+	v := m.addmessage_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMessageID resets all changes to the "message_id" field.
+func (m *SentMessagesMutation) ResetMessageID() {
+	m.message_id = nil
+	m.addmessage_id = nil
+}
+
+// SetText sets the "text" field.
+func (m *SentMessagesMutation) SetText(s string) {
+	m.text = &s
+}
+
+// Text returns the value of the "text" field in the mutation.
+func (m *SentMessagesMutation) Text() (r string, exists bool) {
+	v := m.text
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldText returns the old "text" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldText(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldText is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldText requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldText: %w", err)
+	}
+	return oldValue.Text, nil
+}
+
+// ResetText resets all changes to the "text" field.
+func (m *SentMessagesMutation) ResetText() {
+	m.text = nil
+}
+
+// SetIsPinned sets the "is_pinned" field.
+func (m *SentMessagesMutation) SetIsPinned(b bool) {
+	m.is_pinned = &b
+}
+
+// IsPinned returns the value of the "is_pinned" field in the mutation.
+func (m *SentMessagesMutation) IsPinned() (r bool, exists bool) {
+	v := m.is_pinned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsPinned returns the old "is_pinned" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldIsPinned(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsPinned is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsPinned requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsPinned: %w", err)
+	}
+	return oldValue.IsPinned, nil
+}
+
+// ResetIsPinned resets all changes to the "is_pinned" field.
+func (m *SentMessagesMutation) ResetIsPinned() {
+	m.is_pinned = nil
+}
+
+// SetFromPlatform sets the "from_platform" field.
+func (m *SentMessagesMutation) SetFromPlatform(i int) {
+	m.from_platform = &i
+	m.addfrom_platform = nil
+}
+
+// FromPlatform returns the value of the "from_platform" field in the mutation.
+func (m *SentMessagesMutation) FromPlatform() (r int, exists bool) {
+	v := m.from_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFromPlatform returns the old "from_platform" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldFromPlatform(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFromPlatform is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFromPlatform requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFromPlatform: %w", err)
+	}
+	return oldValue.FromPlatform, nil
+}
+
+// AddFromPlatform adds i to the "from_platform" field.
+func (m *SentMessagesMutation) AddFromPlatform(i int) {
+	if m.addfrom_platform != nil {
+		*m.addfrom_platform += i
+	} else {
+		m.addfrom_platform = &i
+	}
+}
+
+// AddedFromPlatform returns the value that was added to the "from_platform" field in this mutation.
+func (m *SentMessagesMutation) AddedFromPlatform() (r int, exists bool) {
+	v := m.addfrom_platform
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetFromPlatform resets all changes to the "from_platform" field.
+func (m *SentMessagesMutation) ResetFromPlatform() {
+	m.from_platform = nil
+	m.addfrom_platform = nil
+}
+
+// SetMessageType sets the "message_type" field.
+func (m *SentMessagesMutation) SetMessageType(i int) {
+	m.message_type = &i
+	m.addmessage_type = nil
+}
+
+// MessageType returns the value of the "message_type" field in the mutation.
+func (m *SentMessagesMutation) MessageType() (r int, exists bool) {
+	v := m.message_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMessageType returns the old "message_type" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldMessageType(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMessageType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMessageType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMessageType: %w", err)
+	}
+	return oldValue.MessageType, nil
+}
+
+// AddMessageType adds i to the "message_type" field.
+func (m *SentMessagesMutation) AddMessageType(i int) {
+	if m.addmessage_type != nil {
+		*m.addmessage_type += i
+	} else {
+		m.addmessage_type = &i
+	}
+}
+
+// AddedMessageType returns the value that was added to the "message_type" field in this mutation.
+func (m *SentMessagesMutation) AddedMessageType() (r int, exists bool) {
+	v := m.addmessage_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetMessageType resets all changes to the "message_type" field.
+func (m *SentMessagesMutation) ResetMessageType() {
+	m.message_type = nil
+	m.addmessage_type = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *SentMessagesMutation) SetCreatedAt(i int64) {
+	m.created_at = &i
+	m.addcreated_at = nil
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *SentMessagesMutation) CreatedAt() (r int64, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (m *SentMessagesMutation) AddCreatedAt(i int64) {
+	if m.addcreated_at != nil {
+		*m.addcreated_at += i
+	} else {
+		m.addcreated_at = &i
+	}
+}
+
+// AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
+func (m *SentMessagesMutation) AddedCreatedAt() (r int64, exists bool) {
+	v := m.addcreated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *SentMessagesMutation) ResetCreatedAt() {
+	m.created_at = nil
+	m.addcreated_at = nil
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *SentMessagesMutation) SetUpdatedAt(i int64) {
+	m.updated_at = &i
+	m.addupdated_at = nil
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *SentMessagesMutation) UpdatedAt() (r int64, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the SentMessages entity.
+// If the SentMessages object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *SentMessagesMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (m *SentMessagesMutation) AddUpdatedAt(i int64) {
+	if m.addupdated_at != nil {
+		*m.addupdated_at += i
+	} else {
+		m.addupdated_at = &i
+	}
+}
+
+// AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
+func (m *SentMessagesMutation) AddedUpdatedAt() (r int64, exists bool) {
+	v := m.addupdated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *SentMessagesMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	m.addupdated_at = nil
+}
+
+// Where appends a list predicates to the SentMessagesMutation builder.
+func (m *SentMessagesMutation) Where(ps ...predicate.SentMessages) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the SentMessagesMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *SentMessagesMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.SentMessages, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *SentMessagesMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *SentMessagesMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (SentMessages).
+func (m *SentMessagesMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *SentMessagesMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.chat_id != nil {
+		fields = append(fields, sentmessages.FieldChatID)
+	}
+	if m.message_id != nil {
+		fields = append(fields, sentmessages.FieldMessageID)
+	}
+	if m.text != nil {
+		fields = append(fields, sentmessages.FieldText)
+	}
+	if m.is_pinned != nil {
+		fields = append(fields, sentmessages.FieldIsPinned)
+	}
+	if m.from_platform != nil {
+		fields = append(fields, sentmessages.FieldFromPlatform)
+	}
+	if m.message_type != nil {
+		fields = append(fields, sentmessages.FieldMessageType)
+	}
+	if m.created_at != nil {
+		fields = append(fields, sentmessages.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, sentmessages.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *SentMessagesMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case sentmessages.FieldChatID:
+		return m.ChatID()
+	case sentmessages.FieldMessageID:
+		return m.MessageID()
+	case sentmessages.FieldText:
+		return m.Text()
+	case sentmessages.FieldIsPinned:
+		return m.IsPinned()
+	case sentmessages.FieldFromPlatform:
+		return m.FromPlatform()
+	case sentmessages.FieldMessageType:
+		return m.MessageType()
+	case sentmessages.FieldCreatedAt:
+		return m.CreatedAt()
+	case sentmessages.FieldUpdatedAt:
+		return m.UpdatedAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *SentMessagesMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case sentmessages.FieldChatID:
+		return m.OldChatID(ctx)
+	case sentmessages.FieldMessageID:
+		return m.OldMessageID(ctx)
+	case sentmessages.FieldText:
+		return m.OldText(ctx)
+	case sentmessages.FieldIsPinned:
+		return m.OldIsPinned(ctx)
+	case sentmessages.FieldFromPlatform:
+		return m.OldFromPlatform(ctx)
+	case sentmessages.FieldMessageType:
+		return m.OldMessageType(ctx)
+	case sentmessages.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case sentmessages.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown SentMessages field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SentMessagesMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case sentmessages.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetChatID(v)
+		return nil
+	case sentmessages.FieldMessageID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMessageID(v)
+		return nil
+	case sentmessages.FieldText:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetText(v)
+		return nil
+	case sentmessages.FieldIsPinned:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsPinned(v)
+		return nil
+	case sentmessages.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFromPlatform(v)
+		return nil
+	case sentmessages.FieldMessageType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMessageType(v)
+		return nil
+	case sentmessages.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case sentmessages.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SentMessages field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *SentMessagesMutation) AddedFields() []string {
+	var fields []string
+	if m.addchat_id != nil {
+		fields = append(fields, sentmessages.FieldChatID)
+	}
+	if m.addmessage_id != nil {
+		fields = append(fields, sentmessages.FieldMessageID)
+	}
+	if m.addfrom_platform != nil {
+		fields = append(fields, sentmessages.FieldFromPlatform)
+	}
+	if m.addmessage_type != nil {
+		fields = append(fields, sentmessages.FieldMessageType)
+	}
+	if m.addcreated_at != nil {
+		fields = append(fields, sentmessages.FieldCreatedAt)
+	}
+	if m.addupdated_at != nil {
+		fields = append(fields, sentmessages.FieldUpdatedAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *SentMessagesMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case sentmessages.FieldChatID:
+		return m.AddedChatID()
+	case sentmessages.FieldMessageID:
+		return m.AddedMessageID()
+	case sentmessages.FieldFromPlatform:
+		return m.AddedFromPlatform()
+	case sentmessages.FieldMessageType:
+		return m.AddedMessageType()
+	case sentmessages.FieldCreatedAt:
+		return m.AddedCreatedAt()
+	case sentmessages.FieldUpdatedAt:
+		return m.AddedUpdatedAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *SentMessagesMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case sentmessages.FieldChatID:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddChatID(v)
+		return nil
+	case sentmessages.FieldMessageID:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMessageID(v)
+		return nil
+	case sentmessages.FieldFromPlatform:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddFromPlatform(v)
+		return nil
+	case sentmessages.FieldMessageType:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddMessageType(v)
+		return nil
+	case sentmessages.FieldCreatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreatedAt(v)
+		return nil
+	case sentmessages.FieldUpdatedAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdatedAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown SentMessages numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *SentMessagesMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *SentMessagesMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *SentMessagesMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown SentMessages nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *SentMessagesMutation) ResetField(name string) error {
+	switch name {
+	case sentmessages.FieldChatID:
+		m.ResetChatID()
+		return nil
+	case sentmessages.FieldMessageID:
+		m.ResetMessageID()
+		return nil
+	case sentmessages.FieldText:
+		m.ResetText()
+		return nil
+	case sentmessages.FieldIsPinned:
+		m.ResetIsPinned()
+		return nil
+	case sentmessages.FieldFromPlatform:
+		m.ResetFromPlatform()
+		return nil
+	case sentmessages.FieldMessageType:
+		m.ResetMessageType()
+		return nil
+	case sentmessages.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case sentmessages.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown SentMessages field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *SentMessagesMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *SentMessagesMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *SentMessagesMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *SentMessagesMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *SentMessagesMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *SentMessagesMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *SentMessagesMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown SentMessages unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *SentMessagesMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown SentMessages edge %s", name)
+}
+
 // SlackOAuthCredentialsMutation represents an operation that mutates the SlackOAuthCredentials nodes in the graph.
 type SlackOAuthCredentialsMutation struct {
 	config
@@ -8318,6 +9231,7 @@ type TelegramChatRecapsOptionsMutation struct {
 	addmanual_recap_rate_per_seconds *int64
 	auto_recap_rates_per_day         *int
 	addauto_recap_rates_per_day      *int
+	pin_auto_recap_message           *bool
 	created_at                       *int64
 	addcreated_at                    *int64
 	updated_at                       *int64
@@ -8656,6 +9570,42 @@ func (m *TelegramChatRecapsOptionsMutation) ResetAutoRecapRatesPerDay() {
 	m.addauto_recap_rates_per_day = nil
 }
 
+// SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
+func (m *TelegramChatRecapsOptionsMutation) SetPinAutoRecapMessage(b bool) {
+	m.pin_auto_recap_message = &b
+}
+
+// PinAutoRecapMessage returns the value of the "pin_auto_recap_message" field in the mutation.
+func (m *TelegramChatRecapsOptionsMutation) PinAutoRecapMessage() (r bool, exists bool) {
+	v := m.pin_auto_recap_message
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPinAutoRecapMessage returns the old "pin_auto_recap_message" field's value of the TelegramChatRecapsOptions entity.
+// If the TelegramChatRecapsOptions object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TelegramChatRecapsOptionsMutation) OldPinAutoRecapMessage(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPinAutoRecapMessage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPinAutoRecapMessage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPinAutoRecapMessage: %w", err)
+	}
+	return oldValue.PinAutoRecapMessage, nil
+}
+
+// ResetPinAutoRecapMessage resets all changes to the "pin_auto_recap_message" field.
+func (m *TelegramChatRecapsOptionsMutation) ResetPinAutoRecapMessage() {
+	m.pin_auto_recap_message = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *TelegramChatRecapsOptionsMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
@@ -8802,7 +9752,7 @@ func (m *TelegramChatRecapsOptionsMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TelegramChatRecapsOptionsMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.chat_id != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldChatID)
 	}
@@ -8814,6 +9764,9 @@ func (m *TelegramChatRecapsOptionsMutation) Fields() []string {
 	}
 	if m.auto_recap_rates_per_day != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldAutoRecapRatesPerDay)
+	}
+	if m.pin_auto_recap_message != nil {
+		fields = append(fields, telegramchatrecapsoptions.FieldPinAutoRecapMessage)
 	}
 	if m.created_at != nil {
 		fields = append(fields, telegramchatrecapsoptions.FieldCreatedAt)
@@ -8837,6 +9790,8 @@ func (m *TelegramChatRecapsOptionsMutation) Field(name string) (ent.Value, bool)
 		return m.ManualRecapRatePerSeconds()
 	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
 		return m.AutoRecapRatesPerDay()
+	case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+		return m.PinAutoRecapMessage()
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.CreatedAt()
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -8858,6 +9813,8 @@ func (m *TelegramChatRecapsOptionsMutation) OldField(ctx context.Context, name s
 		return m.OldManualRecapRatePerSeconds(ctx)
 	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
 		return m.OldAutoRecapRatesPerDay(ctx)
+	case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+		return m.OldPinAutoRecapMessage(ctx)
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case telegramchatrecapsoptions.FieldUpdatedAt:
@@ -8898,6 +9855,13 @@ func (m *TelegramChatRecapsOptionsMutation) SetField(name string, value ent.Valu
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAutoRecapRatesPerDay(v)
+		return nil
+	case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPinAutoRecapMessage(v)
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		v, ok := value.(int64)
@@ -9048,6 +10012,9 @@ func (m *TelegramChatRecapsOptionsMutation) ResetField(name string) error {
 		return nil
 	case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
 		m.ResetAutoRecapRatesPerDay()
+		return nil
+	case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
+		m.ResetPinAutoRecapMessage()
 		return nil
 	case telegramchatrecapsoptions.FieldCreatedAt:
 		m.ResetCreatedAt()

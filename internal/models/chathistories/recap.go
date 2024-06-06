@@ -179,6 +179,7 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 					zap.Int64("configured_token_limit", m.config.OpenAI.TokenLimit),
 					zap.Int64("calculated_token_limit", tokenLimit),
 				)
+
 				return err
 			}
 
@@ -202,6 +203,7 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 			}
 
 			outputs = o
+
 			return nil
 		})
 		if err != nil {

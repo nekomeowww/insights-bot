@@ -112,6 +112,20 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) AddAutoRecapRatesPerDay(i int) *Te
 	return tcrou
 }
 
+// SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
+func (tcrou *TelegramChatRecapsOptionsUpdate) SetPinAutoRecapMessage(b bool) *TelegramChatRecapsOptionsUpdate {
+	tcrou.mutation.SetPinAutoRecapMessage(b)
+	return tcrou
+}
+
+// SetNillablePinAutoRecapMessage sets the "pin_auto_recap_message" field if the given value is not nil.
+func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillablePinAutoRecapMessage(b *bool) *TelegramChatRecapsOptionsUpdate {
+	if b != nil {
+		tcrou.SetPinAutoRecapMessage(*b)
+	}
+	return tcrou
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (tcrou *TelegramChatRecapsOptionsUpdate) SetCreatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
 	tcrou.mutation.ResetCreatedAt()
@@ -218,6 +232,9 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) sqlSave(ctx context.Context) (n in
 	}
 	if value, ok := tcrou.mutation.AddedAutoRecapRatesPerDay(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
+	}
+	if value, ok := tcrou.mutation.PinAutoRecapMessage(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldPinAutoRecapMessage, field.TypeBool, value)
 	}
 	if value, ok := tcrou.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
@@ -334,6 +351,20 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapRatesPerDa
 // AddAutoRecapRatesPerDay adds i to the "auto_recap_rates_per_day" field.
 func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapRatesPerDay(i int) *TelegramChatRecapsOptionsUpdateOne {
 	tcrouo.mutation.AddAutoRecapRatesPerDay(i)
+	return tcrouo
+}
+
+// SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetPinAutoRecapMessage(b bool) *TelegramChatRecapsOptionsUpdateOne {
+	tcrouo.mutation.SetPinAutoRecapMessage(b)
+	return tcrouo
+}
+
+// SetNillablePinAutoRecapMessage sets the "pin_auto_recap_message" field if the given value is not nil.
+func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillablePinAutoRecapMessage(b *bool) *TelegramChatRecapsOptionsUpdateOne {
+	if b != nil {
+		tcrouo.SetPinAutoRecapMessage(*b)
+	}
 	return tcrouo
 }
 
@@ -473,6 +504,9 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (
 	}
 	if value, ok := tcrouo.mutation.AddedAutoRecapRatesPerDay(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
+	}
+	if value, ok := tcrouo.mutation.PinAutoRecapMessage(); ok {
+		_spec.SetField(telegramchatrecapsoptions.FieldPinAutoRecapMessage, field.TypeBool, value)
 	}
 	if value, ok := tcrouo.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)

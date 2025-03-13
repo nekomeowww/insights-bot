@@ -103,7 +103,7 @@ func (h *Handlers) Install(dispatcher *tgbot.Dispatcher) {
 
 var (
 	RecapSelectHourAvailable = []int64{
-		1, 2, 4, 6, 12,
+		1, 2, 4, 6, 12, 24,
 	}
 	RecapSelectHourAvailableText = lo.SliceToMap(RecapSelectHourAvailable, func(item int64) (int64, string) {
 		return item, fmt.Sprintf("%d 小时", item)

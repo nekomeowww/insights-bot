@@ -50,6 +50,7 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 	}
 
 	chatID := c.Update.Message.Chat.ID
+	fromID := c.Update.Message.From.ID
 	chatTitle := c.Update.Message.Chat.Title
 
 	has, err := h.tgchats.HasChatHistoriesRecapEnabledForGroups(chatID, chatTitle)
@@ -76,15 +77,24 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 		return h.handleRecapCommandForPrivateSubscriptionsMode(c)
 	}
 
-	perSeconds := h.tgchats.ManualRecapRatePerSeconds(options)
+	// Set hourly limit
+	perSeconds := int64(3600) // 1 hour = 3600 seconds
+	if options != nil && options.ManualRecapRatePerSeconds > perSeconds {
+		perSeconds = options.ManualRecapRatePerSeconds
+	}
 
-	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/recap", 1, perSeconds)
+	// Use user ID instead of group ID for rate limiting
+	_, ttl, ok, err := c.RateLimitForCommand(fromID, "/recap", 1, time.Duration(perSeconds)*time.Second)
 	if err != nil {
 		h.logger.Error("failed to check rate limit for command /recap", zap.Error(err))
+		return nil, tgbot.
+			NewExceptionError(err).
+			WithMessage("聊天记录回顾生成失败，请稍后再试！").
+			WithReply(c.Update.Message)
 	}
 	if !ok {
 		return nil, tgbot.
-			NewMessageError(fmt.Sprintf("很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 %d 分钟最多使用一次，请您耐心等待 %d 分钟后再试，感谢您的理解和支持。", perSeconds, lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute))).
+			NewMessageError(fmt.Sprintf("很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 %d 分钟最多使用一次，请您耐心等待 %d 分钟后再试，感谢您的理解和支持。", perSeconds/60, lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute))).
 			WithReply(c.Update.Message)
 	}
 

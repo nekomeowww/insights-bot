@@ -2,8 +2,6 @@ package tgbot
 
 import (
 	"unicode/utf8"
-
-	"github.com/samber/lo"
 )
 
 func SplitMessagesAgainstLengthLimitIntoMessageGroups(originalSlice []string) [][]string {
@@ -12,22 +10,38 @@ func SplitMessagesAgainstLengthLimitIntoMessageGroups(originalSlice []string) []
 	batchSlice := make([][]string, 0)
 
 	for _, s := range originalSlice {
-		tempSlice = append(tempSlice, s)
-		count += utf8.RuneCountInString(s) + 20
+		currentLength := utf8.RuneCountInString(s) + 20
 
-		if count >= 4096 {
-			tempSlice = lo.DropRight(tempSlice, 1)     // rollback the last append
-			batchSlice = append(batchSlice, tempSlice) // commit the batch
+		// If the current message itself exceeds the limit, handle it separately
+		if currentLength >= MessageLengthLimit {
+			// If tempSlice is not empty, save the current batch first
+			if len(tempSlice) > 0 {
+				batchSlice = append(batchSlice, tempSlice)
+				tempSlice = make([]string, 0)
+			}
+			// Add the oversized message as a separate batch
+			batchSlice = append(batchSlice, []string{s})
+			count = 0
+			continue
+		}
 
-			tempSlice = make([]string, 0) // reset the temp slice
-			count = 0                     // reset the count
-
-			tempSlice = append(tempSlice, s)        // re-append the last element
-			count += utf8.RuneCountInString(s) + 20 // re-calculating the count
+		// If adding the current message would exceed the limit
+		if count+currentLength >= MessageLengthLimit {
+			// Save the current batch
+			if len(tempSlice) > 0 {
+				batchSlice = append(batchSlice, tempSlice)
+			}
+			// Start a new batch
+			tempSlice = []string{s}
+			count = currentLength
+		} else {
+			// Add to current batch
+			tempSlice = append(tempSlice, s)
+			count += currentLength
 		}
 	}
 
-	// if there are still elements in the temp slice, append them to the batch
+	// Handle the last batch
 	if len(tempSlice) > 0 {
 		batchSlice = append(batchSlice, tempSlice)
 	}

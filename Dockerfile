@@ -28,6 +28,7 @@ RUN apt update && apt upgrade -y && apt install -y ca-certificates curl && updat
 COPY --from=builder /app/insights-bot/release/insights-bot /usr/local/bin/
 COPY --from=builder /app/insights-bot/locales /etc/insights-bot/locales
 
+RUN mkdir -p /var/log/insights-bot
 ENV LOG_FILE_PATH /var/log/insights-bot/insights-bot.log
 ENV LOCALES_DIR /etc/insights-bot/locales
 

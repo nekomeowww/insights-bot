@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  insights-bot
+  namespace: default
+  labels:
+    app:  insights-bot
+spec:
+  selector:
+    matchLabels:
+      app: insights-bot
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  insights-bot
+    spec:
+      restartPolicy: Always
+      # initContainers:
+        # Init containers are exactly like regular containers, except:
+          # - Init containers always run to completion.
+          # - Each init container must complete successfully before the next one starts.
+      containers:
+      - name:  insights-bot
+        image:  test.luoling.local/insights-bot/self:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: insights-bot-config
+        - secretRef:
+            name: insights-bot-secrets
+        # ports:
+        # - containerPort:  80
+        #   name:  insights-bot
+        # volumeMounts:
+      # volumes:

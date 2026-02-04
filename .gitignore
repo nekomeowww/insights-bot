@@ -68,3 +68,6 @@ temp/
 
 # Local pgSQL db
 .postgres/
+
+# Local secrets
+secrets.local.yaml

@@ -28,6 +28,7 @@
 *.bin
 *.tar.gz
 /release/
+/build/
 
 # Runtime / Compile Temporary Assets
 vendor/

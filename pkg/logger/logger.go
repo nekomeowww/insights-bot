@@ -244,6 +244,7 @@ func NewLogger(level zapcore.Level, namespace string, logFilePath string, hook [
 	}
 
 	logrusLogger := logrus.New()
+
 	if len(hook) > 0 {
 		for _, h := range hook {
 			logrusLogger.Hooks.Add(h)
@@ -252,6 +253,7 @@ func NewLogger(level zapcore.Level, namespace string, logFilePath string, hook [
 
 	logrusLogger.SetFormatter(NewLogFileFormatter())
 	logrusLogger.SetReportCaller(true)
+
 	logrusLogger.Level = zapCoreLevelToLogrusLevel(level)
 
 	l := &Logger{
@@ -297,6 +299,7 @@ func autoCreateLogFile(logFilePathStr string) (string, error) {
 			return "", err
 		}
 	}
+
 	if stat != nil && stat.IsDir() {
 		return "", errors.New("path exists but it is a directory")
 	}

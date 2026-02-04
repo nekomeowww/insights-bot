@@ -98,6 +98,7 @@ func NewService() func(param NewServiceParam) (*Service, error) {
 
 func (s *Service) run() {
 	var ctx context.Context
+
 	ctx, s.closeFunc = context.WithCancel(context.Background())
 	s.started = true
 

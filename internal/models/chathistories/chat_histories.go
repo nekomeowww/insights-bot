@@ -88,8 +88,11 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 	links := lop.Map(message.Entities, func(entity tgbotapi.MessageEntity, i int) MarkdownLink {
 		startIndex := entity.Offset
 		endIndex := startIndex + entity.Length
-		var title string
-		var href string
+
+		var (
+			title string
+			href  string
+		)
 
 		switch entity.Type {
 		case "url":
@@ -121,6 +124,7 @@ func (m *Model) ExtractTextFromMessage(message *tgbotapi.Message) string {
 				m.logger.Error("🔗Failed to summarize title", zap.String("url", href), zap.Error(err), zap.String("title", title))
 				return MarkdownLink{[]uint16{}, -1, -1}
 			}
+
 			if len(resp.Choices) != 0 {
 				title = resp.Choices[0].Message.Content
 			}
@@ -154,11 +158,13 @@ func (m *Model) extractTextWithSummarization(message *tgbotapi.Message) (string,
 	if text == "" {
 		return "", nil
 	}
+
 	if utf8.RuneCountInString(text) >= 300 {
 		resp, err := m.openAI.SummarizeOneChatHistory(context.Background(), text)
 		if err != nil {
 			return "", err
 		}
+
 		if len(resp.Choices) == 0 {
 			return "", nil
 		}
@@ -173,6 +179,7 @@ func (m *Model) extractTextFromMessage(message *tgbotapi.Message) (string, error
 	if message == nil {
 		return "", nil
 	}
+
 	if message.Text == "" && message.Caption == "" {
 		m.logger.Warn("message text is empty")
 		return "", nil
@@ -182,6 +189,7 @@ func (m *Model) extractTextFromMessage(message *tgbotapi.Message) (string, error
 	if err != nil {
 		return "", err
 	}
+
 	if text == "" {
 		m.logger.Warn("message text is empty")
 		return "", nil
@@ -199,6 +207,7 @@ func (m *Model) assignReplyMessageDataForChatHistory(entity *ent.ChatHistoriesCr
 	if err != nil {
 		return err
 	}
+
 	if repliedToText != "" {
 		entity.
 			SetRepliedToMessageID(int64(message.ReplyToMessage.MessageID)).
@@ -217,6 +226,7 @@ func (m *Model) SaveOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if err != nil {
 		return err
 	}
+
 	if text == "" {
 		return nil
 	}
@@ -265,6 +275,7 @@ func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if message == nil {
 		return nil
 	}
+
 	if message.Text == "" && message.Caption == "" {
 		m.logger.Warn("message text is empty")
 		return nil
@@ -274,6 +285,7 @@ func (m *Model) UpdateOneTelegramChatHistory(message *tgbotapi.Message) error {
 	if err != nil {
 		return err
 	}
+
 	if text == "" {
 		m.logger.Warn("message text is empty")
 		return nil

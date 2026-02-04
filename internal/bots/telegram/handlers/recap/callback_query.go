@@ -47,8 +47,10 @@ func NewCallbackQueryHandler() func(NewCallbackQueryHandlerParams) *CallbackQuer
 func shouldSkipCallbackQueryHandlingByCheckingActionData[
 	D recap.ConfigureRecapToggleActionData | recap.ConfigureRecapAssignModeActionData | recap.ConfigureRecapCompleteActionData | recap.ConfigureAutoRecapRatesPerDayActionData,
 ](c *tgbot.Context, actionData D, chatID, fromID int64) bool {
-	var actionDataChatID int64
-	var actionDataFromID int64
+	var (
+		actionDataChatID int64
+		actionDataFromID int64
+	)
 
 	switch val := any(actionData).(type) {
 	case recap.ConfigureRecapToggleActionData:
@@ -76,7 +78,7 @@ func shouldSkipCallbackQueryHandlingByCheckingActionData[
 	}
 	// same actor or the original command should be sent by Group Anonymous Bot
 	callbackQueryMessageFromGroupAnonymousBot := c.Update.CallbackQuery.Message.ReplyToMessage != nil && c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.Message.ReplyToMessage.From)
-	if !(actionDataFromID == fromID || callbackQueryMessageFromGroupAnonymousBot) {
+	if actionDataFromID != fromID && !callbackQueryMessageFromGroupAnonymousBot {
 		c.Logger.Debug("action skipped, because callback query is neither from the same actor nor the original command should sent by Group Anonymous Bot",
 			zap.Int64("from_id", fromID),
 			zap.Int64("action_data_from_id", actionDataFromID),
@@ -129,6 +131,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 
 			return nil, nil
 		}
+
 		if errors.Is(err, errOperationCanNotBeDone) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).
@@ -251,6 +254,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 
 			return nil, nil
 		}
+
 		if errors.Is(err, errOperationCanNotBeDone) || errors.Is(err, errCreatorPermissionRequired) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).
@@ -356,6 +360,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryComplete(c *tgbot.Context) (tg
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
+
 	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.CallbackQuery.From) {
 		return nil, nil
 	}
@@ -384,6 +389,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryUnsubscribe(c *tgbot.Context) 
 			WithEdit(msg).
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
+
 	if actionData.FromID != fromID {
 		h.logger.Warn("action skipped, callback query is not from the same actor or the same chat", zap.Int64("from_id", fromID), zap.Int64("chat_id", chatID))
 		return nil, nil
@@ -449,6 +455,7 @@ func (h *CallbackQueryHandler) handleAutoRecapRatesPerDaySelect(c *tgbot.Context
 
 			return nil, nil
 		}
+
 		if errors.Is(err, errOperationCanNotBeDone) || errors.Is(err, errCreatorPermissionRequired) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).
@@ -563,6 +570,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryPin(c *tgbot.Context) (tgbot.R
 
 			return nil, nil
 		}
+
 		if errors.Is(err, errOperationCanNotBeDone) || errors.Is(err, errCreatorPermissionRequired) {
 			return nil, tgbot.
 				NewMessageError(configureRecapGeneralInstructionMessage + "\n\n" + err.Error()).

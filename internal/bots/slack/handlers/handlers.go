@@ -91,7 +91,6 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	token, err := h.ent.SlackOAuthCredentials.Query().
 		Where(slackoauthcredentials.TeamID(body.TeamID)).
 		First(context.Background())
-
 	if err != nil {
 		h.logger.Warn("smr service: failed to get team's access token when get user locale",
 			zap.Error(err),
@@ -101,8 +100,8 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	}
 
 	slackCli := slackbot.NewSlackCli(nil, h.config.Slack.ClientID, h.config.Slack.ClientSecret, token.RefreshToken, token.AccessToken)
-	user, err := slackCli.GetUserInfoWithTokenExpirationCheck(body.UserID, h.services.NewStoreFuncForRefresh(body.TeamID))
 
+	user, err := slackCli.GetUserInfoWithTokenExpirationCheck(body.UserID, h.services.NewStoreFuncForRefresh(body.TeamID))
 	if err != nil {
 		h.logger.Warn("smr service: failed to user locale",
 			zap.Error(err),
@@ -137,6 +136,7 @@ func (h *Handlers) PostCommandInfo(ctx *gin.Context) {
 	).First(context.Background())
 	if err != nil {
 		h.logger.Warn("slack: failed to get team's access token", zap.Error(err))
+
 		if ent.IsNotFound(err) {
 			ctx.JSON(http.StatusOK, slackbot.NewSlackWebhookMessage(h.i18n.TWithLanguage(user.Locale, "commands.groups.summarization.commands.smr.permissionDenied")))
 			return
@@ -189,6 +189,7 @@ func (h *Handlers) GetInstallAuth(ctx *gin.Context) {
 	}
 
 	ctx.Header("content-type", "text/html")
+
 	_, _ = ctx.Writer.Write([]byte("<h1 style=\"text-align:center\">Success! Now you can close this page<h1>"))
 
 	ctx.Status(http.StatusOK)

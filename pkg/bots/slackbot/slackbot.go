@@ -166,6 +166,7 @@ func (s *BotService) Run() error {
 	}()
 
 	s.logger.Info("Slack Bot/App webhook server is listening", zap.String("addr", s.server.Addr))
+
 	s.started = true
 
 	return nil

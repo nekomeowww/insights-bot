@@ -174,12 +174,15 @@ func (c *Context) fetchActionDataForCallbackQueryHandler() error {
 	if !c.isCallbackQuery {
 		return fmt.Errorf("not a callback query")
 	}
+
 	if c.callbackQueryHandlerRouteHash == "" {
 		return fmt.Errorf("callback query handler route hash is empty")
 	}
+
 	if c.callbackQueryHandlerActionDataHash == "" {
 		return fmt.Errorf("callback query handler action data hash is empty")
 	}
+
 	if c.rueidisClient == nil {
 		return fmt.Errorf("rueidis client is nil")
 	}

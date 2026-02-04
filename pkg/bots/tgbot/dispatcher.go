@@ -110,6 +110,7 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 	if c.Update.Message.From.UserName != "" {
 		identityStrings = append(identityStrings, "@"+c.Update.Message.From.UserName)
 	}
+
 	if c.Update.Message.Chat.Type == "private" {
 		d.Logger.Debug(fmt.Sprintf("[消息｜%s] %s (%s): %s",
 			MapChatTypeToChineseText(telegram.ChatType(c.Update.Message.Chat.Type)),
@@ -127,6 +128,7 @@ func (d *Dispatcher) dispatchMessage(c *Context) {
 			lo.Ternary(c.Update.Message.Text == "", "<empty or contains medias>", c.Update.Message.Text)),
 		)
 	}
+
 	if c.Update.Message.Command() != "" {
 		d.dispatchInGoroutine(func() {
 			for cmd, f := range d.commandHandlers {
@@ -248,6 +250,7 @@ func (d *Dispatcher) dispatchCallbackQuery(c *Context) {
 		d.Logger.Error("failed to fetch the callback query action data for handler", zap.String("route", route), zap.Error(err))
 		return
 	}
+
 	if c.callbackQueryHandlerActionDataIsEmpty {
 		c.Bot.MayRequest(callbackQueryActionInvalidErrMessage)
 		return
@@ -342,7 +345,7 @@ func (d *Dispatcher) OnNewChatMember(h Handler) {
 }
 
 func (d *Dispatcher) dispatchNewChatMember(c *Context) {
-	identities := make([]string, len(c.Update.Message.NewChatMembers))
+	identities := make([]string, 0, len(c.Update.Message.NewChatMembers))
 
 	for _, identity := range c.Update.Message.NewChatMembers {
 		identityStrings := make([]string, 0)

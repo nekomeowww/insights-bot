@@ -61,6 +61,7 @@ func TestQueue_AddTask(t *testing.T) {
 
 	// try get task
 	var taskResult []string
+
 	taskResult, err = testQueue.redisClient.Do(context.Background(), testQueue.redisClient.B().Brpop().Key("smr/task").Timeout(0).Build()).AsStrSlice()
 	r.Len(taskResult, 2)
 	r.Empty(err)

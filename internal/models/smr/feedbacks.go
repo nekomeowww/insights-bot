@@ -83,6 +83,7 @@ func (m *Model) FeedbackReactSummarizationsToChatIDAndLogID(chatID int64, logID 
 	if err != nil {
 		return err
 	}
+
 	if affectedRows > 0 {
 		return nil
 	}

@@ -48,6 +48,7 @@ func (m *Model) SubscribeToAutoRecaps(chatID int64, userID int64) error {
 	if err != nil {
 		return err
 	}
+
 	if subscriber != nil {
 		return nil
 	}
@@ -64,6 +65,7 @@ func (m *Model) UnsubscribeToAutoRecaps(chatID int64, userID int64) error {
 	if err != nil {
 		return err
 	}
+
 	if subscriber == nil {
 		return nil
 	}

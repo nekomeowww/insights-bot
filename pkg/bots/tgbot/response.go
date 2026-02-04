@@ -83,19 +83,23 @@ func (r EditMessageResponse) WithParseModeHTML() EditMessageResponse {
 
 func (r EditMessageResponse) WithInlineReplyMarkup(inlineMarkup tgbotapi.InlineKeyboardMarkup) EditMessageResponse {
 	if r.textConfig != nil {
-		r.textConfig.BaseEdit.ReplyMarkup = &inlineMarkup
+		r.textConfig.ReplyMarkup = &inlineMarkup
 	}
+
 	if r.mediaConfig != nil {
-		r.mediaConfig.BaseEdit.ReplyMarkup = &inlineMarkup
+		r.mediaConfig.ReplyMarkup = &inlineMarkup
 	}
+
 	if r.replyMarkupConfig != nil {
-		r.replyMarkupConfig.BaseEdit.ReplyMarkup = &inlineMarkup
+		r.replyMarkupConfig.ReplyMarkup = &inlineMarkup
 	}
+
 	if r.captionConfig != nil {
-		r.captionConfig.BaseEdit.ReplyMarkup = &inlineMarkup
+		r.captionConfig.ReplyMarkup = &inlineMarkup
 	}
+
 	if r.liveLocationConfig != nil {
-		r.liveLocationConfig.BaseEdit.ReplyMarkup = &inlineMarkup
+		r.liveLocationConfig.ReplyMarkup = &inlineMarkup
 	}
 
 	return r

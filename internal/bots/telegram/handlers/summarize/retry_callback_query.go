@@ -9,6 +9,7 @@ import (
 
 func (h *Handlers) handleCallbackQueryRetry(c *tgbot.Context) (tgbot.Response, error) {
 	messageID := c.Update.CallbackQuery.Message.MessageID
+
 	var data smr.TaskInfo
 
 	err := c.BindFromCallbackQueryData(&data)
@@ -25,7 +26,6 @@ func (h *Handlers) handleCallbackQueryRetry(c *tgbot.Context) (tgbot.Response, e
 	}
 
 	err = h.smrQueue.AddTask(data)
-
 	if err != nil {
 		h.logger.Error("failed to move task back to queue", zap.Error(err))
 		return nil, nil

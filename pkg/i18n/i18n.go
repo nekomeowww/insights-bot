@@ -43,6 +43,7 @@ func NewI18n(options ...NewI18nOption) (*I18n, error) {
 	for _, o := range options {
 		o(&opts)
 	}
+
 	if opts.logger == nil {
 		logger, err := logger.NewLogger(zap.DebugLevel, "i18n", "", nil)
 		if err != nil {

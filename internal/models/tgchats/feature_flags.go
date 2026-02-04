@@ -47,6 +47,7 @@ func (m *Model) findOrCreateFeatureFlagForGroups(chatID int64, chatType telegram
 	if err != nil {
 		return nil, err
 	}
+
 	if featureFlags == nil {
 		createdFeatureFlags, err := m.ent.TelegramChatFeatureFlags.
 			Create().
@@ -71,6 +72,7 @@ func (m *Model) FindLanguageForGroups(chatID int64, chatTitle string) (string, e
 	if err != nil {
 		return "en", err
 	}
+
 	if featureFlags == nil {
 		return "en", nil
 	}
@@ -87,6 +89,7 @@ func (m *Model) SetLanguageForGroups(chatID int64, chatType telegram.ChatType, c
 	if err != nil {
 		return err
 	}
+
 	if featureFlags.FeatureLanguage == language {
 		return nil
 	}
@@ -118,6 +121,7 @@ func (m *Model) EnableChatHistoriesRecapForGroups(chatID int64, chatType telegra
 	if err != nil {
 		return err
 	}
+
 	if featureFlags.FeatureChatHistoriesRecap {
 		return nil
 	}
@@ -148,6 +152,7 @@ func (m *Model) DisableChatHistoriesRecapForGroups(chatID int64, chatType telegr
 	if err != nil {
 		return err
 	}
+
 	if featureFlags == nil {
 		_, err = m.ent.TelegramChatFeatureFlags.
 			Create().
@@ -162,6 +167,7 @@ func (m *Model) DisableChatHistoriesRecapForGroups(chatID int64, chatType telegr
 
 		return nil
 	}
+
 	if !featureFlags.FeatureChatHistoriesRecap {
 		return nil
 	}
@@ -188,6 +194,7 @@ func (m *Model) HasChatHistoriesRecapEnabledForGroups(chatID int64, chatTitle st
 	if err != nil {
 		return false, err
 	}
+
 	if featureFlags == nil {
 		return false, nil
 	}
@@ -277,8 +284,10 @@ func (m *Model) newNextScheduleTimeForChatHistoriesRecapTasksForChatID(_ int64, 
 		scheduleTargets = MapScheduleHours[4]
 	}
 
-	var nextScheduleTimeSet bool
-	var nextScheduleTime time.Time
+	var (
+		nextScheduleTimeSet bool
+		nextScheduleTime    time.Time
+	)
 
 	for _, target := range scheduleTargets {
 		if now.Hour() < int(target) {

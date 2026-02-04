@@ -45,7 +45,9 @@ func NewAutoRecapTimeCapsuleDigger() func(NewAutoRecapTimeCapsuleDiggerParams) (
 		params.Lifecycle.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				go digger.Start()
+
 				digger.started = true
+
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {

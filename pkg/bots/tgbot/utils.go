@@ -46,6 +46,7 @@ func EscapeStringForMarkdownV2(src string) string {
 		result += `\` + src[match[0]:match[1]]
 		lastMatchedIndex = match[1]
 	}
+
 	if lastMatchedIndex < len(src) {
 		result += src[lastMatchedIndex:]
 	}
@@ -57,15 +58,19 @@ func FullNameFromFirstAndLastName(firstName, lastName string) string {
 	if lastName == "" {
 		return firstName
 	}
+
 	if firstName == "" {
 		return lastName
 	}
+
 	if xo.ContainsCJKChar(firstName) && !xo.ContainsCJKChar(lastName) {
 		return firstName + " " + lastName
 	}
+
 	if !xo.ContainsCJKChar(firstName) && xo.ContainsCJKChar(lastName) {
 		return lastName + " " + firstName
 	}
+
 	if xo.ContainsCJKChar(firstName) && xo.ContainsCJKChar(lastName) {
 		return lastName + " " + firstName
 	}

@@ -111,14 +111,17 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 		return nil, errors.New("must supply a valid telegram bot token in configs or environment variable")
 	}
 
-	var err error
-	var b *tgbotapi.BotAPI
+	var (
+		err error
+		b   *tgbotapi.BotAPI
+	)
 
 	if opts.apiEndpoint != "" {
 		b, err = tgbotapi.NewBotAPIWithAPIEndpoint(opts.token, opts.apiEndpoint+"/bot%s/%s")
 	} else {
 		b, err = tgbotapi.NewBotAPI(opts.token)
 	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -165,6 +168,7 @@ func NewBotService(callOpts ...CallOption) (*BotService, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if bot.opts.webhookURL != "" && webhookInfo.IsSet() && webhookInfo.LastErrorDate != 0 {
 		bot.logger.Error("webhook callback failed", zap.String("last_message", webhookInfo.LastErrorMessage))
 	}
@@ -228,6 +232,7 @@ func (b *BotService) Start(ctx context.Context) error {
 		}
 
 		b.startPullUpdates()
+
 		b.webhookStarted = true
 
 		return nil
@@ -335,6 +340,7 @@ func (b *Bot) IsBotAdministrator(chatID int64) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+
 	if botMember.Status == string(telegram.MemberStatusAdministrator) {
 		return true, err
 	}
@@ -347,6 +353,7 @@ func (b *Bot) IsUserMemberStatus(chatID int64, userID int64, status []telegram.M
 	if err != nil {
 		return false, err
 	}
+
 	if lo.Contains(status, telegram.MemberStatus(member.Status)) {
 		return true, nil
 	}
@@ -411,6 +418,7 @@ func (b *Bot) DeleteAllDeleteLaterMessages(forUserID int64) error {
 	if err != nil {
 		return err
 	}
+
 	if len(elems) == 0 {
 		return nil
 	}
@@ -437,6 +445,7 @@ func (b *Bot) DeleteAllDeleteLaterMessages(forUserID int64) error {
 		if err != nil {
 			continue
 		}
+
 		if chatID == 0 || messageID == 0 {
 			continue
 		}
@@ -524,6 +533,7 @@ func (b *Bot) RemoveInlineKeyboardButtonFromInlineKeyboardMarkupThatMatchesDataW
 			if inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == nil {
 				continue
 			}
+
 			if *inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == callbackData {
 				inlineKeyboardMarkup.InlineKeyboard[i] = append(inlineKeyboardMarkup.InlineKeyboard[i][:j], inlineKeyboardMarkup.InlineKeyboard[i][j+1:]...)
 				break
@@ -548,6 +558,7 @@ func (b *Bot) ReplaceInlineKeyboardButtonFromInlineKeyboardMarkupThatMatchesData
 			if inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == nil {
 				continue
 			}
+
 			if *inlineKeyboardMarkup.InlineKeyboard[i][j].CallbackData == callbackData {
 				inlineKeyboardMarkup.InlineKeyboard[i][j] = replacedButton
 				break

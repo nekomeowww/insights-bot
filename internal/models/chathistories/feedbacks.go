@@ -62,6 +62,7 @@ func (m *Model) FeedbackRecapsReactToChatIDAndLogID(chatID int64, logID uuid.UUI
 	if err != nil {
 		return err
 	}
+
 	if affectedRows > 0 {
 		return nil
 	}

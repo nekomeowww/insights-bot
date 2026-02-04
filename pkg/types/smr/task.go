@@ -32,12 +32,14 @@ func NewOngoingTaskPool() *OngoingTaskPool {
 
 func (t *OngoingTaskPool) Add(info TaskInfo) {
 	t.mu.Lock()
+
 	t.tasks = append(t.tasks, info)
 	t.mu.Unlock()
 }
 
 func (t *OngoingTaskPool) Remove() {
 	t.mu.Lock()
+
 	if len(t.tasks) == 0 {
 		t.mu.Unlock()
 		return
@@ -49,6 +51,7 @@ func (t *OngoingTaskPool) Remove() {
 
 func (t *OngoingTaskPool) Len() int {
 	t.mu.RLock()
+
 	l := len(t.tasks)
 	t.mu.RUnlock()
 

@@ -48,6 +48,7 @@ func (h *Handlers) handleCallbackQueryReact(c *tgbot.Context) (tgbot.Response, e
 	default:
 		return nil, nil
 	}
+
 	if err != nil {
 		h.logger.Error("failed to react to recap of chat id and log id",
 			zap.Error(err),

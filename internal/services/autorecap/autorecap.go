@@ -100,9 +100,11 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 ) {
 	m.logger.Debug("send chat histories recap time capsule handler invoked", zap.Int64("chat_id", capsule.Payload.ChatID))
 
-	var enabled bool
-	var options *ent.TelegramChatRecapsOptions
-	var subscribers []*ent.TelegramChatAutoRecapsSubscribers
+	var (
+		enabled     bool
+		options     *ent.TelegramChatRecapsOptions
+		subscribers []*ent.TelegramChatAutoRecapsSubscribers
+	)
 
 	may := fo.NewMay[int]()
 
@@ -146,6 +148,7 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 
 		m.logger.Error("failed to check chat histories recap enabled, options or subscribers", zap.Error(multierr.Combine(errs...)))
 	})
+
 	if !enabled {
 		m.logger.Debug("chat histories recap disabled, skipping...", zap.Int64("chat_id", capsule.Payload.ChatID))
 
@@ -157,6 +160,7 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 	if err != nil {
 		m.logger.Error("failed to queue one send chat histories recap task for chat", zap.Int64("chat_id", capsule.Payload.ChatID), zap.Error(err))
 	}
+
 	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions && len(subscribers) == 0 {
 		m.logger.Debug("chat histories recap send mode is only private subscriptions, but no subscribers, skipping...", zap.Int64("chat_id", capsule.Payload.ChatID))
 
@@ -227,6 +231,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 		return
 	}
+
 	if len(histories) <= 5 {
 		m.logger.Warn("no enough chat histories")
 		return
@@ -315,6 +320,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 			m.logger.Error("failed to get chat member", zap.Error(err), zap.Int64("chat_id", chatID))
 			continue
 		}
+
 		if !lo.Contains([]telegram.MemberStatus{
 			telegram.MemberStatusAdministrator,
 			telegram.MemberStatusCreator,
@@ -380,6 +386,7 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 
 	for i, b := range summarizationBatches {
 		var content string
+
 		text := fmt.Sprintf("<blockquote expandable>%s</blockquote>", strings.Join(b, "\n\n"))
 
 		if len(summarizationBatches) > 1 {
@@ -449,12 +456,14 @@ func (m *AutoRecapService) summarize(chatID int64, options *ent.TelegramChatReca
 					m.logger.Error(err.Error())
 					return
 				}
+
 				prefix, _ := messageArgs[0].(string)
 
 				if len(messageArgs) == 1 {
 					m.logger.Error(prefix, zap.Error(err))
 					return
 				}
+
 				fields := make([]zap.Field, 0)
 				fields = append(fields, zap.Error(err))
 

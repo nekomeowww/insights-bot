@@ -38,9 +38,9 @@ func (b *Bot) couldCountRateLimitFor(key string, rate int64, perDuration time.Du
 		return countedRate, 0, false, err
 	}
 
-	ttlSeconds := time.Duration(ttl) * time.Second
+	ttlDuration := time.Duration(ttl) * time.Second
 	if countedRate >= rate {
-		return countedRate, ttlSeconds, false, nil
+		return countedRate, ttlDuration, false, nil
 	}
 
 	countedRate++
@@ -54,10 +54,10 @@ func (b *Bot) couldCountRateLimitFor(key string, rate int64, perDuration time.Du
 
 	err = b.rueidisClient.Do(context.TODO(), setCmd).Error()
 	if err != nil {
-		return countedRate, ttlSeconds, false, err
+		return countedRate, ttlDuration, false, err
 	}
 
-	return countedRate, ttlSeconds, true, nil
+	return countedRate, ttlDuration, true, nil
 }
 
 func (b *Bot) RateLimitForCommand(chatID int64, command string, rate int64, perDuration time.Duration) (int64, time.Duration, bool, error) {

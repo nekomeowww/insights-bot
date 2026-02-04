@@ -33,6 +33,7 @@ func (h *startCommandHandler) handle(c *Context) (Response, error) {
 	if err != nil {
 		c.Logger.Error("failed to check if bot is administrator")
 	}
+
 	if is &&
 		c.Update.Message != nil &&
 		c.Update.Message.Chat != nil &&

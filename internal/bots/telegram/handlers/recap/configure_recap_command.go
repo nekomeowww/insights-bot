@@ -27,6 +27,7 @@ func checkBotIsAdmin(ctx *tgbot.Context) error {
 	if err != nil {
 		return err
 	}
+
 	if !is {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "现在机器人不是<b>群组管理员</b>，已经不会记录任何聊天记录了。如果需要配置聊天记录回顾功能，<b>请先将机器人设为群组管理员</b>，然后再次执行命令后再试")
 	}
@@ -43,6 +44,7 @@ func checkToggle(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(ctx.Update.FromChat().Type)) {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
+
 	if user == nil {
 		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 	}
@@ -54,6 +56,7 @@ func checkToggle(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	if err != nil {
 		return err
 	}
+
 	if !is && !ctx.Bot.IsGroupAnonymousBot(user) {
 		return fmt.Errorf("%s，%w", errOperationCanNotBeDone, errToggleRecapPermissionDeniedDueToAdministratorIsRequired)
 	}
@@ -70,6 +73,7 @@ func checkAssignMode(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, telegram.ChatType(ctx.Update.FromChat().Type)) {
 		return fmt.Errorf("%w，%s", errOperationCanNotBeDone, "聊天记录回顾功能只有<b>群组</b>和<b>超级群组</b>的管理员可以配置哦！\n请将 Bot 添加到群组中，并配置 Bot 为管理员后使用管理员权限的用户账户为 Bot 进行配置吧。")
 	}
+
 	if user == nil {
 		return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 	}
@@ -78,11 +82,13 @@ func checkAssignMode(ctx *tgbot.Context, _ int64, user *tgbotapi.User) error {
 	if err != nil {
 		return err
 	}
+
 	if !is {
 		isAdmin, err := ctx.IsUserMemberStatus(user.ID, []telegram.MemberStatus{telegram.MemberStatusAdministrator})
 		if err != nil {
 			return err
 		}
+
 		if !isAdmin && !ctx.Bot.IsGroupAnonymousBot(user) {
 			return fmt.Errorf("%s，只有%w角色可以进行此操作", errOperationCanNotBeDone, errAdministratorPermissionRequired)
 		}
@@ -250,6 +256,7 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 			WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").
 			WithReply(c.Update.Message)
 	}
+
 	if !is && !c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
 		return nil, tgbot.
 			NewMessageError(fmt.Errorf("%w，%s", errOperationCanNotBeDone, "需要<b>管理员</b>权限才能配置聊天记录回顾功能。").Error()).
@@ -268,6 +275,7 @@ func (h *CommandHandler) handleConfigureRecapCommand(c *tgbot.Context) (tgbot.Re
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("暂时无法配置聊天记录回顾功能，请稍后再试！").WithReply(c.Update.Message)
 	}
+
 	if options == nil {
 		options = &ent.TelegramChatRecapsOptions{AutoRecapSendMode: int(tgchat.AutoRecapSendModePublicly)}
 	}

@@ -60,6 +60,7 @@ func (h *Handlers) handleChatMigrationFrom(c *tgbot.Context) (tgbot.Response, er
 	if c.Update.Message == nil {
 		return nil, nil
 	}
+
 	if c.Update.Message.MigrateFromChatID == 0 {
 		return nil, nil
 	}

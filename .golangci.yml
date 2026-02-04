@@ -1,65 +1,73 @@
+version: "2"
 linters:
   enable:
-    # - contextcheck # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
-    - errcheck
-    - gosimple
-    # - govet # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
-    - ineffassign
-    - staticcheck
-    - typecheck
-    - unused
-
-    # - bodyclose # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
     - containedctx
     - dupl
     - durationcheck
     - errname
     - exhaustive
-    - exportloopref
     - forcetypeassert
     - godot
-    - gofmt
     - goheader
     - goprintffuncname
     - gosec
     - musttag
     - nestif
-    # - nilerr # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
-    # - noctx # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
     - nolintlint
     - nosprintfhostport
     - prealloc
     - predeclared
     - reassign
     - revive
-    - tenv
     - testableexamples
     - unconvert
-    # - unparam # due to https://github.com/golangci/golangci-lint/issues/3086#issuecomment-1475232706
     - usestdlibvars
     - whitespace
-    - wsl
+    - wsl_v5
   disable:
     - depguard
-
-linters-settings:
-  wsl:
-    allow-assign-and-call: false
-    strict-append: false
-  revive:
+  settings:
+    revive:
+      rules:
+        - name: blank-imports
+          disabled: true
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+      enable:
+        - assign-expr
+      disable:
+        - append
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
     rules:
-      - name: blank-imports
-        disabled: true
-
-issues:
-  exclude:
-    - "if statements should only be cuddled with assignments" # from wsl
-    - "if statements should only be cuddled with assignments used in the if statement itself" # from wsl
-    - "assignments should only be cuddled with other assignments" # from wsl. false positive case: var a bool\nb := true
-    - "declarations should never be cuddled" # from wsl
-  exclude-rules:
-    # Exclude some linters from running on tests files.
-    - path: ent/.*\.go
-      linters:
-        - dupl
-
+      - linters:
+          - dupl
+        path: ent/.*\.go
+      - path: (.+)\.go$
+        text: if statements should only be cuddled with assignments
+      - path: (.+)\.go$
+        text: if statements should only be cuddled with assignments used in the if statement itself
+      - path: (.+)\.go$
+        text: assignments should only be cuddled with other assignments
+      - path: (.+)\.go$
+        text: declarations should never be cuddled
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

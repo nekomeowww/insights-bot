@@ -29,6 +29,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 			WithMessage("聊天记录回顾生成失败，请稍后再试！").
 			WithReply(replyToMessage)
 	}
+
 	if !lo.Contains(RecapSelectHourAvailable, data.Hour) {
 		return nil, tgbot.
 			NewExceptionError(fmt.Errorf("invalid hour: %d", data.Hour)).
@@ -67,6 +68,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 			NewExceptionError(err).WithMessage("聊天记录回顾生成失败，请稍后再试！").
 			WithReply(replyToMessage)
 	}
+
 	if len(histories) <= 5 {
 		var errMessage string
 
@@ -121,6 +123,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 	summarizationBatches := tgbot.SplitMessagesAgainstLengthLimitIntoMessageGroups(summarizations)
 	for i, b := range summarizationBatches {
 		var content string
+
 		text := fmt.Sprintf("<blockquote expandable>%s</blockquote>", strings.Join(b, "\n\n"))
 
 		if len(summarizationBatches) > 1 {
@@ -155,6 +158,7 @@ func (h *CallbackQueryHandler) handleCallbackQuerySelectHours(c *tgbot.Context) 
 
 	// Delete the waiting message after recap generation is complete
 	deleteConfig := tgbotapi.NewDeleteMessage(c.Update.CallbackQuery.Message.Chat.ID, messageID)
+
 	_, err = c.Bot.Request(deleteConfig)
 	if err != nil {
 		h.logger.Error("failed to delete waiting message", zap.Error(err))

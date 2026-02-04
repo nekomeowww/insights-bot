@@ -59,6 +59,7 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 			WithMessage("聊天记录回顾生成失败，请稍后再试！").
 			WithReply(c.Update.Message)
 	}
+
 	if !has {
 		return nil, tgbot.
 			NewMessageError("聊天记录回顾功能在当前群组尚未启用，需要在群组管理员通过 /configure_recap 命令配置功能启用后才可以创建聊天回顾哦。").
@@ -72,19 +73,23 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 			WithMessage("聊天记录回顾生成失败，请稍后再试！").
 			WithReply(c.Update.Message)
 	}
+
 	if options != nil && tgchat.AutoRecapSendMode(options.AutoRecapSendMode) == tgchat.AutoRecapSendModeOnlyPrivateSubscriptions {
 		return h.handleRecapCommandForPrivateSubscriptionsMode(c)
 	}
 
-	perSeconds := h.tgchats.ManualRecapRatePerSeconds(options)
+	rateLimitInterval := h.tgchats.ManualRecapRatePerSeconds(options)
 
-	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/recap", 1, perSeconds)
+	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/recap", 1, rateLimitInterval)
 	if err != nil {
 		h.logger.Error("failed to check rate limit for command /recap", zap.Error(err))
 	}
+
 	if !ok {
+		rateLimitIntervalMinutes := lo.Ternary(rateLimitInterval/time.Minute <= 1, 1, rateLimitInterval/time.Minute)
+
 		return nil, tgbot.
-			NewMessageError(fmt.Sprintf("很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 %d 分钟最多使用一次，请您耐心等待 %d 分钟后再试，感谢您的理解和支持。", perSeconds, lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute))).
+			NewMessageError(fmt.Sprintf("很抱歉，您的操作触发了我们的限制机制，为了保证系统的可用性，本命令每最多 %d 分钟最多使用一次，请您耐心等待 %d 分钟后再试，感谢您的理解和支持。", rateLimitIntervalMinutes, lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute))).
 			WithReply(c.Update.Message)
 	}
 
@@ -172,6 +177,7 @@ func (h *CommandHandler) handleStartCommandWithPrivateSubscriptionsRecap(c *tgbo
 		h.logger.Error("failed to get private subscription recap start command context", zap.Error(err))
 		return nil, nil
 	}
+
 	if context == nil {
 		return nil, nil
 	}
@@ -203,8 +209,10 @@ func (h *CommandHandler) handleChatMemberLeft(c *tgbot.Context) (tgbot.Response,
 	chatID := c.Update.Message.Chat.ID
 	userID := c.Update.Message.LeftChatMember.ID
 
-	var err error
-	var subscriber *ent.TelegramChatAutoRecapsSubscribers
+	var (
+		err        error
+		subscriber *ent.TelegramChatAutoRecapsSubscribers
+	)
 
 	_, _, err = lo.AttemptWithDelay(1000, time.Minute, func(iter int, _ time.Duration) error {
 		subscriber, err = h.tgchats.FindOneAutoRecapsSubscriber(chatID, userID)
@@ -231,6 +239,7 @@ func (h *CommandHandler) handleChatMemberLeft(c *tgbot.Context) (tgbot.Response,
 
 		return nil, nil
 	}
+
 	if subscriber == nil {
 		return nil, nil
 	}

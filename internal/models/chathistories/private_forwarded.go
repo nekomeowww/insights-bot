@@ -14,6 +14,7 @@ import (
 	"github.com/nekomeowww/insights-bot/pkg/types/telegram"
 	"github.com/redis/rueidis"
 	"github.com/samber/lo"
+	"github.com/samber/lo/mutable"
 	"go.uber.org/zap"
 )
 
@@ -83,6 +84,7 @@ func (m *Model) SaveOneTelegramPrivateForwardedReplayChatHistory(message *tgbota
 	if err != nil {
 		return err
 	}
+
 	if !has {
 		return nil
 	}
@@ -91,6 +93,7 @@ func (m *Model) SaveOneTelegramPrivateForwardedReplayChatHistory(message *tgbota
 	if err != nil {
 		return err
 	}
+
 	if text == "" {
 		return nil
 	}
@@ -112,11 +115,13 @@ func (m *Model) SaveOneTelegramPrivateForwardedReplayChatHistory(message *tgbota
 		telegramChatHistory.ActorUsername = message.ForwardFrom.UserName
 		telegramChatHistory.ActorDisplayName = tgbot.FullNameFromFirstAndLastName(message.ForwardFrom.FirstName, message.ForwardFrom.LastName)
 	}
+
 	if message.ForwardFrom == nil && message.ForwardSenderName != "" {
 		telegramChatHistory.ActorID = 0
 		telegramChatHistory.ActorUsername = message.ForwardSenderName
 		telegramChatHistory.ActorDisplayName = message.ForwardSenderName
 	}
+
 	if message.ForwardFromChat != nil {
 		telegramChatHistory.Text = fmt.Sprintf("[forwarded from %s]: %s", message.ForwardFromChat.Title, text)
 	} else {
@@ -185,11 +190,12 @@ func (m *Model) FindPrivateForwardedChatHistories(userID int64) ([]telegramPriva
 
 		return make([]telegramPrivateForwardedReplayChatHistory, 0), err
 	}
+
 	if len(replayChatHistories) == 0 {
 		return make([]telegramPrivateForwardedReplayChatHistory, 0), nil
 	}
 
-	replayChatHistories = lo.Reverse(replayChatHistories)
+	mutable.Reverse(replayChatHistories)
 
 	telegramPrivateForwardedReplayChatHistories := make([]telegramPrivateForwardedReplayChatHistory, 0, len(replayChatHistories))
 
@@ -209,7 +215,7 @@ func (m *Model) FindPrivateForwardedChatHistories(userID int64) ([]telegramPriva
 
 func (m *Model) SummarizePrivateForwardedChatHistories(userID int64, histories []telegramPrivateForwardedReplayChatHistory) ([]string, error) {
 	historiesLLMFriendly := make([]string, 0, len(histories))
-	historiesIncludedMessageIDs := make([]int64, 0)
+	historiesIncludedMessageIDs := make([]int64, 0, len(histories))
 
 	for _, message := range histories {
 		historiesLLMFriendly = append(historiesLLMFriendly, fmt.Sprintf(

@@ -78,6 +78,7 @@ func (h *CommandHandler) handleRecapForwardedCommand(c *tgbot.Context) (tgbot.Re
 	if err != nil {
 		return nil, tgbot.NewExceptionError(err).WithMessage("聊天记录回顾生成失败，请稍后再试！").WithReply(c.Update.Message)
 	}
+
 	if len(histories) < 5 {
 		return nil, tgbot.NewMessageError("目前收到的聊天记录不足 5 条哦，要再多发送给我一些之后之后再试试吗？").WithReply(c.Update.Message)
 	}

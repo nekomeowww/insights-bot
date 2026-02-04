@@ -20,6 +20,7 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	if urlString == "" && c.Update.Message.ReplyToMessage != nil && c.Update.Message.ReplyToMessage.Text != "" {
 		urlString = c.Update.Message.ReplyToMessage.Text
 	}
+
 	if urlString == "" {
 		return nil, tgbot.
 			NewMessageError(c.T("commands.groups.summarization.commands.smr.noLinksFound.telegram")).
@@ -52,16 +53,17 @@ func (h *Handlers) Handle(c *tgbot.Context) (tgbot.Response, error) {
 	}
 
 	chatID := c.Update.Message.Chat.ID
-	perSeconds := h.smr.SummarizeWebpageRatePerSeconds()
+	rateLimitInterval := h.smr.SummarizeWebpageRatePerSeconds()
 
-	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/smr", 1, perSeconds)
+	_, ttl, ok, err := c.RateLimitForCommand(chatID, "/smr", 1, rateLimitInterval)
 	if err != nil {
 		h.logger.Error("failed to check rate limit for command /smr", zap.Error(err))
 	}
+
 	if !ok {
 		return nil, tgbot.
 			NewMessageError(c.T("", i18n.M{
-				"Seconds":           perSeconds,
+				"Seconds":           rateLimitInterval,
 				"SecondsToBeWaited": lo.Ternary(ttl/time.Minute <= 1, 1, ttl/time.Minute),
 			})).
 			WithReply(c.Update.Message)

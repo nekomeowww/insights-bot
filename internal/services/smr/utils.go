@@ -18,6 +18,7 @@ func CheckUrl(urlString string) (error, error) {
 	if err != nil {
 		return ErrParse, err
 	}
+
 	if parsedURL.Scheme == "" || !lo.Contains([]string{"http", "https"}, parsedURL.Scheme) {
 		return ErrScheme, err
 	}

@@ -20,6 +20,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 	if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 		return nil, tgbot.NewMessageError("只有在群组和超级群组内才可以订阅定时的聊天记录回顾哦！").WithReply(c.Update.Message)
 	}
+
 	if c.Bot.IsGroupAnonymousBot(c.Update.Message.From) {
 		return nil, tgbot.
 			NewMessageError("匿名管理员无法订阅定时的聊天记录回顾哦！如果需要订阅定时的聊天记录回顾，必须先将发送角色切换为普通用户然后再试哦。").
@@ -37,6 +38,7 @@ func (h *CommandHandler) handleSubscribeRecapCommand(c *tgbot.Context) (tgbot.Re
 			WithReply(c.Update.Message).
 			WithDeleteLater(fromID, chatID)
 	}
+
 	if !has {
 		return nil, tgbot.
 			NewMessageError("聊天记录回顾功能在当前群组尚未启用，需要在群组管理员通过 /configure_recap 命令配置功能启用后才可以订阅聊天回顾哦。").
@@ -107,6 +109,7 @@ func (h *CommandHandler) handleStartCommandWithRecapSubscription(c *tgbot.Contex
 		h.logger.Error("failed to get private subscription recap start command context", zap.Error(err))
 		return nil, nil
 	}
+
 	if context == nil {
 		return nil, nil
 	}

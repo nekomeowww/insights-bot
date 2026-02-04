@@ -47,7 +47,6 @@ func (m *Model) PruneAllLogsContentForChatID(chatID int64) error {
 		SetRecapInputs("").
 		SetRecapOutputs("").
 		Exec(context.TODO())
-
 	if err != nil {
 		return err
 	}
@@ -63,7 +62,6 @@ func (m *Model) MigrateLogsOfChatFromChatIDToChatID(fromChatID int64, toChatID i
 		).
 		SetChatID(toChatID).
 		Save(context.TODO())
-
 	if err != nil {
 		return err
 	}

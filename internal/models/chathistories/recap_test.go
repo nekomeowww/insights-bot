@@ -100,6 +100,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl
 		},
 	})
 	require.NoError(t, err)
+
 	expected := `## <a href="https://t.me/c/123456789/1">Topic 1</a>
 参与人：User 1，User 2
 讨论：
@@ -118,6 +119,7 @@ func TestRecapOutputTemplateExecute(t *testing.T) { //nolint:dupl
 		},
 	})
 	require.NoError(t, err)
+
 	expected = `## Topic 3
 参与人：User 1，User 2
 讨论：
@@ -160,6 +162,7 @@ func TestRecapWithoutLinksOutputTemplateExecute(t *testing.T) { //nolint:dupl
 		},
 	})
 	require.NoError(t, err)
+
 	expected := `## Topic 1
 参与人：User 1，User 2
 讨论：
@@ -178,6 +181,7 @@ func TestRecapWithoutLinksOutputTemplateExecute(t *testing.T) { //nolint:dupl
 		},
 	})
 	require.NoError(t, err)
+
 	expected = `## Topic 3
 参与人：User 1，User 2
 讨论：

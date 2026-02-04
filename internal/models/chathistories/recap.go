@@ -76,6 +76,7 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 	if err != nil {
 		return nil, goopenai.Usage{}, err
 	}
+
 	if len(resp.Choices) == 0 {
 		return nil, goopenai.Usage{}, nil
 	}
@@ -84,11 +85,13 @@ func (m *Model) summarizeChatHistoriesSlice(chatID int64, s string) ([]*openai.C
 		zap.Int64("chat_id", chatID),
 		zap.String("model_name", m.openAI.GetModelName()),
 	)
+
 	if resp.Choices[0].Message.Content == "" {
 		return nil, goopenai.Usage{}, nil
 	}
 
 	var outputs []*openai.ChatHistorySummarizationOutputs
+
 	resp.Choices[0].Message.Content = strings.TrimPrefix(resp.Choices[0].Message.Content, "```json")
 	resp.Choices[0].Message.Content = strings.TrimPrefix(resp.Choices[0].Message.Content, "```")
 	resp.Choices[0].Message.Content = strings.TrimSuffix(resp.Choices[0].Message.Content, "```")
@@ -209,6 +212,7 @@ func (m *Model) summarizeChatHistories(chatID int64, messageIDs []int64, llmFrie
 		if err != nil {
 			return make([]*openai.ChatHistorySummarizationOutputs, 0), goopenai.Usage{}, err
 		}
+
 		if outputs == nil {
 			continue
 		}

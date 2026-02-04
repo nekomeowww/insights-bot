@@ -81,6 +81,7 @@ func NewClient(enableMetricRecordForTokens bool) func(NewClientParams) (Client, 
 		apiHost := params.Config.OpenAI.Host
 
 		config := openai.DefaultConfig(params.Config.OpenAI.Secret)
+
 		if apiHost != "" {
 			apiHost, err = parseOpenAIAPIHost(apiHost)
 			if err != nil {
@@ -128,6 +129,7 @@ func (c *OpenAIClient) TruncateContentBasedOnTokens(textContent string, limits i
 		if r != utf8.RuneError {
 			break
 		}
+
 		truncated = truncated[:len(truncated)-size]
 	}
 

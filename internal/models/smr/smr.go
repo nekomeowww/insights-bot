@@ -150,6 +150,7 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	if err != nil {
 		return nil, err
 	}
+
 	if parsedURL == nil {
 		return nil, errors.New("empty url")
 	}
@@ -169,8 +170,10 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	}
 
 	dumpBuffer := new(bytes.Buffer)
+
 	defer func() {
 		dumpBuffer.Reset()
+
 		dumpBuffer = nil
 	}()
 
@@ -179,6 +182,7 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 		EnableDumpTo(dumpBuffer).
 		DisableAutoReadResponse().
 		SetContext(ctx)
+
 	defer func() {
 		request.EnableDumpTo(xo.NewNopIoWriter())
 	}()
@@ -187,6 +191,7 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 	if err != nil {
 		return nil, fmt.Errorf("failed to get url %s, %w: %v", parsedURL.String(), ErrNetworkError, err)
 	}
+
 	if !resp.IsSuccessState() {
 		errorBuf := new(bytes.Buffer)
 		defer errorBuf.Reset()
@@ -201,6 +206,7 @@ func (m *Model) extractContentFromURL(ctx context.Context, urlString string) (*r
 
 		return nil, fmt.Errorf("failed to get url %s, %w, status code: %d, dump: %s", parsedURL.String(), ErrRequestFailed, resp.StatusCode, dumpBuffer.String())
 	}
+
 	if !strings.Contains(resp.Header.Get("Content-Type"), "text/html") {
 		return nil, fmt.Errorf("url fetched, but content-type not supported yet, %w, content-type: %s", ErrContentNotSupported, resp.Header.Get("Content-Type"))
 	}

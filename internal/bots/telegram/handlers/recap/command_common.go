@@ -56,6 +56,7 @@ func (h *CommandHandler) getRecapForPrivateSubscriptionModeStartCommandContext(h
 
 		return nil, err
 	}
+
 	if str == "" {
 		return nil, nil
 	}
@@ -106,6 +107,7 @@ func (h *CommandHandler) getSubscribeStartCommandContext(hash string) (*privateS
 
 		return nil, err
 	}
+
 	if str == "" {
 		return nil, nil
 	}

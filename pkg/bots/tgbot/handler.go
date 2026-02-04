@@ -44,6 +44,7 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 	if msgError.message == "" {
 		return nil
 	}
+
 	if msgError.editMessage != nil && msgError.editMessage.MessageID != 0 {
 		editMessage := msgError.editMessage
 
@@ -51,6 +52,7 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 		if msgError.parseMode == tgbotapi.ModeHTML {
 			returns = returns.WithParseModeHTML()
 		}
+
 		if msgError.replyMarkup != nil {
 			returns = returns.WithInlineReplyMarkup(*msgError.replyMarkup)
 		}
@@ -68,11 +70,12 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 					sourceReplyMarkup.InlineKeyboard[i],
 				)
 
-				inlineKeyboardsAreTheSame = !(len(diff1) != 0 || len(diff2) != 0)
+				inlineKeyboardsAreTheSame = len(diff1) == 0 && len(diff2) == 0
 
 				break
 			}
 		}
+
 		if textIsTheSame && inlineKeyboardsAreTheSame {
 			return nil
 		}
@@ -81,14 +84,17 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 
 		return returns
 	}
+
 	if msgError.replyToMessageID != 0 {
 		returns := NewMessageReplyTo(chatID, msgError.message, msgError.replyToMessageID)
 		if msgError.parseMode == tgbotapi.ModeHTML {
 			returns = returns.WithParseModeHTML()
 		}
+
 		if msgError.replyMarkup != nil {
 			returns = returns.WithReplyMarkup(*msgError.replyMarkup)
 		}
+
 		if msgError.deleteLaterForUserID != 0 && msgError.deleteLaterChatID != 0 {
 			returns = returns.WithDeleteLater(msgError.deleteLaterForUserID, msgError.deleteLaterChatID)
 		}
@@ -102,9 +108,11 @@ func processMessageError(ctx *Context, chatID int64, msgError MessageError) Resp
 	if msgError.parseMode == tgbotapi.ModeHTML {
 		returns = returns.WithParseModeHTML()
 	}
+
 	if msgError.replyMarkup != nil {
 		returns = returns.WithReplyMarkup(*msgError.replyMarkup)
 	}
+
 	if msgError.deleteLaterForUserID != 0 && msgError.deleteLaterChatID != 0 {
 		returns = returns.WithDeleteLater(msgError.deleteLaterForUserID, msgError.deleteLaterChatID)
 	}
@@ -136,6 +144,7 @@ func processExceptionError(ctx *Context, chatID int64, e ExceptionError) Respons
 	if e.editMessage != nil && e.editMessage.MessageID != 0 {
 		return NewEditMessageText(chatID, e.editMessage.MessageID, message)
 	}
+
 	if e.replyToMessageID != 0 {
 		returns := NewMessageReplyTo(chatID, message, e.replyToMessageID)
 		if e.deleteLaterForUserID != 0 && e.deleteLaterChatID != 0 {
@@ -221,6 +230,7 @@ func processResponse(ctx *Context, resp Response) {
 				)
 			}
 		}
+
 		if v.replyMarkupConfig != nil {
 			_, err := ctx.Bot.Request(v.replyMarkupConfig)
 			if err != nil {
@@ -231,6 +241,7 @@ func processResponse(ctx *Context, resp Response) {
 				)
 			}
 		}
+
 		if v.liveLocationConfig != nil {
 			_, err := ctx.Bot.Request(v.liveLocationConfig)
 			if err != nil {
@@ -241,6 +252,7 @@ func processResponse(ctx *Context, resp Response) {
 				)
 			}
 		}
+
 		if v.textConfig != nil {
 			_, err := ctx.Bot.Request(v.textConfig)
 			if err != nil {
@@ -251,6 +263,7 @@ func processResponse(ctx *Context, resp Response) {
 				)
 			}
 		}
+
 		if v.captionConfig != nil {
 			_, err := ctx.Bot.Request(v.captionConfig)
 			if err != nil {

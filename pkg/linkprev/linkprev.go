@@ -78,6 +78,7 @@ func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *re
 	if err != nil {
 		return request
 	}
+
 	if !lo.Contains([]string{"twitter.com", "vxtwitter.com", "fxtwitter.com"}, parsedURL.Host) {
 		return request
 	}
@@ -87,14 +88,17 @@ func (c *Client) alterRequestForTwitter(request *req.Request, urlStr string) *re
 
 func (c *Client) request(r *req.Request, urlStr string) (*bytes.Buffer, error) {
 	dumpBuffer := new(bytes.Buffer)
+
 	defer func() {
 		dumpBuffer.Reset()
+
 		dumpBuffer = nil
 	}()
 
 	request := r.
 		EnableDumpTo(dumpBuffer).
 		DisableAutoReadResponse()
+
 	defer func() {
 		request.EnableDumpTo(xo.NewNopIoWriter())
 	}()
@@ -103,6 +107,7 @@ func (c *Client) request(r *req.Request, urlStr string) (*bytes.Buffer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get a preview of url %s, %w: %v", urlStr, ErrNetworkError, err)
 	}
+
 	if !resp.IsSuccessState() {
 		errorBuf := new(bytes.Buffer)
 		defer errorBuf.Reset()
@@ -119,6 +124,7 @@ func (c *Client) request(r *req.Request, urlStr string) (*bytes.Buffer, error) {
 	}
 
 	defer resp.Body.Close()
+
 	buf := new(bytes.Buffer)
 
 	_, err = io.Copy(buf, resp.Body)

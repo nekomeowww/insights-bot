@@ -71,6 +71,7 @@ func (f *LogFileFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	}
 
 	prefixStr := entry.Time.Format(timestampFormat) + " "
+
 	var renderFunc func(a ...any) string
 
 	switch entry.Level {
@@ -95,6 +96,7 @@ func (f *LogFileFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	prefixStr += renderFunc("[", entry.Level.String(), "]")
 
 	b.WriteString(prefixStr)
+
 	if data["file"] != nil {
 		b.WriteString(fmt.Sprintf(" [%s]", data["file"]))
 		delete(data, "file")

@@ -151,6 +151,7 @@ func NewConfig() func() (*Config, error) {
 
 		redisDB, redisDBParseErr := strconv.ParseInt(getEnv(EnvRedisDB), 10, 64)
 		log.Printf("failed to parse redis db %v: %v, should be number", getEnv(EnvRedisDB), redisDBParseErr)
+
 		if redisDB < 0 {
 			redisDB = 0
 
@@ -182,6 +183,7 @@ func NewConfig() func() (*Config, error) {
 		if tokenLimitParseErr != nil {
 			log.Printf("failed to parse %s %v: %v, should be number", EnvOpenAIAPITokenLimit, getEnv(EnvOpenAIAPITokenLimit), tokenLimitParseErr)
 		}
+
 		if tokenLimit <= 0 {
 			tokenLimit = 4096
 
@@ -192,11 +194,13 @@ func NewConfig() func() (*Config, error) {
 		if chatHistoriesRecapTokenLimitParseErr != nil {
 			log.Printf("failed to parse %s %v: %v, should be number", EnvOpenAIAPIChatHistoriesRecapTokenLimit, getEnv(EnvOpenAIAPIChatHistoriesRecapTokenLimit), chatHistoriesRecapTokenLimitParseErr)
 		}
+
 		if chatHistoriesRecapTokenLimit <= 0 {
 			chatHistoriesRecapTokenLimit = 2000
 
 			log.Printf("%s value %v is less than or equal to 0, fallbacks to 2000", EnvOpenAIAPIChatHistoriesRecapTokenLimit, getEnv(EnvOpenAIAPIChatHistoriesRecapTokenLimit))
 		}
+
 		if chatHistoriesRecapTokenLimit > tokenLimit {
 			chatHistoriesRecapTokenLimit = tokenLimit
 

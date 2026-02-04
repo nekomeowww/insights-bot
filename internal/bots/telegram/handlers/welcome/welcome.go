@@ -61,10 +61,12 @@ func (h *Handlers) handleChatMember(c *tgbot.Context) (tgbot.Response, error) {
 	if c.Update.MyChatMember == nil {
 		return nil, nil
 	}
+
 	if telegram.MemberStatus(c.Update.MyChatMember.NewChatMember.Status) == telegram.MemberStatusLeft {
 		h.handleBotLeftChat(c.Update.MyChatMember.Chat.ID)
 		return nil, nil
 	}
+
 	if telegram.MemberStatus(c.Update.MyChatMember.NewChatMember.Status) == telegram.MemberStatusMember {
 		h.handleBotJoinChat(c)
 		return nil, nil
@@ -152,6 +154,7 @@ func (h *Handlers) handleBotJoinChat(c *tgbot.Context) {
 
 		return
 	}
+
 	if hasJoinedBefore {
 		return
 	}

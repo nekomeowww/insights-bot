@@ -22,6 +22,7 @@ func SplitMessagesAgainstLengthLimitIntoMessageGroups(originalSlice []string) []
 			// Add the oversized message as a separate batch
 			batchSlice = append(batchSlice, []string{s})
 			count = 0
+
 			continue
 		}
 

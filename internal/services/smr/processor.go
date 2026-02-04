@@ -43,7 +43,6 @@ func (s *Service) formatError(err error, language string) string {
 
 func (s *Service) newRetryButtonMarkup(info types.TaskInfo) (tgbotapi.InlineKeyboardMarkup, error) {
 	data, err := s.tgBot.Bot().AssignOneCallbackQueryData("smr/summarization/retry", &info)
-
 	if err != nil {
 		return tgbotapi.InlineKeyboardMarkup{}, err
 	}
@@ -70,8 +69,8 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 
 		if provideRetryButton {
 			var err error
-			retryButtonMarkup, err := s.newRetryButtonMarkup(info)
 
+			retryButtonMarkup, err := s.newRetryButtonMarkup(info)
 			if err != nil {
 				s.logger.Error("smr service: failed to create retry button markup",
 					zap.Error(err),
@@ -135,7 +134,6 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 		token, err := s.ent.SlackOAuthCredentials.Query().
 			Where(slackoauthcredentials.TeamID(info.TeamID)).
 			First(context.Background())
-
 		if err != nil {
 			s.logger.Warn("smr service: failed to get team's access token",
 				zap.Error(err),
@@ -147,12 +145,12 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 
 		slackCfg := s.config.Slack
 		slackCli := slackbot.NewSlackCli(nil, slackCfg.ClientID, slackCfg.ClientSecret, token.RefreshToken, token.AccessToken)
+
 		_, _, _, err = slackCli.SendMessageWithTokenExpirationCheck(
 			info.ChannelID,
 			s.slackBot.GetService().NewStoreFuncForRefresh(info.TeamID),
 			slack.MsgOptionText(result, false),
 		)
-
 		if err != nil {
 			s.logger.Warn("smr service: failed to send result message",
 				zap.Error(err),
@@ -162,12 +160,12 @@ func (s *Service) sendResult(output *smr.URLSummarizationOutput, info types.Task
 	case bot.FromPlatformDiscord:
 		// TODO: provide retry button
 		channelID, _ := snowflake.Parse(info.ChannelID)
+
 		_, err := s.discordBot.Rest().
 			CreateMessage(channelID, discord.NewMessageCreateBuilder().
 				SetContent(result).
 				Build(),
 			)
-
 		if err != nil {
 			s.logger.Warn("smr service: failed to send result message",
 				zap.Error(err),
@@ -208,6 +206,7 @@ func (s *Service) processor(info types.TaskInfo) {
 	smrResult, err := s.model.SummarizeInputURL(ctx, info.URL, info.Platform)
 	if err != nil {
 		s.logger.Warn("smr service: summarization failed", zap.Error(err))
+
 		errStr := s.formatError(err, lo.Ternary(info.Language == "", "en", info.Language))
 		s.sendResult(nil, info, errStr, !errors.Is(err, smr.ErrContentNotSupported))
 

@@ -18,12 +18,14 @@ func RecordMessage(chatHistories *chathistories.Model, tgchats *tgchats.Model) f
 		if !lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup, telegram.ChatTypePrivate}, chatType) {
 			return
 		}
+
 		if lo.Contains([]telegram.ChatType{telegram.ChatTypeGroup, telegram.ChatTypeSuperGroup}, chatType) {
 			enabled, err := tgchats.HasChatHistoriesRecapEnabledForGroups(c.Update.Message.Chat.ID, c.Update.Message.Chat.Title)
 			if err != nil {
 				c.Logger.Error(err.Error())
 				return
 			}
+
 			if !enabled {
 				return
 			}
@@ -34,6 +36,7 @@ func RecordMessage(chatHistories *chathistories.Model, tgchats *tgchats.Model) f
 				return
 			}
 		}
+
 		if lo.Contains([]telegram.ChatType{telegram.ChatTypePrivate}, chatType) {
 			err := chatHistories.SaveOneTelegramPrivateForwardedReplayChatHistory(c.Update.Message)
 			if err != nil {

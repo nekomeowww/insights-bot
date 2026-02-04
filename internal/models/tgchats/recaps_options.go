@@ -31,6 +31,7 @@ func (m *Model) FindOneOrCreateRecapsOption(chatID int64) (*ent.TelegramChatReca
 	if err != nil {
 		return nil, err
 	}
+
 	if option == nil {
 		option, err := m.ent.TelegramChatRecapsOptions.
 			Create().
@@ -53,6 +54,7 @@ func (m *Model) SetRecapsRecapMode(chatID int64, recapMode tgchat.AutoRecapSendM
 	if err != nil {
 		return err
 	}
+
 	if option == nil {
 		err := m.ent.TelegramChatRecapsOptions.
 			Create().
@@ -65,6 +67,7 @@ func (m *Model) SetRecapsRecapMode(chatID int64, recapMode tgchat.AutoRecapSendM
 
 		return nil
 	}
+
 	if option.AutoRecapSendMode == int(recapMode) {
 		return nil
 	}
@@ -89,6 +92,7 @@ func (m *Model) SetAutoRecapRatesPerDay(chatID int64, ratesPerDay int) error {
 	if err != nil {
 		return err
 	}
+
 	if option == nil {
 		panic("option is nil")
 	}
@@ -126,7 +130,6 @@ func (m *Model) MigrateOptionOfChatFromChatIDToChatID(fromChatID int64, toChatID
 		).
 		SetChatID(toChatID).
 		Save(context.Background())
-
 	if err != nil {
 		return err
 	}
@@ -145,6 +148,7 @@ func (m *Model) EnablePinAutoRecapMessage(chatID int64) error {
 	if err != nil {
 		return err
 	}
+
 	if option.PinAutoRecapMessage {
 		return nil
 	}
@@ -169,6 +173,7 @@ func (m *Model) DisablePinAutoRecapMessage(chatID int64) error {
 	if err != nil {
 		return err
 	}
+
 	if option == nil {
 		_, err = m.ent.TelegramChatRecapsOptions.
 			Create().
@@ -183,6 +188,7 @@ func (m *Model) DisablePinAutoRecapMessage(chatID int64) error {
 
 		return nil
 	}
+
 	if !option.PinAutoRecapMessage {
 		return nil
 	}

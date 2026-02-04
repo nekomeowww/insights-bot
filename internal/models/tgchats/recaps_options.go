@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (m *Model) FindOneRecapsOption(chatID int64) (*ent.TelegramChatRecapsOptions, error) {
+func (m *Model) findOneRecapsOption(chatID int64) (*ent.TelegramChatRecapsOptions, error) {
 	option, err := m.ent.TelegramChatRecapsOptions.
 		Query().
 		Where(telegramchatrecapsoptions.ChatID(chatID)).
@@ -27,7 +27,7 @@ func (m *Model) FindOneRecapsOption(chatID int64) (*ent.TelegramChatRecapsOption
 }
 
 func (m *Model) FindOneOrCreateRecapsOption(chatID int64) (*ent.TelegramChatRecapsOptions, error) {
-	option, err := m.FindOneRecapsOption(chatID)
+	option, err := m.findOneRecapsOption(chatID)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (m *Model) FindOneOrCreateRecapsOption(chatID int64) (*ent.TelegramChatReca
 }
 
 func (m *Model) SetRecapsRecapMode(chatID int64, recapMode tgchat.AutoRecapSendMode) error {
-	option, err := m.FindOneRecapsOption(chatID)
+	option, err := m.findOneRecapsOption(chatID)
 	if err != nil {
 		return err
 	}
@@ -165,7 +165,7 @@ func (m *Model) EnablePinAutoRecapMessage(chatID int64) error {
 }
 
 func (m *Model) DisablePinAutoRecapMessage(chatID int64) error {
-	option, err := m.FindOneRecapsOption(chatID)
+	option, err := m.findOneRecapsOption(chatID)
 	if err != nil {
 		return err
 	}

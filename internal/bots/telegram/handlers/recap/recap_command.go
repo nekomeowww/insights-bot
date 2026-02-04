@@ -65,7 +65,7 @@ func (h *CommandHandler) handleRecapCommand(c *tgbot.Context) (tgbot.Response, e
 			WithReply(c.Update.Message)
 	}
 
-	options, err := h.tgchats.FindOneRecapsOption(chatID)
+	options, err := h.tgchats.FindOneOrCreateRecapsOption(chatID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

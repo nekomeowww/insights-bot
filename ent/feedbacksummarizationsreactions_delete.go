@@ -21,58 +21,58 @@ type FeedbackSummarizationsReactionsDelete struct {
 }
 
 // Where appends a list predicates to the FeedbackSummarizationsReactionsDelete builder.
-func (fsrd *FeedbackSummarizationsReactionsDelete) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDelete {
-	fsrd.mutation.Where(ps...)
-	return fsrd
+func (_d *FeedbackSummarizationsReactionsDelete) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (fsrd *FeedbackSummarizationsReactionsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, fsrd.sqlExec, fsrd.mutation, fsrd.hooks)
+func (_d *FeedbackSummarizationsReactionsDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fsrd *FeedbackSummarizationsReactionsDelete) ExecX(ctx context.Context) int {
-	n, err := fsrd.Exec(ctx)
+func (_d *FeedbackSummarizationsReactionsDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (fsrd *FeedbackSummarizationsReactionsDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *FeedbackSummarizationsReactionsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(feedbacksummarizationsreactions.Table, sqlgraph.NewFieldSpec(feedbacksummarizationsreactions.FieldID, field.TypeUUID))
-	_spec.Node.Schema = fsrd.schemaConfig.FeedbackSummarizationsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fsrd.schemaConfig)
-	if ps := fsrd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.FeedbackSummarizationsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, fsrd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	fsrd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // FeedbackSummarizationsReactionsDeleteOne is the builder for deleting a single FeedbackSummarizationsReactions entity.
 type FeedbackSummarizationsReactionsDeleteOne struct {
-	fsrd *FeedbackSummarizationsReactionsDelete
+	_d *FeedbackSummarizationsReactionsDelete
 }
 
 // Where appends a list predicates to the FeedbackSummarizationsReactionsDelete builder.
-func (fsrdo *FeedbackSummarizationsReactionsDeleteOne) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDeleteOne {
-	fsrdo.fsrd.mutation.Where(ps...)
-	return fsrdo
+func (_d *FeedbackSummarizationsReactionsDeleteOne) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (fsrdo *FeedbackSummarizationsReactionsDeleteOne) Exec(ctx context.Context) error {
-	n, err := fsrdo.fsrd.Exec(ctx)
+func (_d *FeedbackSummarizationsReactionsDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (fsrdo *FeedbackSummarizationsReactionsDeleteOne) Exec(ctx context.Context)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fsrdo *FeedbackSummarizationsReactionsDeleteOne) ExecX(ctx context.Context) {
-	if err := fsrdo.Exec(ctx); err != nil {
+func (_d *FeedbackSummarizationsReactionsDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

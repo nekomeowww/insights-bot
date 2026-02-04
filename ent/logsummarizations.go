@@ -64,7 +64,7 @@ func (*LogSummarizations) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the LogSummarizations fields.
-func (ls *LogSummarizations) assignValues(columns []string, values []any) error {
+func (_m *LogSummarizations) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -74,82 +74,82 @@ func (ls *LogSummarizations) assignValues(columns []string, values []any) error 
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				ls.ID = *value
+				_m.ID = *value
 			}
 		case logsummarizations.FieldContentURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content_url", values[i])
 			} else if value.Valid {
-				ls.ContentURL = value.String
+				_m.ContentURL = value.String
 			}
 		case logsummarizations.FieldContentTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content_title", values[i])
 			} else if value.Valid {
-				ls.ContentTitle = value.String
+				_m.ContentTitle = value.String
 			}
 		case logsummarizations.FieldContentAuthor:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content_author", values[i])
 			} else if value.Valid {
-				ls.ContentAuthor = value.String
+				_m.ContentAuthor = value.String
 			}
 		case logsummarizations.FieldContentText:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content_text", values[i])
 			} else if value.Valid {
-				ls.ContentText = value.String
+				_m.ContentText = value.String
 			}
 		case logsummarizations.FieldContentSummarizedOutputs:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field content_summarized_outputs", values[i])
 			} else if value.Valid {
-				ls.ContentSummarizedOutputs = value.String
+				_m.ContentSummarizedOutputs = value.String
 			}
 		case logsummarizations.FieldFromPlatform:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
 			} else if value.Valid {
-				ls.FromPlatform = int(value.Int64)
+				_m.FromPlatform = int(value.Int64)
 			}
 		case logsummarizations.FieldPromptTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field prompt_token_usage", values[i])
 			} else if value.Valid {
-				ls.PromptTokenUsage = int(value.Int64)
+				_m.PromptTokenUsage = int(value.Int64)
 			}
 		case logsummarizations.FieldCompletionTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field completion_token_usage", values[i])
 			} else if value.Valid {
-				ls.CompletionTokenUsage = int(value.Int64)
+				_m.CompletionTokenUsage = int(value.Int64)
 			}
 		case logsummarizations.FieldTotalTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
 			} else if value.Valid {
-				ls.TotalTokenUsage = int(value.Int64)
+				_m.TotalTokenUsage = int(value.Int64)
 			}
 		case logsummarizations.FieldModelName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field model_name", values[i])
 			} else if value.Valid {
-				ls.ModelName = value.String
+				_m.ModelName = value.String
 			}
 		case logsummarizations.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ls.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case logsummarizations.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ls.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			ls.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -157,68 +157,68 @@ func (ls *LogSummarizations) assignValues(columns []string, values []any) error 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the LogSummarizations.
 // This includes values selected through modifiers, order, etc.
-func (ls *LogSummarizations) Value(name string) (ent.Value, error) {
-	return ls.selectValues.Get(name)
+func (_m *LogSummarizations) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this LogSummarizations.
 // Note that you need to call LogSummarizations.Unwrap() before calling this method if this LogSummarizations
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ls *LogSummarizations) Update() *LogSummarizationsUpdateOne {
-	return NewLogSummarizationsClient(ls.config).UpdateOne(ls)
+func (_m *LogSummarizations) Update() *LogSummarizationsUpdateOne {
+	return NewLogSummarizationsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the LogSummarizations entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ls *LogSummarizations) Unwrap() *LogSummarizations {
-	_tx, ok := ls.config.driver.(*txDriver)
+func (_m *LogSummarizations) Unwrap() *LogSummarizations {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: LogSummarizations is not a transactional entity")
 	}
-	ls.config.driver = _tx.drv
-	return ls
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (ls *LogSummarizations) String() string {
+func (_m *LogSummarizations) String() string {
 	var builder strings.Builder
 	builder.WriteString("LogSummarizations(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ls.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("content_url=")
-	builder.WriteString(ls.ContentURL)
+	builder.WriteString(_m.ContentURL)
 	builder.WriteString(", ")
 	builder.WriteString("content_title=")
-	builder.WriteString(ls.ContentTitle)
+	builder.WriteString(_m.ContentTitle)
 	builder.WriteString(", ")
 	builder.WriteString("content_author=")
-	builder.WriteString(ls.ContentAuthor)
+	builder.WriteString(_m.ContentAuthor)
 	builder.WriteString(", ")
 	builder.WriteString("content_text=")
-	builder.WriteString(ls.ContentText)
+	builder.WriteString(_m.ContentText)
 	builder.WriteString(", ")
 	builder.WriteString("content_summarized_outputs=")
-	builder.WriteString(ls.ContentSummarizedOutputs)
+	builder.WriteString(_m.ContentSummarizedOutputs)
 	builder.WriteString(", ")
 	builder.WriteString("from_platform=")
-	builder.WriteString(fmt.Sprintf("%v", ls.FromPlatform))
+	builder.WriteString(fmt.Sprintf("%v", _m.FromPlatform))
 	builder.WriteString(", ")
 	builder.WriteString("prompt_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", ls.PromptTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.PromptTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("completion_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", ls.CompletionTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.CompletionTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", ls.TotalTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("model_name=")
-	builder.WriteString(ls.ModelName)
+	builder.WriteString(_m.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", ls.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", ls.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

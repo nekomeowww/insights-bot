@@ -21,58 +21,58 @@ type TelegramChatFeatureFlagsDelete struct {
 }
 
 // Where appends a list predicates to the TelegramChatFeatureFlagsDelete builder.
-func (tcffd *TelegramChatFeatureFlagsDelete) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDelete {
-	tcffd.mutation.Where(ps...)
-	return tcffd
+func (_d *TelegramChatFeatureFlagsDelete) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tcffd *TelegramChatFeatureFlagsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcffd.sqlExec, tcffd.mutation, tcffd.hooks)
+func (_d *TelegramChatFeatureFlagsDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcffd *TelegramChatFeatureFlagsDelete) ExecX(ctx context.Context) int {
-	n, err := tcffd.Exec(ctx)
+func (_d *TelegramChatFeatureFlagsDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tcffd *TelegramChatFeatureFlagsDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TelegramChatFeatureFlagsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(telegramchatfeatureflags.Table, sqlgraph.NewFieldSpec(telegramchatfeatureflags.FieldID, field.TypeUUID))
-	_spec.Node.Schema = tcffd.schemaConfig.TelegramChatFeatureFlags
-	ctx = internal.NewSchemaConfigContext(ctx, tcffd.schemaConfig)
-	if ps := tcffd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TelegramChatFeatureFlags
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tcffd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tcffd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TelegramChatFeatureFlagsDeleteOne is the builder for deleting a single TelegramChatFeatureFlags entity.
 type TelegramChatFeatureFlagsDeleteOne struct {
-	tcffd *TelegramChatFeatureFlagsDelete
+	_d *TelegramChatFeatureFlagsDelete
 }
 
 // Where appends a list predicates to the TelegramChatFeatureFlagsDelete builder.
-func (tcffdo *TelegramChatFeatureFlagsDeleteOne) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDeleteOne {
-	tcffdo.tcffd.mutation.Where(ps...)
-	return tcffdo
+func (_d *TelegramChatFeatureFlagsDeleteOne) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tcffdo *TelegramChatFeatureFlagsDeleteOne) Exec(ctx context.Context) error {
-	n, err := tcffdo.tcffd.Exec(ctx)
+func (_d *TelegramChatFeatureFlagsDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (tcffdo *TelegramChatFeatureFlagsDeleteOne) Exec(ctx context.Context) error
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcffdo *TelegramChatFeatureFlagsDeleteOne) ExecX(ctx context.Context) {
-	if err := tcffdo.Exec(ctx); err != nil {
+func (_d *TelegramChatFeatureFlagsDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

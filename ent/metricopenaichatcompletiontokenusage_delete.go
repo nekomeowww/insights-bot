@@ -21,58 +21,58 @@ type MetricOpenAIChatCompletionTokenUsageDelete struct {
 }
 
 // Where appends a list predicates to the MetricOpenAIChatCompletionTokenUsageDelete builder.
-func (moacctud *MetricOpenAIChatCompletionTokenUsageDelete) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDelete {
-	moacctud.mutation.Where(ps...)
-	return moacctud
+func (_d *MetricOpenAIChatCompletionTokenUsageDelete) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (moacctud *MetricOpenAIChatCompletionTokenUsageDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, moacctud.sqlExec, moacctud.mutation, moacctud.hooks)
+func (_d *MetricOpenAIChatCompletionTokenUsageDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (moacctud *MetricOpenAIChatCompletionTokenUsageDelete) ExecX(ctx context.Context) int {
-	n, err := moacctud.Exec(ctx)
+func (_d *MetricOpenAIChatCompletionTokenUsageDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (moacctud *MetricOpenAIChatCompletionTokenUsageDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *MetricOpenAIChatCompletionTokenUsageDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(metricopenaichatcompletiontokenusage.Table, sqlgraph.NewFieldSpec(metricopenaichatcompletiontokenusage.FieldID, field.TypeUUID))
-	_spec.Node.Schema = moacctud.schemaConfig.MetricOpenAIChatCompletionTokenUsage
-	ctx = internal.NewSchemaConfigContext(ctx, moacctud.schemaConfig)
-	if ps := moacctud.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.MetricOpenAIChatCompletionTokenUsage
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, moacctud.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	moacctud.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // MetricOpenAIChatCompletionTokenUsageDeleteOne is the builder for deleting a single MetricOpenAIChatCompletionTokenUsage entity.
 type MetricOpenAIChatCompletionTokenUsageDeleteOne struct {
-	moacctud *MetricOpenAIChatCompletionTokenUsageDelete
+	_d *MetricOpenAIChatCompletionTokenUsageDelete
 }
 
 // Where appends a list predicates to the MetricOpenAIChatCompletionTokenUsageDelete builder.
-func (moacctudo *MetricOpenAIChatCompletionTokenUsageDeleteOne) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
-	moacctudo.moacctud.mutation.Where(ps...)
-	return moacctudo
+func (_d *MetricOpenAIChatCompletionTokenUsageDeleteOne) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (moacctudo *MetricOpenAIChatCompletionTokenUsageDeleteOne) Exec(ctx context.Context) error {
-	n, err := moacctudo.moacctud.Exec(ctx)
+func (_d *MetricOpenAIChatCompletionTokenUsageDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (moacctudo *MetricOpenAIChatCompletionTokenUsageDeleteOne) Exec(ctx context
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (moacctudo *MetricOpenAIChatCompletionTokenUsageDeleteOne) ExecX(ctx context.Context) {
-	if err := moacctudo.Exec(ctx); err != nil {
+func (_d *MetricOpenAIChatCompletionTokenUsageDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

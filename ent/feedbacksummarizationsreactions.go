@@ -52,7 +52,7 @@ func (*FeedbackSummarizationsReactions) scanValues(columns []string) ([]any, err
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FeedbackSummarizationsReactions fields.
-func (fsr *FeedbackSummarizationsReactions) assignValues(columns []string, values []any) error {
+func (_m *FeedbackSummarizationsReactions) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -62,46 +62,46 @@ func (fsr *FeedbackSummarizationsReactions) assignValues(columns []string, value
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				fsr.ID = *value
+				_m.ID = *value
 			}
 		case feedbacksummarizationsreactions.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				fsr.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case feedbacksummarizationsreactions.FieldLogID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field log_id", values[i])
 			} else if value != nil {
-				fsr.LogID = *value
+				_m.LogID = *value
 			}
 		case feedbacksummarizationsreactions.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				fsr.UserID = value.Int64
+				_m.UserID = value.Int64
 			}
 		case feedbacksummarizationsreactions.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				fsr.Type = feedbacksummarizationsreactions.Type(value.String)
+				_m.Type = feedbacksummarizationsreactions.Type(value.String)
 			}
 		case feedbacksummarizationsreactions.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				fsr.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case feedbacksummarizationsreactions.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				fsr.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			fsr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -109,50 +109,50 @@ func (fsr *FeedbackSummarizationsReactions) assignValues(columns []string, value
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FeedbackSummarizationsReactions.
 // This includes values selected through modifiers, order, etc.
-func (fsr *FeedbackSummarizationsReactions) Value(name string) (ent.Value, error) {
-	return fsr.selectValues.Get(name)
+func (_m *FeedbackSummarizationsReactions) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this FeedbackSummarizationsReactions.
 // Note that you need to call FeedbackSummarizationsReactions.Unwrap() before calling this method if this FeedbackSummarizationsReactions
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (fsr *FeedbackSummarizationsReactions) Update() *FeedbackSummarizationsReactionsUpdateOne {
-	return NewFeedbackSummarizationsReactionsClient(fsr.config).UpdateOne(fsr)
+func (_m *FeedbackSummarizationsReactions) Update() *FeedbackSummarizationsReactionsUpdateOne {
+	return NewFeedbackSummarizationsReactionsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the FeedbackSummarizationsReactions entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fsr *FeedbackSummarizationsReactions) Unwrap() *FeedbackSummarizationsReactions {
-	_tx, ok := fsr.config.driver.(*txDriver)
+func (_m *FeedbackSummarizationsReactions) Unwrap() *FeedbackSummarizationsReactions {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: FeedbackSummarizationsReactions is not a transactional entity")
 	}
-	fsr.config.driver = _tx.drv
-	return fsr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fsr *FeedbackSummarizationsReactions) String() string {
+func (_m *FeedbackSummarizationsReactions) String() string {
 	var builder strings.Builder
 	builder.WriteString("FeedbackSummarizationsReactions(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", fsr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("log_id=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.LogID))
+	builder.WriteString(fmt.Sprintf("%v", _m.LogID))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", fsr.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

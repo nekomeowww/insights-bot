@@ -50,7 +50,7 @@ func (*SlackOAuthCredentials) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the SlackOAuthCredentials fields.
-func (soc *SlackOAuthCredentials) assignValues(columns []string, values []any) error {
+func (_m *SlackOAuthCredentials) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -60,40 +60,40 @@ func (soc *SlackOAuthCredentials) assignValues(columns []string, values []any) e
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				soc.ID = *value
+				_m.ID = *value
 			}
 		case slackoauthcredentials.FieldTeamID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field team_id", values[i])
 			} else if value.Valid {
-				soc.TeamID = value.String
+				_m.TeamID = value.String
 			}
 		case slackoauthcredentials.FieldRefreshToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
 			} else if value.Valid {
-				soc.RefreshToken = value.String
+				_m.RefreshToken = value.String
 			}
 		case slackoauthcredentials.FieldAccessToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field access_token", values[i])
 			} else if value.Valid {
-				soc.AccessToken = value.String
+				_m.AccessToken = value.String
 			}
 		case slackoauthcredentials.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				soc.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case slackoauthcredentials.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				soc.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			soc.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -101,47 +101,47 @@ func (soc *SlackOAuthCredentials) assignValues(columns []string, values []any) e
 
 // Value returns the ent.Value that was dynamically selected and assigned to the SlackOAuthCredentials.
 // This includes values selected through modifiers, order, etc.
-func (soc *SlackOAuthCredentials) Value(name string) (ent.Value, error) {
-	return soc.selectValues.Get(name)
+func (_m *SlackOAuthCredentials) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this SlackOAuthCredentials.
 // Note that you need to call SlackOAuthCredentials.Unwrap() before calling this method if this SlackOAuthCredentials
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (soc *SlackOAuthCredentials) Update() *SlackOAuthCredentialsUpdateOne {
-	return NewSlackOAuthCredentialsClient(soc.config).UpdateOne(soc)
+func (_m *SlackOAuthCredentials) Update() *SlackOAuthCredentialsUpdateOne {
+	return NewSlackOAuthCredentialsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the SlackOAuthCredentials entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (soc *SlackOAuthCredentials) Unwrap() *SlackOAuthCredentials {
-	_tx, ok := soc.config.driver.(*txDriver)
+func (_m *SlackOAuthCredentials) Unwrap() *SlackOAuthCredentials {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: SlackOAuthCredentials is not a transactional entity")
 	}
-	soc.config.driver = _tx.drv
-	return soc
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (soc *SlackOAuthCredentials) String() string {
+func (_m *SlackOAuthCredentials) String() string {
 	var builder strings.Builder
 	builder.WriteString("SlackOAuthCredentials(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", soc.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("team_id=")
-	builder.WriteString(soc.TeamID)
+	builder.WriteString(_m.TeamID)
 	builder.WriteString(", ")
 	builder.WriteString("refresh_token=")
-	builder.WriteString(soc.RefreshToken)
+	builder.WriteString(_m.RefreshToken)
 	builder.WriteString(", ")
 	builder.WriteString("access_token=")
-	builder.WriteString(soc.AccessToken)
+	builder.WriteString(_m.AccessToken)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", soc.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", soc.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

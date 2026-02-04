@@ -58,7 +58,7 @@ func (*SentMessages) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the SentMessages fields.
-func (sm *SentMessages) assignValues(columns []string, values []any) error {
+func (_m *SentMessages) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -68,58 +68,58 @@ func (sm *SentMessages) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				sm.ID = *value
+				_m.ID = *value
 			}
 		case sentmessages.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				sm.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case sentmessages.FieldMessageID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field message_id", values[i])
 			} else if value.Valid {
-				sm.MessageID = int(value.Int64)
+				_m.MessageID = int(value.Int64)
 			}
 		case sentmessages.FieldText:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field text", values[i])
 			} else if value.Valid {
-				sm.Text = value.String
+				_m.Text = value.String
 			}
 		case sentmessages.FieldIsPinned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_pinned", values[i])
 			} else if value.Valid {
-				sm.IsPinned = value.Bool
+				_m.IsPinned = value.Bool
 			}
 		case sentmessages.FieldFromPlatform:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
 			} else if value.Valid {
-				sm.FromPlatform = int(value.Int64)
+				_m.FromPlatform = int(value.Int64)
 			}
 		case sentmessages.FieldMessageType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field message_type", values[i])
 			} else if value.Valid {
-				sm.MessageType = int(value.Int64)
+				_m.MessageType = int(value.Int64)
 			}
 		case sentmessages.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				sm.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case sentmessages.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				sm.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			sm.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -127,56 +127,56 @@ func (sm *SentMessages) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the SentMessages.
 // This includes values selected through modifiers, order, etc.
-func (sm *SentMessages) Value(name string) (ent.Value, error) {
-	return sm.selectValues.Get(name)
+func (_m *SentMessages) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this SentMessages.
 // Note that you need to call SentMessages.Unwrap() before calling this method if this SentMessages
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (sm *SentMessages) Update() *SentMessagesUpdateOne {
-	return NewSentMessagesClient(sm.config).UpdateOne(sm)
+func (_m *SentMessages) Update() *SentMessagesUpdateOne {
+	return NewSentMessagesClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the SentMessages entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (sm *SentMessages) Unwrap() *SentMessages {
-	_tx, ok := sm.config.driver.(*txDriver)
+func (_m *SentMessages) Unwrap() *SentMessages {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: SentMessages is not a transactional entity")
 	}
-	sm.config.driver = _tx.drv
-	return sm
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (sm *SentMessages) String() string {
+func (_m *SentMessages) String() string {
 	var builder strings.Builder
 	builder.WriteString("SentMessages(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", sm.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", sm.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("message_id=")
-	builder.WriteString(fmt.Sprintf("%v", sm.MessageID))
+	builder.WriteString(fmt.Sprintf("%v", _m.MessageID))
 	builder.WriteString(", ")
 	builder.WriteString("text=")
-	builder.WriteString(sm.Text)
+	builder.WriteString(_m.Text)
 	builder.WriteString(", ")
 	builder.WriteString("is_pinned=")
-	builder.WriteString(fmt.Sprintf("%v", sm.IsPinned))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPinned))
 	builder.WriteString(", ")
 	builder.WriteString("from_platform=")
-	builder.WriteString(fmt.Sprintf("%v", sm.FromPlatform))
+	builder.WriteString(fmt.Sprintf("%v", _m.FromPlatform))
 	builder.WriteString(", ")
 	builder.WriteString("message_type=")
-	builder.WriteString(fmt.Sprintf("%v", sm.MessageType))
+	builder.WriteString(fmt.Sprintf("%v", _m.MessageType))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", sm.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", sm.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

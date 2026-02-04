@@ -21,58 +21,58 @@ type TelegramChatRecapsOptionsDelete struct {
 }
 
 // Where appends a list predicates to the TelegramChatRecapsOptionsDelete builder.
-func (tcrod *TelegramChatRecapsOptionsDelete) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDelete {
-	tcrod.mutation.Where(ps...)
-	return tcrod
+func (_d *TelegramChatRecapsOptionsDelete) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tcrod *TelegramChatRecapsOptionsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcrod.sqlExec, tcrod.mutation, tcrod.hooks)
+func (_d *TelegramChatRecapsOptionsDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcrod *TelegramChatRecapsOptionsDelete) ExecX(ctx context.Context) int {
-	n, err := tcrod.Exec(ctx)
+func (_d *TelegramChatRecapsOptionsDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tcrod *TelegramChatRecapsOptionsDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TelegramChatRecapsOptionsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(telegramchatrecapsoptions.Table, sqlgraph.NewFieldSpec(telegramchatrecapsoptions.FieldID, field.TypeUUID))
-	_spec.Node.Schema = tcrod.schemaConfig.TelegramChatRecapsOptions
-	ctx = internal.NewSchemaConfigContext(ctx, tcrod.schemaConfig)
-	if ps := tcrod.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TelegramChatRecapsOptions
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tcrod.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tcrod.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TelegramChatRecapsOptionsDeleteOne is the builder for deleting a single TelegramChatRecapsOptions entity.
 type TelegramChatRecapsOptionsDeleteOne struct {
-	tcrod *TelegramChatRecapsOptionsDelete
+	_d *TelegramChatRecapsOptionsDelete
 }
 
 // Where appends a list predicates to the TelegramChatRecapsOptionsDelete builder.
-func (tcrodo *TelegramChatRecapsOptionsDeleteOne) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDeleteOne {
-	tcrodo.tcrod.mutation.Where(ps...)
-	return tcrodo
+func (_d *TelegramChatRecapsOptionsDeleteOne) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tcrodo *TelegramChatRecapsOptionsDeleteOne) Exec(ctx context.Context) error {
-	n, err := tcrodo.tcrod.Exec(ctx)
+func (_d *TelegramChatRecapsOptionsDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (tcrodo *TelegramChatRecapsOptionsDeleteOne) Exec(ctx context.Context) erro
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcrodo *TelegramChatRecapsOptionsDeleteOne) ExecX(ctx context.Context) {
-	if err := tcrodo.Exec(ctx); err != nil {
+func (_d *TelegramChatRecapsOptionsDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

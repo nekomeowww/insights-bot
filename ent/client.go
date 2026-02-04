@@ -352,8 +352,8 @@ func (c *ChatHistoriesClient) Update() *ChatHistoriesUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *ChatHistoriesClient) UpdateOne(ch *ChatHistories) *ChatHistoriesUpdateOne {
-	mutation := newChatHistoriesMutation(c.config, OpUpdateOne, withChatHistories(ch))
+func (c *ChatHistoriesClient) UpdateOne(_m *ChatHistories) *ChatHistoriesUpdateOne {
+	mutation := newChatHistoriesMutation(c.config, OpUpdateOne, withChatHistories(_m))
 	return &ChatHistoriesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -370,8 +370,8 @@ func (c *ChatHistoriesClient) Delete() *ChatHistoriesDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *ChatHistoriesClient) DeleteOne(ch *ChatHistories) *ChatHistoriesDeleteOne {
-	return c.DeleteOneID(ch.ID)
+func (c *ChatHistoriesClient) DeleteOne(_m *ChatHistories) *ChatHistoriesDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -485,8 +485,8 @@ func (c *FeedbackChatHistoriesRecapsReactionsClient) Update() *FeedbackChatHisto
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FeedbackChatHistoriesRecapsReactionsClient) UpdateOne(fchrr *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpUpdateOne, withFeedbackChatHistoriesRecapsReactions(fchrr))
+func (c *FeedbackChatHistoriesRecapsReactionsClient) UpdateOne(_m *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	mutation := newFeedbackChatHistoriesRecapsReactionsMutation(c.config, OpUpdateOne, withFeedbackChatHistoriesRecapsReactions(_m))
 	return &FeedbackChatHistoriesRecapsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -503,8 +503,8 @@ func (c *FeedbackChatHistoriesRecapsReactionsClient) Delete() *FeedbackChatHisto
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FeedbackChatHistoriesRecapsReactionsClient) DeleteOne(fchrr *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsDeleteOne {
-	return c.DeleteOneID(fchrr.ID)
+func (c *FeedbackChatHistoriesRecapsReactionsClient) DeleteOne(_m *FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -618,8 +618,8 @@ func (c *FeedbackSummarizationsReactionsClient) Update() *FeedbackSummarizations
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FeedbackSummarizationsReactionsClient) UpdateOne(fsr *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdateOne {
-	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdateOne, withFeedbackSummarizationsReactions(fsr))
+func (c *FeedbackSummarizationsReactionsClient) UpdateOne(_m *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdateOne {
+	mutation := newFeedbackSummarizationsReactionsMutation(c.config, OpUpdateOne, withFeedbackSummarizationsReactions(_m))
 	return &FeedbackSummarizationsReactionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -636,8 +636,8 @@ func (c *FeedbackSummarizationsReactionsClient) Delete() *FeedbackSummarizations
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FeedbackSummarizationsReactionsClient) DeleteOne(fsr *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDeleteOne {
-	return c.DeleteOneID(fsr.ID)
+func (c *FeedbackSummarizationsReactionsClient) DeleteOne(_m *FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -751,8 +751,8 @@ func (c *LogChatHistoriesRecapClient) Update() *LogChatHistoriesRecapUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *LogChatHistoriesRecapClient) UpdateOne(lchr *LogChatHistoriesRecap) *LogChatHistoriesRecapUpdateOne {
-	mutation := newLogChatHistoriesRecapMutation(c.config, OpUpdateOne, withLogChatHistoriesRecap(lchr))
+func (c *LogChatHistoriesRecapClient) UpdateOne(_m *LogChatHistoriesRecap) *LogChatHistoriesRecapUpdateOne {
+	mutation := newLogChatHistoriesRecapMutation(c.config, OpUpdateOne, withLogChatHistoriesRecap(_m))
 	return &LogChatHistoriesRecapUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -769,8 +769,8 @@ func (c *LogChatHistoriesRecapClient) Delete() *LogChatHistoriesRecapDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *LogChatHistoriesRecapClient) DeleteOne(lchr *LogChatHistoriesRecap) *LogChatHistoriesRecapDeleteOne {
-	return c.DeleteOneID(lchr.ID)
+func (c *LogChatHistoriesRecapClient) DeleteOne(_m *LogChatHistoriesRecap) *LogChatHistoriesRecapDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -884,8 +884,8 @@ func (c *LogSummarizationsClient) Update() *LogSummarizationsUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *LogSummarizationsClient) UpdateOne(ls *LogSummarizations) *LogSummarizationsUpdateOne {
-	mutation := newLogSummarizationsMutation(c.config, OpUpdateOne, withLogSummarizations(ls))
+func (c *LogSummarizationsClient) UpdateOne(_m *LogSummarizations) *LogSummarizationsUpdateOne {
+	mutation := newLogSummarizationsMutation(c.config, OpUpdateOne, withLogSummarizations(_m))
 	return &LogSummarizationsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -902,8 +902,8 @@ func (c *LogSummarizationsClient) Delete() *LogSummarizationsDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *LogSummarizationsClient) DeleteOne(ls *LogSummarizations) *LogSummarizationsDeleteOne {
-	return c.DeleteOneID(ls.ID)
+func (c *LogSummarizationsClient) DeleteOne(_m *LogSummarizations) *LogSummarizationsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1017,8 +1017,8 @@ func (c *MetricOpenAIChatCompletionTokenUsageClient) Update() *MetricOpenAIChatC
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *MetricOpenAIChatCompletionTokenUsageClient) UpdateOne(moacctu *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
-	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpUpdateOne, withMetricOpenAIChatCompletionTokenUsage(moacctu))
+func (c *MetricOpenAIChatCompletionTokenUsageClient) UpdateOne(_m *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	mutation := newMetricOpenAIChatCompletionTokenUsageMutation(c.config, OpUpdateOne, withMetricOpenAIChatCompletionTokenUsage(_m))
 	return &MetricOpenAIChatCompletionTokenUsageUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1035,8 +1035,8 @@ func (c *MetricOpenAIChatCompletionTokenUsageClient) Delete() *MetricOpenAIChatC
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *MetricOpenAIChatCompletionTokenUsageClient) DeleteOne(moacctu *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
-	return c.DeleteOneID(moacctu.ID)
+func (c *MetricOpenAIChatCompletionTokenUsageClient) DeleteOne(_m *MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1150,8 +1150,8 @@ func (c *SentMessagesClient) Update() *SentMessagesUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SentMessagesClient) UpdateOne(sm *SentMessages) *SentMessagesUpdateOne {
-	mutation := newSentMessagesMutation(c.config, OpUpdateOne, withSentMessages(sm))
+func (c *SentMessagesClient) UpdateOne(_m *SentMessages) *SentMessagesUpdateOne {
+	mutation := newSentMessagesMutation(c.config, OpUpdateOne, withSentMessages(_m))
 	return &SentMessagesUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1168,8 +1168,8 @@ func (c *SentMessagesClient) Delete() *SentMessagesDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SentMessagesClient) DeleteOne(sm *SentMessages) *SentMessagesDeleteOne {
-	return c.DeleteOneID(sm.ID)
+func (c *SentMessagesClient) DeleteOne(_m *SentMessages) *SentMessagesDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1283,8 +1283,8 @@ func (c *SlackOAuthCredentialsClient) Update() *SlackOAuthCredentialsUpdate {
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *SlackOAuthCredentialsClient) UpdateOne(soc *SlackOAuthCredentials) *SlackOAuthCredentialsUpdateOne {
-	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdateOne, withSlackOAuthCredentials(soc))
+func (c *SlackOAuthCredentialsClient) UpdateOne(_m *SlackOAuthCredentials) *SlackOAuthCredentialsUpdateOne {
+	mutation := newSlackOAuthCredentialsMutation(c.config, OpUpdateOne, withSlackOAuthCredentials(_m))
 	return &SlackOAuthCredentialsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1301,8 +1301,8 @@ func (c *SlackOAuthCredentialsClient) Delete() *SlackOAuthCredentialsDelete {
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *SlackOAuthCredentialsClient) DeleteOne(soc *SlackOAuthCredentials) *SlackOAuthCredentialsDeleteOne {
-	return c.DeleteOneID(soc.ID)
+func (c *SlackOAuthCredentialsClient) DeleteOne(_m *SlackOAuthCredentials) *SlackOAuthCredentialsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1416,8 +1416,8 @@ func (c *TelegramChatAutoRecapsSubscribersClient) Update() *TelegramChatAutoReca
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TelegramChatAutoRecapsSubscribersClient) UpdateOne(tcars *TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	mutation := newTelegramChatAutoRecapsSubscribersMutation(c.config, OpUpdateOne, withTelegramChatAutoRecapsSubscribers(tcars))
+func (c *TelegramChatAutoRecapsSubscribersClient) UpdateOne(_m *TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	mutation := newTelegramChatAutoRecapsSubscribersMutation(c.config, OpUpdateOne, withTelegramChatAutoRecapsSubscribers(_m))
 	return &TelegramChatAutoRecapsSubscribersUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1434,8 +1434,8 @@ func (c *TelegramChatAutoRecapsSubscribersClient) Delete() *TelegramChatAutoReca
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TelegramChatAutoRecapsSubscribersClient) DeleteOne(tcars *TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDeleteOne {
-	return c.DeleteOneID(tcars.ID)
+func (c *TelegramChatAutoRecapsSubscribersClient) DeleteOne(_m *TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1549,8 +1549,8 @@ func (c *TelegramChatFeatureFlagsClient) Update() *TelegramChatFeatureFlagsUpdat
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TelegramChatFeatureFlagsClient) UpdateOne(tcff *TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdateOne {
-	mutation := newTelegramChatFeatureFlagsMutation(c.config, OpUpdateOne, withTelegramChatFeatureFlags(tcff))
+func (c *TelegramChatFeatureFlagsClient) UpdateOne(_m *TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdateOne {
+	mutation := newTelegramChatFeatureFlagsMutation(c.config, OpUpdateOne, withTelegramChatFeatureFlags(_m))
 	return &TelegramChatFeatureFlagsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1567,8 +1567,8 @@ func (c *TelegramChatFeatureFlagsClient) Delete() *TelegramChatFeatureFlagsDelet
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TelegramChatFeatureFlagsClient) DeleteOne(tcff *TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDeleteOne {
-	return c.DeleteOneID(tcff.ID)
+func (c *TelegramChatFeatureFlagsClient) DeleteOne(_m *TelegramChatFeatureFlags) *TelegramChatFeatureFlagsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
@@ -1682,8 +1682,8 @@ func (c *TelegramChatRecapsOptionsClient) Update() *TelegramChatRecapsOptionsUpd
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *TelegramChatRecapsOptionsClient) UpdateOne(tcro *TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdateOne {
-	mutation := newTelegramChatRecapsOptionsMutation(c.config, OpUpdateOne, withTelegramChatRecapsOptions(tcro))
+func (c *TelegramChatRecapsOptionsClient) UpdateOne(_m *TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdateOne {
+	mutation := newTelegramChatRecapsOptionsMutation(c.config, OpUpdateOne, withTelegramChatRecapsOptions(_m))
 	return &TelegramChatRecapsOptionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
@@ -1700,8 +1700,8 @@ func (c *TelegramChatRecapsOptionsClient) Delete() *TelegramChatRecapsOptionsDel
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *TelegramChatRecapsOptionsClient) DeleteOne(tcro *TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDeleteOne {
-	return c.DeleteOneID(tcro.ID)
+func (c *TelegramChatRecapsOptionsClient) DeleteOne(_m *TelegramChatRecapsOptions) *TelegramChatRecapsOptionsDeleteOne {
+	return c.DeleteOneID(_m.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.

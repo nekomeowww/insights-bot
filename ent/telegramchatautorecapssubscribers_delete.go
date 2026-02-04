@@ -21,58 +21,58 @@ type TelegramChatAutoRecapsSubscribersDelete struct {
 }
 
 // Where appends a list predicates to the TelegramChatAutoRecapsSubscribersDelete builder.
-func (tcarsd *TelegramChatAutoRecapsSubscribersDelete) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDelete {
-	tcarsd.mutation.Where(ps...)
-	return tcarsd
+func (_d *TelegramChatAutoRecapsSubscribersDelete) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tcarsd *TelegramChatAutoRecapsSubscribersDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcarsd.sqlExec, tcarsd.mutation, tcarsd.hooks)
+func (_d *TelegramChatAutoRecapsSubscribersDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarsd *TelegramChatAutoRecapsSubscribersDelete) ExecX(ctx context.Context) int {
-	n, err := tcarsd.Exec(ctx)
+func (_d *TelegramChatAutoRecapsSubscribersDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tcarsd *TelegramChatAutoRecapsSubscribersDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TelegramChatAutoRecapsSubscribersDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(telegramchatautorecapssubscribers.Table, sqlgraph.NewFieldSpec(telegramchatautorecapssubscribers.FieldID, field.TypeUUID))
-	_spec.Node.Schema = tcarsd.schemaConfig.TelegramChatAutoRecapsSubscribers
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsd.schemaConfig)
-	if ps := tcarsd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.TelegramChatAutoRecapsSubscribers
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tcarsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tcarsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TelegramChatAutoRecapsSubscribersDeleteOne is the builder for deleting a single TelegramChatAutoRecapsSubscribers entity.
 type TelegramChatAutoRecapsSubscribersDeleteOne struct {
-	tcarsd *TelegramChatAutoRecapsSubscribersDelete
+	_d *TelegramChatAutoRecapsSubscribersDelete
 }
 
 // Where appends a list predicates to the TelegramChatAutoRecapsSubscribersDelete builder.
-func (tcarsdo *TelegramChatAutoRecapsSubscribersDeleteOne) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDeleteOne {
-	tcarsdo.tcarsd.mutation.Where(ps...)
-	return tcarsdo
+func (_d *TelegramChatAutoRecapsSubscribersDeleteOne) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tcarsdo *TelegramChatAutoRecapsSubscribersDeleteOne) Exec(ctx context.Context) error {
-	n, err := tcarsdo.tcarsd.Exec(ctx)
+func (_d *TelegramChatAutoRecapsSubscribersDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (tcarsdo *TelegramChatAutoRecapsSubscribersDeleteOne) Exec(ctx context.Cont
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarsdo *TelegramChatAutoRecapsSubscribersDeleteOne) ExecX(ctx context.Context) {
-	if err := tcarsdo.Exec(ctx); err != nil {
+func (_d *TelegramChatAutoRecapsSubscribersDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

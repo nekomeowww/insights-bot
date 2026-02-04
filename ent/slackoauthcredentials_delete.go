@@ -21,58 +21,58 @@ type SlackOAuthCredentialsDelete struct {
 }
 
 // Where appends a list predicates to the SlackOAuthCredentialsDelete builder.
-func (socd *SlackOAuthCredentialsDelete) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsDelete {
-	socd.mutation.Where(ps...)
-	return socd
+func (_d *SlackOAuthCredentialsDelete) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (socd *SlackOAuthCredentialsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, socd.sqlExec, socd.mutation, socd.hooks)
+func (_d *SlackOAuthCredentialsDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (socd *SlackOAuthCredentialsDelete) ExecX(ctx context.Context) int {
-	n, err := socd.Exec(ctx)
+func (_d *SlackOAuthCredentialsDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (socd *SlackOAuthCredentialsDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SlackOAuthCredentialsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(slackoauthcredentials.Table, sqlgraph.NewFieldSpec(slackoauthcredentials.FieldID, field.TypeUUID))
-	_spec.Node.Schema = socd.schemaConfig.SlackOAuthCredentials
-	ctx = internal.NewSchemaConfigContext(ctx, socd.schemaConfig)
-	if ps := socd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.SlackOAuthCredentials
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, socd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	socd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SlackOAuthCredentialsDeleteOne is the builder for deleting a single SlackOAuthCredentials entity.
 type SlackOAuthCredentialsDeleteOne struct {
-	socd *SlackOAuthCredentialsDelete
+	_d *SlackOAuthCredentialsDelete
 }
 
 // Where appends a list predicates to the SlackOAuthCredentialsDelete builder.
-func (socdo *SlackOAuthCredentialsDeleteOne) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsDeleteOne {
-	socdo.socd.mutation.Where(ps...)
-	return socdo
+func (_d *SlackOAuthCredentialsDeleteOne) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (socdo *SlackOAuthCredentialsDeleteOne) Exec(ctx context.Context) error {
-	n, err := socdo.socd.Exec(ctx)
+func (_d *SlackOAuthCredentialsDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (socdo *SlackOAuthCredentialsDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (socdo *SlackOAuthCredentialsDeleteOne) ExecX(ctx context.Context) {
-	if err := socdo.Exec(ctx); err != nil {
+func (_d *SlackOAuthCredentialsDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

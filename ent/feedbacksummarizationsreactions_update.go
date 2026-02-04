@@ -23,122 +23,122 @@ type FeedbackSummarizationsReactionsUpdate struct {
 }
 
 // Where appends a list predicates to the FeedbackSummarizationsReactionsUpdate builder.
-func (fsru *FeedbackSummarizationsReactionsUpdate) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.Where(ps...)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetChatID(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.ResetChatID()
-	fsru.mutation.SetChatID(i)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) SetChatID(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetNillableChatID(i *int64) *FeedbackSummarizationsReactionsUpdate {
-	if i != nil {
-		fsru.SetChatID(*i)
+func (_u *FeedbackSummarizationsReactionsUpdate) SetNillableChatID(v *int64) *FeedbackSummarizationsReactionsUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return fsru
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) AddChatID(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.AddChatID(i)
-	return fsru
+// AddChatID adds value to the "chat_id" field.
+func (_u *FeedbackSummarizationsReactionsUpdate) AddChatID(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetUserID(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.ResetUserID()
-	fsru.mutation.SetUserID(i)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) SetUserID(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetNillableUserID(i *int64) *FeedbackSummarizationsReactionsUpdate {
-	if i != nil {
-		fsru.SetUserID(*i)
+func (_u *FeedbackSummarizationsReactionsUpdate) SetNillableUserID(v *int64) *FeedbackSummarizationsReactionsUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return fsru
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) AddUserID(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.AddUserID(i)
-	return fsru
+// AddUserID adds value to the "user_id" field.
+func (_u *FeedbackSummarizationsReactionsUpdate) AddUserID(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetType sets the "type" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetType(f feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.SetType(f)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) SetType(v feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetNillableType(f *feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdate {
-	if f != nil {
-		fsru.SetType(*f)
+func (_u *FeedbackSummarizationsReactionsUpdate) SetNillableType(v *feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdate {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return fsru
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetCreatedAt(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.ResetCreatedAt()
-	fsru.mutation.SetCreatedAt(i)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) SetCreatedAt(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetNillableCreatedAt(i *int64) *FeedbackSummarizationsReactionsUpdate {
-	if i != nil {
-		fsru.SetCreatedAt(*i)
+func (_u *FeedbackSummarizationsReactionsUpdate) SetNillableCreatedAt(v *int64) *FeedbackSummarizationsReactionsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return fsru
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) AddCreatedAt(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.AddCreatedAt(i)
-	return fsru
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *FeedbackSummarizationsReactionsUpdate) AddCreatedAt(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetUpdatedAt(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.ResetUpdatedAt()
-	fsru.mutation.SetUpdatedAt(i)
-	return fsru
+func (_u *FeedbackSummarizationsReactionsUpdate) SetUpdatedAt(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SetNillableUpdatedAt(i *int64) *FeedbackSummarizationsReactionsUpdate {
-	if i != nil {
-		fsru.SetUpdatedAt(*i)
+func (_u *FeedbackSummarizationsReactionsUpdate) SetNillableUpdatedAt(v *int64) *FeedbackSummarizationsReactionsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return fsru
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (fsru *FeedbackSummarizationsReactionsUpdate) AddUpdatedAt(i int64) *FeedbackSummarizationsReactionsUpdate {
-	fsru.mutation.AddUpdatedAt(i)
-	return fsru
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *FeedbackSummarizationsReactionsUpdate) AddUpdatedAt(v int64) *FeedbackSummarizationsReactionsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FeedbackSummarizationsReactionsMutation object of the builder.
-func (fsru *FeedbackSummarizationsReactionsUpdate) Mutation() *FeedbackSummarizationsReactionsMutation {
-	return fsru.mutation
+func (_u *FeedbackSummarizationsReactionsUpdate) Mutation() *FeedbackSummarizationsReactionsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (fsru *FeedbackSummarizationsReactionsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, fsru.sqlSave, fsru.mutation, fsru.hooks)
+func (_u *FeedbackSummarizationsReactionsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fsru *FeedbackSummarizationsReactionsUpdate) SaveX(ctx context.Context) int {
-	affected, err := fsru.Save(ctx)
+func (_u *FeedbackSummarizationsReactionsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,21 +146,21 @@ func (fsru *FeedbackSummarizationsReactionsUpdate) SaveX(ctx context.Context) in
 }
 
 // Exec executes the query.
-func (fsru *FeedbackSummarizationsReactionsUpdate) Exec(ctx context.Context) error {
-	_, err := fsru.Save(ctx)
+func (_u *FeedbackSummarizationsReactionsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fsru *FeedbackSummarizationsReactionsUpdate) ExecX(ctx context.Context) {
-	if err := fsru.Exec(ctx); err != nil {
+func (_u *FeedbackSummarizationsReactionsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fsru *FeedbackSummarizationsReactionsUpdate) check() error {
-	if v, ok := fsru.mutation.GetType(); ok {
+func (_u *FeedbackSummarizationsReactionsUpdate) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := feedbacksummarizationsreactions.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "FeedbackSummarizationsReactions.type": %w`, err)}
 		}
@@ -168,48 +168,48 @@ func (fsru *FeedbackSummarizationsReactionsUpdate) check() error {
 	return nil
 }
 
-func (fsru *FeedbackSummarizationsReactionsUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := fsru.check(); err != nil {
-		return n, err
+func (_u *FeedbackSummarizationsReactionsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(feedbacksummarizationsreactions.Table, feedbacksummarizationsreactions.Columns, sqlgraph.NewFieldSpec(feedbacksummarizationsreactions.FieldID, field.TypeUUID))
-	if ps := fsru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fsru.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := fsru.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsru.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = fsru.schemaConfig.FeedbackSummarizationsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fsru.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, fsru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.FeedbackSummarizationsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{feedbacksummarizationsreactions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -217,8 +217,8 @@ func (fsru *FeedbackSummarizationsReactionsUpdate) sqlSave(ctx context.Context) 
 		}
 		return 0, err
 	}
-	fsru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // FeedbackSummarizationsReactionsUpdateOne is the builder for updating a single FeedbackSummarizationsReactions entity.
@@ -230,129 +230,129 @@ type FeedbackSummarizationsReactionsUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetChatID(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.ResetChatID()
-	fsruo.mutation.SetChatID(i)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetChatID(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetNillableChatID(i *int64) *FeedbackSummarizationsReactionsUpdateOne {
-	if i != nil {
-		fsruo.SetChatID(*i)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetNillableChatID(v *int64) *FeedbackSummarizationsReactionsUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return fsruo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) AddChatID(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.AddChatID(i)
-	return fsruo
+// AddChatID adds value to the "chat_id" field.
+func (_u *FeedbackSummarizationsReactionsUpdateOne) AddChatID(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetUserID(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.ResetUserID()
-	fsruo.mutation.SetUserID(i)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetUserID(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetNillableUserID(i *int64) *FeedbackSummarizationsReactionsUpdateOne {
-	if i != nil {
-		fsruo.SetUserID(*i)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetNillableUserID(v *int64) *FeedbackSummarizationsReactionsUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return fsruo
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) AddUserID(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.AddUserID(i)
-	return fsruo
+// AddUserID adds value to the "user_id" field.
+func (_u *FeedbackSummarizationsReactionsUpdateOne) AddUserID(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetType sets the "type" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetType(f feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.SetType(f)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetType(v feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetNillableType(f *feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdateOne {
-	if f != nil {
-		fsruo.SetType(*f)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetNillableType(v *feedbacksummarizationsreactions.Type) *FeedbackSummarizationsReactionsUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return fsruo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetCreatedAt(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.ResetCreatedAt()
-	fsruo.mutation.SetCreatedAt(i)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetCreatedAt(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetNillableCreatedAt(i *int64) *FeedbackSummarizationsReactionsUpdateOne {
-	if i != nil {
-		fsruo.SetCreatedAt(*i)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetNillableCreatedAt(v *int64) *FeedbackSummarizationsReactionsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return fsruo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) AddCreatedAt(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.AddCreatedAt(i)
-	return fsruo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *FeedbackSummarizationsReactionsUpdateOne) AddCreatedAt(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetUpdatedAt(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.ResetUpdatedAt()
-	fsruo.mutation.SetUpdatedAt(i)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetUpdatedAt(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SetNillableUpdatedAt(i *int64) *FeedbackSummarizationsReactionsUpdateOne {
-	if i != nil {
-		fsruo.SetUpdatedAt(*i)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SetNillableUpdatedAt(v *int64) *FeedbackSummarizationsReactionsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return fsruo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) AddUpdatedAt(i int64) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.AddUpdatedAt(i)
-	return fsruo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *FeedbackSummarizationsReactionsUpdateOne) AddUpdatedAt(v int64) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FeedbackSummarizationsReactionsMutation object of the builder.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) Mutation() *FeedbackSummarizationsReactionsMutation {
-	return fsruo.mutation
+func (_u *FeedbackSummarizationsReactionsUpdateOne) Mutation() *FeedbackSummarizationsReactionsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the FeedbackSummarizationsReactionsUpdate builder.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.mutation.Where(ps...)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) Select(field string, fields ...string) *FeedbackSummarizationsReactionsUpdateOne {
-	fsruo.fields = append([]string{field}, fields...)
-	return fsruo
+func (_u *FeedbackSummarizationsReactionsUpdateOne) Select(field string, fields ...string) *FeedbackSummarizationsReactionsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated FeedbackSummarizationsReactions entity.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) Save(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
-	return withHooks(ctx, fsruo.sqlSave, fsruo.mutation, fsruo.hooks)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) Save(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SaveX(ctx context.Context) *FeedbackSummarizationsReactions {
-	node, err := fsruo.Save(ctx)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) SaveX(ctx context.Context) *FeedbackSummarizationsReactions {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -360,21 +360,21 @@ func (fsruo *FeedbackSummarizationsReactionsUpdateOne) SaveX(ctx context.Context
 }
 
 // Exec executes the query on the entity.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) Exec(ctx context.Context) error {
-	_, err := fsruo.Save(ctx)
+func (_u *FeedbackSummarizationsReactionsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) ExecX(ctx context.Context) {
-	if err := fsruo.Exec(ctx); err != nil {
+func (_u *FeedbackSummarizationsReactionsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) check() error {
-	if v, ok := fsruo.mutation.GetType(); ok {
+func (_u *FeedbackSummarizationsReactionsUpdateOne) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := feedbacksummarizationsreactions.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "FeedbackSummarizationsReactions.type": %w`, err)}
 		}
@@ -382,17 +382,17 @@ func (fsruo *FeedbackSummarizationsReactionsUpdateOne) check() error {
 	return nil
 }
 
-func (fsruo *FeedbackSummarizationsReactionsUpdateOne) sqlSave(ctx context.Context) (_node *FeedbackSummarizationsReactions, err error) {
-	if err := fsruo.check(); err != nil {
+func (_u *FeedbackSummarizationsReactionsUpdateOne) sqlSave(ctx context.Context) (_node *FeedbackSummarizationsReactions, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(feedbacksummarizationsreactions.Table, feedbacksummarizationsreactions.Columns, sqlgraph.NewFieldSpec(feedbacksummarizationsreactions.FieldID, field.TypeUUID))
-	id, ok := fsruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FeedbackSummarizationsReactions.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := fsruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, feedbacksummarizationsreactions.FieldID)
 		for _, f := range fields {
@@ -404,46 +404,46 @@ func (fsruo *FeedbackSummarizationsReactionsUpdateOne) sqlSave(ctx context.Conte
 			}
 		}
 	}
-	if ps := fsruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fsruo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := fsruo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(feedbacksummarizationsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fsruo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(feedbacksummarizationsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = fsruo.schemaConfig.FeedbackSummarizationsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fsruo.schemaConfig)
-	_node = &FeedbackSummarizationsReactions{config: fsruo.config}
+	_spec.Node.Schema = _u.schemaConfig.FeedbackSummarizationsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &FeedbackSummarizationsReactions{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, fsruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{feedbacksummarizationsreactions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -451,6 +451,6 @@ func (fsruo *FeedbackSummarizationsReactionsUpdateOne) sqlSave(ctx context.Conte
 		}
 		return nil, err
 	}
-	fsruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

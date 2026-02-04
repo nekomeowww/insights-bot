@@ -56,7 +56,7 @@ func (*MetricOpenAIChatCompletionTokenUsage) scanValues(columns []string) ([]any
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the MetricOpenAIChatCompletionTokenUsage fields.
-func (moacctu *MetricOpenAIChatCompletionTokenUsage) assignValues(columns []string, values []any) error {
+func (_m *MetricOpenAIChatCompletionTokenUsage) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -66,58 +66,58 @@ func (moacctu *MetricOpenAIChatCompletionTokenUsage) assignValues(columns []stri
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				moacctu.ID = *value
+				_m.ID = *value
 			}
 		case metricopenaichatcompletiontokenusage.FieldPromptOperation:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field prompt_operation", values[i])
 			} else if value.Valid {
-				moacctu.PromptOperation = value.String
+				_m.PromptOperation = value.String
 			}
 		case metricopenaichatcompletiontokenusage.FieldPromptCharacterLength:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field prompt_character_length", values[i])
 			} else if value.Valid {
-				moacctu.PromptCharacterLength = int(value.Int64)
+				_m.PromptCharacterLength = int(value.Int64)
 			}
 		case metricopenaichatcompletiontokenusage.FieldPromptTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field prompt_token_usage", values[i])
 			} else if value.Valid {
-				moacctu.PromptTokenUsage = int(value.Int64)
+				_m.PromptTokenUsage = int(value.Int64)
 			}
 		case metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field completion_character_length", values[i])
 			} else if value.Valid {
-				moacctu.CompletionCharacterLength = int(value.Int64)
+				_m.CompletionCharacterLength = int(value.Int64)
 			}
 		case metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field completion_token_usage", values[i])
 			} else if value.Valid {
-				moacctu.CompletionTokenUsage = int(value.Int64)
+				_m.CompletionTokenUsage = int(value.Int64)
 			}
 		case metricopenaichatcompletiontokenusage.FieldTotalTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
 			} else if value.Valid {
-				moacctu.TotalTokenUsage = int(value.Int64)
+				_m.TotalTokenUsage = int(value.Int64)
 			}
 		case metricopenaichatcompletiontokenusage.FieldModelName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field model_name", values[i])
 			} else if value.Valid {
-				moacctu.ModelName = value.String
+				_m.ModelName = value.String
 			}
 		case metricopenaichatcompletiontokenusage.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				moacctu.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		default:
-			moacctu.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -125,56 +125,56 @@ func (moacctu *MetricOpenAIChatCompletionTokenUsage) assignValues(columns []stri
 
 // Value returns the ent.Value that was dynamically selected and assigned to the MetricOpenAIChatCompletionTokenUsage.
 // This includes values selected through modifiers, order, etc.
-func (moacctu *MetricOpenAIChatCompletionTokenUsage) Value(name string) (ent.Value, error) {
-	return moacctu.selectValues.Get(name)
+func (_m *MetricOpenAIChatCompletionTokenUsage) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this MetricOpenAIChatCompletionTokenUsage.
 // Note that you need to call MetricOpenAIChatCompletionTokenUsage.Unwrap() before calling this method if this MetricOpenAIChatCompletionTokenUsage
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (moacctu *MetricOpenAIChatCompletionTokenUsage) Update() *MetricOpenAIChatCompletionTokenUsageUpdateOne {
-	return NewMetricOpenAIChatCompletionTokenUsageClient(moacctu.config).UpdateOne(moacctu)
+func (_m *MetricOpenAIChatCompletionTokenUsage) Update() *MetricOpenAIChatCompletionTokenUsageUpdateOne {
+	return NewMetricOpenAIChatCompletionTokenUsageClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the MetricOpenAIChatCompletionTokenUsage entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (moacctu *MetricOpenAIChatCompletionTokenUsage) Unwrap() *MetricOpenAIChatCompletionTokenUsage {
-	_tx, ok := moacctu.config.driver.(*txDriver)
+func (_m *MetricOpenAIChatCompletionTokenUsage) Unwrap() *MetricOpenAIChatCompletionTokenUsage {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: MetricOpenAIChatCompletionTokenUsage is not a transactional entity")
 	}
-	moacctu.config.driver = _tx.drv
-	return moacctu
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (moacctu *MetricOpenAIChatCompletionTokenUsage) String() string {
+func (_m *MetricOpenAIChatCompletionTokenUsage) String() string {
 	var builder strings.Builder
 	builder.WriteString("MetricOpenAIChatCompletionTokenUsage(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", moacctu.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("prompt_operation=")
-	builder.WriteString(moacctu.PromptOperation)
+	builder.WriteString(_m.PromptOperation)
 	builder.WriteString(", ")
 	builder.WriteString("prompt_character_length=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.PromptCharacterLength))
+	builder.WriteString(fmt.Sprintf("%v", _m.PromptCharacterLength))
 	builder.WriteString(", ")
 	builder.WriteString("prompt_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.PromptTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.PromptTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("completion_character_length=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.CompletionCharacterLength))
+	builder.WriteString(fmt.Sprintf("%v", _m.CompletionCharacterLength))
 	builder.WriteString(", ")
 	builder.WriteString("completion_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.CompletionTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.CompletionTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.TotalTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("model_name=")
-	builder.WriteString(moacctu.ModelName)
+	builder.WriteString(_m.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", moacctu.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

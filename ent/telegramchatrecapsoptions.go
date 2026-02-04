@@ -54,7 +54,7 @@ func (*TelegramChatRecapsOptions) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TelegramChatRecapsOptions fields.
-func (tcro *TelegramChatRecapsOptions) assignValues(columns []string, values []any) error {
+func (_m *TelegramChatRecapsOptions) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -64,52 +64,52 @@ func (tcro *TelegramChatRecapsOptions) assignValues(columns []string, values []a
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				tcro.ID = *value
+				_m.ID = *value
 			}
 		case telegramchatrecapsoptions.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				tcro.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case telegramchatrecapsoptions.FieldAutoRecapSendMode:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field auto_recap_send_mode", values[i])
 			} else if value.Valid {
-				tcro.AutoRecapSendMode = int(value.Int64)
+				_m.AutoRecapSendMode = int(value.Int64)
 			}
 		case telegramchatrecapsoptions.FieldManualRecapRatePerSeconds:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field manual_recap_rate_per_seconds", values[i])
 			} else if value.Valid {
-				tcro.ManualRecapRatePerSeconds = value.Int64
+				_m.ManualRecapRatePerSeconds = value.Int64
 			}
 		case telegramchatrecapsoptions.FieldAutoRecapRatesPerDay:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field auto_recap_rates_per_day", values[i])
 			} else if value.Valid {
-				tcro.AutoRecapRatesPerDay = int(value.Int64)
+				_m.AutoRecapRatesPerDay = int(value.Int64)
 			}
 		case telegramchatrecapsoptions.FieldPinAutoRecapMessage:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field pin_auto_recap_message", values[i])
 			} else if value.Valid {
-				tcro.PinAutoRecapMessage = value.Bool
+				_m.PinAutoRecapMessage = value.Bool
 			}
 		case telegramchatrecapsoptions.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcro.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case telegramchatrecapsoptions.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcro.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			tcro.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -117,53 +117,53 @@ func (tcro *TelegramChatRecapsOptions) assignValues(columns []string, values []a
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TelegramChatRecapsOptions.
 // This includes values selected through modifiers, order, etc.
-func (tcro *TelegramChatRecapsOptions) Value(name string) (ent.Value, error) {
-	return tcro.selectValues.Get(name)
+func (_m *TelegramChatRecapsOptions) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TelegramChatRecapsOptions.
 // Note that you need to call TelegramChatRecapsOptions.Unwrap() before calling this method if this TelegramChatRecapsOptions
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcro *TelegramChatRecapsOptions) Update() *TelegramChatRecapsOptionsUpdateOne {
-	return NewTelegramChatRecapsOptionsClient(tcro.config).UpdateOne(tcro)
+func (_m *TelegramChatRecapsOptions) Update() *TelegramChatRecapsOptionsUpdateOne {
+	return NewTelegramChatRecapsOptionsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TelegramChatRecapsOptions entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcro *TelegramChatRecapsOptions) Unwrap() *TelegramChatRecapsOptions {
-	_tx, ok := tcro.config.driver.(*txDriver)
+func (_m *TelegramChatRecapsOptions) Unwrap() *TelegramChatRecapsOptions {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TelegramChatRecapsOptions is not a transactional entity")
 	}
-	tcro.config.driver = _tx.drv
-	return tcro
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcro *TelegramChatRecapsOptions) String() string {
+func (_m *TelegramChatRecapsOptions) String() string {
 	var builder strings.Builder
 	builder.WriteString("TelegramChatRecapsOptions(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcro.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("auto_recap_send_mode=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.AutoRecapSendMode))
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoRecapSendMode))
 	builder.WriteString(", ")
 	builder.WriteString("manual_recap_rate_per_seconds=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.ManualRecapRatePerSeconds))
+	builder.WriteString(fmt.Sprintf("%v", _m.ManualRecapRatePerSeconds))
 	builder.WriteString(", ")
 	builder.WriteString("auto_recap_rates_per_day=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.AutoRecapRatesPerDay))
+	builder.WriteString(fmt.Sprintf("%v", _m.AutoRecapRatesPerDay))
 	builder.WriteString(", ")
 	builder.WriteString("pin_auto_recap_message=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.PinAutoRecapMessage))
+	builder.WriteString(fmt.Sprintf("%v", _m.PinAutoRecapMessage))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", tcro.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

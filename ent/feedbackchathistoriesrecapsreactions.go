@@ -52,7 +52,7 @@ func (*FeedbackChatHistoriesRecapsReactions) scanValues(columns []string) ([]any
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the FeedbackChatHistoriesRecapsReactions fields.
-func (fchrr *FeedbackChatHistoriesRecapsReactions) assignValues(columns []string, values []any) error {
+func (_m *FeedbackChatHistoriesRecapsReactions) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -62,46 +62,46 @@ func (fchrr *FeedbackChatHistoriesRecapsReactions) assignValues(columns []string
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				fchrr.ID = *value
+				_m.ID = *value
 			}
 		case feedbackchathistoriesrecapsreactions.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				fchrr.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case feedbackchathistoriesrecapsreactions.FieldLogID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field log_id", values[i])
 			} else if value != nil {
-				fchrr.LogID = *value
+				_m.LogID = *value
 			}
 		case feedbackchathistoriesrecapsreactions.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				fchrr.UserID = value.Int64
+				_m.UserID = value.Int64
 			}
 		case feedbackchathistoriesrecapsreactions.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				fchrr.Type = feedbackchathistoriesrecapsreactions.Type(value.String)
+				_m.Type = feedbackchathistoriesrecapsreactions.Type(value.String)
 			}
 		case feedbackchathistoriesrecapsreactions.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				fchrr.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case feedbackchathistoriesrecapsreactions.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				fchrr.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			fchrr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -109,50 +109,50 @@ func (fchrr *FeedbackChatHistoriesRecapsReactions) assignValues(columns []string
 
 // Value returns the ent.Value that was dynamically selected and assigned to the FeedbackChatHistoriesRecapsReactions.
 // This includes values selected through modifiers, order, etc.
-func (fchrr *FeedbackChatHistoriesRecapsReactions) Value(name string) (ent.Value, error) {
-	return fchrr.selectValues.Get(name)
+func (_m *FeedbackChatHistoriesRecapsReactions) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this FeedbackChatHistoriesRecapsReactions.
 // Note that you need to call FeedbackChatHistoriesRecapsReactions.Unwrap() before calling this method if this FeedbackChatHistoriesRecapsReactions
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (fchrr *FeedbackChatHistoriesRecapsReactions) Update() *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	return NewFeedbackChatHistoriesRecapsReactionsClient(fchrr.config).UpdateOne(fchrr)
+func (_m *FeedbackChatHistoriesRecapsReactions) Update() *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	return NewFeedbackChatHistoriesRecapsReactionsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the FeedbackChatHistoriesRecapsReactions entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (fchrr *FeedbackChatHistoriesRecapsReactions) Unwrap() *FeedbackChatHistoriesRecapsReactions {
-	_tx, ok := fchrr.config.driver.(*txDriver)
+func (_m *FeedbackChatHistoriesRecapsReactions) Unwrap() *FeedbackChatHistoriesRecapsReactions {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: FeedbackChatHistoriesRecapsReactions is not a transactional entity")
 	}
-	fchrr.config.driver = _tx.drv
-	return fchrr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (fchrr *FeedbackChatHistoriesRecapsReactions) String() string {
+func (_m *FeedbackChatHistoriesRecapsReactions) String() string {
 	var builder strings.Builder
 	builder.WriteString("FeedbackChatHistoriesRecapsReactions(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", fchrr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("log_id=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.LogID))
+	builder.WriteString(fmt.Sprintf("%v", _m.LogID))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", fchrr.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

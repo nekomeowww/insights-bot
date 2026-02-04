@@ -23,234 +23,234 @@ type LogSummarizationsUpdate struct {
 }
 
 // Where appends a list predicates to the LogSummarizationsUpdate builder.
-func (lsu *LogSummarizationsUpdate) Where(ps ...predicate.LogSummarizations) *LogSummarizationsUpdate {
-	lsu.mutation.Where(ps...)
-	return lsu
+func (_u *LogSummarizationsUpdate) Where(ps ...predicate.LogSummarizations) *LogSummarizationsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetContentURL sets the "content_url" field.
-func (lsu *LogSummarizationsUpdate) SetContentURL(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetContentURL(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetContentURL(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetContentURL(v)
+	return _u
 }
 
 // SetNillableContentURL sets the "content_url" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableContentURL(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetContentURL(*s)
+func (_u *LogSummarizationsUpdate) SetNillableContentURL(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetContentURL(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetContentTitle sets the "content_title" field.
-func (lsu *LogSummarizationsUpdate) SetContentTitle(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetContentTitle(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetContentTitle(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetContentTitle(v)
+	return _u
 }
 
 // SetNillableContentTitle sets the "content_title" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableContentTitle(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetContentTitle(*s)
+func (_u *LogSummarizationsUpdate) SetNillableContentTitle(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetContentTitle(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetContentAuthor sets the "content_author" field.
-func (lsu *LogSummarizationsUpdate) SetContentAuthor(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetContentAuthor(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetContentAuthor(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetContentAuthor(v)
+	return _u
 }
 
 // SetNillableContentAuthor sets the "content_author" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableContentAuthor(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetContentAuthor(*s)
+func (_u *LogSummarizationsUpdate) SetNillableContentAuthor(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetContentAuthor(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetContentText sets the "content_text" field.
-func (lsu *LogSummarizationsUpdate) SetContentText(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetContentText(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetContentText(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetContentText(v)
+	return _u
 }
 
 // SetNillableContentText sets the "content_text" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableContentText(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetContentText(*s)
+func (_u *LogSummarizationsUpdate) SetNillableContentText(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetContentText(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetContentSummarizedOutputs sets the "content_summarized_outputs" field.
-func (lsu *LogSummarizationsUpdate) SetContentSummarizedOutputs(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetContentSummarizedOutputs(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetContentSummarizedOutputs(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetContentSummarizedOutputs(v)
+	return _u
 }
 
 // SetNillableContentSummarizedOutputs sets the "content_summarized_outputs" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableContentSummarizedOutputs(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetContentSummarizedOutputs(*s)
+func (_u *LogSummarizationsUpdate) SetNillableContentSummarizedOutputs(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetContentSummarizedOutputs(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lsu *LogSummarizationsUpdate) SetFromPlatform(i int) *LogSummarizationsUpdate {
-	lsu.mutation.ResetFromPlatform()
-	lsu.mutation.SetFromPlatform(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetFromPlatform(v int) *LogSummarizationsUpdate {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableFromPlatform(i *int) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetFromPlatform(*i)
+func (_u *LogSummarizationsUpdate) SetNillableFromPlatform(v *int) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (lsu *LogSummarizationsUpdate) AddFromPlatform(i int) *LogSummarizationsUpdate {
-	lsu.mutation.AddFromPlatform(i)
-	return lsu
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *LogSummarizationsUpdate) AddFromPlatform(v int) *LogSummarizationsUpdate {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lsu *LogSummarizationsUpdate) SetPromptTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.ResetPromptTokenUsage()
-	lsu.mutation.SetPromptTokenUsage(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetPromptTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.ResetPromptTokenUsage()
+	_u.mutation.SetPromptTokenUsage(v)
+	return _u
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillablePromptTokenUsage(i *int) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetPromptTokenUsage(*i)
+func (_u *LogSummarizationsUpdate) SetNillablePromptTokenUsage(v *int) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetPromptTokenUsage(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
-func (lsu *LogSummarizationsUpdate) AddPromptTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.AddPromptTokenUsage(i)
-	return lsu
+// AddPromptTokenUsage adds value to the "prompt_token_usage" field.
+func (_u *LogSummarizationsUpdate) AddPromptTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.AddPromptTokenUsage(v)
+	return _u
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lsu *LogSummarizationsUpdate) SetCompletionTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.ResetCompletionTokenUsage()
-	lsu.mutation.SetCompletionTokenUsage(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetCompletionTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.ResetCompletionTokenUsage()
+	_u.mutation.SetCompletionTokenUsage(v)
+	return _u
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetCompletionTokenUsage(*i)
+func (_u *LogSummarizationsUpdate) SetNillableCompletionTokenUsage(v *int) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetCompletionTokenUsage(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
-func (lsu *LogSummarizationsUpdate) AddCompletionTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.AddCompletionTokenUsage(i)
-	return lsu
+// AddCompletionTokenUsage adds value to the "completion_token_usage" field.
+func (_u *LogSummarizationsUpdate) AddCompletionTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.AddCompletionTokenUsage(v)
+	return _u
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lsu *LogSummarizationsUpdate) SetTotalTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.ResetTotalTokenUsage()
-	lsu.mutation.SetTotalTokenUsage(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetTotalTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.ResetTotalTokenUsage()
+	_u.mutation.SetTotalTokenUsage(v)
+	return _u
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableTotalTokenUsage(i *int) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetTotalTokenUsage(*i)
+func (_u *LogSummarizationsUpdate) SetNillableTotalTokenUsage(v *int) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetTotalTokenUsage(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddTotalTokenUsage adds i to the "total_token_usage" field.
-func (lsu *LogSummarizationsUpdate) AddTotalTokenUsage(i int) *LogSummarizationsUpdate {
-	lsu.mutation.AddTotalTokenUsage(i)
-	return lsu
+// AddTotalTokenUsage adds value to the "total_token_usage" field.
+func (_u *LogSummarizationsUpdate) AddTotalTokenUsage(v int) *LogSummarizationsUpdate {
+	_u.mutation.AddTotalTokenUsage(v)
+	return _u
 }
 
 // SetModelName sets the "model_name" field.
-func (lsu *LogSummarizationsUpdate) SetModelName(s string) *LogSummarizationsUpdate {
-	lsu.mutation.SetModelName(s)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetModelName(v string) *LogSummarizationsUpdate {
+	_u.mutation.SetModelName(v)
+	return _u
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableModelName(s *string) *LogSummarizationsUpdate {
-	if s != nil {
-		lsu.SetModelName(*s)
+func (_u *LogSummarizationsUpdate) SetNillableModelName(v *string) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetModelName(*v)
 	}
-	return lsu
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lsu *LogSummarizationsUpdate) SetCreatedAt(i int64) *LogSummarizationsUpdate {
-	lsu.mutation.ResetCreatedAt()
-	lsu.mutation.SetCreatedAt(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetCreatedAt(v int64) *LogSummarizationsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableCreatedAt(i *int64) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetCreatedAt(*i)
+func (_u *LogSummarizationsUpdate) SetNillableCreatedAt(v *int64) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (lsu *LogSummarizationsUpdate) AddCreatedAt(i int64) *LogSummarizationsUpdate {
-	lsu.mutation.AddCreatedAt(i)
-	return lsu
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *LogSummarizationsUpdate) AddCreatedAt(v int64) *LogSummarizationsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lsu *LogSummarizationsUpdate) SetUpdatedAt(i int64) *LogSummarizationsUpdate {
-	lsu.mutation.ResetUpdatedAt()
-	lsu.mutation.SetUpdatedAt(i)
-	return lsu
+func (_u *LogSummarizationsUpdate) SetUpdatedAt(v int64) *LogSummarizationsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lsu *LogSummarizationsUpdate) SetNillableUpdatedAt(i *int64) *LogSummarizationsUpdate {
-	if i != nil {
-		lsu.SetUpdatedAt(*i)
+func (_u *LogSummarizationsUpdate) SetNillableUpdatedAt(v *int64) *LogSummarizationsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return lsu
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (lsu *LogSummarizationsUpdate) AddUpdatedAt(i int64) *LogSummarizationsUpdate {
-	lsu.mutation.AddUpdatedAt(i)
-	return lsu
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *LogSummarizationsUpdate) AddUpdatedAt(v int64) *LogSummarizationsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the LogSummarizationsMutation object of the builder.
-func (lsu *LogSummarizationsUpdate) Mutation() *LogSummarizationsMutation {
-	return lsu.mutation
+func (_u *LogSummarizationsUpdate) Mutation() *LogSummarizationsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (lsu *LogSummarizationsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, lsu.sqlSave, lsu.mutation, lsu.hooks)
+func (_u *LogSummarizationsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lsu *LogSummarizationsUpdate) SaveX(ctx context.Context) int {
-	affected, err := lsu.Save(ctx)
+func (_u *LogSummarizationsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -258,84 +258,84 @@ func (lsu *LogSummarizationsUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (lsu *LogSummarizationsUpdate) Exec(ctx context.Context) error {
-	_, err := lsu.Save(ctx)
+func (_u *LogSummarizationsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lsu *LogSummarizationsUpdate) ExecX(ctx context.Context) {
-	if err := lsu.Exec(ctx); err != nil {
+func (_u *LogSummarizationsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (lsu *LogSummarizationsUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *LogSummarizationsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logsummarizations.Table, logsummarizations.Columns, sqlgraph.NewFieldSpec(logsummarizations.FieldID, field.TypeUUID))
-	if ps := lsu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := lsu.mutation.ContentURL(); ok {
+	if value, ok := _u.mutation.ContentURL(); ok {
 		_spec.SetField(logsummarizations.FieldContentURL, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.ContentTitle(); ok {
+	if value, ok := _u.mutation.ContentTitle(); ok {
 		_spec.SetField(logsummarizations.FieldContentTitle, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.ContentAuthor(); ok {
+	if value, ok := _u.mutation.ContentAuthor(); ok {
 		_spec.SetField(logsummarizations.FieldContentAuthor, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.ContentText(); ok {
+	if value, ok := _u.mutation.ContentText(); ok {
 		_spec.SetField(logsummarizations.FieldContentText, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.ContentSummarizedOutputs(); ok {
+	if value, ok := _u.mutation.ContentSummarizedOutputs(); ok {
 		_spec.SetField(logsummarizations.FieldContentSummarizedOutputs, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.PromptTokenUsage(); ok {
+	if value, ok := _u.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.AddedPromptTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedPromptTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.AddedCompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedCompletionTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.TotalTokenUsage(); ok {
+	if value, ok := _u.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.AddedTotalTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsu.mutation.ModelName(); ok {
+	if value, ok := _u.mutation.ModelName(); ok {
 		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
 	}
-	if value, ok := lsu.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsu.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsu.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(logsummarizations.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = lsu.schemaConfig.LogSummarizations
-	ctx = internal.NewSchemaConfigContext(ctx, lsu.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, lsu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.LogSummarizations
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logsummarizations.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -343,8 +343,8 @@ func (lsu *LogSummarizationsUpdate) sqlSave(ctx context.Context) (n int, err err
 		}
 		return 0, err
 	}
-	lsu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // LogSummarizationsUpdateOne is the builder for updating a single LogSummarizations entity.
@@ -356,241 +356,241 @@ type LogSummarizationsUpdateOne struct {
 }
 
 // SetContentURL sets the "content_url" field.
-func (lsuo *LogSummarizationsUpdateOne) SetContentURL(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetContentURL(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetContentURL(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetContentURL(v)
+	return _u
 }
 
 // SetNillableContentURL sets the "content_url" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableContentURL(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetContentURL(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableContentURL(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetContentURL(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetContentTitle sets the "content_title" field.
-func (lsuo *LogSummarizationsUpdateOne) SetContentTitle(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetContentTitle(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetContentTitle(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetContentTitle(v)
+	return _u
 }
 
 // SetNillableContentTitle sets the "content_title" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableContentTitle(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetContentTitle(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableContentTitle(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetContentTitle(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetContentAuthor sets the "content_author" field.
-func (lsuo *LogSummarizationsUpdateOne) SetContentAuthor(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetContentAuthor(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetContentAuthor(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetContentAuthor(v)
+	return _u
 }
 
 // SetNillableContentAuthor sets the "content_author" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableContentAuthor(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetContentAuthor(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableContentAuthor(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetContentAuthor(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetContentText sets the "content_text" field.
-func (lsuo *LogSummarizationsUpdateOne) SetContentText(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetContentText(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetContentText(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetContentText(v)
+	return _u
 }
 
 // SetNillableContentText sets the "content_text" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableContentText(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetContentText(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableContentText(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetContentText(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetContentSummarizedOutputs sets the "content_summarized_outputs" field.
-func (lsuo *LogSummarizationsUpdateOne) SetContentSummarizedOutputs(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetContentSummarizedOutputs(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetContentSummarizedOutputs(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetContentSummarizedOutputs(v)
+	return _u
 }
 
 // SetNillableContentSummarizedOutputs sets the "content_summarized_outputs" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableContentSummarizedOutputs(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetContentSummarizedOutputs(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableContentSummarizedOutputs(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetContentSummarizedOutputs(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lsuo *LogSummarizationsUpdateOne) SetFromPlatform(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetFromPlatform()
-	lsuo.mutation.SetFromPlatform(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetFromPlatform(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableFromPlatform(i *int) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetFromPlatform(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillableFromPlatform(v *int) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (lsuo *LogSummarizationsUpdateOne) AddFromPlatform(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddFromPlatform(i)
-	return lsuo
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *LogSummarizationsUpdateOne) AddFromPlatform(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) SetPromptTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetPromptTokenUsage()
-	lsuo.mutation.SetPromptTokenUsage(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetPromptTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetPromptTokenUsage()
+	_u.mutation.SetPromptTokenUsage(v)
+	return _u
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillablePromptTokenUsage(i *int) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetPromptTokenUsage(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillablePromptTokenUsage(v *int) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetPromptTokenUsage(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) AddPromptTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddPromptTokenUsage(i)
-	return lsuo
+// AddPromptTokenUsage adds value to the "prompt_token_usage" field.
+func (_u *LogSummarizationsUpdateOne) AddPromptTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.AddPromptTokenUsage(v)
+	return _u
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) SetCompletionTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetCompletionTokenUsage()
-	lsuo.mutation.SetCompletionTokenUsage(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetCompletionTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetCompletionTokenUsage()
+	_u.mutation.SetCompletionTokenUsage(v)
+	return _u
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetCompletionTokenUsage(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillableCompletionTokenUsage(v *int) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetCompletionTokenUsage(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) AddCompletionTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddCompletionTokenUsage(i)
-	return lsuo
+// AddCompletionTokenUsage adds value to the "completion_token_usage" field.
+func (_u *LogSummarizationsUpdateOne) AddCompletionTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.AddCompletionTokenUsage(v)
+	return _u
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) SetTotalTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetTotalTokenUsage()
-	lsuo.mutation.SetTotalTokenUsage(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetTotalTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetTotalTokenUsage()
+	_u.mutation.SetTotalTokenUsage(v)
+	return _u
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableTotalTokenUsage(i *int) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetTotalTokenUsage(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillableTotalTokenUsage(v *int) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetTotalTokenUsage(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddTotalTokenUsage adds i to the "total_token_usage" field.
-func (lsuo *LogSummarizationsUpdateOne) AddTotalTokenUsage(i int) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddTotalTokenUsage(i)
-	return lsuo
+// AddTotalTokenUsage adds value to the "total_token_usage" field.
+func (_u *LogSummarizationsUpdateOne) AddTotalTokenUsage(v int) *LogSummarizationsUpdateOne {
+	_u.mutation.AddTotalTokenUsage(v)
+	return _u
 }
 
 // SetModelName sets the "model_name" field.
-func (lsuo *LogSummarizationsUpdateOne) SetModelName(s string) *LogSummarizationsUpdateOne {
-	lsuo.mutation.SetModelName(s)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetModelName(v string) *LogSummarizationsUpdateOne {
+	_u.mutation.SetModelName(v)
+	return _u
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableModelName(s *string) *LogSummarizationsUpdateOne {
-	if s != nil {
-		lsuo.SetModelName(*s)
+func (_u *LogSummarizationsUpdateOne) SetNillableModelName(v *string) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetModelName(*v)
 	}
-	return lsuo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lsuo *LogSummarizationsUpdateOne) SetCreatedAt(i int64) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetCreatedAt()
-	lsuo.mutation.SetCreatedAt(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetCreatedAt(v int64) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableCreatedAt(i *int64) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetCreatedAt(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillableCreatedAt(v *int64) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (lsuo *LogSummarizationsUpdateOne) AddCreatedAt(i int64) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddCreatedAt(i)
-	return lsuo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *LogSummarizationsUpdateOne) AddCreatedAt(v int64) *LogSummarizationsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lsuo *LogSummarizationsUpdateOne) SetUpdatedAt(i int64) *LogSummarizationsUpdateOne {
-	lsuo.mutation.ResetUpdatedAt()
-	lsuo.mutation.SetUpdatedAt(i)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) SetUpdatedAt(v int64) *LogSummarizationsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lsuo *LogSummarizationsUpdateOne) SetNillableUpdatedAt(i *int64) *LogSummarizationsUpdateOne {
-	if i != nil {
-		lsuo.SetUpdatedAt(*i)
+func (_u *LogSummarizationsUpdateOne) SetNillableUpdatedAt(v *int64) *LogSummarizationsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return lsuo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (lsuo *LogSummarizationsUpdateOne) AddUpdatedAt(i int64) *LogSummarizationsUpdateOne {
-	lsuo.mutation.AddUpdatedAt(i)
-	return lsuo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *LogSummarizationsUpdateOne) AddUpdatedAt(v int64) *LogSummarizationsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the LogSummarizationsMutation object of the builder.
-func (lsuo *LogSummarizationsUpdateOne) Mutation() *LogSummarizationsMutation {
-	return lsuo.mutation
+func (_u *LogSummarizationsUpdateOne) Mutation() *LogSummarizationsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the LogSummarizationsUpdate builder.
-func (lsuo *LogSummarizationsUpdateOne) Where(ps ...predicate.LogSummarizations) *LogSummarizationsUpdateOne {
-	lsuo.mutation.Where(ps...)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) Where(ps ...predicate.LogSummarizations) *LogSummarizationsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (lsuo *LogSummarizationsUpdateOne) Select(field string, fields ...string) *LogSummarizationsUpdateOne {
-	lsuo.fields = append([]string{field}, fields...)
-	return lsuo
+func (_u *LogSummarizationsUpdateOne) Select(field string, fields ...string) *LogSummarizationsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated LogSummarizations entity.
-func (lsuo *LogSummarizationsUpdateOne) Save(ctx context.Context) (*LogSummarizations, error) {
-	return withHooks(ctx, lsuo.sqlSave, lsuo.mutation, lsuo.hooks)
+func (_u *LogSummarizationsUpdateOne) Save(ctx context.Context) (*LogSummarizations, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lsuo *LogSummarizationsUpdateOne) SaveX(ctx context.Context) *LogSummarizations {
-	node, err := lsuo.Save(ctx)
+func (_u *LogSummarizationsUpdateOne) SaveX(ctx context.Context) *LogSummarizations {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -598,26 +598,26 @@ func (lsuo *LogSummarizationsUpdateOne) SaveX(ctx context.Context) *LogSummariza
 }
 
 // Exec executes the query on the entity.
-func (lsuo *LogSummarizationsUpdateOne) Exec(ctx context.Context) error {
-	_, err := lsuo.Save(ctx)
+func (_u *LogSummarizationsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lsuo *LogSummarizationsUpdateOne) ExecX(ctx context.Context) {
-	if err := lsuo.Exec(ctx); err != nil {
+func (_u *LogSummarizationsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (lsuo *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *LogSummarizations, err error) {
+func (_u *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *LogSummarizations, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logsummarizations.Table, logsummarizations.Columns, sqlgraph.NewFieldSpec(logsummarizations.FieldID, field.TypeUUID))
-	id, ok := lsuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "LogSummarizations.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := lsuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, logsummarizations.FieldID)
 		for _, f := range fields {
@@ -629,73 +629,73 @@ func (lsuo *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *Log
 			}
 		}
 	}
-	if ps := lsuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := lsuo.mutation.ContentURL(); ok {
+	if value, ok := _u.mutation.ContentURL(); ok {
 		_spec.SetField(logsummarizations.FieldContentURL, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.ContentTitle(); ok {
+	if value, ok := _u.mutation.ContentTitle(); ok {
 		_spec.SetField(logsummarizations.FieldContentTitle, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.ContentAuthor(); ok {
+	if value, ok := _u.mutation.ContentAuthor(); ok {
 		_spec.SetField(logsummarizations.FieldContentAuthor, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.ContentText(); ok {
+	if value, ok := _u.mutation.ContentText(); ok {
 		_spec.SetField(logsummarizations.FieldContentText, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.ContentSummarizedOutputs(); ok {
+	if value, ok := _u.mutation.ContentSummarizedOutputs(); ok {
 		_spec.SetField(logsummarizations.FieldContentSummarizedOutputs, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.PromptTokenUsage(); ok {
+	if value, ok := _u.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.AddedPromptTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedPromptTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.AddedCompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedCompletionTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.TotalTokenUsage(); ok {
+	if value, ok := _u.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.AddedTotalTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lsuo.mutation.ModelName(); ok {
+	if value, ok := _u.mutation.ModelName(); ok {
 		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
 	}
-	if value, ok := lsuo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsuo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lsuo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(logsummarizations.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = lsuo.schemaConfig.LogSummarizations
-	ctx = internal.NewSchemaConfigContext(ctx, lsuo.schemaConfig)
-	_node = &LogSummarizations{config: lsuo.config}
+	_spec.Node.Schema = _u.schemaConfig.LogSummarizations
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &LogSummarizations{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, lsuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logsummarizations.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -703,6 +703,6 @@ func (lsuo *LogSummarizationsUpdateOne) sqlSave(ctx context.Context) (_node *Log
 		}
 		return nil, err
 	}
-	lsuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

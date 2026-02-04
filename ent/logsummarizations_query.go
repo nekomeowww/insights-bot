@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type LogSummarizationsQuery struct {
 }
 
 // Where adds a new predicate for the LogSummarizationsQuery builder.
-func (lsq *LogSummarizationsQuery) Where(ps ...predicate.LogSummarizations) *LogSummarizationsQuery {
-	lsq.predicates = append(lsq.predicates, ps...)
-	return lsq
+func (_q *LogSummarizationsQuery) Where(ps ...predicate.LogSummarizations) *LogSummarizationsQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (lsq *LogSummarizationsQuery) Limit(limit int) *LogSummarizationsQuery {
-	lsq.ctx.Limit = &limit
-	return lsq
+func (_q *LogSummarizationsQuery) Limit(limit int) *LogSummarizationsQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (lsq *LogSummarizationsQuery) Offset(offset int) *LogSummarizationsQuery {
-	lsq.ctx.Offset = &offset
-	return lsq
+func (_q *LogSummarizationsQuery) Offset(offset int) *LogSummarizationsQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (lsq *LogSummarizationsQuery) Unique(unique bool) *LogSummarizationsQuery {
-	lsq.ctx.Unique = &unique
-	return lsq
+func (_q *LogSummarizationsQuery) Unique(unique bool) *LogSummarizationsQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (lsq *LogSummarizationsQuery) Order(o ...logsummarizations.OrderOption) *LogSummarizationsQuery {
-	lsq.order = append(lsq.order, o...)
-	return lsq
+func (_q *LogSummarizationsQuery) Order(o ...logsummarizations.OrderOption) *LogSummarizationsQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first LogSummarizations entity from the query.
 // Returns a *NotFoundError when no LogSummarizations was found.
-func (lsq *LogSummarizationsQuery) First(ctx context.Context) (*LogSummarizations, error) {
-	nodes, err := lsq.Limit(1).All(setContextOp(ctx, lsq.ctx, "First"))
+func (_q *LogSummarizationsQuery) First(ctx context.Context) (*LogSummarizations, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (lsq *LogSummarizationsQuery) First(ctx context.Context) (*LogSummarization
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) FirstX(ctx context.Context) *LogSummarizations {
-	node, err := lsq.First(ctx)
+func (_q *LogSummarizationsQuery) FirstX(ctx context.Context) *LogSummarizations {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (lsq *LogSummarizationsQuery) FirstX(ctx context.Context) *LogSummarization
 
 // FirstID returns the first LogSummarizations ID from the query.
 // Returns a *NotFoundError when no LogSummarizations ID was found.
-func (lsq *LogSummarizationsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *LogSummarizationsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = lsq.Limit(1).IDs(setContextOp(ctx, lsq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (lsq *LogSummarizationsQuery) FirstID(ctx context.Context) (id uuid.UUID, e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := lsq.FirstID(ctx)
+func (_q *LogSummarizationsQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (lsq *LogSummarizationsQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single LogSummarizations entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one LogSummarizations entity is found.
 // Returns a *NotFoundError when no LogSummarizations entities are found.
-func (lsq *LogSummarizationsQuery) Only(ctx context.Context) (*LogSummarizations, error) {
-	nodes, err := lsq.Limit(2).All(setContextOp(ctx, lsq.ctx, "Only"))
+func (_q *LogSummarizationsQuery) Only(ctx context.Context) (*LogSummarizations, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (lsq *LogSummarizationsQuery) Only(ctx context.Context) (*LogSummarizations
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) OnlyX(ctx context.Context) *LogSummarizations {
-	node, err := lsq.Only(ctx)
+func (_q *LogSummarizationsQuery) OnlyX(ctx context.Context) *LogSummarizations {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (lsq *LogSummarizationsQuery) OnlyX(ctx context.Context) *LogSummarizations
 // OnlyID is like Only, but returns the only LogSummarizations ID in the query.
 // Returns a *NotSingularError when more than one LogSummarizations ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (lsq *LogSummarizationsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *LogSummarizationsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = lsq.Limit(2).IDs(setContextOp(ctx, lsq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (lsq *LogSummarizationsQuery) OnlyID(ctx context.Context) (id uuid.UUID, er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := lsq.OnlyID(ctx)
+func (_q *LogSummarizationsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (lsq *LogSummarizationsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of LogSummarizationsSlice.
-func (lsq *LogSummarizationsQuery) All(ctx context.Context) ([]*LogSummarizations, error) {
-	ctx = setContextOp(ctx, lsq.ctx, "All")
-	if err := lsq.prepareQuery(ctx); err != nil {
+func (_q *LogSummarizationsQuery) All(ctx context.Context) ([]*LogSummarizations, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*LogSummarizations, *LogSummarizationsQuery]()
-	return withInterceptors[[]*LogSummarizations](ctx, lsq, qr, lsq.inters)
+	return withInterceptors[[]*LogSummarizations](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) AllX(ctx context.Context) []*LogSummarizations {
-	nodes, err := lsq.All(ctx)
+func (_q *LogSummarizationsQuery) AllX(ctx context.Context) []*LogSummarizations {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (lsq *LogSummarizationsQuery) AllX(ctx context.Context) []*LogSummarization
 }
 
 // IDs executes the query and returns a list of LogSummarizations IDs.
-func (lsq *LogSummarizationsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if lsq.ctx.Unique == nil && lsq.path != nil {
-		lsq.Unique(true)
+func (_q *LogSummarizationsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, lsq.ctx, "IDs")
-	if err = lsq.Select(logsummarizations.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(logsummarizations.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := lsq.IDs(ctx)
+func (_q *LogSummarizationsQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (lsq *LogSummarizationsQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (lsq *LogSummarizationsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, lsq.ctx, "Count")
-	if err := lsq.prepareQuery(ctx); err != nil {
+func (_q *LogSummarizationsQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, lsq, querierCount[*LogSummarizationsQuery](), lsq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*LogSummarizationsQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) CountX(ctx context.Context) int {
-	count, err := lsq.Count(ctx)
+func (_q *LogSummarizationsQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (lsq *LogSummarizationsQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (lsq *LogSummarizationsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, lsq.ctx, "Exist")
-	switch _, err := lsq.FirstID(ctx); {
+func (_q *LogSummarizationsQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (lsq *LogSummarizationsQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (lsq *LogSummarizationsQuery) ExistX(ctx context.Context) bool {
-	exist, err := lsq.Exist(ctx)
+func (_q *LogSummarizationsQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (lsq *LogSummarizationsQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the LogSummarizationsQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (lsq *LogSummarizationsQuery) Clone() *LogSummarizationsQuery {
-	if lsq == nil {
+func (_q *LogSummarizationsQuery) Clone() *LogSummarizationsQuery {
+	if _q == nil {
 		return nil
 	}
 	return &LogSummarizationsQuery{
-		config:     lsq.config,
-		ctx:        lsq.ctx.Clone(),
-		order:      append([]logsummarizations.OrderOption{}, lsq.order...),
-		inters:     append([]Interceptor{}, lsq.inters...),
-		predicates: append([]predicate.LogSummarizations{}, lsq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]logsummarizations.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.LogSummarizations{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  lsq.sql.Clone(),
-		path: lsq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (lsq *LogSummarizationsQuery) Clone() *LogSummarizationsQuery {
 //		GroupBy(logsummarizations.FieldContentURL).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (lsq *LogSummarizationsQuery) GroupBy(field string, fields ...string) *LogSummarizationsGroupBy {
-	lsq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &LogSummarizationsGroupBy{build: lsq}
-	grbuild.flds = &lsq.ctx.Fields
+func (_q *LogSummarizationsQuery) GroupBy(field string, fields ...string) *LogSummarizationsGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &LogSummarizationsGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = logsummarizations.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (lsq *LogSummarizationsQuery) GroupBy(field string, fields ...string) *LogS
 //	client.LogSummarizations.Query().
 //		Select(logsummarizations.FieldContentURL).
 //		Scan(ctx, &v)
-func (lsq *LogSummarizationsQuery) Select(fields ...string) *LogSummarizationsSelect {
-	lsq.ctx.Fields = append(lsq.ctx.Fields, fields...)
-	sbuild := &LogSummarizationsSelect{LogSummarizationsQuery: lsq}
+func (_q *LogSummarizationsQuery) Select(fields ...string) *LogSummarizationsSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &LogSummarizationsSelect{LogSummarizationsQuery: _q}
 	sbuild.label = logsummarizations.Label
-	sbuild.flds, sbuild.scan = &lsq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a LogSummarizationsSelect configured with the given aggregations.
-func (lsq *LogSummarizationsQuery) Aggregate(fns ...AggregateFunc) *LogSummarizationsSelect {
-	return lsq.Select().Aggregate(fns...)
+func (_q *LogSummarizationsQuery) Aggregate(fns ...AggregateFunc) *LogSummarizationsSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (lsq *LogSummarizationsQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range lsq.inters {
+func (_q *LogSummarizationsQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, lsq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range lsq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !logsummarizations.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if lsq.path != nil {
-		prev, err := lsq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		lsq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (lsq *LogSummarizationsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*LogSummarizations, error) {
+func (_q *LogSummarizationsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*LogSummarizations, error) {
 	var (
 		nodes = []*LogSummarizations{}
-		_spec = lsq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*LogSummarizations).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &LogSummarizations{config: lsq.config}
+		node := &LogSummarizations{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = lsq.schemaConfig.LogSummarizations
-	ctx = internal.NewSchemaConfigContext(ctx, lsq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.LogSummarizations
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, lsq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (lsq *LogSummarizationsQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
-func (lsq *LogSummarizationsQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := lsq.querySpec()
-	_spec.Node.Schema = lsq.schemaConfig.LogSummarizations
-	ctx = internal.NewSchemaConfigContext(ctx, lsq.schemaConfig)
-	_spec.Node.Columns = lsq.ctx.Fields
-	if len(lsq.ctx.Fields) > 0 {
-		_spec.Unique = lsq.ctx.Unique != nil && *lsq.ctx.Unique
+func (_q *LogSummarizationsQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.LogSummarizations
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, lsq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (lsq *LogSummarizationsQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *LogSummarizationsQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(logsummarizations.Table, logsummarizations.Columns, sqlgraph.NewFieldSpec(logsummarizations.FieldID, field.TypeUUID))
-	_spec.From = lsq.sql
-	if unique := lsq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if lsq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := lsq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, logsummarizations.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (lsq *LogSummarizationsQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := lsq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := lsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := lsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := lsq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (lsq *LogSummarizationsQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (lsq *LogSummarizationsQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(lsq.driver.Dialect())
+func (_q *LogSummarizationsQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(logsummarizations.Table)
-	columns := lsq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = logsummarizations.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if lsq.sql != nil {
-		selector = lsq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if lsq.ctx.Unique != nil && *lsq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(lsq.schemaConfig.LogSummarizations)
-	ctx = internal.NewSchemaConfigContext(ctx, lsq.schemaConfig)
+	t1.Schema(_q.schemaConfig.LogSummarizations)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range lsq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range lsq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := lsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := lsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type LogSummarizationsGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (lsgb *LogSummarizationsGroupBy) Aggregate(fns ...AggregateFunc) *LogSummarizationsGroupBy {
-	lsgb.fns = append(lsgb.fns, fns...)
-	return lsgb
+func (_g *LogSummarizationsGroupBy) Aggregate(fns ...AggregateFunc) *LogSummarizationsGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (lsgb *LogSummarizationsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, lsgb.build.ctx, "GroupBy")
-	if err := lsgb.build.prepareQuery(ctx); err != nil {
+func (_g *LogSummarizationsGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*LogSummarizationsQuery, *LogSummarizationsGroupBy](ctx, lsgb.build, lsgb, lsgb.build.inters, v)
+	return scanWithInterceptors[*LogSummarizationsQuery, *LogSummarizationsGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (lsgb *LogSummarizationsGroupBy) sqlScan(ctx context.Context, root *LogSummarizationsQuery, v any) error {
+func (_g *LogSummarizationsGroupBy) sqlScan(ctx context.Context, root *LogSummarizationsQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(lsgb.fns))
-	for _, fn := range lsgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*lsgb.flds)+len(lsgb.fns))
-		for _, f := range *lsgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*lsgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := lsgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type LogSummarizationsSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (lss *LogSummarizationsSelect) Aggregate(fns ...AggregateFunc) *LogSummarizationsSelect {
-	lss.fns = append(lss.fns, fns...)
-	return lss
+func (_s *LogSummarizationsSelect) Aggregate(fns ...AggregateFunc) *LogSummarizationsSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (lss *LogSummarizationsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, lss.ctx, "Select")
-	if err := lss.prepareQuery(ctx); err != nil {
+func (_s *LogSummarizationsSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*LogSummarizationsQuery, *LogSummarizationsSelect](ctx, lss.LogSummarizationsQuery, lss, lss.inters, v)
+	return scanWithInterceptors[*LogSummarizationsQuery, *LogSummarizationsSelect](ctx, _s.LogSummarizationsQuery, _s, _s.inters, v)
 }
 
-func (lss *LogSummarizationsSelect) sqlScan(ctx context.Context, root *LogSummarizationsQuery, v any) error {
+func (_s *LogSummarizationsSelect) sqlScan(ctx context.Context, root *LogSummarizationsQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(lss.fns))
-	for _, fn := range lss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*lss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (lss *LogSummarizationsSelect) sqlScan(ctx context.Context, root *LogSummar
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := lss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

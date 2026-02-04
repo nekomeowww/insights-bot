@@ -21,299 +21,299 @@ type ChatHistoriesCreate struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (chc *ChatHistoriesCreate) SetChatID(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetChatID(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetChatID(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetChatID(v)
+	return _c
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableChatID(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetChatID(*i)
+func (_c *ChatHistoriesCreate) SetNillableChatID(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetChatID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetChatTitle sets the "chat_title" field.
-func (chc *ChatHistoriesCreate) SetChatTitle(s string) *ChatHistoriesCreate {
-	chc.mutation.SetChatTitle(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetChatTitle(v string) *ChatHistoriesCreate {
+	_c.mutation.SetChatTitle(v)
+	return _c
 }
 
 // SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableChatTitle(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetChatTitle(*s)
+func (_c *ChatHistoriesCreate) SetNillableChatTitle(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetChatTitle(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetChatType sets the "chat_type" field.
-func (chc *ChatHistoriesCreate) SetChatType(s string) *ChatHistoriesCreate {
-	chc.mutation.SetChatType(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetChatType(v string) *ChatHistoriesCreate {
+	_c.mutation.SetChatType(v)
+	return _c
 }
 
 // SetNillableChatType sets the "chat_type" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableChatType(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetChatType(*s)
+func (_c *ChatHistoriesCreate) SetNillableChatType(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetChatType(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetMessageID sets the "message_id" field.
-func (chc *ChatHistoriesCreate) SetMessageID(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetMessageID(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetMessageID(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetMessageID(v)
+	return _c
 }
 
 // SetNillableMessageID sets the "message_id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableMessageID(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetMessageID(*i)
+func (_c *ChatHistoriesCreate) SetNillableMessageID(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetMessageID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (chc *ChatHistoriesCreate) SetUserID(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetUserID(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetUserID(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableUserID(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetUserID(*i)
+func (_c *ChatHistoriesCreate) SetNillableUserID(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetUserID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetUsername sets the "username" field.
-func (chc *ChatHistoriesCreate) SetUsername(s string) *ChatHistoriesCreate {
-	chc.mutation.SetUsername(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetUsername(v string) *ChatHistoriesCreate {
+	_c.mutation.SetUsername(v)
+	return _c
 }
 
 // SetNillableUsername sets the "username" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableUsername(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetUsername(*s)
+func (_c *ChatHistoriesCreate) SetNillableUsername(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetUsername(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetFullName sets the "full_name" field.
-func (chc *ChatHistoriesCreate) SetFullName(s string) *ChatHistoriesCreate {
-	chc.mutation.SetFullName(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetFullName(v string) *ChatHistoriesCreate {
+	_c.mutation.SetFullName(v)
+	return _c
 }
 
 // SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableFullName(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetFullName(*s)
+func (_c *ChatHistoriesCreate) SetNillableFullName(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetFullName(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetText sets the "text" field.
-func (chc *ChatHistoriesCreate) SetText(s string) *ChatHistoriesCreate {
-	chc.mutation.SetText(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetText(v string) *ChatHistoriesCreate {
+	_c.mutation.SetText(v)
+	return _c
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableText(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetText(*s)
+func (_c *ChatHistoriesCreate) SetNillableText(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetText(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToMessageID sets the "replied_to_message_id" field.
-func (chc *ChatHistoriesCreate) SetRepliedToMessageID(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToMessageID(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToMessageID(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToMessageID(v)
+	return _c
 }
 
 // SetNillableRepliedToMessageID sets the "replied_to_message_id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToMessageID(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetRepliedToMessageID(*i)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToMessageID(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToMessageID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToUserID sets the "replied_to_user_id" field.
-func (chc *ChatHistoriesCreate) SetRepliedToUserID(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToUserID(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToUserID(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToUserID(v)
+	return _c
 }
 
 // SetNillableRepliedToUserID sets the "replied_to_user_id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToUserID(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetRepliedToUserID(*i)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToUserID(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToUserID(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToFullName sets the "replied_to_full_name" field.
-func (chc *ChatHistoriesCreate) SetRepliedToFullName(s string) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToFullName(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToFullName(v string) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToFullName(v)
+	return _c
 }
 
 // SetNillableRepliedToFullName sets the "replied_to_full_name" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToFullName(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetRepliedToFullName(*s)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToFullName(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToFullName(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToUsername sets the "replied_to_username" field.
-func (chc *ChatHistoriesCreate) SetRepliedToUsername(s string) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToUsername(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToUsername(v string) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToUsername(v)
+	return _c
 }
 
 // SetNillableRepliedToUsername sets the "replied_to_username" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToUsername(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetRepliedToUsername(*s)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToUsername(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToUsername(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToText sets the "replied_to_text" field.
-func (chc *ChatHistoriesCreate) SetRepliedToText(s string) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToText(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToText(v string) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToText(v)
+	return _c
 }
 
 // SetNillableRepliedToText sets the "replied_to_text" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToText(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetRepliedToText(*s)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToText(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToText(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetRepliedToChatType sets the "replied_to_chat_type" field.
-func (chc *ChatHistoriesCreate) SetRepliedToChatType(s string) *ChatHistoriesCreate {
-	chc.mutation.SetRepliedToChatType(s)
-	return chc
+func (_c *ChatHistoriesCreate) SetRepliedToChatType(v string) *ChatHistoriesCreate {
+	_c.mutation.SetRepliedToChatType(v)
+	return _c
 }
 
 // SetNillableRepliedToChatType sets the "replied_to_chat_type" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableRepliedToChatType(s *string) *ChatHistoriesCreate {
-	if s != nil {
-		chc.SetRepliedToChatType(*s)
+func (_c *ChatHistoriesCreate) SetNillableRepliedToChatType(v *string) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetRepliedToChatType(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetChattedAt sets the "chatted_at" field.
-func (chc *ChatHistoriesCreate) SetChattedAt(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetChattedAt(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetChattedAt(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetChattedAt(v)
+	return _c
 }
 
 // SetNillableChattedAt sets the "chatted_at" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableChattedAt(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetChattedAt(*i)
+func (_c *ChatHistoriesCreate) SetNillableChattedAt(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetChattedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetEmbedded sets the "embedded" field.
-func (chc *ChatHistoriesCreate) SetEmbedded(b bool) *ChatHistoriesCreate {
-	chc.mutation.SetEmbedded(b)
-	return chc
+func (_c *ChatHistoriesCreate) SetEmbedded(v bool) *ChatHistoriesCreate {
+	_c.mutation.SetEmbedded(v)
+	return _c
 }
 
 // SetNillableEmbedded sets the "embedded" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableEmbedded(b *bool) *ChatHistoriesCreate {
-	if b != nil {
-		chc.SetEmbedded(*b)
+func (_c *ChatHistoriesCreate) SetNillableEmbedded(v *bool) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetEmbedded(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (chc *ChatHistoriesCreate) SetFromPlatform(i int) *ChatHistoriesCreate {
-	chc.mutation.SetFromPlatform(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetFromPlatform(v int) *ChatHistoriesCreate {
+	_c.mutation.SetFromPlatform(v)
+	return _c
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableFromPlatform(i *int) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetFromPlatform(*i)
+func (_c *ChatHistoriesCreate) SetNillableFromPlatform(v *int) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetFromPlatform(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (chc *ChatHistoriesCreate) SetCreatedAt(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetCreatedAt(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetCreatedAt(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableCreatedAt(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetCreatedAt(*i)
+func (_c *ChatHistoriesCreate) SetNillableCreatedAt(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (chc *ChatHistoriesCreate) SetUpdatedAt(i int64) *ChatHistoriesCreate {
-	chc.mutation.SetUpdatedAt(i)
-	return chc
+func (_c *ChatHistoriesCreate) SetUpdatedAt(v int64) *ChatHistoriesCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableUpdatedAt(i *int64) *ChatHistoriesCreate {
-	if i != nil {
-		chc.SetUpdatedAt(*i)
+func (_c *ChatHistoriesCreate) SetNillableUpdatedAt(v *int64) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return chc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (chc *ChatHistoriesCreate) SetID(u uuid.UUID) *ChatHistoriesCreate {
-	chc.mutation.SetID(u)
-	return chc
+func (_c *ChatHistoriesCreate) SetID(v uuid.UUID) *ChatHistoriesCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (chc *ChatHistoriesCreate) SetNillableID(u *uuid.UUID) *ChatHistoriesCreate {
-	if u != nil {
-		chc.SetID(*u)
+func (_c *ChatHistoriesCreate) SetNillableID(v *uuid.UUID) *ChatHistoriesCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return chc
+	return _c
 }
 
 // Mutation returns the ChatHistoriesMutation object of the builder.
-func (chc *ChatHistoriesCreate) Mutation() *ChatHistoriesMutation {
-	return chc.mutation
+func (_c *ChatHistoriesCreate) Mutation() *ChatHistoriesMutation {
+	return _c.mutation
 }
 
 // Save creates the ChatHistories in the database.
-func (chc *ChatHistoriesCreate) Save(ctx context.Context) (*ChatHistories, error) {
-	chc.defaults()
-	return withHooks(ctx, chc.sqlSave, chc.mutation, chc.hooks)
+func (_c *ChatHistoriesCreate) Save(ctx context.Context) (*ChatHistories, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (chc *ChatHistoriesCreate) SaveX(ctx context.Context) *ChatHistories {
-	v, err := chc.Save(ctx)
+func (_c *ChatHistoriesCreate) SaveX(ctx context.Context) *ChatHistories {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -321,170 +321,170 @@ func (chc *ChatHistoriesCreate) SaveX(ctx context.Context) *ChatHistories {
 }
 
 // Exec executes the query.
-func (chc *ChatHistoriesCreate) Exec(ctx context.Context) error {
-	_, err := chc.Save(ctx)
+func (_c *ChatHistoriesCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chc *ChatHistoriesCreate) ExecX(ctx context.Context) {
-	if err := chc.Exec(ctx); err != nil {
+func (_c *ChatHistoriesCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (chc *ChatHistoriesCreate) defaults() {
-	if _, ok := chc.mutation.ChatID(); !ok {
+func (_c *ChatHistoriesCreate) defaults() {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		v := chathistories.DefaultChatID
-		chc.mutation.SetChatID(v)
+		_c.mutation.SetChatID(v)
 	}
-	if _, ok := chc.mutation.ChatTitle(); !ok {
+	if _, ok := _c.mutation.ChatTitle(); !ok {
 		v := chathistories.DefaultChatTitle
-		chc.mutation.SetChatTitle(v)
+		_c.mutation.SetChatTitle(v)
 	}
-	if _, ok := chc.mutation.ChatType(); !ok {
+	if _, ok := _c.mutation.ChatType(); !ok {
 		v := chathistories.DefaultChatType
-		chc.mutation.SetChatType(v)
+		_c.mutation.SetChatType(v)
 	}
-	if _, ok := chc.mutation.MessageID(); !ok {
+	if _, ok := _c.mutation.MessageID(); !ok {
 		v := chathistories.DefaultMessageID
-		chc.mutation.SetMessageID(v)
+		_c.mutation.SetMessageID(v)
 	}
-	if _, ok := chc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		v := chathistories.DefaultUserID
-		chc.mutation.SetUserID(v)
+		_c.mutation.SetUserID(v)
 	}
-	if _, ok := chc.mutation.Username(); !ok {
+	if _, ok := _c.mutation.Username(); !ok {
 		v := chathistories.DefaultUsername
-		chc.mutation.SetUsername(v)
+		_c.mutation.SetUsername(v)
 	}
-	if _, ok := chc.mutation.FullName(); !ok {
+	if _, ok := _c.mutation.FullName(); !ok {
 		v := chathistories.DefaultFullName
-		chc.mutation.SetFullName(v)
+		_c.mutation.SetFullName(v)
 	}
-	if _, ok := chc.mutation.Text(); !ok {
+	if _, ok := _c.mutation.Text(); !ok {
 		v := chathistories.DefaultText
-		chc.mutation.SetText(v)
+		_c.mutation.SetText(v)
 	}
-	if _, ok := chc.mutation.RepliedToMessageID(); !ok {
+	if _, ok := _c.mutation.RepliedToMessageID(); !ok {
 		v := chathistories.DefaultRepliedToMessageID
-		chc.mutation.SetRepliedToMessageID(v)
+		_c.mutation.SetRepliedToMessageID(v)
 	}
-	if _, ok := chc.mutation.RepliedToUserID(); !ok {
+	if _, ok := _c.mutation.RepliedToUserID(); !ok {
 		v := chathistories.DefaultRepliedToUserID
-		chc.mutation.SetRepliedToUserID(v)
+		_c.mutation.SetRepliedToUserID(v)
 	}
-	if _, ok := chc.mutation.RepliedToFullName(); !ok {
+	if _, ok := _c.mutation.RepliedToFullName(); !ok {
 		v := chathistories.DefaultRepliedToFullName
-		chc.mutation.SetRepliedToFullName(v)
+		_c.mutation.SetRepliedToFullName(v)
 	}
-	if _, ok := chc.mutation.RepliedToUsername(); !ok {
+	if _, ok := _c.mutation.RepliedToUsername(); !ok {
 		v := chathistories.DefaultRepliedToUsername
-		chc.mutation.SetRepliedToUsername(v)
+		_c.mutation.SetRepliedToUsername(v)
 	}
-	if _, ok := chc.mutation.RepliedToText(); !ok {
+	if _, ok := _c.mutation.RepliedToText(); !ok {
 		v := chathistories.DefaultRepliedToText
-		chc.mutation.SetRepliedToText(v)
+		_c.mutation.SetRepliedToText(v)
 	}
-	if _, ok := chc.mutation.RepliedToChatType(); !ok {
+	if _, ok := _c.mutation.RepliedToChatType(); !ok {
 		v := chathistories.DefaultRepliedToChatType
-		chc.mutation.SetRepliedToChatType(v)
+		_c.mutation.SetRepliedToChatType(v)
 	}
-	if _, ok := chc.mutation.ChattedAt(); !ok {
+	if _, ok := _c.mutation.ChattedAt(); !ok {
 		v := chathistories.DefaultChattedAt()
-		chc.mutation.SetChattedAt(v)
+		_c.mutation.SetChattedAt(v)
 	}
-	if _, ok := chc.mutation.Embedded(); !ok {
+	if _, ok := _c.mutation.Embedded(); !ok {
 		v := chathistories.DefaultEmbedded
-		chc.mutation.SetEmbedded(v)
+		_c.mutation.SetEmbedded(v)
 	}
-	if _, ok := chc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		v := chathistories.DefaultFromPlatform
-		chc.mutation.SetFromPlatform(v)
+		_c.mutation.SetFromPlatform(v)
 	}
-	if _, ok := chc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := chathistories.DefaultCreatedAt()
-		chc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := chc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := chathistories.DefaultUpdatedAt()
-		chc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := chc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := chathistories.DefaultID()
-		chc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (chc *ChatHistoriesCreate) check() error {
-	if _, ok := chc.mutation.ChatID(); !ok {
+func (_c *ChatHistoriesCreate) check() error {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		return &ValidationError{Name: "chat_id", err: errors.New(`ent: missing required field "ChatHistories.chat_id"`)}
 	}
-	if _, ok := chc.mutation.ChatTitle(); !ok {
+	if _, ok := _c.mutation.ChatTitle(); !ok {
 		return &ValidationError{Name: "chat_title", err: errors.New(`ent: missing required field "ChatHistories.chat_title"`)}
 	}
-	if _, ok := chc.mutation.ChatType(); !ok {
+	if _, ok := _c.mutation.ChatType(); !ok {
 		return &ValidationError{Name: "chat_type", err: errors.New(`ent: missing required field "ChatHistories.chat_type"`)}
 	}
-	if _, ok := chc.mutation.MessageID(); !ok {
+	if _, ok := _c.mutation.MessageID(); !ok {
 		return &ValidationError{Name: "message_id", err: errors.New(`ent: missing required field "ChatHistories.message_id"`)}
 	}
-	if _, ok := chc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "ChatHistories.user_id"`)}
 	}
-	if _, ok := chc.mutation.Username(); !ok {
+	if _, ok := _c.mutation.Username(); !ok {
 		return &ValidationError{Name: "username", err: errors.New(`ent: missing required field "ChatHistories.username"`)}
 	}
-	if _, ok := chc.mutation.FullName(); !ok {
+	if _, ok := _c.mutation.FullName(); !ok {
 		return &ValidationError{Name: "full_name", err: errors.New(`ent: missing required field "ChatHistories.full_name"`)}
 	}
-	if _, ok := chc.mutation.Text(); !ok {
+	if _, ok := _c.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`ent: missing required field "ChatHistories.text"`)}
 	}
-	if _, ok := chc.mutation.RepliedToMessageID(); !ok {
+	if _, ok := _c.mutation.RepliedToMessageID(); !ok {
 		return &ValidationError{Name: "replied_to_message_id", err: errors.New(`ent: missing required field "ChatHistories.replied_to_message_id"`)}
 	}
-	if _, ok := chc.mutation.RepliedToUserID(); !ok {
+	if _, ok := _c.mutation.RepliedToUserID(); !ok {
 		return &ValidationError{Name: "replied_to_user_id", err: errors.New(`ent: missing required field "ChatHistories.replied_to_user_id"`)}
 	}
-	if _, ok := chc.mutation.RepliedToFullName(); !ok {
+	if _, ok := _c.mutation.RepliedToFullName(); !ok {
 		return &ValidationError{Name: "replied_to_full_name", err: errors.New(`ent: missing required field "ChatHistories.replied_to_full_name"`)}
 	}
-	if _, ok := chc.mutation.RepliedToUsername(); !ok {
+	if _, ok := _c.mutation.RepliedToUsername(); !ok {
 		return &ValidationError{Name: "replied_to_username", err: errors.New(`ent: missing required field "ChatHistories.replied_to_username"`)}
 	}
-	if _, ok := chc.mutation.RepliedToText(); !ok {
+	if _, ok := _c.mutation.RepliedToText(); !ok {
 		return &ValidationError{Name: "replied_to_text", err: errors.New(`ent: missing required field "ChatHistories.replied_to_text"`)}
 	}
-	if _, ok := chc.mutation.RepliedToChatType(); !ok {
+	if _, ok := _c.mutation.RepliedToChatType(); !ok {
 		return &ValidationError{Name: "replied_to_chat_type", err: errors.New(`ent: missing required field "ChatHistories.replied_to_chat_type"`)}
 	}
-	if _, ok := chc.mutation.ChattedAt(); !ok {
+	if _, ok := _c.mutation.ChattedAt(); !ok {
 		return &ValidationError{Name: "chatted_at", err: errors.New(`ent: missing required field "ChatHistories.chatted_at"`)}
 	}
-	if _, ok := chc.mutation.Embedded(); !ok {
+	if _, ok := _c.mutation.Embedded(); !ok {
 		return &ValidationError{Name: "embedded", err: errors.New(`ent: missing required field "ChatHistories.embedded"`)}
 	}
-	if _, ok := chc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "ChatHistories.from_platform"`)}
 	}
-	if _, ok := chc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "ChatHistories.created_at"`)}
 	}
-	if _, ok := chc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "ChatHistories.updated_at"`)}
 	}
 	return nil
 }
 
-func (chc *ChatHistoriesCreate) sqlSave(ctx context.Context) (*ChatHistories, error) {
-	if err := chc.check(); err != nil {
+func (_c *ChatHistoriesCreate) sqlSave(ctx context.Context) (*ChatHistories, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := chc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, chc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -497,94 +497,94 @@ func (chc *ChatHistoriesCreate) sqlSave(ctx context.Context) (*ChatHistories, er
 			return nil, err
 		}
 	}
-	chc.mutation.id = &_node.ID
-	chc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (chc *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSpec) {
+func (_c *ChatHistoriesCreate) createSpec() (*ChatHistories, *sqlgraph.CreateSpec) {
 	var (
-		_node = &ChatHistories{config: chc.config}
+		_node = &ChatHistories{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(chathistories.Table, sqlgraph.NewFieldSpec(chathistories.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = chc.schemaConfig.ChatHistories
-	if id, ok := chc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.ChatHistories
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := chc.mutation.ChatID(); ok {
+	if value, ok := _c.mutation.ChatID(); ok {
 		_spec.SetField(chathistories.FieldChatID, field.TypeInt64, value)
 		_node.ChatID = value
 	}
-	if value, ok := chc.mutation.ChatTitle(); ok {
+	if value, ok := _c.mutation.ChatTitle(); ok {
 		_spec.SetField(chathistories.FieldChatTitle, field.TypeString, value)
 		_node.ChatTitle = value
 	}
-	if value, ok := chc.mutation.ChatType(); ok {
+	if value, ok := _c.mutation.ChatType(); ok {
 		_spec.SetField(chathistories.FieldChatType, field.TypeString, value)
 		_node.ChatType = value
 	}
-	if value, ok := chc.mutation.MessageID(); ok {
+	if value, ok := _c.mutation.MessageID(); ok {
 		_spec.SetField(chathistories.FieldMessageID, field.TypeInt64, value)
 		_node.MessageID = value
 	}
-	if value, ok := chc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(chathistories.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
-	if value, ok := chc.mutation.Username(); ok {
+	if value, ok := _c.mutation.Username(); ok {
 		_spec.SetField(chathistories.FieldUsername, field.TypeString, value)
 		_node.Username = value
 	}
-	if value, ok := chc.mutation.FullName(); ok {
+	if value, ok := _c.mutation.FullName(); ok {
 		_spec.SetField(chathistories.FieldFullName, field.TypeString, value)
 		_node.FullName = value
 	}
-	if value, ok := chc.mutation.Text(); ok {
+	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(chathistories.FieldText, field.TypeString, value)
 		_node.Text = value
 	}
-	if value, ok := chc.mutation.RepliedToMessageID(); ok {
+	if value, ok := _c.mutation.RepliedToMessageID(); ok {
 		_spec.SetField(chathistories.FieldRepliedToMessageID, field.TypeInt64, value)
 		_node.RepliedToMessageID = value
 	}
-	if value, ok := chc.mutation.RepliedToUserID(); ok {
+	if value, ok := _c.mutation.RepliedToUserID(); ok {
 		_spec.SetField(chathistories.FieldRepliedToUserID, field.TypeInt64, value)
 		_node.RepliedToUserID = value
 	}
-	if value, ok := chc.mutation.RepliedToFullName(); ok {
+	if value, ok := _c.mutation.RepliedToFullName(); ok {
 		_spec.SetField(chathistories.FieldRepliedToFullName, field.TypeString, value)
 		_node.RepliedToFullName = value
 	}
-	if value, ok := chc.mutation.RepliedToUsername(); ok {
+	if value, ok := _c.mutation.RepliedToUsername(); ok {
 		_spec.SetField(chathistories.FieldRepliedToUsername, field.TypeString, value)
 		_node.RepliedToUsername = value
 	}
-	if value, ok := chc.mutation.RepliedToText(); ok {
+	if value, ok := _c.mutation.RepliedToText(); ok {
 		_spec.SetField(chathistories.FieldRepliedToText, field.TypeString, value)
 		_node.RepliedToText = value
 	}
-	if value, ok := chc.mutation.RepliedToChatType(); ok {
+	if value, ok := _c.mutation.RepliedToChatType(); ok {
 		_spec.SetField(chathistories.FieldRepliedToChatType, field.TypeString, value)
 		_node.RepliedToChatType = value
 	}
-	if value, ok := chc.mutation.ChattedAt(); ok {
+	if value, ok := _c.mutation.ChattedAt(); ok {
 		_spec.SetField(chathistories.FieldChattedAt, field.TypeInt64, value)
 		_node.ChattedAt = value
 	}
-	if value, ok := chc.mutation.Embedded(); ok {
+	if value, ok := _c.mutation.Embedded(); ok {
 		_spec.SetField(chathistories.FieldEmbedded, field.TypeBool, value)
 		_node.Embedded = value
 	}
-	if value, ok := chc.mutation.FromPlatform(); ok {
+	if value, ok := _c.mutation.FromPlatform(); ok {
 		_spec.SetField(chathistories.FieldFromPlatform, field.TypeInt, value)
 		_node.FromPlatform = value
 	}
-	if value, ok := chc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(chathistories.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := chc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(chathistories.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
@@ -599,16 +599,16 @@ type ChatHistoriesCreateBulk struct {
 }
 
 // Save creates the ChatHistories entities in the database.
-func (chcb *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories, error) {
-	if chcb.err != nil {
-		return nil, chcb.err
+func (_c *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(chcb.builders))
-	nodes := make([]*ChatHistories, len(chcb.builders))
-	mutators := make([]Mutator, len(chcb.builders))
-	for i := range chcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*ChatHistories, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := chcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ChatHistoriesMutation)
@@ -622,11 +622,11 @@ func (chcb *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, chcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, chcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -646,7 +646,7 @@ func (chcb *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, chcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -654,8 +654,8 @@ func (chcb *ChatHistoriesCreateBulk) Save(ctx context.Context) ([]*ChatHistories
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (chcb *ChatHistoriesCreateBulk) SaveX(ctx context.Context) []*ChatHistories {
-	v, err := chcb.Save(ctx)
+func (_c *ChatHistoriesCreateBulk) SaveX(ctx context.Context) []*ChatHistories {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -663,14 +663,14 @@ func (chcb *ChatHistoriesCreateBulk) SaveX(ctx context.Context) []*ChatHistories
 }
 
 // Exec executes the query.
-func (chcb *ChatHistoriesCreateBulk) Exec(ctx context.Context) error {
-	_, err := chcb.Save(ctx)
+func (_c *ChatHistoriesCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (chcb *ChatHistoriesCreateBulk) ExecX(ctx context.Context) {
-	if err := chcb.Exec(ctx); err != nil {
+func (_c *ChatHistoriesCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

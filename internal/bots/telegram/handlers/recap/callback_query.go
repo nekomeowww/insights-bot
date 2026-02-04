@@ -144,7 +144,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryToggle(c *tgbot.Context) (tgbo
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	options, err := h.tgchats.FindOneRecapsOption(chatID)
+	options, err := h.tgchats.FindOneOrCreateRecapsOption(chatID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).
@@ -286,7 +286,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryAssignMode(c *tgbot.Context) (
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	options, err := h.tgchats.FindOneRecapsOption(chatID)
+	options, err := h.tgchats.FindOneOrCreateRecapsOption(chatID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).
@@ -473,7 +473,7 @@ func (h *CallbackQueryHandler) handleAutoRecapRatesPerDaySelect(c *tgbot.Context
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	options, err := h.tgchats.FindOneRecapsOption(chatID)
+	options, err := h.tgchats.FindOneOrCreateRecapsOption(chatID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).
@@ -578,7 +578,7 @@ func (h *CallbackQueryHandler) handleCallbackQueryPin(c *tgbot.Context) (tgbot.R
 			WithReplyMarkup(tgbotapi.NewInlineKeyboardMarkup(msg.ReplyMarkup.InlineKeyboard...))
 	}
 
-	options, err := h.tgchats.FindOneRecapsOption(chatID)
+	options, err := h.tgchats.FindOneOrCreateRecapsOption(chatID)
 	if err != nil {
 		return nil, tgbot.
 			NewExceptionError(err).

@@ -101,7 +101,7 @@ func (m *AutoRecapService) sendChatHistoriesRecapTimeCapsuleHandler(
 	_ = may.Invoke(lo.Attempt(10, func(index int) error {
 		var err error
 
-		options, err = m.tgchats.FindOneRecapsOption(capsule.Payload.ChatID)
+		options, err = m.tgchats.FindOneOrCreateRecapsOption(capsule.Payload.ChatID)
 		if err != nil {
 			m.logger.Error("failed to find chat recap options", zap.Error(err))
 		}

@@ -19,7 +19,7 @@ func TestFindOneOrCreateRecapsOption(t *testing.T) {
 	assert.Empty(t, option.AutoRecapSendMode)
 	assert.Equal(t, 4, option.AutoRecapRatesPerDay)
 
-	option2, err := model.FindOneRecapsOption(chatID)
+	option2, err := model.findOneRecapsOption(chatID)
 	require.NoError(t, err)
 	require.NotNil(t, option2)
 
@@ -38,7 +38,7 @@ func TestSetAutoRecapRatesPerDay(t *testing.T) {
 	err := model.SetAutoRecapRatesPerDay(chatID, 4)
 	require.NoError(t, err)
 
-	option, err := model.FindOneRecapsOption(chatID)
+	option, err := model.findOneRecapsOption(chatID)
 	require.NoError(t, err)
 	require.NotNil(t, option)
 
@@ -48,7 +48,7 @@ func TestSetAutoRecapRatesPerDay(t *testing.T) {
 	err = model.SetAutoRecapRatesPerDay(chatID, 10)
 	require.NoError(t, err)
 
-	option2, err := model.FindOneRecapsOption(chatID)
+	option2, err := model.findOneRecapsOption(chatID)
 	require.NoError(t, err)
 	require.NotNil(t, option2)
 

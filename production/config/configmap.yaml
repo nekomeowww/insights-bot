@@ -1,0 +1,55 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: insights-bot-config
+data:
+  # # Timezone shift in seconds for automatically generating group recap messages.
+  # TIMEZONE_SHIFT_SECONDS: "0"
+  # # Telegram Bot API token
+  # TELEGRAM_BOT_TOKEN: ""
+  # # Telegram Bot webhook URL
+  # TELEGRAM_BOT_WEBHOOK_URL: "https://webhook.example.com/telegram_bot"
+  # # Telegram Bot Webhook server port
+  # TELEGRAM_BOT_WEBHOOK_PORT: "7071"
+  # # Slack app client id
+  # SLACK_CLIENT_ID: ""
+  # # Slack app client secret
+  # SLACK_CLIENT_SECRET: ""
+  # # Slack Bot/App Webhook server port
+  # SLACK_WEBHOOK_PORT: ""
+  # # Discord bot token
+  # DISCORD_BOT_TOKEN: ""
+  # # Discord app public key
+  # DISCORD_BOT_PUBLIC_KEY: ""
+  # # Discord Bot Webhook server port
+  # DISCORD_BOT_WEBHOOK_PORT: ""
+  # # OpenAI API Secret Key
+  # OPENAI_API_SECRET: ""
+  # # OpenAI API Host
+  OPENAI_API_HOST: "https://openrouter.ai/api/v1"
+  # # OpenAI API Model name
+  OPENAI_API_MODEL_NAME: "deepseek/deepseek-v3.2"
+  # # OpenAI API token limit
+  # OPENAI_API_TOKEN_LIMIT: "4096"
+  # # OpenAI chat histories recap token limit
+  # OPENAI_API_CHAT_HISTORIES_RECAP_TOKEN_LIMIT: "2000"
+  # # PostgreSQL database URL
+  # DB_CONNECTION_STR: ""
+  # # Redis host
+  REDIS_HOST: "redis-master.default.svc.cluster.local"
+  # # Redis port
+  REDIS_PORT: "6379"
+  # # Redis TLS enabled
+  # REDIS_TLS_ENABLED: "false"
+  # # Redis username
+  # REDIS_USERNAME: ""
+  # # Redis password
+  # REDIS_PASSWORD: ""
+  # # Redis database number
+  # REDIS_DB: "0"
+  # # Redis client cache enabled
+  # REDIS_CLIENT_CACHE_ENABLED: "false"
+  # # Log level
+  # LOG_LEVEL: "info"
+  # # Locales directory
+  # LOCALES_DIR: "locales"

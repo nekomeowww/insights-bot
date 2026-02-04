@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type SentMessagesQuery struct {
 }
 
 // Where adds a new predicate for the SentMessagesQuery builder.
-func (smq *SentMessagesQuery) Where(ps ...predicate.SentMessages) *SentMessagesQuery {
-	smq.predicates = append(smq.predicates, ps...)
-	return smq
+func (_q *SentMessagesQuery) Where(ps ...predicate.SentMessages) *SentMessagesQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (smq *SentMessagesQuery) Limit(limit int) *SentMessagesQuery {
-	smq.ctx.Limit = &limit
-	return smq
+func (_q *SentMessagesQuery) Limit(limit int) *SentMessagesQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (smq *SentMessagesQuery) Offset(offset int) *SentMessagesQuery {
-	smq.ctx.Offset = &offset
-	return smq
+func (_q *SentMessagesQuery) Offset(offset int) *SentMessagesQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (smq *SentMessagesQuery) Unique(unique bool) *SentMessagesQuery {
-	smq.ctx.Unique = &unique
-	return smq
+func (_q *SentMessagesQuery) Unique(unique bool) *SentMessagesQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (smq *SentMessagesQuery) Order(o ...sentmessages.OrderOption) *SentMessagesQuery {
-	smq.order = append(smq.order, o...)
-	return smq
+func (_q *SentMessagesQuery) Order(o ...sentmessages.OrderOption) *SentMessagesQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first SentMessages entity from the query.
 // Returns a *NotFoundError when no SentMessages was found.
-func (smq *SentMessagesQuery) First(ctx context.Context) (*SentMessages, error) {
-	nodes, err := smq.Limit(1).All(setContextOp(ctx, smq.ctx, "First"))
+func (_q *SentMessagesQuery) First(ctx context.Context) (*SentMessages, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (smq *SentMessagesQuery) First(ctx context.Context) (*SentMessages, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (smq *SentMessagesQuery) FirstX(ctx context.Context) *SentMessages {
-	node, err := smq.First(ctx)
+func (_q *SentMessagesQuery) FirstX(ctx context.Context) *SentMessages {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (smq *SentMessagesQuery) FirstX(ctx context.Context) *SentMessages {
 
 // FirstID returns the first SentMessages ID from the query.
 // Returns a *NotFoundError when no SentMessages ID was found.
-func (smq *SentMessagesQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *SentMessagesQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = smq.Limit(1).IDs(setContextOp(ctx, smq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (smq *SentMessagesQuery) FirstID(ctx context.Context) (id uuid.UUID, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (smq *SentMessagesQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := smq.FirstID(ctx)
+func (_q *SentMessagesQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (smq *SentMessagesQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single SentMessages entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one SentMessages entity is found.
 // Returns a *NotFoundError when no SentMessages entities are found.
-func (smq *SentMessagesQuery) Only(ctx context.Context) (*SentMessages, error) {
-	nodes, err := smq.Limit(2).All(setContextOp(ctx, smq.ctx, "Only"))
+func (_q *SentMessagesQuery) Only(ctx context.Context) (*SentMessages, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (smq *SentMessagesQuery) Only(ctx context.Context) (*SentMessages, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (smq *SentMessagesQuery) OnlyX(ctx context.Context) *SentMessages {
-	node, err := smq.Only(ctx)
+func (_q *SentMessagesQuery) OnlyX(ctx context.Context) *SentMessages {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (smq *SentMessagesQuery) OnlyX(ctx context.Context) *SentMessages {
 // OnlyID is like Only, but returns the only SentMessages ID in the query.
 // Returns a *NotSingularError when more than one SentMessages ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (smq *SentMessagesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *SentMessagesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = smq.Limit(2).IDs(setContextOp(ctx, smq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (smq *SentMessagesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (smq *SentMessagesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := smq.OnlyID(ctx)
+func (_q *SentMessagesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (smq *SentMessagesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of SentMessagesSlice.
-func (smq *SentMessagesQuery) All(ctx context.Context) ([]*SentMessages, error) {
-	ctx = setContextOp(ctx, smq.ctx, "All")
-	if err := smq.prepareQuery(ctx); err != nil {
+func (_q *SentMessagesQuery) All(ctx context.Context) ([]*SentMessages, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*SentMessages, *SentMessagesQuery]()
-	return withInterceptors[[]*SentMessages](ctx, smq, qr, smq.inters)
+	return withInterceptors[[]*SentMessages](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (smq *SentMessagesQuery) AllX(ctx context.Context) []*SentMessages {
-	nodes, err := smq.All(ctx)
+func (_q *SentMessagesQuery) AllX(ctx context.Context) []*SentMessages {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (smq *SentMessagesQuery) AllX(ctx context.Context) []*SentMessages {
 }
 
 // IDs executes the query and returns a list of SentMessages IDs.
-func (smq *SentMessagesQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if smq.ctx.Unique == nil && smq.path != nil {
-		smq.Unique(true)
+func (_q *SentMessagesQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, smq.ctx, "IDs")
-	if err = smq.Select(sentmessages.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(sentmessages.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (smq *SentMessagesQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := smq.IDs(ctx)
+func (_q *SentMessagesQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (smq *SentMessagesQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (smq *SentMessagesQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, smq.ctx, "Count")
-	if err := smq.prepareQuery(ctx); err != nil {
+func (_q *SentMessagesQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, smq, querierCount[*SentMessagesQuery](), smq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*SentMessagesQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (smq *SentMessagesQuery) CountX(ctx context.Context) int {
-	count, err := smq.Count(ctx)
+func (_q *SentMessagesQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (smq *SentMessagesQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (smq *SentMessagesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, smq.ctx, "Exist")
-	switch _, err := smq.FirstID(ctx); {
+func (_q *SentMessagesQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (smq *SentMessagesQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (smq *SentMessagesQuery) ExistX(ctx context.Context) bool {
-	exist, err := smq.Exist(ctx)
+func (_q *SentMessagesQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (smq *SentMessagesQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the SentMessagesQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (smq *SentMessagesQuery) Clone() *SentMessagesQuery {
-	if smq == nil {
+func (_q *SentMessagesQuery) Clone() *SentMessagesQuery {
+	if _q == nil {
 		return nil
 	}
 	return &SentMessagesQuery{
-		config:     smq.config,
-		ctx:        smq.ctx.Clone(),
-		order:      append([]sentmessages.OrderOption{}, smq.order...),
-		inters:     append([]Interceptor{}, smq.inters...),
-		predicates: append([]predicate.SentMessages{}, smq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]sentmessages.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.SentMessages{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  smq.sql.Clone(),
-		path: smq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (smq *SentMessagesQuery) Clone() *SentMessagesQuery {
 //		GroupBy(sentmessages.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (smq *SentMessagesQuery) GroupBy(field string, fields ...string) *SentMessagesGroupBy {
-	smq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &SentMessagesGroupBy{build: smq}
-	grbuild.flds = &smq.ctx.Fields
+func (_q *SentMessagesQuery) GroupBy(field string, fields ...string) *SentMessagesGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &SentMessagesGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = sentmessages.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (smq *SentMessagesQuery) GroupBy(field string, fields ...string) *SentMessa
 //	client.SentMessages.Query().
 //		Select(sentmessages.FieldChatID).
 //		Scan(ctx, &v)
-func (smq *SentMessagesQuery) Select(fields ...string) *SentMessagesSelect {
-	smq.ctx.Fields = append(smq.ctx.Fields, fields...)
-	sbuild := &SentMessagesSelect{SentMessagesQuery: smq}
+func (_q *SentMessagesQuery) Select(fields ...string) *SentMessagesSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &SentMessagesSelect{SentMessagesQuery: _q}
 	sbuild.label = sentmessages.Label
-	sbuild.flds, sbuild.scan = &smq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a SentMessagesSelect configured with the given aggregations.
-func (smq *SentMessagesQuery) Aggregate(fns ...AggregateFunc) *SentMessagesSelect {
-	return smq.Select().Aggregate(fns...)
+func (_q *SentMessagesQuery) Aggregate(fns ...AggregateFunc) *SentMessagesSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (smq *SentMessagesQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range smq.inters {
+func (_q *SentMessagesQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, smq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range smq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !sentmessages.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if smq.path != nil {
-		prev, err := smq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		smq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (smq *SentMessagesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*SentMessages, error) {
+func (_q *SentMessagesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*SentMessages, error) {
 	var (
 		nodes = []*SentMessages{}
-		_spec = smq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*SentMessages).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &SentMessages{config: smq.config}
+		node := &SentMessages{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = smq.schemaConfig.SentMessages
-	ctx = internal.NewSchemaConfigContext(ctx, smq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.SentMessages
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, smq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (smq *SentMessagesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	return nodes, nil
 }
 
-func (smq *SentMessagesQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := smq.querySpec()
-	_spec.Node.Schema = smq.schemaConfig.SentMessages
-	ctx = internal.NewSchemaConfigContext(ctx, smq.schemaConfig)
-	_spec.Node.Columns = smq.ctx.Fields
-	if len(smq.ctx.Fields) > 0 {
-		_spec.Unique = smq.ctx.Unique != nil && *smq.ctx.Unique
+func (_q *SentMessagesQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.SentMessages
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, smq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (smq *SentMessagesQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *SentMessagesQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(sentmessages.Table, sentmessages.Columns, sqlgraph.NewFieldSpec(sentmessages.FieldID, field.TypeUUID))
-	_spec.From = smq.sql
-	if unique := smq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if smq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := smq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, sentmessages.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (smq *SentMessagesQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := smq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := smq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := smq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := smq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (smq *SentMessagesQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (smq *SentMessagesQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(smq.driver.Dialect())
+func (_q *SentMessagesQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(sentmessages.Table)
-	columns := smq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = sentmessages.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if smq.sql != nil {
-		selector = smq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if smq.ctx.Unique != nil && *smq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(smq.schemaConfig.SentMessages)
-	ctx = internal.NewSchemaConfigContext(ctx, smq.schemaConfig)
+	t1.Schema(_q.schemaConfig.SentMessages)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range smq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range smq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := smq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := smq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type SentMessagesGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (smgb *SentMessagesGroupBy) Aggregate(fns ...AggregateFunc) *SentMessagesGroupBy {
-	smgb.fns = append(smgb.fns, fns...)
-	return smgb
+func (_g *SentMessagesGroupBy) Aggregate(fns ...AggregateFunc) *SentMessagesGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (smgb *SentMessagesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, smgb.build.ctx, "GroupBy")
-	if err := smgb.build.prepareQuery(ctx); err != nil {
+func (_g *SentMessagesGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SentMessagesQuery, *SentMessagesGroupBy](ctx, smgb.build, smgb, smgb.build.inters, v)
+	return scanWithInterceptors[*SentMessagesQuery, *SentMessagesGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (smgb *SentMessagesGroupBy) sqlScan(ctx context.Context, root *SentMessagesQuery, v any) error {
+func (_g *SentMessagesGroupBy) sqlScan(ctx context.Context, root *SentMessagesQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(smgb.fns))
-	for _, fn := range smgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*smgb.flds)+len(smgb.fns))
-		for _, f := range *smgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*smgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := smgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type SentMessagesSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (sms *SentMessagesSelect) Aggregate(fns ...AggregateFunc) *SentMessagesSelect {
-	sms.fns = append(sms.fns, fns...)
-	return sms
+func (_s *SentMessagesSelect) Aggregate(fns ...AggregateFunc) *SentMessagesSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (sms *SentMessagesSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, sms.ctx, "Select")
-	if err := sms.prepareQuery(ctx); err != nil {
+func (_s *SentMessagesSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*SentMessagesQuery, *SentMessagesSelect](ctx, sms.SentMessagesQuery, sms, sms.inters, v)
+	return scanWithInterceptors[*SentMessagesQuery, *SentMessagesSelect](ctx, _s.SentMessagesQuery, _s, _s.inters, v)
 }
 
-func (sms *SentMessagesSelect) sqlScan(ctx context.Context, root *SentMessagesQuery, v any) error {
+func (_s *SentMessagesSelect) sqlScan(ctx context.Context, root *SentMessagesQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(sms.fns))
-	for _, fn := range sms.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*sms.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (sms *SentMessagesSelect) sqlScan(ctx context.Context, root *SentMessagesQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := sms.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

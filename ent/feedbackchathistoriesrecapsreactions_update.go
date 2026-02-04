@@ -23,122 +23,122 @@ type FeedbackChatHistoriesRecapsReactionsUpdate struct {
 }
 
 // Where appends a list predicates to the FeedbackChatHistoriesRecapsReactionsUpdate builder.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.Where(ps...)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetChatID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.ResetChatID()
-	fchrru.mutation.SetChatID(i)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetChatID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableChatID(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	if i != nil {
-		fchrru.SetChatID(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableChatID(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return fchrru
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) AddChatID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.AddChatID(i)
-	return fchrru
+// AddChatID adds value to the "chat_id" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) AddChatID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetUserID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.ResetUserID()
-	fchrru.mutation.SetUserID(i)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetUserID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableUserID(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	if i != nil {
-		fchrru.SetUserID(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableUserID(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return fchrru
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) AddUserID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.AddUserID(i)
-	return fchrru
+// AddUserID adds value to the "user_id" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) AddUserID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetType sets the "type" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetType(f feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.SetType(f)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetType(v feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableType(f *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	if f != nil {
-		fchrru.SetType(*f)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableType(v *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return fchrru
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetCreatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.ResetCreatedAt()
-	fchrru.mutation.SetCreatedAt(i)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetCreatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableCreatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	if i != nil {
-		fchrru.SetCreatedAt(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableCreatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return fchrru
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) AddCreatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.AddCreatedAt(i)
-	return fchrru
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) AddCreatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetUpdatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.ResetUpdatedAt()
-	fchrru.mutation.SetUpdatedAt(i)
-	return fchrru
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetUpdatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableUpdatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	if i != nil {
-		fchrru.SetUpdatedAt(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SetNillableUpdatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return fchrru
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) AddUpdatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
-	fchrru.mutation.AddUpdatedAt(i)
-	return fchrru
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) AddUpdatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FeedbackChatHistoriesRecapsReactionsMutation object of the builder.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
-	return fchrru.mutation
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, fchrru.sqlSave, fchrru.mutation, fchrru.hooks)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SaveX(ctx context.Context) int {
-	affected, err := fchrru.Save(ctx)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -146,21 +146,21 @@ func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) SaveX(ctx context.Cont
 }
 
 // Exec executes the query.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) Exec(ctx context.Context) error {
-	_, err := fchrru.Save(ctx)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) ExecX(ctx context.Context) {
-	if err := fchrru.Exec(ctx); err != nil {
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) check() error {
-	if v, ok := fchrru.mutation.GetType(); ok {
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := feedbackchathistoriesrecapsreactions.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "FeedbackChatHistoriesRecapsReactions.type": %w`, err)}
 		}
@@ -168,48 +168,48 @@ func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) check() error {
 	return nil
 }
 
-func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := fchrru.check(); err != nil {
-		return n, err
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(feedbackchathistoriesrecapsreactions.Table, feedbackchathistoriesrecapsreactions.Columns, sqlgraph.NewFieldSpec(feedbackchathistoriesrecapsreactions.FieldID, field.TypeUUID))
-	if ps := fchrru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fchrru.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := fchrru.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrru.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = fchrru.schemaConfig.FeedbackChatHistoriesRecapsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fchrru.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, fchrru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.FeedbackChatHistoriesRecapsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{feedbackchathistoriesrecapsreactions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -217,8 +217,8 @@ func (fchrru *FeedbackChatHistoriesRecapsReactionsUpdate) sqlSave(ctx context.Co
 		}
 		return 0, err
 	}
-	fchrru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // FeedbackChatHistoriesRecapsReactionsUpdateOne is the builder for updating a single FeedbackChatHistoriesRecapsReactions entity.
@@ -230,129 +230,129 @@ type FeedbackChatHistoriesRecapsReactionsUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetChatID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.ResetChatID()
-	fchrruo.mutation.SetChatID(i)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetChatID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableChatID(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	if i != nil {
-		fchrruo.SetChatID(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableChatID(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return fchrruo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddChatID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.AddChatID(i)
-	return fchrruo
+// AddChatID adds value to the "chat_id" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddChatID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetUserID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.ResetUserID()
-	fchrruo.mutation.SetUserID(i)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetUserID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableUserID(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	if i != nil {
-		fchrruo.SetUserID(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableUserID(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return fchrruo
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddUserID(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.AddUserID(i)
-	return fchrruo
+// AddUserID adds value to the "user_id" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddUserID(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetType sets the "type" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetType(f feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.SetType(f)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetType(v feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.SetType(v)
+	return _u
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableType(f *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	if f != nil {
-		fchrruo.SetType(*f)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableType(v *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	if v != nil {
+		_u.SetType(*v)
 	}
-	return fchrruo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetCreatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.ResetCreatedAt()
-	fchrruo.mutation.SetCreatedAt(i)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetCreatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableCreatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	if i != nil {
-		fchrruo.SetCreatedAt(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableCreatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return fchrruo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddCreatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.AddCreatedAt(i)
-	return fchrruo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddCreatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetUpdatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.ResetUpdatedAt()
-	fchrruo.mutation.SetUpdatedAt(i)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetUpdatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableUpdatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	if i != nil {
-		fchrruo.SetUpdatedAt(*i)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SetNillableUpdatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return fchrruo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddUpdatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.AddUpdatedAt(i)
-	return fchrruo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) AddUpdatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the FeedbackChatHistoriesRecapsReactionsMutation object of the builder.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
-	return fchrruo.mutation
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the FeedbackChatHistoriesRecapsReactionsUpdate builder.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.mutation.Where(ps...)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) Select(field string, fields ...string) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
-	fchrruo.fields = append([]string{field}, fields...)
-	return fchrruo
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) Select(field string, fields ...string) *FeedbackChatHistoriesRecapsReactionsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated FeedbackChatHistoriesRecapsReactions entity.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) Save(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
-	return withHooks(ctx, fchrruo.sqlSave, fchrruo.mutation, fchrruo.hooks)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) Save(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SaveX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
-	node, err := fchrruo.Save(ctx)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) SaveX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -360,21 +360,21 @@ func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) SaveX(ctx context.
 }
 
 // Exec executes the query on the entity.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) Exec(ctx context.Context) error {
-	_, err := fchrruo.Save(ctx)
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) ExecX(ctx context.Context) {
-	if err := fchrruo.Exec(ctx); err != nil {
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) check() error {
-	if v, ok := fchrruo.mutation.GetType(); ok {
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) check() error {
+	if v, ok := _u.mutation.GetType(); ok {
 		if err := feedbackchathistoriesrecapsreactions.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "FeedbackChatHistoriesRecapsReactions.type": %w`, err)}
 		}
@@ -382,17 +382,17 @@ func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) check() error {
 	return nil
 }
 
-func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) sqlSave(ctx context.Context) (_node *FeedbackChatHistoriesRecapsReactions, err error) {
-	if err := fchrruo.check(); err != nil {
+func (_u *FeedbackChatHistoriesRecapsReactionsUpdateOne) sqlSave(ctx context.Context) (_node *FeedbackChatHistoriesRecapsReactions, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(feedbackchathistoriesrecapsreactions.Table, feedbackchathistoriesrecapsreactions.Columns, sqlgraph.NewFieldSpec(feedbackchathistoriesrecapsreactions.FieldID, field.TypeUUID))
-	id, ok := fchrruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "FeedbackChatHistoriesRecapsReactions.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := fchrruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, feedbackchathistoriesrecapsreactions.FieldID)
 		for _, f := range fields {
@@ -404,46 +404,46 @@ func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) sqlSave(ctx contex
 			}
 		}
 	}
-	if ps := fchrruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := fchrruo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.GetType(); ok {
+	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldType, field.TypeEnum, value)
 	}
-	if value, ok := fchrruo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := fchrruo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(feedbackchathistoriesrecapsreactions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = fchrruo.schemaConfig.FeedbackChatHistoriesRecapsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fchrruo.schemaConfig)
-	_node = &FeedbackChatHistoriesRecapsReactions{config: fchrruo.config}
+	_spec.Node.Schema = _u.schemaConfig.FeedbackChatHistoriesRecapsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &FeedbackChatHistoriesRecapsReactions{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, fchrruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{feedbackchathistoriesrecapsreactions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -451,6 +451,6 @@ func (fchrruo *FeedbackChatHistoriesRecapsReactionsUpdateOne) sqlSave(ctx contex
 		}
 		return nil, err
 	}
-	fchrruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

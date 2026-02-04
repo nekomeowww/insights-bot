@@ -21,89 +21,89 @@ type TelegramChatAutoRecapsSubscribersCreate struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetChatID(i int64) *TelegramChatAutoRecapsSubscribersCreate {
-	tcarsc.mutation.SetChatID(i)
-	return tcarsc
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetChatID(v int64) *TelegramChatAutoRecapsSubscribersCreate {
+	_c.mutation.SetChatID(v)
+	return _c
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetNillableChatID(i *int64) *TelegramChatAutoRecapsSubscribersCreate {
-	if i != nil {
-		tcarsc.SetChatID(*i)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetNillableChatID(v *int64) *TelegramChatAutoRecapsSubscribersCreate {
+	if v != nil {
+		_c.SetChatID(*v)
 	}
-	return tcarsc
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetUserID(i int64) *TelegramChatAutoRecapsSubscribersCreate {
-	tcarsc.mutation.SetUserID(i)
-	return tcarsc
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetUserID(v int64) *TelegramChatAutoRecapsSubscribersCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetNillableUserID(i *int64) *TelegramChatAutoRecapsSubscribersCreate {
-	if i != nil {
-		tcarsc.SetUserID(*i)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetNillableUserID(v *int64) *TelegramChatAutoRecapsSubscribersCreate {
+	if v != nil {
+		_c.SetUserID(*v)
 	}
-	return tcarsc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetCreatedAt(i int64) *TelegramChatAutoRecapsSubscribersCreate {
-	tcarsc.mutation.SetCreatedAt(i)
-	return tcarsc
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetCreatedAt(v int64) *TelegramChatAutoRecapsSubscribersCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetNillableCreatedAt(i *int64) *TelegramChatAutoRecapsSubscribersCreate {
-	if i != nil {
-		tcarsc.SetCreatedAt(*i)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetNillableCreatedAt(v *int64) *TelegramChatAutoRecapsSubscribersCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return tcarsc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetUpdatedAt(i int64) *TelegramChatAutoRecapsSubscribersCreate {
-	tcarsc.mutation.SetUpdatedAt(i)
-	return tcarsc
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetUpdatedAt(v int64) *TelegramChatAutoRecapsSubscribersCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetNillableUpdatedAt(i *int64) *TelegramChatAutoRecapsSubscribersCreate {
-	if i != nil {
-		tcarsc.SetUpdatedAt(*i)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetNillableUpdatedAt(v *int64) *TelegramChatAutoRecapsSubscribersCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return tcarsc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetID(u uuid.UUID) *TelegramChatAutoRecapsSubscribersCreate {
-	tcarsc.mutation.SetID(u)
-	return tcarsc
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetID(v uuid.UUID) *TelegramChatAutoRecapsSubscribersCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SetNillableID(u *uuid.UUID) *TelegramChatAutoRecapsSubscribersCreate {
-	if u != nil {
-		tcarsc.SetID(*u)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SetNillableID(v *uuid.UUID) *TelegramChatAutoRecapsSubscribersCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return tcarsc
+	return _c
 }
 
 // Mutation returns the TelegramChatAutoRecapsSubscribersMutation object of the builder.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
-	return tcarsc.mutation
+func (_c *TelegramChatAutoRecapsSubscribersCreate) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
+	return _c.mutation
 }
 
 // Save creates the TelegramChatAutoRecapsSubscribers in the database.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) Save(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
-	tcarsc.defaults()
-	return withHooks(ctx, tcarsc.sqlSave, tcarsc.mutation, tcarsc.hooks)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) Save(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SaveX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
-	v, err := tcarsc.Save(ctx)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) SaveX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -111,65 +111,65 @@ func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) SaveX(ctx context.Context
 }
 
 // Exec executes the query.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) Exec(ctx context.Context) error {
-	_, err := tcarsc.Save(ctx)
+func (_c *TelegramChatAutoRecapsSubscribersCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) ExecX(ctx context.Context) {
-	if err := tcarsc.Exec(ctx); err != nil {
+func (_c *TelegramChatAutoRecapsSubscribersCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) defaults() {
-	if _, ok := tcarsc.mutation.ChatID(); !ok {
+func (_c *TelegramChatAutoRecapsSubscribersCreate) defaults() {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		v := telegramchatautorecapssubscribers.DefaultChatID
-		tcarsc.mutation.SetChatID(v)
+		_c.mutation.SetChatID(v)
 	}
-	if _, ok := tcarsc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		v := telegramchatautorecapssubscribers.DefaultUserID
-		tcarsc.mutation.SetUserID(v)
+		_c.mutation.SetUserID(v)
 	}
-	if _, ok := tcarsc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := telegramchatautorecapssubscribers.DefaultCreatedAt()
-		tcarsc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := tcarsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := telegramchatautorecapssubscribers.DefaultUpdatedAt()
-		tcarsc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := tcarsc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := telegramchatautorecapssubscribers.DefaultID()
-		tcarsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) check() error {
-	if _, ok := tcarsc.mutation.ChatID(); !ok {
+func (_c *TelegramChatAutoRecapsSubscribersCreate) check() error {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		return &ValidationError{Name: "chat_id", err: errors.New(`ent: missing required field "TelegramChatAutoRecapsSubscribers.chat_id"`)}
 	}
-	if _, ok := tcarsc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "TelegramChatAutoRecapsSubscribers.user_id"`)}
 	}
-	if _, ok := tcarsc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "TelegramChatAutoRecapsSubscribers.created_at"`)}
 	}
-	if _, ok := tcarsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "TelegramChatAutoRecapsSubscribers.updated_at"`)}
 	}
 	return nil
 }
 
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) sqlSave(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
-	if err := tcarsc.check(); err != nil {
+func (_c *TelegramChatAutoRecapsSubscribersCreate) sqlSave(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tcarsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tcarsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -182,34 +182,34 @@ func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) sqlSave(ctx context.Conte
 			return nil, err
 		}
 	}
-	tcarsc.mutation.id = &_node.ID
-	tcarsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tcarsc *TelegramChatAutoRecapsSubscribersCreate) createSpec() (*TelegramChatAutoRecapsSubscribers, *sqlgraph.CreateSpec) {
+func (_c *TelegramChatAutoRecapsSubscribersCreate) createSpec() (*TelegramChatAutoRecapsSubscribers, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TelegramChatAutoRecapsSubscribers{config: tcarsc.config}
+		_node = &TelegramChatAutoRecapsSubscribers{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(telegramchatautorecapssubscribers.Table, sqlgraph.NewFieldSpec(telegramchatautorecapssubscribers.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = tcarsc.schemaConfig.TelegramChatAutoRecapsSubscribers
-	if id, ok := tcarsc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.TelegramChatAutoRecapsSubscribers
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := tcarsc.mutation.ChatID(); ok {
+	if value, ok := _c.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldChatID, field.TypeInt64, value)
 		_node.ChatID = value
 	}
-	if value, ok := tcarsc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
-	if value, ok := tcarsc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := tcarsc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
@@ -224,16 +224,16 @@ type TelegramChatAutoRecapsSubscribersCreateBulk struct {
 }
 
 // Save creates the TelegramChatAutoRecapsSubscribers entities in the database.
-func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Context) ([]*TelegramChatAutoRecapsSubscribers, error) {
-	if tcarscb.err != nil {
-		return nil, tcarscb.err
+func (_c *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Context) ([]*TelegramChatAutoRecapsSubscribers, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tcarscb.builders))
-	nodes := make([]*TelegramChatAutoRecapsSubscribers, len(tcarscb.builders))
-	mutators := make([]Mutator, len(tcarscb.builders))
-	for i := range tcarscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TelegramChatAutoRecapsSubscribers, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tcarscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TelegramChatAutoRecapsSubscribersMutation)
@@ -247,11 +247,11 @@ func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Con
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tcarscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tcarscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -271,7 +271,7 @@ func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Con
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tcarscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -279,8 +279,8 @@ func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Save(ctx context.Con
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) SaveX(ctx context.Context) []*TelegramChatAutoRecapsSubscribers {
-	v, err := tcarscb.Save(ctx)
+func (_c *TelegramChatAutoRecapsSubscribersCreateBulk) SaveX(ctx context.Context) []*TelegramChatAutoRecapsSubscribers {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -288,14 +288,14 @@ func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) SaveX(ctx context.Co
 }
 
 // Exec executes the query.
-func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) Exec(ctx context.Context) error {
-	_, err := tcarscb.Save(ctx)
+func (_c *TelegramChatAutoRecapsSubscribersCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarscb *TelegramChatAutoRecapsSubscribersCreateBulk) ExecX(ctx context.Context) {
-	if err := tcarscb.Exec(ctx); err != nil {
+func (_c *TelegramChatAutoRecapsSubscribersCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

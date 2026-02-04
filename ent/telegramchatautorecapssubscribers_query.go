@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type TelegramChatAutoRecapsSubscribersQuery struct {
 }
 
 // Where adds a new predicate for the TelegramChatAutoRecapsSubscribersQuery builder.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersQuery {
-	tcarsq.predicates = append(tcarsq.predicates, ps...)
-	return tcarsq
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Limit(limit int) *TelegramChatAutoRecapsSubscribersQuery {
-	tcarsq.ctx.Limit = &limit
-	return tcarsq
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Limit(limit int) *TelegramChatAutoRecapsSubscribersQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Offset(offset int) *TelegramChatAutoRecapsSubscribersQuery {
-	tcarsq.ctx.Offset = &offset
-	return tcarsq
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Offset(offset int) *TelegramChatAutoRecapsSubscribersQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Unique(unique bool) *TelegramChatAutoRecapsSubscribersQuery {
-	tcarsq.ctx.Unique = &unique
-	return tcarsq
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Unique(unique bool) *TelegramChatAutoRecapsSubscribersQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Order(o ...telegramchatautorecapssubscribers.OrderOption) *TelegramChatAutoRecapsSubscribersQuery {
-	tcarsq.order = append(tcarsq.order, o...)
-	return tcarsq
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Order(o ...telegramchatautorecapssubscribers.OrderOption) *TelegramChatAutoRecapsSubscribersQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TelegramChatAutoRecapsSubscribers entity from the query.
 // Returns a *NotFoundError when no TelegramChatAutoRecapsSubscribers was found.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) First(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
-	nodes, err := tcarsq.Limit(1).All(setContextOp(ctx, tcarsq.ctx, "First"))
+func (_q *TelegramChatAutoRecapsSubscribersQuery) First(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) First(ctx context.Context)
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
-	node, err := tcarsq.First(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) FirstX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstX(ctx context.Context
 
 // FirstID returns the first TelegramChatAutoRecapsSubscribers ID from the query.
 // Returns a *NotFoundError when no TelegramChatAutoRecapsSubscribers ID was found.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcarsq.Limit(1).IDs(setContextOp(ctx, tcarsq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstID(ctx context.Contex
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := tcarsq.FirstID(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) FirstIDX(ctx context.Conte
 // Only returns a single TelegramChatAutoRecapsSubscribers entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TelegramChatAutoRecapsSubscribers entity is found.
 // Returns a *NotFoundError when no TelegramChatAutoRecapsSubscribers entities are found.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Only(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
-	nodes, err := tcarsq.Limit(2).All(setContextOp(ctx, tcarsq.ctx, "Only"))
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Only(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Only(ctx context.Context) 
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
-	node, err := tcarsq.Only(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) OnlyX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyX(ctx context.Context)
 // OnlyID is like Only, but returns the only TelegramChatAutoRecapsSubscribers ID in the query.
 // Returns a *NotSingularError when more than one TelegramChatAutoRecapsSubscribers ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcarsq.Limit(2).IDs(setContextOp(ctx, tcarsq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyID(ctx context.Context
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := tcarsq.OnlyID(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) OnlyIDX(ctx context.Contex
 }
 
 // All executes the query and returns a list of TelegramChatAutoRecapsSubscribersSlice.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) All(ctx context.Context) ([]*TelegramChatAutoRecapsSubscribers, error) {
-	ctx = setContextOp(ctx, tcarsq.ctx, "All")
-	if err := tcarsq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) All(ctx context.Context) ([]*TelegramChatAutoRecapsSubscribers, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TelegramChatAutoRecapsSubscribers, *TelegramChatAutoRecapsSubscribersQuery]()
-	return withInterceptors[[]*TelegramChatAutoRecapsSubscribers](ctx, tcarsq, qr, tcarsq.inters)
+	return withInterceptors[[]*TelegramChatAutoRecapsSubscribers](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) AllX(ctx context.Context) []*TelegramChatAutoRecapsSubscribers {
-	nodes, err := tcarsq.All(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) AllX(ctx context.Context) []*TelegramChatAutoRecapsSubscribers {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) AllX(ctx context.Context) 
 }
 
 // IDs executes the query and returns a list of TelegramChatAutoRecapsSubscribers IDs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if tcarsq.ctx.Unique == nil && tcarsq.path != nil {
-		tcarsq.Unique(true)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tcarsq.ctx, "IDs")
-	if err = tcarsq.Select(telegramchatautorecapssubscribers.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(telegramchatautorecapssubscribers.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := tcarsq.IDs(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) IDsX(ctx context.Context) 
 }
 
 // Count returns the count of the given query.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tcarsq.ctx, "Count")
-	if err := tcarsq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tcarsq, querierCount[*TelegramChatAutoRecapsSubscribersQuery](), tcarsq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TelegramChatAutoRecapsSubscribersQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) CountX(ctx context.Context) int {
-	count, err := tcarsq.Count(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) CountX(ctx context.Context
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tcarsq.ctx, "Exist")
-	switch _, err := tcarsq.FirstID(ctx); {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Exist(ctx context.Context)
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) ExistX(ctx context.Context) bool {
-	exist, err := tcarsq.Exist(ctx)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) ExistX(ctx context.Context
 
 // Clone returns a duplicate of the TelegramChatAutoRecapsSubscribersQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Clone() *TelegramChatAutoRecapsSubscribersQuery {
-	if tcarsq == nil {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Clone() *TelegramChatAutoRecapsSubscribersQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TelegramChatAutoRecapsSubscribersQuery{
-		config:     tcarsq.config,
-		ctx:        tcarsq.ctx.Clone(),
-		order:      append([]telegramchatautorecapssubscribers.OrderOption{}, tcarsq.order...),
-		inters:     append([]Interceptor{}, tcarsq.inters...),
-		predicates: append([]predicate.TelegramChatAutoRecapsSubscribers{}, tcarsq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]telegramchatautorecapssubscribers.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TelegramChatAutoRecapsSubscribers{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  tcarsq.sql.Clone(),
-		path: tcarsq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Clone() *TelegramChatAutoR
 //		GroupBy(telegramchatautorecapssubscribers.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) GroupBy(field string, fields ...string) *TelegramChatAutoRecapsSubscribersGroupBy {
-	tcarsq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TelegramChatAutoRecapsSubscribersGroupBy{build: tcarsq}
-	grbuild.flds = &tcarsq.ctx.Fields
+func (_q *TelegramChatAutoRecapsSubscribersQuery) GroupBy(field string, fields ...string) *TelegramChatAutoRecapsSubscribersGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TelegramChatAutoRecapsSubscribersGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = telegramchatautorecapssubscribers.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) GroupBy(field string, fiel
 //	client.TelegramChatAutoRecapsSubscribers.Query().
 //		Select(telegramchatautorecapssubscribers.FieldChatID).
 //		Scan(ctx, &v)
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Select(fields ...string) *TelegramChatAutoRecapsSubscribersSelect {
-	tcarsq.ctx.Fields = append(tcarsq.ctx.Fields, fields...)
-	sbuild := &TelegramChatAutoRecapsSubscribersSelect{TelegramChatAutoRecapsSubscribersQuery: tcarsq}
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Select(fields ...string) *TelegramChatAutoRecapsSubscribersSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TelegramChatAutoRecapsSubscribersSelect{TelegramChatAutoRecapsSubscribersQuery: _q}
 	sbuild.label = telegramchatautorecapssubscribers.Label
-	sbuild.flds, sbuild.scan = &tcarsq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TelegramChatAutoRecapsSubscribersSelect configured with the given aggregations.
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersSelect {
-	return tcarsq.Select().Aggregate(fns...)
+func (_q *TelegramChatAutoRecapsSubscribersQuery) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tcarsq.inters {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tcarsq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tcarsq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !telegramchatautorecapssubscribers.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if tcarsq.path != nil {
-		prev, err := tcarsq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tcarsq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatAutoRecapsSubscribers, error) {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatAutoRecapsSubscribers, error) {
 	var (
 		nodes = []*TelegramChatAutoRecapsSubscribers{}
-		_spec = tcarsq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TelegramChatAutoRecapsSubscribers).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TelegramChatAutoRecapsSubscribers{config: tcarsq.config}
+		node := &TelegramChatAutoRecapsSubscribers{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tcarsq.schemaConfig.TelegramChatAutoRecapsSubscribers
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatAutoRecapsSubscribers
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tcarsq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) sqlAll(ctx context.Context
 	return nodes, nil
 }
 
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tcarsq.querySpec()
-	_spec.Node.Schema = tcarsq.schemaConfig.TelegramChatAutoRecapsSubscribers
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsq.schemaConfig)
-	_spec.Node.Columns = tcarsq.ctx.Fields
-	if len(tcarsq.ctx.Fields) > 0 {
-		_spec.Unique = tcarsq.ctx.Unique != nil && *tcarsq.ctx.Unique
+func (_q *TelegramChatAutoRecapsSubscribersQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatAutoRecapsSubscribers
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tcarsq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TelegramChatAutoRecapsSubscribersQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(telegramchatautorecapssubscribers.Table, telegramchatautorecapssubscribers.Columns, sqlgraph.NewFieldSpec(telegramchatautorecapssubscribers.FieldID, field.TypeUUID))
-	_spec.From = tcarsq.sql
-	if unique := tcarsq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tcarsq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tcarsq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatautorecapssubscribers.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) querySpec() *sqlgraph.Quer
 			}
 		}
 	}
-	if ps := tcarsq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tcarsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tcarsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tcarsq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) querySpec() *sqlgraph.Quer
 	return _spec
 }
 
-func (tcarsq *TelegramChatAutoRecapsSubscribersQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tcarsq.driver.Dialect())
+func (_q *TelegramChatAutoRecapsSubscribersQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(telegramchatautorecapssubscribers.Table)
-	columns := tcarsq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = telegramchatautorecapssubscribers.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tcarsq.sql != nil {
-		selector = tcarsq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tcarsq.ctx.Unique != nil && *tcarsq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tcarsq.schemaConfig.TelegramChatAutoRecapsSubscribers)
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TelegramChatAutoRecapsSubscribers)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range tcarsq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tcarsq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tcarsq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tcarsq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type TelegramChatAutoRecapsSubscribersGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tcarsgb *TelegramChatAutoRecapsSubscribersGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersGroupBy {
-	tcarsgb.fns = append(tcarsgb.fns, fns...)
-	return tcarsgb
+func (_g *TelegramChatAutoRecapsSubscribersGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcarsgb *TelegramChatAutoRecapsSubscribersGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcarsgb.build.ctx, "GroupBy")
-	if err := tcarsgb.build.prepareQuery(ctx); err != nil {
+func (_g *TelegramChatAutoRecapsSubscribersGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatAutoRecapsSubscribersQuery, *TelegramChatAutoRecapsSubscribersGroupBy](ctx, tcarsgb.build, tcarsgb, tcarsgb.build.inters, v)
+	return scanWithInterceptors[*TelegramChatAutoRecapsSubscribersQuery, *TelegramChatAutoRecapsSubscribersGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tcarsgb *TelegramChatAutoRecapsSubscribersGroupBy) sqlScan(ctx context.Context, root *TelegramChatAutoRecapsSubscribersQuery, v any) error {
+func (_g *TelegramChatAutoRecapsSubscribersGroupBy) sqlScan(ctx context.Context, root *TelegramChatAutoRecapsSubscribersQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tcarsgb.fns))
-	for _, fn := range tcarsgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tcarsgb.flds)+len(tcarsgb.fns))
-		for _, f := range *tcarsgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tcarsgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcarsgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type TelegramChatAutoRecapsSubscribersSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tcarss *TelegramChatAutoRecapsSubscribersSelect) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersSelect {
-	tcarss.fns = append(tcarss.fns, fns...)
-	return tcarss
+func (_s *TelegramChatAutoRecapsSubscribersSelect) Aggregate(fns ...AggregateFunc) *TelegramChatAutoRecapsSubscribersSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcarss *TelegramChatAutoRecapsSubscribersSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcarss.ctx, "Select")
-	if err := tcarss.prepareQuery(ctx); err != nil {
+func (_s *TelegramChatAutoRecapsSubscribersSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatAutoRecapsSubscribersQuery, *TelegramChatAutoRecapsSubscribersSelect](ctx, tcarss.TelegramChatAutoRecapsSubscribersQuery, tcarss, tcarss.inters, v)
+	return scanWithInterceptors[*TelegramChatAutoRecapsSubscribersQuery, *TelegramChatAutoRecapsSubscribersSelect](ctx, _s.TelegramChatAutoRecapsSubscribersQuery, _s, _s.inters, v)
 }
 
-func (tcarss *TelegramChatAutoRecapsSubscribersSelect) sqlScan(ctx context.Context, root *TelegramChatAutoRecapsSubscribersQuery, v any) error {
+func (_s *TelegramChatAutoRecapsSubscribersSelect) sqlScan(ctx context.Context, root *TelegramChatAutoRecapsSubscribersQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tcarss.fns))
-	for _, fn := range tcarss.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tcarss.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (tcarss *TelegramChatAutoRecapsSubscribersSelect) sqlScan(ctx context.Conte
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcarss.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

@@ -21,58 +21,58 @@ type LogSummarizationsDelete struct {
 }
 
 // Where appends a list predicates to the LogSummarizationsDelete builder.
-func (lsd *LogSummarizationsDelete) Where(ps ...predicate.LogSummarizations) *LogSummarizationsDelete {
-	lsd.mutation.Where(ps...)
-	return lsd
+func (_d *LogSummarizationsDelete) Where(ps ...predicate.LogSummarizations) *LogSummarizationsDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (lsd *LogSummarizationsDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, lsd.sqlExec, lsd.mutation, lsd.hooks)
+func (_d *LogSummarizationsDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lsd *LogSummarizationsDelete) ExecX(ctx context.Context) int {
-	n, err := lsd.Exec(ctx)
+func (_d *LogSummarizationsDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (lsd *LogSummarizationsDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *LogSummarizationsDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(logsummarizations.Table, sqlgraph.NewFieldSpec(logsummarizations.FieldID, field.TypeUUID))
-	_spec.Node.Schema = lsd.schemaConfig.LogSummarizations
-	ctx = internal.NewSchemaConfigContext(ctx, lsd.schemaConfig)
-	if ps := lsd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.LogSummarizations
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, lsd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	lsd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // LogSummarizationsDeleteOne is the builder for deleting a single LogSummarizations entity.
 type LogSummarizationsDeleteOne struct {
-	lsd *LogSummarizationsDelete
+	_d *LogSummarizationsDelete
 }
 
 // Where appends a list predicates to the LogSummarizationsDelete builder.
-func (lsdo *LogSummarizationsDeleteOne) Where(ps ...predicate.LogSummarizations) *LogSummarizationsDeleteOne {
-	lsdo.lsd.mutation.Where(ps...)
-	return lsdo
+func (_d *LogSummarizationsDeleteOne) Where(ps ...predicate.LogSummarizations) *LogSummarizationsDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (lsdo *LogSummarizationsDeleteOne) Exec(ctx context.Context) error {
-	n, err := lsdo.lsd.Exec(ctx)
+func (_d *LogSummarizationsDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (lsdo *LogSummarizationsDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lsdo *LogSummarizationsDeleteOne) ExecX(ctx context.Context) {
-	if err := lsdo.Exec(ctx); err != nil {
+func (_d *LogSummarizationsDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

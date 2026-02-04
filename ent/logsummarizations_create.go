@@ -21,201 +21,201 @@ type LogSummarizationsCreate struct {
 }
 
 // SetContentURL sets the "content_url" field.
-func (lsc *LogSummarizationsCreate) SetContentURL(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetContentURL(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetContentURL(v string) *LogSummarizationsCreate {
+	_c.mutation.SetContentURL(v)
+	return _c
 }
 
 // SetNillableContentURL sets the "content_url" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableContentURL(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetContentURL(*s)
+func (_c *LogSummarizationsCreate) SetNillableContentURL(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetContentURL(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetContentTitle sets the "content_title" field.
-func (lsc *LogSummarizationsCreate) SetContentTitle(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetContentTitle(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetContentTitle(v string) *LogSummarizationsCreate {
+	_c.mutation.SetContentTitle(v)
+	return _c
 }
 
 // SetNillableContentTitle sets the "content_title" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableContentTitle(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetContentTitle(*s)
+func (_c *LogSummarizationsCreate) SetNillableContentTitle(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetContentTitle(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetContentAuthor sets the "content_author" field.
-func (lsc *LogSummarizationsCreate) SetContentAuthor(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetContentAuthor(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetContentAuthor(v string) *LogSummarizationsCreate {
+	_c.mutation.SetContentAuthor(v)
+	return _c
 }
 
 // SetNillableContentAuthor sets the "content_author" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableContentAuthor(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetContentAuthor(*s)
+func (_c *LogSummarizationsCreate) SetNillableContentAuthor(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetContentAuthor(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetContentText sets the "content_text" field.
-func (lsc *LogSummarizationsCreate) SetContentText(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetContentText(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetContentText(v string) *LogSummarizationsCreate {
+	_c.mutation.SetContentText(v)
+	return _c
 }
 
 // SetNillableContentText sets the "content_text" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableContentText(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetContentText(*s)
+func (_c *LogSummarizationsCreate) SetNillableContentText(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetContentText(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetContentSummarizedOutputs sets the "content_summarized_outputs" field.
-func (lsc *LogSummarizationsCreate) SetContentSummarizedOutputs(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetContentSummarizedOutputs(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetContentSummarizedOutputs(v string) *LogSummarizationsCreate {
+	_c.mutation.SetContentSummarizedOutputs(v)
+	return _c
 }
 
 // SetNillableContentSummarizedOutputs sets the "content_summarized_outputs" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableContentSummarizedOutputs(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetContentSummarizedOutputs(*s)
+func (_c *LogSummarizationsCreate) SetNillableContentSummarizedOutputs(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetContentSummarizedOutputs(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lsc *LogSummarizationsCreate) SetFromPlatform(i int) *LogSummarizationsCreate {
-	lsc.mutation.SetFromPlatform(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetFromPlatform(v int) *LogSummarizationsCreate {
+	_c.mutation.SetFromPlatform(v)
+	return _c
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableFromPlatform(i *int) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetFromPlatform(*i)
+func (_c *LogSummarizationsCreate) SetNillableFromPlatform(v *int) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetFromPlatform(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lsc *LogSummarizationsCreate) SetPromptTokenUsage(i int) *LogSummarizationsCreate {
-	lsc.mutation.SetPromptTokenUsage(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetPromptTokenUsage(v int) *LogSummarizationsCreate {
+	_c.mutation.SetPromptTokenUsage(v)
+	return _c
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillablePromptTokenUsage(i *int) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetPromptTokenUsage(*i)
+func (_c *LogSummarizationsCreate) SetNillablePromptTokenUsage(v *int) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetPromptTokenUsage(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lsc *LogSummarizationsCreate) SetCompletionTokenUsage(i int) *LogSummarizationsCreate {
-	lsc.mutation.SetCompletionTokenUsage(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetCompletionTokenUsage(v int) *LogSummarizationsCreate {
+	_c.mutation.SetCompletionTokenUsage(v)
+	return _c
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableCompletionTokenUsage(i *int) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetCompletionTokenUsage(*i)
+func (_c *LogSummarizationsCreate) SetNillableCompletionTokenUsage(v *int) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetCompletionTokenUsage(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lsc *LogSummarizationsCreate) SetTotalTokenUsage(i int) *LogSummarizationsCreate {
-	lsc.mutation.SetTotalTokenUsage(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetTotalTokenUsage(v int) *LogSummarizationsCreate {
+	_c.mutation.SetTotalTokenUsage(v)
+	return _c
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableTotalTokenUsage(i *int) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetTotalTokenUsage(*i)
+func (_c *LogSummarizationsCreate) SetNillableTotalTokenUsage(v *int) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetTotalTokenUsage(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetModelName sets the "model_name" field.
-func (lsc *LogSummarizationsCreate) SetModelName(s string) *LogSummarizationsCreate {
-	lsc.mutation.SetModelName(s)
-	return lsc
+func (_c *LogSummarizationsCreate) SetModelName(v string) *LogSummarizationsCreate {
+	_c.mutation.SetModelName(v)
+	return _c
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableModelName(s *string) *LogSummarizationsCreate {
-	if s != nil {
-		lsc.SetModelName(*s)
+func (_c *LogSummarizationsCreate) SetNillableModelName(v *string) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetModelName(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lsc *LogSummarizationsCreate) SetCreatedAt(i int64) *LogSummarizationsCreate {
-	lsc.mutation.SetCreatedAt(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetCreatedAt(v int64) *LogSummarizationsCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableCreatedAt(i *int64) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetCreatedAt(*i)
+func (_c *LogSummarizationsCreate) SetNillableCreatedAt(v *int64) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lsc *LogSummarizationsCreate) SetUpdatedAt(i int64) *LogSummarizationsCreate {
-	lsc.mutation.SetUpdatedAt(i)
-	return lsc
+func (_c *LogSummarizationsCreate) SetUpdatedAt(v int64) *LogSummarizationsCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableUpdatedAt(i *int64) *LogSummarizationsCreate {
-	if i != nil {
-		lsc.SetUpdatedAt(*i)
+func (_c *LogSummarizationsCreate) SetNillableUpdatedAt(v *int64) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return lsc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (lsc *LogSummarizationsCreate) SetID(u uuid.UUID) *LogSummarizationsCreate {
-	lsc.mutation.SetID(u)
-	return lsc
+func (_c *LogSummarizationsCreate) SetID(v uuid.UUID) *LogSummarizationsCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (lsc *LogSummarizationsCreate) SetNillableID(u *uuid.UUID) *LogSummarizationsCreate {
-	if u != nil {
-		lsc.SetID(*u)
+func (_c *LogSummarizationsCreate) SetNillableID(v *uuid.UUID) *LogSummarizationsCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return lsc
+	return _c
 }
 
 // Mutation returns the LogSummarizationsMutation object of the builder.
-func (lsc *LogSummarizationsCreate) Mutation() *LogSummarizationsMutation {
-	return lsc.mutation
+func (_c *LogSummarizationsCreate) Mutation() *LogSummarizationsMutation {
+	return _c.mutation
 }
 
 // Save creates the LogSummarizations in the database.
-func (lsc *LogSummarizationsCreate) Save(ctx context.Context) (*LogSummarizations, error) {
-	lsc.defaults()
-	return withHooks(ctx, lsc.sqlSave, lsc.mutation, lsc.hooks)
+func (_c *LogSummarizationsCreate) Save(ctx context.Context) (*LogSummarizations, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (lsc *LogSummarizationsCreate) SaveX(ctx context.Context) *LogSummarizations {
-	v, err := lsc.Save(ctx)
+func (_c *LogSummarizationsCreate) SaveX(ctx context.Context) *LogSummarizations {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -223,121 +223,121 @@ func (lsc *LogSummarizationsCreate) SaveX(ctx context.Context) *LogSummarization
 }
 
 // Exec executes the query.
-func (lsc *LogSummarizationsCreate) Exec(ctx context.Context) error {
-	_, err := lsc.Save(ctx)
+func (_c *LogSummarizationsCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lsc *LogSummarizationsCreate) ExecX(ctx context.Context) {
-	if err := lsc.Exec(ctx); err != nil {
+func (_c *LogSummarizationsCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (lsc *LogSummarizationsCreate) defaults() {
-	if _, ok := lsc.mutation.ContentURL(); !ok {
+func (_c *LogSummarizationsCreate) defaults() {
+	if _, ok := _c.mutation.ContentURL(); !ok {
 		v := logsummarizations.DefaultContentURL
-		lsc.mutation.SetContentURL(v)
+		_c.mutation.SetContentURL(v)
 	}
-	if _, ok := lsc.mutation.ContentTitle(); !ok {
+	if _, ok := _c.mutation.ContentTitle(); !ok {
 		v := logsummarizations.DefaultContentTitle
-		lsc.mutation.SetContentTitle(v)
+		_c.mutation.SetContentTitle(v)
 	}
-	if _, ok := lsc.mutation.ContentAuthor(); !ok {
+	if _, ok := _c.mutation.ContentAuthor(); !ok {
 		v := logsummarizations.DefaultContentAuthor
-		lsc.mutation.SetContentAuthor(v)
+		_c.mutation.SetContentAuthor(v)
 	}
-	if _, ok := lsc.mutation.ContentText(); !ok {
+	if _, ok := _c.mutation.ContentText(); !ok {
 		v := logsummarizations.DefaultContentText
-		lsc.mutation.SetContentText(v)
+		_c.mutation.SetContentText(v)
 	}
-	if _, ok := lsc.mutation.ContentSummarizedOutputs(); !ok {
+	if _, ok := _c.mutation.ContentSummarizedOutputs(); !ok {
 		v := logsummarizations.DefaultContentSummarizedOutputs
-		lsc.mutation.SetContentSummarizedOutputs(v)
+		_c.mutation.SetContentSummarizedOutputs(v)
 	}
-	if _, ok := lsc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		v := logsummarizations.DefaultFromPlatform
-		lsc.mutation.SetFromPlatform(v)
+		_c.mutation.SetFromPlatform(v)
 	}
-	if _, ok := lsc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		v := logsummarizations.DefaultPromptTokenUsage
-		lsc.mutation.SetPromptTokenUsage(v)
+		_c.mutation.SetPromptTokenUsage(v)
 	}
-	if _, ok := lsc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		v := logsummarizations.DefaultCompletionTokenUsage
-		lsc.mutation.SetCompletionTokenUsage(v)
+		_c.mutation.SetCompletionTokenUsage(v)
 	}
-	if _, ok := lsc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		v := logsummarizations.DefaultTotalTokenUsage
-		lsc.mutation.SetTotalTokenUsage(v)
+		_c.mutation.SetTotalTokenUsage(v)
 	}
-	if _, ok := lsc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		v := logsummarizations.DefaultModelName
-		lsc.mutation.SetModelName(v)
+		_c.mutation.SetModelName(v)
 	}
-	if _, ok := lsc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := logsummarizations.DefaultCreatedAt()
-		lsc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := lsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := logsummarizations.DefaultUpdatedAt()
-		lsc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := lsc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := logsummarizations.DefaultID()
-		lsc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (lsc *LogSummarizationsCreate) check() error {
-	if _, ok := lsc.mutation.ContentURL(); !ok {
+func (_c *LogSummarizationsCreate) check() error {
+	if _, ok := _c.mutation.ContentURL(); !ok {
 		return &ValidationError{Name: "content_url", err: errors.New(`ent: missing required field "LogSummarizations.content_url"`)}
 	}
-	if _, ok := lsc.mutation.ContentTitle(); !ok {
+	if _, ok := _c.mutation.ContentTitle(); !ok {
 		return &ValidationError{Name: "content_title", err: errors.New(`ent: missing required field "LogSummarizations.content_title"`)}
 	}
-	if _, ok := lsc.mutation.ContentAuthor(); !ok {
+	if _, ok := _c.mutation.ContentAuthor(); !ok {
 		return &ValidationError{Name: "content_author", err: errors.New(`ent: missing required field "LogSummarizations.content_author"`)}
 	}
-	if _, ok := lsc.mutation.ContentText(); !ok {
+	if _, ok := _c.mutation.ContentText(); !ok {
 		return &ValidationError{Name: "content_text", err: errors.New(`ent: missing required field "LogSummarizations.content_text"`)}
 	}
-	if _, ok := lsc.mutation.ContentSummarizedOutputs(); !ok {
+	if _, ok := _c.mutation.ContentSummarizedOutputs(); !ok {
 		return &ValidationError{Name: "content_summarized_outputs", err: errors.New(`ent: missing required field "LogSummarizations.content_summarized_outputs"`)}
 	}
-	if _, ok := lsc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "LogSummarizations.from_platform"`)}
 	}
-	if _, ok := lsc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		return &ValidationError{Name: "prompt_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.prompt_token_usage"`)}
 	}
-	if _, ok := lsc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		return &ValidationError{Name: "completion_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.completion_token_usage"`)}
 	}
-	if _, ok := lsc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogSummarizations.total_token_usage"`)}
 	}
-	if _, ok := lsc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "LogSummarizations.model_name"`)}
 	}
-	if _, ok := lsc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogSummarizations.created_at"`)}
 	}
-	if _, ok := lsc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "LogSummarizations.updated_at"`)}
 	}
 	return nil
 }
 
-func (lsc *LogSummarizationsCreate) sqlSave(ctx context.Context) (*LogSummarizations, error) {
-	if err := lsc.check(); err != nil {
+func (_c *LogSummarizationsCreate) sqlSave(ctx context.Context) (*LogSummarizations, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := lsc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, lsc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -350,66 +350,66 @@ func (lsc *LogSummarizationsCreate) sqlSave(ctx context.Context) (*LogSummarizat
 			return nil, err
 		}
 	}
-	lsc.mutation.id = &_node.ID
-	lsc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (lsc *LogSummarizationsCreate) createSpec() (*LogSummarizations, *sqlgraph.CreateSpec) {
+func (_c *LogSummarizationsCreate) createSpec() (*LogSummarizations, *sqlgraph.CreateSpec) {
 	var (
-		_node = &LogSummarizations{config: lsc.config}
+		_node = &LogSummarizations{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(logsummarizations.Table, sqlgraph.NewFieldSpec(logsummarizations.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = lsc.schemaConfig.LogSummarizations
-	if id, ok := lsc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.LogSummarizations
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := lsc.mutation.ContentURL(); ok {
+	if value, ok := _c.mutation.ContentURL(); ok {
 		_spec.SetField(logsummarizations.FieldContentURL, field.TypeString, value)
 		_node.ContentURL = value
 	}
-	if value, ok := lsc.mutation.ContentTitle(); ok {
+	if value, ok := _c.mutation.ContentTitle(); ok {
 		_spec.SetField(logsummarizations.FieldContentTitle, field.TypeString, value)
 		_node.ContentTitle = value
 	}
-	if value, ok := lsc.mutation.ContentAuthor(); ok {
+	if value, ok := _c.mutation.ContentAuthor(); ok {
 		_spec.SetField(logsummarizations.FieldContentAuthor, field.TypeString, value)
 		_node.ContentAuthor = value
 	}
-	if value, ok := lsc.mutation.ContentText(); ok {
+	if value, ok := _c.mutation.ContentText(); ok {
 		_spec.SetField(logsummarizations.FieldContentText, field.TypeString, value)
 		_node.ContentText = value
 	}
-	if value, ok := lsc.mutation.ContentSummarizedOutputs(); ok {
+	if value, ok := _c.mutation.ContentSummarizedOutputs(); ok {
 		_spec.SetField(logsummarizations.FieldContentSummarizedOutputs, field.TypeString, value)
 		_node.ContentSummarizedOutputs = value
 	}
-	if value, ok := lsc.mutation.FromPlatform(); ok {
+	if value, ok := _c.mutation.FromPlatform(); ok {
 		_spec.SetField(logsummarizations.FieldFromPlatform, field.TypeInt, value)
 		_node.FromPlatform = value
 	}
-	if value, ok := lsc.mutation.PromptTokenUsage(); ok {
+	if value, ok := _c.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldPromptTokenUsage, field.TypeInt, value)
 		_node.PromptTokenUsage = value
 	}
-	if value, ok := lsc.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _c.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldCompletionTokenUsage, field.TypeInt, value)
 		_node.CompletionTokenUsage = value
 	}
-	if value, ok := lsc.mutation.TotalTokenUsage(); ok {
+	if value, ok := _c.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logsummarizations.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
 	}
-	if value, ok := lsc.mutation.ModelName(); ok {
+	if value, ok := _c.mutation.ModelName(); ok {
 		_spec.SetField(logsummarizations.FieldModelName, field.TypeString, value)
 		_node.ModelName = value
 	}
-	if value, ok := lsc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := lsc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(logsummarizations.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
@@ -424,16 +424,16 @@ type LogSummarizationsCreateBulk struct {
 }
 
 // Save creates the LogSummarizations entities in the database.
-func (lscb *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummarizations, error) {
-	if lscb.err != nil {
-		return nil, lscb.err
+func (_c *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummarizations, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(lscb.builders))
-	nodes := make([]*LogSummarizations, len(lscb.builders))
-	mutators := make([]Mutator, len(lscb.builders))
-	for i := range lscb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*LogSummarizations, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := lscb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*LogSummarizationsMutation)
@@ -447,11 +447,11 @@ func (lscb *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummar
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, lscb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, lscb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -471,7 +471,7 @@ func (lscb *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummar
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, lscb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -479,8 +479,8 @@ func (lscb *LogSummarizationsCreateBulk) Save(ctx context.Context) ([]*LogSummar
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lscb *LogSummarizationsCreateBulk) SaveX(ctx context.Context) []*LogSummarizations {
-	v, err := lscb.Save(ctx)
+func (_c *LogSummarizationsCreateBulk) SaveX(ctx context.Context) []*LogSummarizations {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -488,14 +488,14 @@ func (lscb *LogSummarizationsCreateBulk) SaveX(ctx context.Context) []*LogSummar
 }
 
 // Exec executes the query.
-func (lscb *LogSummarizationsCreateBulk) Exec(ctx context.Context) error {
-	_, err := lscb.Save(ctx)
+func (_c *LogSummarizationsCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lscb *LogSummarizationsCreateBulk) ExecX(ctx context.Context) {
-	if err := lscb.Exec(ctx); err != nil {
+func (_c *LogSummarizationsCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

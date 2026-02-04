@@ -23,94 +23,94 @@ type SlackOAuthCredentialsUpdate struct {
 }
 
 // Where appends a list predicates to the SlackOAuthCredentialsUpdate builder.
-func (socu *SlackOAuthCredentialsUpdate) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsUpdate {
-	socu.mutation.Where(ps...)
-	return socu
+func (_u *SlackOAuthCredentialsUpdate) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (socu *SlackOAuthCredentialsUpdate) SetRefreshToken(s string) *SlackOAuthCredentialsUpdate {
-	socu.mutation.SetRefreshToken(s)
-	return socu
+func (_u *SlackOAuthCredentialsUpdate) SetRefreshToken(v string) *SlackOAuthCredentialsUpdate {
+	_u.mutation.SetRefreshToken(v)
+	return _u
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (socu *SlackOAuthCredentialsUpdate) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdate {
-	if s != nil {
-		socu.SetRefreshToken(*s)
+func (_u *SlackOAuthCredentialsUpdate) SetNillableRefreshToken(v *string) *SlackOAuthCredentialsUpdate {
+	if v != nil {
+		_u.SetRefreshToken(*v)
 	}
-	return socu
+	return _u
 }
 
 // SetAccessToken sets the "access_token" field.
-func (socu *SlackOAuthCredentialsUpdate) SetAccessToken(s string) *SlackOAuthCredentialsUpdate {
-	socu.mutation.SetAccessToken(s)
-	return socu
+func (_u *SlackOAuthCredentialsUpdate) SetAccessToken(v string) *SlackOAuthCredentialsUpdate {
+	_u.mutation.SetAccessToken(v)
+	return _u
 }
 
 // SetNillableAccessToken sets the "access_token" field if the given value is not nil.
-func (socu *SlackOAuthCredentialsUpdate) SetNillableAccessToken(s *string) *SlackOAuthCredentialsUpdate {
-	if s != nil {
-		socu.SetAccessToken(*s)
+func (_u *SlackOAuthCredentialsUpdate) SetNillableAccessToken(v *string) *SlackOAuthCredentialsUpdate {
+	if v != nil {
+		_u.SetAccessToken(*v)
 	}
-	return socu
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (socu *SlackOAuthCredentialsUpdate) SetCreatedAt(i int64) *SlackOAuthCredentialsUpdate {
-	socu.mutation.ResetCreatedAt()
-	socu.mutation.SetCreatedAt(i)
-	return socu
+func (_u *SlackOAuthCredentialsUpdate) SetCreatedAt(v int64) *SlackOAuthCredentialsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (socu *SlackOAuthCredentialsUpdate) SetNillableCreatedAt(i *int64) *SlackOAuthCredentialsUpdate {
-	if i != nil {
-		socu.SetCreatedAt(*i)
+func (_u *SlackOAuthCredentialsUpdate) SetNillableCreatedAt(v *int64) *SlackOAuthCredentialsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return socu
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (socu *SlackOAuthCredentialsUpdate) AddCreatedAt(i int64) *SlackOAuthCredentialsUpdate {
-	socu.mutation.AddCreatedAt(i)
-	return socu
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *SlackOAuthCredentialsUpdate) AddCreatedAt(v int64) *SlackOAuthCredentialsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (socu *SlackOAuthCredentialsUpdate) SetUpdatedAt(i int64) *SlackOAuthCredentialsUpdate {
-	socu.mutation.ResetUpdatedAt()
-	socu.mutation.SetUpdatedAt(i)
-	return socu
+func (_u *SlackOAuthCredentialsUpdate) SetUpdatedAt(v int64) *SlackOAuthCredentialsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (socu *SlackOAuthCredentialsUpdate) SetNillableUpdatedAt(i *int64) *SlackOAuthCredentialsUpdate {
-	if i != nil {
-		socu.SetUpdatedAt(*i)
+func (_u *SlackOAuthCredentialsUpdate) SetNillableUpdatedAt(v *int64) *SlackOAuthCredentialsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return socu
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (socu *SlackOAuthCredentialsUpdate) AddUpdatedAt(i int64) *SlackOAuthCredentialsUpdate {
-	socu.mutation.AddUpdatedAt(i)
-	return socu
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *SlackOAuthCredentialsUpdate) AddUpdatedAt(v int64) *SlackOAuthCredentialsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the SlackOAuthCredentialsMutation object of the builder.
-func (socu *SlackOAuthCredentialsUpdate) Mutation() *SlackOAuthCredentialsMutation {
-	return socu.mutation
+func (_u *SlackOAuthCredentialsUpdate) Mutation() *SlackOAuthCredentialsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (socu *SlackOAuthCredentialsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, socu.sqlSave, socu.mutation, socu.hooks)
+func (_u *SlackOAuthCredentialsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (socu *SlackOAuthCredentialsUpdate) SaveX(ctx context.Context) int {
-	affected, err := socu.Save(ctx)
+func (_u *SlackOAuthCredentialsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -118,21 +118,21 @@ func (socu *SlackOAuthCredentialsUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (socu *SlackOAuthCredentialsUpdate) Exec(ctx context.Context) error {
-	_, err := socu.Save(ctx)
+func (_u *SlackOAuthCredentialsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (socu *SlackOAuthCredentialsUpdate) ExecX(ctx context.Context) {
-	if err := socu.Exec(ctx); err != nil {
+func (_u *SlackOAuthCredentialsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (socu *SlackOAuthCredentialsUpdate) check() error {
-	if v, ok := socu.mutation.AccessToken(); ok {
+func (_u *SlackOAuthCredentialsUpdate) check() error {
+	if v, ok := _u.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}
 		}
@@ -140,39 +140,39 @@ func (socu *SlackOAuthCredentialsUpdate) check() error {
 	return nil
 }
 
-func (socu *SlackOAuthCredentialsUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := socu.check(); err != nil {
-		return n, err
+func (_u *SlackOAuthCredentialsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(slackoauthcredentials.Table, slackoauthcredentials.Columns, sqlgraph.NewFieldSpec(slackoauthcredentials.FieldID, field.TypeUUID))
-	if ps := socu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := socu.mutation.RefreshToken(); ok {
+	if value, ok := _u.mutation.RefreshToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
 	}
-	if value, ok := socu.mutation.AccessToken(); ok {
+	if value, ok := _u.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)
 	}
-	if value, ok := socu.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(slackoauthcredentials.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socu.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(slackoauthcredentials.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(slackoauthcredentials.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socu.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(slackoauthcredentials.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = socu.schemaConfig.SlackOAuthCredentials
-	ctx = internal.NewSchemaConfigContext(ctx, socu.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, socu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.SlackOAuthCredentials
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{slackoauthcredentials.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -180,8 +180,8 @@ func (socu *SlackOAuthCredentialsUpdate) sqlSave(ctx context.Context) (n int, er
 		}
 		return 0, err
 	}
-	socu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SlackOAuthCredentialsUpdateOne is the builder for updating a single SlackOAuthCredentials entity.
@@ -193,101 +193,101 @@ type SlackOAuthCredentialsUpdateOne struct {
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetRefreshToken(s string) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.SetRefreshToken(s)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) SetRefreshToken(v string) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.SetRefreshToken(v)
+	return _u
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableRefreshToken(s *string) *SlackOAuthCredentialsUpdateOne {
-	if s != nil {
-		socuo.SetRefreshToken(*s)
+func (_u *SlackOAuthCredentialsUpdateOne) SetNillableRefreshToken(v *string) *SlackOAuthCredentialsUpdateOne {
+	if v != nil {
+		_u.SetRefreshToken(*v)
 	}
-	return socuo
+	return _u
 }
 
 // SetAccessToken sets the "access_token" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetAccessToken(s string) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.SetAccessToken(s)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) SetAccessToken(v string) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.SetAccessToken(v)
+	return _u
 }
 
 // SetNillableAccessToken sets the "access_token" field if the given value is not nil.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableAccessToken(s *string) *SlackOAuthCredentialsUpdateOne {
-	if s != nil {
-		socuo.SetAccessToken(*s)
+func (_u *SlackOAuthCredentialsUpdateOne) SetNillableAccessToken(v *string) *SlackOAuthCredentialsUpdateOne {
+	if v != nil {
+		_u.SetAccessToken(*v)
 	}
-	return socuo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetCreatedAt(i int64) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.ResetCreatedAt()
-	socuo.mutation.SetCreatedAt(i)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) SetCreatedAt(v int64) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableCreatedAt(i *int64) *SlackOAuthCredentialsUpdateOne {
-	if i != nil {
-		socuo.SetCreatedAt(*i)
+func (_u *SlackOAuthCredentialsUpdateOne) SetNillableCreatedAt(v *int64) *SlackOAuthCredentialsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return socuo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) AddCreatedAt(i int64) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.AddCreatedAt(i)
-	return socuo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *SlackOAuthCredentialsUpdateOne) AddCreatedAt(v int64) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetUpdatedAt(i int64) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.ResetUpdatedAt()
-	socuo.mutation.SetUpdatedAt(i)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) SetUpdatedAt(v int64) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (socuo *SlackOAuthCredentialsUpdateOne) SetNillableUpdatedAt(i *int64) *SlackOAuthCredentialsUpdateOne {
-	if i != nil {
-		socuo.SetUpdatedAt(*i)
+func (_u *SlackOAuthCredentialsUpdateOne) SetNillableUpdatedAt(v *int64) *SlackOAuthCredentialsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return socuo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (socuo *SlackOAuthCredentialsUpdateOne) AddUpdatedAt(i int64) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.AddUpdatedAt(i)
-	return socuo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *SlackOAuthCredentialsUpdateOne) AddUpdatedAt(v int64) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the SlackOAuthCredentialsMutation object of the builder.
-func (socuo *SlackOAuthCredentialsUpdateOne) Mutation() *SlackOAuthCredentialsMutation {
-	return socuo.mutation
+func (_u *SlackOAuthCredentialsUpdateOne) Mutation() *SlackOAuthCredentialsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the SlackOAuthCredentialsUpdate builder.
-func (socuo *SlackOAuthCredentialsUpdateOne) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsUpdateOne {
-	socuo.mutation.Where(ps...)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) Where(ps ...predicate.SlackOAuthCredentials) *SlackOAuthCredentialsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (socuo *SlackOAuthCredentialsUpdateOne) Select(field string, fields ...string) *SlackOAuthCredentialsUpdateOne {
-	socuo.fields = append([]string{field}, fields...)
-	return socuo
+func (_u *SlackOAuthCredentialsUpdateOne) Select(field string, fields ...string) *SlackOAuthCredentialsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated SlackOAuthCredentials entity.
-func (socuo *SlackOAuthCredentialsUpdateOne) Save(ctx context.Context) (*SlackOAuthCredentials, error) {
-	return withHooks(ctx, socuo.sqlSave, socuo.mutation, socuo.hooks)
+func (_u *SlackOAuthCredentialsUpdateOne) Save(ctx context.Context) (*SlackOAuthCredentials, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (socuo *SlackOAuthCredentialsUpdateOne) SaveX(ctx context.Context) *SlackOAuthCredentials {
-	node, err := socuo.Save(ctx)
+func (_u *SlackOAuthCredentialsUpdateOne) SaveX(ctx context.Context) *SlackOAuthCredentials {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -295,21 +295,21 @@ func (socuo *SlackOAuthCredentialsUpdateOne) SaveX(ctx context.Context) *SlackOA
 }
 
 // Exec executes the query on the entity.
-func (socuo *SlackOAuthCredentialsUpdateOne) Exec(ctx context.Context) error {
-	_, err := socuo.Save(ctx)
+func (_u *SlackOAuthCredentialsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (socuo *SlackOAuthCredentialsUpdateOne) ExecX(ctx context.Context) {
-	if err := socuo.Exec(ctx); err != nil {
+func (_u *SlackOAuthCredentialsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (socuo *SlackOAuthCredentialsUpdateOne) check() error {
-	if v, ok := socuo.mutation.AccessToken(); ok {
+func (_u *SlackOAuthCredentialsUpdateOne) check() error {
+	if v, ok := _u.mutation.AccessToken(); ok {
 		if err := slackoauthcredentials.AccessTokenValidator(v); err != nil {
 			return &ValidationError{Name: "access_token", err: fmt.Errorf(`ent: validator failed for field "SlackOAuthCredentials.access_token": %w`, err)}
 		}
@@ -317,17 +317,17 @@ func (socuo *SlackOAuthCredentialsUpdateOne) check() error {
 	return nil
 }
 
-func (socuo *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node *SlackOAuthCredentials, err error) {
-	if err := socuo.check(); err != nil {
+func (_u *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node *SlackOAuthCredentials, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(slackoauthcredentials.Table, slackoauthcredentials.Columns, sqlgraph.NewFieldSpec(slackoauthcredentials.FieldID, field.TypeUUID))
-	id, ok := socuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "SlackOAuthCredentials.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := socuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, slackoauthcredentials.FieldID)
 		for _, f := range fields {
@@ -339,37 +339,37 @@ func (socuo *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node
 			}
 		}
 	}
-	if ps := socuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := socuo.mutation.RefreshToken(); ok {
+	if value, ok := _u.mutation.RefreshToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldRefreshToken, field.TypeString, value)
 	}
-	if value, ok := socuo.mutation.AccessToken(); ok {
+	if value, ok := _u.mutation.AccessToken(); ok {
 		_spec.SetField(slackoauthcredentials.FieldAccessToken, field.TypeString, value)
 	}
-	if value, ok := socuo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(slackoauthcredentials.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socuo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(slackoauthcredentials.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(slackoauthcredentials.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := socuo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(slackoauthcredentials.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = socuo.schemaConfig.SlackOAuthCredentials
-	ctx = internal.NewSchemaConfigContext(ctx, socuo.schemaConfig)
-	_node = &SlackOAuthCredentials{config: socuo.config}
+	_spec.Node.Schema = _u.schemaConfig.SlackOAuthCredentials
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &SlackOAuthCredentials{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, socuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{slackoauthcredentials.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -377,6 +377,6 @@ func (socuo *SlackOAuthCredentialsUpdateOne) sqlSave(ctx context.Context) (_node
 		}
 		return nil, err
 	}
-	socuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

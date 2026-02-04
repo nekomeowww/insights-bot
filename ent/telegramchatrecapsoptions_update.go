@@ -23,164 +23,164 @@ type TelegramChatRecapsOptionsUpdate struct {
 }
 
 // Where appends a list predicates to the TelegramChatRecapsOptionsUpdate builder.
-func (tcrou *TelegramChatRecapsOptionsUpdate) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.Where(ps...)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetChatID(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetChatID()
-	tcrou.mutation.SetChatID(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetChatID(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableChatID(i *int64) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetChatID(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableChatID(v *int64) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddChatID(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddChatID(i)
-	return tcrou
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddChatID(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetAutoRecapSendMode sets the "auto_recap_send_mode" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetAutoRecapSendMode(i int) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetAutoRecapSendMode()
-	tcrou.mutation.SetAutoRecapSendMode(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetAutoRecapSendMode(v int) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetAutoRecapSendMode()
+	_u.mutation.SetAutoRecapSendMode(v)
+	return _u
 }
 
 // SetNillableAutoRecapSendMode sets the "auto_recap_send_mode" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableAutoRecapSendMode(i *int) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetAutoRecapSendMode(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableAutoRecapSendMode(v *int) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetAutoRecapSendMode(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddAutoRecapSendMode adds i to the "auto_recap_send_mode" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddAutoRecapSendMode(i int) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddAutoRecapSendMode(i)
-	return tcrou
+// AddAutoRecapSendMode adds value to the "auto_recap_send_mode" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddAutoRecapSendMode(v int) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddAutoRecapSendMode(v)
+	return _u
 }
 
 // SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetManualRecapRatePerSeconds()
-	tcrou.mutation.SetManualRecapRatePerSeconds(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetManualRecapRatePerSeconds(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetManualRecapRatePerSeconds()
+	_u.mutation.SetManualRecapRatePerSeconds(v)
+	return _u
 }
 
 // SetNillableManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableManualRecapRatePerSeconds(i *int64) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetManualRecapRatePerSeconds(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableManualRecapRatePerSeconds(v *int64) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetManualRecapRatePerSeconds(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddManualRecapRatePerSeconds adds i to the "manual_recap_rate_per_seconds" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddManualRecapRatePerSeconds(i)
-	return tcrou
+// AddManualRecapRatePerSeconds adds value to the "manual_recap_rate_per_seconds" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddManualRecapRatePerSeconds(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddManualRecapRatePerSeconds(v)
+	return _u
 }
 
 // SetAutoRecapRatesPerDay sets the "auto_recap_rates_per_day" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetAutoRecapRatesPerDay(i int) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetAutoRecapRatesPerDay()
-	tcrou.mutation.SetAutoRecapRatesPerDay(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetAutoRecapRatesPerDay(v int) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetAutoRecapRatesPerDay()
+	_u.mutation.SetAutoRecapRatesPerDay(v)
+	return _u
 }
 
 // SetNillableAutoRecapRatesPerDay sets the "auto_recap_rates_per_day" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableAutoRecapRatesPerDay(i *int) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetAutoRecapRatesPerDay(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableAutoRecapRatesPerDay(v *int) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetAutoRecapRatesPerDay(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddAutoRecapRatesPerDay adds i to the "auto_recap_rates_per_day" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddAutoRecapRatesPerDay(i int) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddAutoRecapRatesPerDay(i)
-	return tcrou
+// AddAutoRecapRatesPerDay adds value to the "auto_recap_rates_per_day" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddAutoRecapRatesPerDay(v int) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddAutoRecapRatesPerDay(v)
+	return _u
 }
 
 // SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetPinAutoRecapMessage(b bool) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.SetPinAutoRecapMessage(b)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetPinAutoRecapMessage(v bool) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.SetPinAutoRecapMessage(v)
+	return _u
 }
 
 // SetNillablePinAutoRecapMessage sets the "pin_auto_recap_message" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillablePinAutoRecapMessage(b *bool) *TelegramChatRecapsOptionsUpdate {
-	if b != nil {
-		tcrou.SetPinAutoRecapMessage(*b)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillablePinAutoRecapMessage(v *bool) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetPinAutoRecapMessage(*v)
 	}
-	return tcrou
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetCreatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetCreatedAt()
-	tcrou.mutation.SetCreatedAt(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetCreatedAt(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableCreatedAt(i *int64) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetCreatedAt(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableCreatedAt(v *int64) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddCreatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddCreatedAt(i)
-	return tcrou
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddCreatedAt(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetUpdatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.ResetUpdatedAt()
-	tcrou.mutation.SetUpdatedAt(i)
-	return tcrou
+func (_u *TelegramChatRecapsOptionsUpdate) SetUpdatedAt(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SetNillableUpdatedAt(i *int64) *TelegramChatRecapsOptionsUpdate {
-	if i != nil {
-		tcrou.SetUpdatedAt(*i)
+func (_u *TelegramChatRecapsOptionsUpdate) SetNillableUpdatedAt(v *int64) *TelegramChatRecapsOptionsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcrou
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcrou *TelegramChatRecapsOptionsUpdate) AddUpdatedAt(i int64) *TelegramChatRecapsOptionsUpdate {
-	tcrou.mutation.AddUpdatedAt(i)
-	return tcrou
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatRecapsOptionsUpdate) AddUpdatedAt(v int64) *TelegramChatRecapsOptionsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatRecapsOptionsMutation object of the builder.
-func (tcrou *TelegramChatRecapsOptionsUpdate) Mutation() *TelegramChatRecapsOptionsMutation {
-	return tcrou.mutation
+func (_u *TelegramChatRecapsOptionsUpdate) Mutation() *TelegramChatRecapsOptionsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcrou *TelegramChatRecapsOptionsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcrou.sqlSave, tcrou.mutation, tcrou.hooks)
+func (_u *TelegramChatRecapsOptionsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcrou *TelegramChatRecapsOptionsUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcrou.Save(ctx)
+func (_u *TelegramChatRecapsOptionsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -188,69 +188,69 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tcrou *TelegramChatRecapsOptionsUpdate) Exec(ctx context.Context) error {
-	_, err := tcrou.Save(ctx)
+func (_u *TelegramChatRecapsOptionsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcrou *TelegramChatRecapsOptionsUpdate) ExecX(ctx context.Context) {
-	if err := tcrou.Exec(ctx); err != nil {
+func (_u *TelegramChatRecapsOptionsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcrou *TelegramChatRecapsOptionsUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TelegramChatRecapsOptionsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatrecapsoptions.Table, telegramchatrecapsoptions.Columns, sqlgraph.NewFieldSpec(telegramchatrecapsoptions.FieldID, field.TypeUUID))
-	if ps := tcrou.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcrou.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AutoRecapSendMode(); ok {
+	if value, ok := _u.mutation.AutoRecapSendMode(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 	}
-	if value, ok := tcrou.mutation.AddedAutoRecapSendMode(); ok {
+	if value, ok := _u.mutation.AddedAutoRecapSendMode(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 	}
-	if value, ok := tcrou.mutation.ManualRecapRatePerSeconds(); ok {
+	if value, ok := _u.mutation.ManualRecapRatePerSeconds(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AddedManualRecapRatePerSeconds(); ok {
+	if value, ok := _u.mutation.AddedManualRecapRatePerSeconds(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AutoRecapRatesPerDay(); ok {
+	if value, ok := _u.mutation.AutoRecapRatesPerDay(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
 	}
-	if value, ok := tcrou.mutation.AddedAutoRecapRatesPerDay(); ok {
+	if value, ok := _u.mutation.AddedAutoRecapRatesPerDay(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
 	}
-	if value, ok := tcrou.mutation.PinAutoRecapMessage(); ok {
+	if value, ok := _u.mutation.PinAutoRecapMessage(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldPinAutoRecapMessage, field.TypeBool, value)
 	}
-	if value, ok := tcrou.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrou.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcrou.schemaConfig.TelegramChatRecapsOptions
-	ctx = internal.NewSchemaConfigContext(ctx, tcrou.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcrou.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatRecapsOptions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatrecapsoptions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -258,8 +258,8 @@ func (tcrou *TelegramChatRecapsOptionsUpdate) sqlSave(ctx context.Context) (n in
 		}
 		return 0, err
 	}
-	tcrou.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TelegramChatRecapsOptionsUpdateOne is the builder for updating a single TelegramChatRecapsOptions entity.
@@ -271,171 +271,171 @@ type TelegramChatRecapsOptionsUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetChatID(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetChatID()
-	tcrouo.mutation.SetChatID(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetChatID(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableChatID(i *int64) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetChatID(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableChatID(v *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddChatID(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddChatID(i)
-	return tcrouo
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddChatID(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetAutoRecapSendMode sets the "auto_recap_send_mode" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetAutoRecapSendMode(i int) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetAutoRecapSendMode()
-	tcrouo.mutation.SetAutoRecapSendMode(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetAutoRecapSendMode(v int) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetAutoRecapSendMode()
+	_u.mutation.SetAutoRecapSendMode(v)
+	return _u
 }
 
 // SetNillableAutoRecapSendMode sets the "auto_recap_send_mode" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapSendMode(i *int) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetAutoRecapSendMode(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapSendMode(v *int) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetAutoRecapSendMode(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddAutoRecapSendMode adds i to the "auto_recap_send_mode" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapSendMode(i int) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddAutoRecapSendMode(i)
-	return tcrouo
+// AddAutoRecapSendMode adds value to the "auto_recap_send_mode" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapSendMode(v int) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddAutoRecapSendMode(v)
+	return _u
 }
 
 // SetManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetManualRecapRatePerSeconds()
-	tcrouo.mutation.SetManualRecapRatePerSeconds(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetManualRecapRatePerSeconds(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetManualRecapRatePerSeconds()
+	_u.mutation.SetManualRecapRatePerSeconds(v)
+	return _u
 }
 
 // SetNillableManualRecapRatePerSeconds sets the "manual_recap_rate_per_seconds" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableManualRecapRatePerSeconds(i *int64) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetManualRecapRatePerSeconds(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableManualRecapRatePerSeconds(v *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetManualRecapRatePerSeconds(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddManualRecapRatePerSeconds adds i to the "manual_recap_rate_per_seconds" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddManualRecapRatePerSeconds(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddManualRecapRatePerSeconds(i)
-	return tcrouo
+// AddManualRecapRatePerSeconds adds value to the "manual_recap_rate_per_seconds" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddManualRecapRatePerSeconds(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddManualRecapRatePerSeconds(v)
+	return _u
 }
 
 // SetAutoRecapRatesPerDay sets the "auto_recap_rates_per_day" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetAutoRecapRatesPerDay(i int) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetAutoRecapRatesPerDay()
-	tcrouo.mutation.SetAutoRecapRatesPerDay(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetAutoRecapRatesPerDay(v int) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetAutoRecapRatesPerDay()
+	_u.mutation.SetAutoRecapRatesPerDay(v)
+	return _u
 }
 
 // SetNillableAutoRecapRatesPerDay sets the "auto_recap_rates_per_day" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapRatesPerDay(i *int) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetAutoRecapRatesPerDay(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableAutoRecapRatesPerDay(v *int) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetAutoRecapRatesPerDay(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddAutoRecapRatesPerDay adds i to the "auto_recap_rates_per_day" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapRatesPerDay(i int) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddAutoRecapRatesPerDay(i)
-	return tcrouo
+// AddAutoRecapRatesPerDay adds value to the "auto_recap_rates_per_day" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddAutoRecapRatesPerDay(v int) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddAutoRecapRatesPerDay(v)
+	return _u
 }
 
 // SetPinAutoRecapMessage sets the "pin_auto_recap_message" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetPinAutoRecapMessage(b bool) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.SetPinAutoRecapMessage(b)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetPinAutoRecapMessage(v bool) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.SetPinAutoRecapMessage(v)
+	return _u
 }
 
 // SetNillablePinAutoRecapMessage sets the "pin_auto_recap_message" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillablePinAutoRecapMessage(b *bool) *TelegramChatRecapsOptionsUpdateOne {
-	if b != nil {
-		tcrouo.SetPinAutoRecapMessage(*b)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillablePinAutoRecapMessage(v *bool) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetPinAutoRecapMessage(*v)
 	}
-	return tcrouo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetCreatedAt(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetCreatedAt()
-	tcrouo.mutation.SetCreatedAt(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetCreatedAt(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableCreatedAt(i *int64) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetCreatedAt(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableCreatedAt(v *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddCreatedAt(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddCreatedAt(i)
-	return tcrouo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddCreatedAt(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetUpdatedAt(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.ResetUpdatedAt()
-	tcrouo.mutation.SetUpdatedAt(i)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetUpdatedAt(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SetNillableUpdatedAt(i *int64) *TelegramChatRecapsOptionsUpdateOne {
-	if i != nil {
-		tcrouo.SetUpdatedAt(*i)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SetNillableUpdatedAt(v *int64) *TelegramChatRecapsOptionsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcrouo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) AddUpdatedAt(i int64) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.AddUpdatedAt(i)
-	return tcrouo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatRecapsOptionsUpdateOne) AddUpdatedAt(v int64) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatRecapsOptionsMutation object of the builder.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) Mutation() *TelegramChatRecapsOptionsMutation {
-	return tcrouo.mutation
+func (_u *TelegramChatRecapsOptionsUpdateOne) Mutation() *TelegramChatRecapsOptionsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TelegramChatRecapsOptionsUpdate builder.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.mutation.Where(ps...)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) Select(field string, fields ...string) *TelegramChatRecapsOptionsUpdateOne {
-	tcrouo.fields = append([]string{field}, fields...)
-	return tcrouo
+func (_u *TelegramChatRecapsOptionsUpdateOne) Select(field string, fields ...string) *TelegramChatRecapsOptionsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TelegramChatRecapsOptions entity.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) Save(ctx context.Context) (*TelegramChatRecapsOptions, error) {
-	return withHooks(ctx, tcrouo.sqlSave, tcrouo.mutation, tcrouo.hooks)
+func (_u *TelegramChatRecapsOptionsUpdateOne) Save(ctx context.Context) (*TelegramChatRecapsOptions, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SaveX(ctx context.Context) *TelegramChatRecapsOptions {
-	node, err := tcrouo.Save(ctx)
+func (_u *TelegramChatRecapsOptionsUpdateOne) SaveX(ctx context.Context) *TelegramChatRecapsOptions {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -443,26 +443,26 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) SaveX(ctx context.Context) *Te
 }
 
 // Exec executes the query on the entity.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcrouo.Save(ctx)
+func (_u *TelegramChatRecapsOptionsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) ExecX(ctx context.Context) {
-	if err := tcrouo.Exec(ctx); err != nil {
+func (_u *TelegramChatRecapsOptionsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcrouo *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatRecapsOptions, err error) {
+func (_u *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatRecapsOptions, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatrecapsoptions.Table, telegramchatrecapsoptions.Columns, sqlgraph.NewFieldSpec(telegramchatrecapsoptions.FieldID, field.TypeUUID))
-	id, ok := tcrouo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TelegramChatRecapsOptions.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcrouo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatrecapsoptions.FieldID)
 		for _, f := range fields {
@@ -474,58 +474,58 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (
 			}
 		}
 	}
-	if ps := tcrouo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcrouo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AutoRecapSendMode(); ok {
+	if value, ok := _u.mutation.AutoRecapSendMode(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 	}
-	if value, ok := tcrouo.mutation.AddedAutoRecapSendMode(); ok {
+	if value, ok := _u.mutation.AddedAutoRecapSendMode(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapSendMode, field.TypeInt, value)
 	}
-	if value, ok := tcrouo.mutation.ManualRecapRatePerSeconds(); ok {
+	if value, ok := _u.mutation.ManualRecapRatePerSeconds(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AddedManualRecapRatePerSeconds(); ok {
+	if value, ok := _u.mutation.AddedManualRecapRatePerSeconds(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldManualRecapRatePerSeconds, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AutoRecapRatesPerDay(); ok {
+	if value, ok := _u.mutation.AutoRecapRatesPerDay(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
 	}
-	if value, ok := tcrouo.mutation.AddedAutoRecapRatesPerDay(); ok {
+	if value, ok := _u.mutation.AddedAutoRecapRatesPerDay(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldAutoRecapRatesPerDay, field.TypeInt, value)
 	}
-	if value, ok := tcrouo.mutation.PinAutoRecapMessage(); ok {
+	if value, ok := _u.mutation.PinAutoRecapMessage(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldPinAutoRecapMessage, field.TypeBool, value)
 	}
-	if value, ok := tcrouo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatrecapsoptions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcrouo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatrecapsoptions.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcrouo.schemaConfig.TelegramChatRecapsOptions
-	ctx = internal.NewSchemaConfigContext(ctx, tcrouo.schemaConfig)
-	_node = &TelegramChatRecapsOptions{config: tcrouo.config}
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatRecapsOptions
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &TelegramChatRecapsOptions{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcrouo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatrecapsoptions.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -533,6 +533,6 @@ func (tcrouo *TelegramChatRecapsOptionsUpdateOne) sqlSave(ctx context.Context) (
 		}
 		return nil, err
 	}
-	tcrouo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

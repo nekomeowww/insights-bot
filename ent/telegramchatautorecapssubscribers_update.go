@@ -23,108 +23,108 @@ type TelegramChatAutoRecapsSubscribersUpdate struct {
 }
 
 // Where appends a list predicates to the TelegramChatAutoRecapsSubscribersUpdate builder.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.Where(ps...)
-	return tcarsu
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetChatID(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.ResetChatID()
-	tcarsu.mutation.SetChatID(i)
-	return tcarsu
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetChatID(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetNillableChatID(i *int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	if i != nil {
-		tcarsu.SetChatID(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetNillableChatID(v *int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcarsu
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) AddChatID(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.AddChatID(i)
-	return tcarsu
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) AddChatID(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetUserID(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.ResetUserID()
-	tcarsu.mutation.SetUserID(i)
-	return tcarsu
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetUserID(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetNillableUserID(i *int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	if i != nil {
-		tcarsu.SetUserID(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetNillableUserID(v *int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return tcarsu
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) AddUserID(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.AddUserID(i)
-	return tcarsu
+// AddUserID adds value to the "user_id" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) AddUserID(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetCreatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.ResetCreatedAt()
-	tcarsu.mutation.SetCreatedAt(i)
-	return tcarsu
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetCreatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetNillableCreatedAt(i *int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	if i != nil {
-		tcarsu.SetCreatedAt(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetNillableCreatedAt(v *int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcarsu
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) AddCreatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.AddCreatedAt(i)
-	return tcarsu
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) AddCreatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetUpdatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.ResetUpdatedAt()
-	tcarsu.mutation.SetUpdatedAt(i)
-	return tcarsu
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetUpdatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SetNillableUpdatedAt(i *int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	if i != nil {
-		tcarsu.SetUpdatedAt(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SetNillableUpdatedAt(v *int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcarsu
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) AddUpdatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdate {
-	tcarsu.mutation.AddUpdatedAt(i)
-	return tcarsu
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) AddUpdatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatAutoRecapsSubscribersMutation object of the builder.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
-	return tcarsu.mutation
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcarsu.sqlSave, tcarsu.mutation, tcarsu.hooks)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcarsu.Save(ctx)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -132,54 +132,54 @@ func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) SaveX(ctx context.Context
 }
 
 // Exec executes the query.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) Exec(ctx context.Context) error {
-	_, err := tcarsu.Save(ctx)
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) ExecX(ctx context.Context) {
-	if err := tcarsu.Exec(ctx); err != nil {
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TelegramChatAutoRecapsSubscribersUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatautorecapssubscribers.Table, telegramchatautorecapssubscribers.Columns, sqlgraph.NewFieldSpec(telegramchatautorecapssubscribers.FieldID, field.TypeUUID))
-	if ps := tcarsu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcarsu.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsu.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcarsu.schemaConfig.TelegramChatAutoRecapsSubscribers
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsu.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcarsu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatAutoRecapsSubscribers
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatautorecapssubscribers.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -187,8 +187,8 @@ func (tcarsu *TelegramChatAutoRecapsSubscribersUpdate) sqlSave(ctx context.Conte
 		}
 		return 0, err
 	}
-	tcarsu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TelegramChatAutoRecapsSubscribersUpdateOne is the builder for updating a single TelegramChatAutoRecapsSubscribers entity.
@@ -200,115 +200,115 @@ type TelegramChatAutoRecapsSubscribersUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetChatID(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.ResetChatID()
-	tcarsuo.mutation.SetChatID(i)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetChatID(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableChatID(i *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	if i != nil {
-		tcarsuo.SetChatID(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableChatID(v *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcarsuo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) AddChatID(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.AddChatID(i)
-	return tcarsuo
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) AddChatID(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetUserID(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.ResetUserID()
-	tcarsuo.mutation.SetUserID(i)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetUserID(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.ResetUserID()
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableUserID(i *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	if i != nil {
-		tcarsuo.SetUserID(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableUserID(v *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return tcarsuo
+	return _u
 }
 
-// AddUserID adds i to the "user_id" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) AddUserID(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.AddUserID(i)
-	return tcarsuo
+// AddUserID adds value to the "user_id" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) AddUserID(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.AddUserID(v)
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetCreatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.ResetCreatedAt()
-	tcarsuo.mutation.SetCreatedAt(i)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetCreatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableCreatedAt(i *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	if i != nil {
-		tcarsuo.SetCreatedAt(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableCreatedAt(v *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcarsuo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) AddCreatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.AddCreatedAt(i)
-	return tcarsuo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) AddCreatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetUpdatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.ResetUpdatedAt()
-	tcarsuo.mutation.SetUpdatedAt(i)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetUpdatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableUpdatedAt(i *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	if i != nil {
-		tcarsuo.SetUpdatedAt(*i)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SetNillableUpdatedAt(v *int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcarsuo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) AddUpdatedAt(i int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.AddUpdatedAt(i)
-	return tcarsuo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) AddUpdatedAt(v int64) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatAutoRecapsSubscribersMutation object of the builder.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
-	return tcarsuo.mutation
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) Mutation() *TelegramChatAutoRecapsSubscribersMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TelegramChatAutoRecapsSubscribersUpdate builder.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.mutation.Where(ps...)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) Where(ps ...predicate.TelegramChatAutoRecapsSubscribers) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) Select(field string, fields ...string) *TelegramChatAutoRecapsSubscribersUpdateOne {
-	tcarsuo.fields = append([]string{field}, fields...)
-	return tcarsuo
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) Select(field string, fields ...string) *TelegramChatAutoRecapsSubscribersUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TelegramChatAutoRecapsSubscribers entity.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) Save(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
-	return withHooks(ctx, tcarsuo.sqlSave, tcarsuo.mutation, tcarsuo.hooks)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) Save(ctx context.Context) (*TelegramChatAutoRecapsSubscribers, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SaveX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
-	node, err := tcarsuo.Save(ctx)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) SaveX(ctx context.Context) *TelegramChatAutoRecapsSubscribers {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -316,26 +316,26 @@ func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) SaveX(ctx context.Con
 }
 
 // Exec executes the query on the entity.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcarsuo.Save(ctx)
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) ExecX(ctx context.Context) {
-	if err := tcarsuo.Exec(ctx); err != nil {
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatAutoRecapsSubscribers, err error) {
+func (_u *TelegramChatAutoRecapsSubscribersUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatAutoRecapsSubscribers, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatautorecapssubscribers.Table, telegramchatautorecapssubscribers.Columns, sqlgraph.NewFieldSpec(telegramchatautorecapssubscribers.FieldID, field.TypeUUID))
-	id, ok := tcarsuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TelegramChatAutoRecapsSubscribers.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcarsuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatautorecapssubscribers.FieldID)
 		for _, f := range fields {
@@ -347,43 +347,43 @@ func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) sqlSave(ctx context.C
 			}
 		}
 	}
-	if ps := tcarsuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcarsuo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.UserID(); ok {
+	if value, ok := _u.mutation.UserID(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.AddedUserID(); ok {
+	if value, ok := _u.mutation.AddedUserID(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldUserID, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatautorecapssubscribers.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcarsuo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatautorecapssubscribers.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcarsuo.schemaConfig.TelegramChatAutoRecapsSubscribers
-	ctx = internal.NewSchemaConfigContext(ctx, tcarsuo.schemaConfig)
-	_node = &TelegramChatAutoRecapsSubscribers{config: tcarsuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatAutoRecapsSubscribers
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &TelegramChatAutoRecapsSubscribers{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcarsuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatautorecapssubscribers.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -391,6 +391,6 @@ func (tcarsuo *TelegramChatAutoRecapsSubscribersUpdateOne) sqlSave(ctx context.C
 		}
 		return nil, err
 	}
-	tcarsuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

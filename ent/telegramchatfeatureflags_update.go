@@ -23,143 +23,143 @@ type TelegramChatFeatureFlagsUpdate struct {
 }
 
 // Where appends a list predicates to the TelegramChatFeatureFlagsUpdate builder.
-func (tcffu *TelegramChatFeatureFlagsUpdate) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.Where(ps...)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatID(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.ResetChatID()
-	tcffu.mutation.SetChatID(i)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetChatID(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableChatID(i *int64) *TelegramChatFeatureFlagsUpdate {
-	if i != nil {
-		tcffu.SetChatID(*i)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableChatID(v *int64) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcffu
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) AddChatID(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.AddChatID(i)
-	return tcffu
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatFeatureFlagsUpdate) AddChatID(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetChatType sets the "chat_type" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatType(s string) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.SetChatType(s)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetChatType(v string) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.SetChatType(v)
+	return _u
 }
 
 // SetNillableChatType sets the "chat_type" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableChatType(s *string) *TelegramChatFeatureFlagsUpdate {
-	if s != nil {
-		tcffu.SetChatType(*s)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableChatType(v *string) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetChatType(*v)
 	}
-	return tcffu
+	return _u
 }
 
 // SetChatTitle sets the "chat_title" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetChatTitle(s string) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.SetChatTitle(s)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetChatTitle(v string) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.SetChatTitle(v)
+	return _u
 }
 
 // SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableChatTitle(s *string) *TelegramChatFeatureFlagsUpdate {
-	if s != nil {
-		tcffu.SetChatTitle(*s)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableChatTitle(v *string) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetChatTitle(*v)
 	}
-	return tcffu
+	return _u
 }
 
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.SetFeatureChatHistoriesRecap(b)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetFeatureChatHistoriesRecap(v bool) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.SetFeatureChatHistoriesRecap(v)
+	return _u
 }
 
 // SetNillableFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableFeatureChatHistoriesRecap(b *bool) *TelegramChatFeatureFlagsUpdate {
-	if b != nil {
-		tcffu.SetFeatureChatHistoriesRecap(*b)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableFeatureChatHistoriesRecap(v *bool) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetFeatureChatHistoriesRecap(*v)
 	}
-	return tcffu
+	return _u
 }
 
 // SetFeatureLanguage sets the "feature_language" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetFeatureLanguage(s string) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.SetFeatureLanguage(s)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetFeatureLanguage(v string) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.SetFeatureLanguage(v)
+	return _u
 }
 
 // SetNillableFeatureLanguage sets the "feature_language" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableFeatureLanguage(s *string) *TelegramChatFeatureFlagsUpdate {
-	if s != nil {
-		tcffu.SetFeatureLanguage(*s)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableFeatureLanguage(v *string) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetFeatureLanguage(*v)
 	}
-	return tcffu
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetCreatedAt(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.ResetCreatedAt()
-	tcffu.mutation.SetCreatedAt(i)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetCreatedAt(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableCreatedAt(i *int64) *TelegramChatFeatureFlagsUpdate {
-	if i != nil {
-		tcffu.SetCreatedAt(*i)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableCreatedAt(v *int64) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcffu
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) AddCreatedAt(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.AddCreatedAt(i)
-	return tcffu
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatFeatureFlagsUpdate) AddCreatedAt(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetUpdatedAt(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.ResetUpdatedAt()
-	tcffu.mutation.SetUpdatedAt(i)
-	return tcffu
+func (_u *TelegramChatFeatureFlagsUpdate) SetUpdatedAt(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SetNillableUpdatedAt(i *int64) *TelegramChatFeatureFlagsUpdate {
-	if i != nil {
-		tcffu.SetUpdatedAt(*i)
+func (_u *TelegramChatFeatureFlagsUpdate) SetNillableUpdatedAt(v *int64) *TelegramChatFeatureFlagsUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcffu
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcffu *TelegramChatFeatureFlagsUpdate) AddUpdatedAt(i int64) *TelegramChatFeatureFlagsUpdate {
-	tcffu.mutation.AddUpdatedAt(i)
-	return tcffu
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatFeatureFlagsUpdate) AddUpdatedAt(v int64) *TelegramChatFeatureFlagsUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatFeatureFlagsMutation object of the builder.
-func (tcffu *TelegramChatFeatureFlagsUpdate) Mutation() *TelegramChatFeatureFlagsMutation {
-	return tcffu.mutation
+func (_u *TelegramChatFeatureFlagsUpdate) Mutation() *TelegramChatFeatureFlagsMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tcffu *TelegramChatFeatureFlagsUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tcffu.sqlSave, tcffu.mutation, tcffu.hooks)
+func (_u *TelegramChatFeatureFlagsUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcffu *TelegramChatFeatureFlagsUpdate) SaveX(ctx context.Context) int {
-	affected, err := tcffu.Save(ctx)
+func (_u *TelegramChatFeatureFlagsUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -167,60 +167,60 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tcffu *TelegramChatFeatureFlagsUpdate) Exec(ctx context.Context) error {
-	_, err := tcffu.Save(ctx)
+func (_u *TelegramChatFeatureFlagsUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcffu *TelegramChatFeatureFlagsUpdate) ExecX(ctx context.Context) {
-	if err := tcffu.Exec(ctx); err != nil {
+func (_u *TelegramChatFeatureFlagsUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcffu *TelegramChatFeatureFlagsUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *TelegramChatFeatureFlagsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatfeatureflags.Table, telegramchatfeatureflags.Columns, sqlgraph.NewFieldSpec(telegramchatfeatureflags.FieldID, field.TypeUUID))
-	if ps := tcffu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcffu.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcffu.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcffu.mutation.ChatType(); ok {
+	if value, ok := _u.mutation.ChatType(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatType, field.TypeString, value)
 	}
-	if value, ok := tcffu.mutation.ChatTitle(); ok {
+	if value, ok := _u.mutation.ChatTitle(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatTitle, field.TypeString, value)
 	}
-	if value, ok := tcffu.mutation.FeatureChatHistoriesRecap(); ok {
+	if value, ok := _u.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
 	}
-	if value, ok := tcffu.mutation.FeatureLanguage(); ok {
+	if value, ok := _u.mutation.FeatureLanguage(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureLanguage, field.TypeString, value)
 	}
-	if value, ok := tcffu.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffu.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffu.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcffu.schemaConfig.TelegramChatFeatureFlags
-	ctx = internal.NewSchemaConfigContext(ctx, tcffu.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, tcffu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatFeatureFlags
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatfeatureflags.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -228,8 +228,8 @@ func (tcffu *TelegramChatFeatureFlagsUpdate) sqlSave(ctx context.Context) (n int
 		}
 		return 0, err
 	}
-	tcffu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TelegramChatFeatureFlagsUpdateOne is the builder for updating a single TelegramChatFeatureFlags entity.
@@ -241,150 +241,150 @@ type TelegramChatFeatureFlagsUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatID(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.ResetChatID()
-	tcffuo.mutation.SetChatID(i)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetChatID(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableChatID(i *int64) *TelegramChatFeatureFlagsUpdateOne {
-	if i != nil {
-		tcffuo.SetChatID(*i)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableChatID(v *int64) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return tcffuo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) AddChatID(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.AddChatID(i)
-	return tcffuo
+// AddChatID adds value to the "chat_id" field.
+func (_u *TelegramChatFeatureFlagsUpdateOne) AddChatID(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetChatType sets the "chat_type" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatType(s string) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.SetChatType(s)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetChatType(v string) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.SetChatType(v)
+	return _u
 }
 
 // SetNillableChatType sets the "chat_type" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableChatType(s *string) *TelegramChatFeatureFlagsUpdateOne {
-	if s != nil {
-		tcffuo.SetChatType(*s)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableChatType(v *string) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetChatType(*v)
 	}
-	return tcffuo
+	return _u
 }
 
 // SetChatTitle sets the "chat_title" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetChatTitle(s string) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.SetChatTitle(s)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetChatTitle(v string) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.SetChatTitle(v)
+	return _u
 }
 
 // SetNillableChatTitle sets the "chat_title" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableChatTitle(s *string) *TelegramChatFeatureFlagsUpdateOne {
-	if s != nil {
-		tcffuo.SetChatTitle(*s)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableChatTitle(v *string) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetChatTitle(*v)
 	}
-	return tcffuo
+	return _u
 }
 
 // SetFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetFeatureChatHistoriesRecap(b bool) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.SetFeatureChatHistoriesRecap(b)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetFeatureChatHistoriesRecap(v bool) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.SetFeatureChatHistoriesRecap(v)
+	return _u
 }
 
 // SetNillableFeatureChatHistoriesRecap sets the "feature_chat_histories_recap" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureChatHistoriesRecap(b *bool) *TelegramChatFeatureFlagsUpdateOne {
-	if b != nil {
-		tcffuo.SetFeatureChatHistoriesRecap(*b)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureChatHistoriesRecap(v *bool) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetFeatureChatHistoriesRecap(*v)
 	}
-	return tcffuo
+	return _u
 }
 
 // SetFeatureLanguage sets the "feature_language" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetFeatureLanguage(s string) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.SetFeatureLanguage(s)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetFeatureLanguage(v string) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.SetFeatureLanguage(v)
+	return _u
 }
 
 // SetNillableFeatureLanguage sets the "feature_language" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureLanguage(s *string) *TelegramChatFeatureFlagsUpdateOne {
-	if s != nil {
-		tcffuo.SetFeatureLanguage(*s)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableFeatureLanguage(v *string) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetFeatureLanguage(*v)
 	}
-	return tcffuo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetCreatedAt(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.ResetCreatedAt()
-	tcffuo.mutation.SetCreatedAt(i)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetCreatedAt(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableCreatedAt(i *int64) *TelegramChatFeatureFlagsUpdateOne {
-	if i != nil {
-		tcffuo.SetCreatedAt(*i)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableCreatedAt(v *int64) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return tcffuo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) AddCreatedAt(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.AddCreatedAt(i)
-	return tcffuo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *TelegramChatFeatureFlagsUpdateOne) AddCreatedAt(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetUpdatedAt(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.ResetUpdatedAt()
-	tcffuo.mutation.SetUpdatedAt(i)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetUpdatedAt(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SetNillableUpdatedAt(i *int64) *TelegramChatFeatureFlagsUpdateOne {
-	if i != nil {
-		tcffuo.SetUpdatedAt(*i)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SetNillableUpdatedAt(v *int64) *TelegramChatFeatureFlagsUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return tcffuo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) AddUpdatedAt(i int64) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.AddUpdatedAt(i)
-	return tcffuo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *TelegramChatFeatureFlagsUpdateOne) AddUpdatedAt(v int64) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the TelegramChatFeatureFlagsMutation object of the builder.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Mutation() *TelegramChatFeatureFlagsMutation {
-	return tcffuo.mutation
+func (_u *TelegramChatFeatureFlagsUpdateOne) Mutation() *TelegramChatFeatureFlagsMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the TelegramChatFeatureFlagsUpdate builder.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.mutation.Where(ps...)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Select(field string, fields ...string) *TelegramChatFeatureFlagsUpdateOne {
-	tcffuo.fields = append([]string{field}, fields...)
-	return tcffuo
+func (_u *TelegramChatFeatureFlagsUpdateOne) Select(field string, fields ...string) *TelegramChatFeatureFlagsUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TelegramChatFeatureFlags entity.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Save(ctx context.Context) (*TelegramChatFeatureFlags, error) {
-	return withHooks(ctx, tcffuo.sqlSave, tcffuo.mutation, tcffuo.hooks)
+func (_u *TelegramChatFeatureFlagsUpdateOne) Save(ctx context.Context) (*TelegramChatFeatureFlags, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SaveX(ctx context.Context) *TelegramChatFeatureFlags {
-	node, err := tcffuo.Save(ctx)
+func (_u *TelegramChatFeatureFlagsUpdateOne) SaveX(ctx context.Context) *TelegramChatFeatureFlags {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -392,26 +392,26 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) SaveX(ctx context.Context) *Tel
 }
 
 // Exec executes the query on the entity.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) Exec(ctx context.Context) error {
-	_, err := tcffuo.Save(ctx)
+func (_u *TelegramChatFeatureFlagsUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) ExecX(ctx context.Context) {
-	if err := tcffuo.Exec(ctx); err != nil {
+func (_u *TelegramChatFeatureFlagsUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (tcffuo *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatFeatureFlags, err error) {
+func (_u *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_node *TelegramChatFeatureFlags, err error) {
 	_spec := sqlgraph.NewUpdateSpec(telegramchatfeatureflags.Table, telegramchatfeatureflags.Columns, sqlgraph.NewFieldSpec(telegramchatfeatureflags.FieldID, field.TypeUUID))
-	id, ok := tcffuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TelegramChatFeatureFlags.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tcffuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatfeatureflags.FieldID)
 		for _, f := range fields {
@@ -423,49 +423,49 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_
 			}
 		}
 	}
-	if ps := tcffuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tcffuo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcffuo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := tcffuo.mutation.ChatType(); ok {
+	if value, ok := _u.mutation.ChatType(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatType, field.TypeString, value)
 	}
-	if value, ok := tcffuo.mutation.ChatTitle(); ok {
+	if value, ok := _u.mutation.ChatTitle(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldChatTitle, field.TypeString, value)
 	}
-	if value, ok := tcffuo.mutation.FeatureChatHistoriesRecap(); ok {
+	if value, ok := _u.mutation.FeatureChatHistoriesRecap(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureChatHistoriesRecap, field.TypeBool, value)
 	}
-	if value, ok := tcffuo.mutation.FeatureLanguage(); ok {
+	if value, ok := _u.mutation.FeatureLanguage(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldFeatureLanguage, field.TypeString, value)
 	}
-	if value, ok := tcffuo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffuo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(telegramchatfeatureflags.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := tcffuo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(telegramchatfeatureflags.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = tcffuo.schemaConfig.TelegramChatFeatureFlags
-	ctx = internal.NewSchemaConfigContext(ctx, tcffuo.schemaConfig)
-	_node = &TelegramChatFeatureFlags{config: tcffuo.config}
+	_spec.Node.Schema = _u.schemaConfig.TelegramChatFeatureFlags
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &TelegramChatFeatureFlags{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tcffuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{telegramchatfeatureflags.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -473,6 +473,6 @@ func (tcffuo *TelegramChatFeatureFlagsUpdateOne) sqlSave(ctx context.Context) (_
 		}
 		return nil, err
 	}
-	tcffuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

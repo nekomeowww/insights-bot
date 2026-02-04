@@ -21,145 +21,145 @@ type MetricOpenAIChatCompletionTokenUsageCreate struct {
 }
 
 // SetPromptOperation sets the "prompt_operation" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptOperation(s string) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetPromptOperation(s)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptOperation(v string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetPromptOperation(v)
+	return _c
 }
 
 // SetNillablePromptOperation sets the "prompt_operation" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptOperation(s *string) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if s != nil {
-		moacctuc.SetPromptOperation(*s)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptOperation(v *string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetPromptOperation(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetPromptCharacterLength sets the "prompt_character_length" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptCharacterLength(i int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetPromptCharacterLength(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptCharacterLength(v int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetPromptCharacterLength(v)
+	return _c
 }
 
 // SetNillablePromptCharacterLength sets the "prompt_character_length" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptCharacterLength(i *int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetPromptCharacterLength(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptCharacterLength(v *int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetPromptCharacterLength(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptTokenUsage(i int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetPromptTokenUsage(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetPromptTokenUsage(v int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetPromptTokenUsage(v)
+	return _c
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptTokenUsage(i *int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetPromptTokenUsage(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillablePromptTokenUsage(v *int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetPromptTokenUsage(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetCompletionCharacterLength sets the "completion_character_length" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetCompletionCharacterLength(i int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetCompletionCharacterLength(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetCompletionCharacterLength(v int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetCompletionCharacterLength(v)
+	return _c
 }
 
 // SetNillableCompletionCharacterLength sets the "completion_character_length" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCompletionCharacterLength(i *int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetCompletionCharacterLength(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCompletionCharacterLength(v *int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetCompletionCharacterLength(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetCompletionTokenUsage(i int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetCompletionTokenUsage(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetCompletionTokenUsage(v int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetCompletionTokenUsage(v)
+	return _c
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCompletionTokenUsage(i *int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetCompletionTokenUsage(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCompletionTokenUsage(v *int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetCompletionTokenUsage(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetTotalTokenUsage(i int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetTotalTokenUsage(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetTotalTokenUsage(v int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetTotalTokenUsage(v)
+	return _c
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableTotalTokenUsage(i *int) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetTotalTokenUsage(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableTotalTokenUsage(v *int) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetTotalTokenUsage(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetModelName sets the "model_name" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetModelName(s string) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetModelName(s)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetModelName(v string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetModelName(v)
+	return _c
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableModelName(s *string) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if s != nil {
-		moacctuc.SetModelName(*s)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableModelName(v *string) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetModelName(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetCreatedAt(i int64) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetCreatedAt(i)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetCreatedAt(v int64) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCreatedAt(i *int64) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if i != nil {
-		moacctuc.SetCreatedAt(*i)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableCreatedAt(v *int64) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetID(u uuid.UUID) *MetricOpenAIChatCompletionTokenUsageCreate {
-	moacctuc.mutation.SetID(u)
-	return moacctuc
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetID(v uuid.UUID) *MetricOpenAIChatCompletionTokenUsageCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableID(u *uuid.UUID) *MetricOpenAIChatCompletionTokenUsageCreate {
-	if u != nil {
-		moacctuc.SetID(*u)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SetNillableID(v *uuid.UUID) *MetricOpenAIChatCompletionTokenUsageCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return moacctuc
+	return _c
 }
 
 // Mutation returns the MetricOpenAIChatCompletionTokenUsageMutation object of the builder.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) Mutation() *MetricOpenAIChatCompletionTokenUsageMutation {
-	return moacctuc.mutation
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) Mutation() *MetricOpenAIChatCompletionTokenUsageMutation {
+	return _c.mutation
 }
 
 // Save creates the MetricOpenAIChatCompletionTokenUsage in the database.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) Save(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
-	moacctuc.defaults()
-	return withHooks(ctx, moacctuc.sqlSave, moacctuc.mutation, moacctuc.hooks)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) Save(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SaveX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
-	v, err := moacctuc.Save(ctx)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) SaveX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -167,93 +167,93 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) SaveX(ctx context.Co
 }
 
 // Exec executes the query.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) Exec(ctx context.Context) error {
-	_, err := moacctuc.Save(ctx)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) ExecX(ctx context.Context) {
-	if err := moacctuc.Exec(ctx); err != nil {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) defaults() {
-	if _, ok := moacctuc.mutation.PromptOperation(); !ok {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) defaults() {
+	if _, ok := _c.mutation.PromptOperation(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultPromptOperation
-		moacctuc.mutation.SetPromptOperation(v)
+		_c.mutation.SetPromptOperation(v)
 	}
-	if _, ok := moacctuc.mutation.PromptCharacterLength(); !ok {
+	if _, ok := _c.mutation.PromptCharacterLength(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultPromptCharacterLength
-		moacctuc.mutation.SetPromptCharacterLength(v)
+		_c.mutation.SetPromptCharacterLength(v)
 	}
-	if _, ok := moacctuc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultPromptTokenUsage
-		moacctuc.mutation.SetPromptTokenUsage(v)
+		_c.mutation.SetPromptTokenUsage(v)
 	}
-	if _, ok := moacctuc.mutation.CompletionCharacterLength(); !ok {
+	if _, ok := _c.mutation.CompletionCharacterLength(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultCompletionCharacterLength
-		moacctuc.mutation.SetCompletionCharacterLength(v)
+		_c.mutation.SetCompletionCharacterLength(v)
 	}
-	if _, ok := moacctuc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultCompletionTokenUsage
-		moacctuc.mutation.SetCompletionTokenUsage(v)
+		_c.mutation.SetCompletionTokenUsage(v)
 	}
-	if _, ok := moacctuc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultTotalTokenUsage
-		moacctuc.mutation.SetTotalTokenUsage(v)
+		_c.mutation.SetTotalTokenUsage(v)
 	}
-	if _, ok := moacctuc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultModelName
-		moacctuc.mutation.SetModelName(v)
+		_c.mutation.SetModelName(v)
 	}
-	if _, ok := moacctuc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultCreatedAt()
-		moacctuc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := moacctuc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := metricopenaichatcompletiontokenusage.DefaultID()
-		moacctuc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) check() error {
-	if _, ok := moacctuc.mutation.PromptOperation(); !ok {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) check() error {
+	if _, ok := _c.mutation.PromptOperation(); !ok {
 		return &ValidationError{Name: "prompt_operation", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.prompt_operation"`)}
 	}
-	if _, ok := moacctuc.mutation.PromptCharacterLength(); !ok {
+	if _, ok := _c.mutation.PromptCharacterLength(); !ok {
 		return &ValidationError{Name: "prompt_character_length", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.prompt_character_length"`)}
 	}
-	if _, ok := moacctuc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		return &ValidationError{Name: "prompt_token_usage", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.prompt_token_usage"`)}
 	}
-	if _, ok := moacctuc.mutation.CompletionCharacterLength(); !ok {
+	if _, ok := _c.mutation.CompletionCharacterLength(); !ok {
 		return &ValidationError{Name: "completion_character_length", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.completion_character_length"`)}
 	}
-	if _, ok := moacctuc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		return &ValidationError{Name: "completion_token_usage", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.completion_token_usage"`)}
 	}
-	if _, ok := moacctuc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.total_token_usage"`)}
 	}
-	if _, ok := moacctuc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.model_name"`)}
 	}
-	if _, ok := moacctuc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "MetricOpenAIChatCompletionTokenUsage.created_at"`)}
 	}
 	return nil
 }
 
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) sqlSave(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
-	if err := moacctuc.check(); err != nil {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) sqlSave(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := moacctuc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, moacctuc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -266,50 +266,50 @@ func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) sqlSave(ctx context.
 			return nil, err
 		}
 	}
-	moacctuc.mutation.id = &_node.ID
-	moacctuc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (moacctuc *MetricOpenAIChatCompletionTokenUsageCreate) createSpec() (*MetricOpenAIChatCompletionTokenUsage, *sqlgraph.CreateSpec) {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreate) createSpec() (*MetricOpenAIChatCompletionTokenUsage, *sqlgraph.CreateSpec) {
 	var (
-		_node = &MetricOpenAIChatCompletionTokenUsage{config: moacctuc.config}
+		_node = &MetricOpenAIChatCompletionTokenUsage{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(metricopenaichatcompletiontokenusage.Table, sqlgraph.NewFieldSpec(metricopenaichatcompletiontokenusage.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = moacctuc.schemaConfig.MetricOpenAIChatCompletionTokenUsage
-	if id, ok := moacctuc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.MetricOpenAIChatCompletionTokenUsage
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := moacctuc.mutation.PromptOperation(); ok {
+	if value, ok := _c.mutation.PromptOperation(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldPromptOperation, field.TypeString, value)
 		_node.PromptOperation = value
 	}
-	if value, ok := moacctuc.mutation.PromptCharacterLength(); ok {
+	if value, ok := _c.mutation.PromptCharacterLength(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldPromptCharacterLength, field.TypeInt, value)
 		_node.PromptCharacterLength = value
 	}
-	if value, ok := moacctuc.mutation.PromptTokenUsage(); ok {
+	if value, ok := _c.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldPromptTokenUsage, field.TypeInt, value)
 		_node.PromptTokenUsage = value
 	}
-	if value, ok := moacctuc.mutation.CompletionCharacterLength(); ok {
+	if value, ok := _c.mutation.CompletionCharacterLength(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCompletionCharacterLength, field.TypeInt, value)
 		_node.CompletionCharacterLength = value
 	}
-	if value, ok := moacctuc.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _c.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCompletionTokenUsage, field.TypeInt, value)
 		_node.CompletionTokenUsage = value
 	}
-	if value, ok := moacctuc.mutation.TotalTokenUsage(); ok {
+	if value, ok := _c.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
 	}
-	if value, ok := moacctuc.mutation.ModelName(); ok {
+	if value, ok := _c.mutation.ModelName(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldModelName, field.TypeString, value)
 		_node.ModelName = value
 	}
-	if value, ok := moacctuc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(metricopenaichatcompletiontokenusage.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
@@ -324,16 +324,16 @@ type MetricOpenAIChatCompletionTokenUsageCreateBulk struct {
 }
 
 // Save creates the MetricOpenAIChatCompletionTokenUsage entities in the database.
-func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx context.Context) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
-	if moacctucb.err != nil {
-		return nil, moacctucb.err
+func (_c *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx context.Context) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(moacctucb.builders))
-	nodes := make([]*MetricOpenAIChatCompletionTokenUsage, len(moacctucb.builders))
-	mutators := make([]Mutator, len(moacctucb.builders))
-	for i := range moacctucb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*MetricOpenAIChatCompletionTokenUsage, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := moacctucb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*MetricOpenAIChatCompletionTokenUsageMutation)
@@ -347,11 +347,11 @@ func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx contex
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, moacctucb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, moacctucb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -371,7 +371,7 @@ func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx contex
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, moacctucb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -379,8 +379,8 @@ func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Save(ctx contex
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) SaveX(ctx context.Context) []*MetricOpenAIChatCompletionTokenUsage {
-	v, err := moacctucb.Save(ctx)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreateBulk) SaveX(ctx context.Context) []*MetricOpenAIChatCompletionTokenUsage {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -388,14 +388,14 @@ func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) SaveX(ctx conte
 }
 
 // Exec executes the query.
-func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) Exec(ctx context.Context) error {
-	_, err := moacctucb.Save(ctx)
+func (_c *MetricOpenAIChatCompletionTokenUsageCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (moacctucb *MetricOpenAIChatCompletionTokenUsageCreateBulk) ExecX(ctx context.Context) {
-	if err := moacctucb.Exec(ctx); err != nil {
+func (_c *MetricOpenAIChatCompletionTokenUsageCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

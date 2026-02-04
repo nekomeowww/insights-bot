@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type LogChatHistoriesRecapQuery struct {
 }
 
 // Where adds a new predicate for the LogChatHistoriesRecapQuery builder.
-func (lchrq *LogChatHistoriesRecapQuery) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapQuery {
-	lchrq.predicates = append(lchrq.predicates, ps...)
-	return lchrq
+func (_q *LogChatHistoriesRecapQuery) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (lchrq *LogChatHistoriesRecapQuery) Limit(limit int) *LogChatHistoriesRecapQuery {
-	lchrq.ctx.Limit = &limit
-	return lchrq
+func (_q *LogChatHistoriesRecapQuery) Limit(limit int) *LogChatHistoriesRecapQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (lchrq *LogChatHistoriesRecapQuery) Offset(offset int) *LogChatHistoriesRecapQuery {
-	lchrq.ctx.Offset = &offset
-	return lchrq
+func (_q *LogChatHistoriesRecapQuery) Offset(offset int) *LogChatHistoriesRecapQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (lchrq *LogChatHistoriesRecapQuery) Unique(unique bool) *LogChatHistoriesRecapQuery {
-	lchrq.ctx.Unique = &unique
-	return lchrq
+func (_q *LogChatHistoriesRecapQuery) Unique(unique bool) *LogChatHistoriesRecapQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (lchrq *LogChatHistoriesRecapQuery) Order(o ...logchathistoriesrecap.OrderOption) *LogChatHistoriesRecapQuery {
-	lchrq.order = append(lchrq.order, o...)
-	return lchrq
+func (_q *LogChatHistoriesRecapQuery) Order(o ...logchathistoriesrecap.OrderOption) *LogChatHistoriesRecapQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first LogChatHistoriesRecap entity from the query.
 // Returns a *NotFoundError when no LogChatHistoriesRecap was found.
-func (lchrq *LogChatHistoriesRecapQuery) First(ctx context.Context) (*LogChatHistoriesRecap, error) {
-	nodes, err := lchrq.Limit(1).All(setContextOp(ctx, lchrq.ctx, "First"))
+func (_q *LogChatHistoriesRecapQuery) First(ctx context.Context) (*LogChatHistoriesRecap, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (lchrq *LogChatHistoriesRecapQuery) First(ctx context.Context) (*LogChatHis
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) FirstX(ctx context.Context) *LogChatHistoriesRecap {
-	node, err := lchrq.First(ctx)
+func (_q *LogChatHistoriesRecapQuery) FirstX(ctx context.Context) *LogChatHistoriesRecap {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (lchrq *LogChatHistoriesRecapQuery) FirstX(ctx context.Context) *LogChatHis
 
 // FirstID returns the first LogChatHistoriesRecap ID from the query.
 // Returns a *NotFoundError when no LogChatHistoriesRecap ID was found.
-func (lchrq *LogChatHistoriesRecapQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *LogChatHistoriesRecapQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = lchrq.Limit(1).IDs(setContextOp(ctx, lchrq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (lchrq *LogChatHistoriesRecapQuery) FirstID(ctx context.Context) (id uuid.U
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := lchrq.FirstID(ctx)
+func (_q *LogChatHistoriesRecapQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (lchrq *LogChatHistoriesRecapQuery) FirstIDX(ctx context.Context) uuid.UUID
 // Only returns a single LogChatHistoriesRecap entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one LogChatHistoriesRecap entity is found.
 // Returns a *NotFoundError when no LogChatHistoriesRecap entities are found.
-func (lchrq *LogChatHistoriesRecapQuery) Only(ctx context.Context) (*LogChatHistoriesRecap, error) {
-	nodes, err := lchrq.Limit(2).All(setContextOp(ctx, lchrq.ctx, "Only"))
+func (_q *LogChatHistoriesRecapQuery) Only(ctx context.Context) (*LogChatHistoriesRecap, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (lchrq *LogChatHistoriesRecapQuery) Only(ctx context.Context) (*LogChatHist
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) OnlyX(ctx context.Context) *LogChatHistoriesRecap {
-	node, err := lchrq.Only(ctx)
+func (_q *LogChatHistoriesRecapQuery) OnlyX(ctx context.Context) *LogChatHistoriesRecap {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (lchrq *LogChatHistoriesRecapQuery) OnlyX(ctx context.Context) *LogChatHist
 // OnlyID is like Only, but returns the only LogChatHistoriesRecap ID in the query.
 // Returns a *NotSingularError when more than one LogChatHistoriesRecap ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (lchrq *LogChatHistoriesRecapQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *LogChatHistoriesRecapQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = lchrq.Limit(2).IDs(setContextOp(ctx, lchrq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (lchrq *LogChatHistoriesRecapQuery) OnlyID(ctx context.Context) (id uuid.UU
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := lchrq.OnlyID(ctx)
+func (_q *LogChatHistoriesRecapQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (lchrq *LogChatHistoriesRecapQuery) OnlyIDX(ctx context.Context) uuid.UUID 
 }
 
 // All executes the query and returns a list of LogChatHistoriesRecaps.
-func (lchrq *LogChatHistoriesRecapQuery) All(ctx context.Context) ([]*LogChatHistoriesRecap, error) {
-	ctx = setContextOp(ctx, lchrq.ctx, "All")
-	if err := lchrq.prepareQuery(ctx); err != nil {
+func (_q *LogChatHistoriesRecapQuery) All(ctx context.Context) ([]*LogChatHistoriesRecap, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*LogChatHistoriesRecap, *LogChatHistoriesRecapQuery]()
-	return withInterceptors[[]*LogChatHistoriesRecap](ctx, lchrq, qr, lchrq.inters)
+	return withInterceptors[[]*LogChatHistoriesRecap](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) AllX(ctx context.Context) []*LogChatHistoriesRecap {
-	nodes, err := lchrq.All(ctx)
+func (_q *LogChatHistoriesRecapQuery) AllX(ctx context.Context) []*LogChatHistoriesRecap {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (lchrq *LogChatHistoriesRecapQuery) AllX(ctx context.Context) []*LogChatHis
 }
 
 // IDs executes the query and returns a list of LogChatHistoriesRecap IDs.
-func (lchrq *LogChatHistoriesRecapQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if lchrq.ctx.Unique == nil && lchrq.path != nil {
-		lchrq.Unique(true)
+func (_q *LogChatHistoriesRecapQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, lchrq.ctx, "IDs")
-	if err = lchrq.Select(logchathistoriesrecap.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(logchathistoriesrecap.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := lchrq.IDs(ctx)
+func (_q *LogChatHistoriesRecapQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (lchrq *LogChatHistoriesRecapQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (lchrq *LogChatHistoriesRecapQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, lchrq.ctx, "Count")
-	if err := lchrq.prepareQuery(ctx); err != nil {
+func (_q *LogChatHistoriesRecapQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, lchrq, querierCount[*LogChatHistoriesRecapQuery](), lchrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*LogChatHistoriesRecapQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) CountX(ctx context.Context) int {
-	count, err := lchrq.Count(ctx)
+func (_q *LogChatHistoriesRecapQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (lchrq *LogChatHistoriesRecapQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (lchrq *LogChatHistoriesRecapQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, lchrq.ctx, "Exist")
-	switch _, err := lchrq.FirstID(ctx); {
+func (_q *LogChatHistoriesRecapQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (lchrq *LogChatHistoriesRecapQuery) Exist(ctx context.Context) (bool, error
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (lchrq *LogChatHistoriesRecapQuery) ExistX(ctx context.Context) bool {
-	exist, err := lchrq.Exist(ctx)
+func (_q *LogChatHistoriesRecapQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (lchrq *LogChatHistoriesRecapQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the LogChatHistoriesRecapQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (lchrq *LogChatHistoriesRecapQuery) Clone() *LogChatHistoriesRecapQuery {
-	if lchrq == nil {
+func (_q *LogChatHistoriesRecapQuery) Clone() *LogChatHistoriesRecapQuery {
+	if _q == nil {
 		return nil
 	}
 	return &LogChatHistoriesRecapQuery{
-		config:     lchrq.config,
-		ctx:        lchrq.ctx.Clone(),
-		order:      append([]logchathistoriesrecap.OrderOption{}, lchrq.order...),
-		inters:     append([]Interceptor{}, lchrq.inters...),
-		predicates: append([]predicate.LogChatHistoriesRecap{}, lchrq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]logchathistoriesrecap.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.LogChatHistoriesRecap{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  lchrq.sql.Clone(),
-		path: lchrq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (lchrq *LogChatHistoriesRecapQuery) Clone() *LogChatHistoriesRecapQuery {
 //		GroupBy(logchathistoriesrecap.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (lchrq *LogChatHistoriesRecapQuery) GroupBy(field string, fields ...string) *LogChatHistoriesRecapGroupBy {
-	lchrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &LogChatHistoriesRecapGroupBy{build: lchrq}
-	grbuild.flds = &lchrq.ctx.Fields
+func (_q *LogChatHistoriesRecapQuery) GroupBy(field string, fields ...string) *LogChatHistoriesRecapGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &LogChatHistoriesRecapGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = logchathistoriesrecap.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (lchrq *LogChatHistoriesRecapQuery) GroupBy(field string, fields ...string)
 //	client.LogChatHistoriesRecap.Query().
 //		Select(logchathistoriesrecap.FieldChatID).
 //		Scan(ctx, &v)
-func (lchrq *LogChatHistoriesRecapQuery) Select(fields ...string) *LogChatHistoriesRecapSelect {
-	lchrq.ctx.Fields = append(lchrq.ctx.Fields, fields...)
-	sbuild := &LogChatHistoriesRecapSelect{LogChatHistoriesRecapQuery: lchrq}
+func (_q *LogChatHistoriesRecapQuery) Select(fields ...string) *LogChatHistoriesRecapSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &LogChatHistoriesRecapSelect{LogChatHistoriesRecapQuery: _q}
 	sbuild.label = logchathistoriesrecap.Label
-	sbuild.flds, sbuild.scan = &lchrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a LogChatHistoriesRecapSelect configured with the given aggregations.
-func (lchrq *LogChatHistoriesRecapQuery) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapSelect {
-	return lchrq.Select().Aggregate(fns...)
+func (_q *LogChatHistoriesRecapQuery) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (lchrq *LogChatHistoriesRecapQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range lchrq.inters {
+func (_q *LogChatHistoriesRecapQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, lchrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range lchrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !logchathistoriesrecap.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if lchrq.path != nil {
-		prev, err := lchrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		lchrq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (lchrq *LogChatHistoriesRecapQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*LogChatHistoriesRecap, error) {
+func (_q *LogChatHistoriesRecapQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*LogChatHistoriesRecap, error) {
 	var (
 		nodes = []*LogChatHistoriesRecap{}
-		_spec = lchrq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*LogChatHistoriesRecap).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &LogChatHistoriesRecap{config: lchrq.config}
+		node := &LogChatHistoriesRecap{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = lchrq.schemaConfig.LogChatHistoriesRecap
-	ctx = internal.NewSchemaConfigContext(ctx, lchrq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.LogChatHistoriesRecap
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, lchrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (lchrq *LogChatHistoriesRecapQuery) sqlAll(ctx context.Context, hooks ...qu
 	return nodes, nil
 }
 
-func (lchrq *LogChatHistoriesRecapQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := lchrq.querySpec()
-	_spec.Node.Schema = lchrq.schemaConfig.LogChatHistoriesRecap
-	ctx = internal.NewSchemaConfigContext(ctx, lchrq.schemaConfig)
-	_spec.Node.Columns = lchrq.ctx.Fields
-	if len(lchrq.ctx.Fields) > 0 {
-		_spec.Unique = lchrq.ctx.Unique != nil && *lchrq.ctx.Unique
+func (_q *LogChatHistoriesRecapQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.LogChatHistoriesRecap
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, lchrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (lchrq *LogChatHistoriesRecapQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *LogChatHistoriesRecapQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(logchathistoriesrecap.Table, logchathistoriesrecap.Columns, sqlgraph.NewFieldSpec(logchathistoriesrecap.FieldID, field.TypeUUID))
-	_spec.From = lchrq.sql
-	if unique := lchrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if lchrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := lchrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, logchathistoriesrecap.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (lchrq *LogChatHistoriesRecapQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := lchrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := lchrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := lchrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := lchrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (lchrq *LogChatHistoriesRecapQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (lchrq *LogChatHistoriesRecapQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(lchrq.driver.Dialect())
+func (_q *LogChatHistoriesRecapQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(logchathistoriesrecap.Table)
-	columns := lchrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = logchathistoriesrecap.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if lchrq.sql != nil {
-		selector = lchrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if lchrq.ctx.Unique != nil && *lchrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(lchrq.schemaConfig.LogChatHistoriesRecap)
-	ctx = internal.NewSchemaConfigContext(ctx, lchrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.LogChatHistoriesRecap)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range lchrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range lchrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := lchrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := lchrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type LogChatHistoriesRecapGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (lchrgb *LogChatHistoriesRecapGroupBy) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapGroupBy {
-	lchrgb.fns = append(lchrgb.fns, fns...)
-	return lchrgb
+func (_g *LogChatHistoriesRecapGroupBy) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (lchrgb *LogChatHistoriesRecapGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, lchrgb.build.ctx, "GroupBy")
-	if err := lchrgb.build.prepareQuery(ctx); err != nil {
+func (_g *LogChatHistoriesRecapGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*LogChatHistoriesRecapQuery, *LogChatHistoriesRecapGroupBy](ctx, lchrgb.build, lchrgb, lchrgb.build.inters, v)
+	return scanWithInterceptors[*LogChatHistoriesRecapQuery, *LogChatHistoriesRecapGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (lchrgb *LogChatHistoriesRecapGroupBy) sqlScan(ctx context.Context, root *LogChatHistoriesRecapQuery, v any) error {
+func (_g *LogChatHistoriesRecapGroupBy) sqlScan(ctx context.Context, root *LogChatHistoriesRecapQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(lchrgb.fns))
-	for _, fn := range lchrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*lchrgb.flds)+len(lchrgb.fns))
-		for _, f := range *lchrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*lchrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := lchrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type LogChatHistoriesRecapSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (lchrs *LogChatHistoriesRecapSelect) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapSelect {
-	lchrs.fns = append(lchrs.fns, fns...)
-	return lchrs
+func (_s *LogChatHistoriesRecapSelect) Aggregate(fns ...AggregateFunc) *LogChatHistoriesRecapSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (lchrs *LogChatHistoriesRecapSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, lchrs.ctx, "Select")
-	if err := lchrs.prepareQuery(ctx); err != nil {
+func (_s *LogChatHistoriesRecapSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*LogChatHistoriesRecapQuery, *LogChatHistoriesRecapSelect](ctx, lchrs.LogChatHistoriesRecapQuery, lchrs, lchrs.inters, v)
+	return scanWithInterceptors[*LogChatHistoriesRecapQuery, *LogChatHistoriesRecapSelect](ctx, _s.LogChatHistoriesRecapQuery, _s, _s.inters, v)
 }
 
-func (lchrs *LogChatHistoriesRecapSelect) sqlScan(ctx context.Context, root *LogChatHistoriesRecapQuery, v any) error {
+func (_s *LogChatHistoriesRecapSelect) sqlScan(ctx context.Context, root *LogChatHistoriesRecapQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(lchrs.fns))
-	for _, fn := range lchrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*lchrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (lchrs *LogChatHistoriesRecapSelect) sqlScan(ctx context.Context, root *Log
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := lchrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

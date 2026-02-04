@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type FeedbackChatHistoriesRecapsReactionsQuery struct {
 }
 
 // Where adds a new predicate for the FeedbackChatHistoriesRecapsReactionsQuery builder.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsQuery {
-	fchrrq.predicates = append(fchrrq.predicates, ps...)
-	return fchrrq
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Where(ps ...predicate.FeedbackChatHistoriesRecapsReactions) *FeedbackChatHistoriesRecapsReactionsQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Limit(limit int) *FeedbackChatHistoriesRecapsReactionsQuery {
-	fchrrq.ctx.Limit = &limit
-	return fchrrq
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Limit(limit int) *FeedbackChatHistoriesRecapsReactionsQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Offset(offset int) *FeedbackChatHistoriesRecapsReactionsQuery {
-	fchrrq.ctx.Offset = &offset
-	return fchrrq
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Offset(offset int) *FeedbackChatHistoriesRecapsReactionsQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Unique(unique bool) *FeedbackChatHistoriesRecapsReactionsQuery {
-	fchrrq.ctx.Unique = &unique
-	return fchrrq
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Unique(unique bool) *FeedbackChatHistoriesRecapsReactionsQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Order(o ...feedbackchathistoriesrecapsreactions.OrderOption) *FeedbackChatHistoriesRecapsReactionsQuery {
-	fchrrq.order = append(fchrrq.order, o...)
-	return fchrrq
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Order(o ...feedbackchathistoriesrecapsreactions.OrderOption) *FeedbackChatHistoriesRecapsReactionsQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first FeedbackChatHistoriesRecapsReactions entity from the query.
 // Returns a *NotFoundError when no FeedbackChatHistoriesRecapsReactions was found.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) First(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
-	nodes, err := fchrrq.Limit(1).All(setContextOp(ctx, fchrrq.ctx, "First"))
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) First(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) First(ctx context.Conte
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
-	node, err := fchrrq.First(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) FirstX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstX(ctx context.Cont
 
 // FirstID returns the first FeedbackChatHistoriesRecapsReactions ID from the query.
 // Returns a *NotFoundError when no FeedbackChatHistoriesRecapsReactions ID was found.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = fchrrq.Limit(1).IDs(setContextOp(ctx, fchrrq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstID(ctx context.Con
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := fchrrq.FirstID(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) FirstIDX(ctx context.Co
 // Only returns a single FeedbackChatHistoriesRecapsReactions entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FeedbackChatHistoriesRecapsReactions entity is found.
 // Returns a *NotFoundError when no FeedbackChatHistoriesRecapsReactions entities are found.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Only(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
-	nodes, err := fchrrq.Limit(2).All(setContextOp(ctx, fchrrq.ctx, "Only"))
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Only(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Only(ctx context.Contex
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
-	node, err := fchrrq.Only(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) OnlyX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyX(ctx context.Conte
 // OnlyID is like Only, but returns the only FeedbackChatHistoriesRecapsReactions ID in the query.
 // Returns a *NotSingularError when more than one FeedbackChatHistoriesRecapsReactions ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = fchrrq.Limit(2).IDs(setContextOp(ctx, fchrrq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyID(ctx context.Cont
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := fchrrq.OnlyID(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) OnlyIDX(ctx context.Con
 }
 
 // All executes the query and returns a list of FeedbackChatHistoriesRecapsReactionsSlice.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) All(ctx context.Context) ([]*FeedbackChatHistoriesRecapsReactions, error) {
-	ctx = setContextOp(ctx, fchrrq.ctx, "All")
-	if err := fchrrq.prepareQuery(ctx); err != nil {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) All(ctx context.Context) ([]*FeedbackChatHistoriesRecapsReactions, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FeedbackChatHistoriesRecapsReactions, *FeedbackChatHistoriesRecapsReactionsQuery]()
-	return withInterceptors[[]*FeedbackChatHistoriesRecapsReactions](ctx, fchrrq, qr, fchrrq.inters)
+	return withInterceptors[[]*FeedbackChatHistoriesRecapsReactions](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) AllX(ctx context.Context) []*FeedbackChatHistoriesRecapsReactions {
-	nodes, err := fchrrq.All(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) AllX(ctx context.Context) []*FeedbackChatHistoriesRecapsReactions {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) AllX(ctx context.Contex
 }
 
 // IDs executes the query and returns a list of FeedbackChatHistoriesRecapsReactions IDs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if fchrrq.ctx.Unique == nil && fchrrq.path != nil {
-		fchrrq.Unique(true)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, fchrrq.ctx, "IDs")
-	if err = fchrrq.Select(feedbackchathistoriesrecapsreactions.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(feedbackchathistoriesrecapsreactions.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := fchrrq.IDs(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) IDsX(ctx context.Contex
 }
 
 // Count returns the count of the given query.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fchrrq.ctx, "Count")
-	if err := fchrrq.prepareQuery(ctx); err != nil {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fchrrq, querierCount[*FeedbackChatHistoriesRecapsReactionsQuery](), fchrrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FeedbackChatHistoriesRecapsReactionsQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) CountX(ctx context.Context) int {
-	count, err := fchrrq.Count(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) CountX(ctx context.Cont
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fchrrq.ctx, "Exist")
-	switch _, err := fchrrq.FirstID(ctx); {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Exist(ctx context.Conte
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) ExistX(ctx context.Context) bool {
-	exist, err := fchrrq.Exist(ctx)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) ExistX(ctx context.Cont
 
 // Clone returns a duplicate of the FeedbackChatHistoriesRecapsReactionsQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Clone() *FeedbackChatHistoriesRecapsReactionsQuery {
-	if fchrrq == nil {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Clone() *FeedbackChatHistoriesRecapsReactionsQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FeedbackChatHistoriesRecapsReactionsQuery{
-		config:     fchrrq.config,
-		ctx:        fchrrq.ctx.Clone(),
-		order:      append([]feedbackchathistoriesrecapsreactions.OrderOption{}, fchrrq.order...),
-		inters:     append([]Interceptor{}, fchrrq.inters...),
-		predicates: append([]predicate.FeedbackChatHistoriesRecapsReactions{}, fchrrq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]feedbackchathistoriesrecapsreactions.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.FeedbackChatHistoriesRecapsReactions{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  fchrrq.sql.Clone(),
-		path: fchrrq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Clone() *FeedbackChatHi
 //		GroupBy(feedbackchathistoriesrecapsreactions.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) GroupBy(field string, fields ...string) *FeedbackChatHistoriesRecapsReactionsGroupBy {
-	fchrrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FeedbackChatHistoriesRecapsReactionsGroupBy{build: fchrrq}
-	grbuild.flds = &fchrrq.ctx.Fields
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) GroupBy(field string, fields ...string) *FeedbackChatHistoriesRecapsReactionsGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FeedbackChatHistoriesRecapsReactionsGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = feedbackchathistoriesrecapsreactions.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) GroupBy(field string, f
 //	client.FeedbackChatHistoriesRecapsReactions.Query().
 //		Select(feedbackchathistoriesrecapsreactions.FieldChatID).
 //		Scan(ctx, &v)
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Select(fields ...string) *FeedbackChatHistoriesRecapsReactionsSelect {
-	fchrrq.ctx.Fields = append(fchrrq.ctx.Fields, fields...)
-	sbuild := &FeedbackChatHistoriesRecapsReactionsSelect{FeedbackChatHistoriesRecapsReactionsQuery: fchrrq}
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Select(fields ...string) *FeedbackChatHistoriesRecapsReactionsSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FeedbackChatHistoriesRecapsReactionsSelect{FeedbackChatHistoriesRecapsReactionsQuery: _q}
 	sbuild.label = feedbackchathistoriesrecapsreactions.Label
-	sbuild.flds, sbuild.scan = &fchrrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FeedbackChatHistoriesRecapsReactionsSelect configured with the given aggregations.
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsSelect {
-	return fchrrq.Select().Aggregate(fns...)
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fchrrq.inters {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fchrrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fchrrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !feedbackchathistoriesrecapsreactions.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if fchrrq.path != nil {
-		prev, err := fchrrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fchrrq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FeedbackChatHistoriesRecapsReactions, error) {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FeedbackChatHistoriesRecapsReactions, error) {
 	var (
 		nodes = []*FeedbackChatHistoriesRecapsReactions{}
-		_spec = fchrrq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FeedbackChatHistoriesRecapsReactions).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FeedbackChatHistoriesRecapsReactions{config: fchrrq.config}
+		node := &FeedbackChatHistoriesRecapsReactions{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = fchrrq.schemaConfig.FeedbackChatHistoriesRecapsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fchrrq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.FeedbackChatHistoriesRecapsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fchrrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) sqlAll(ctx context.Cont
 	return nodes, nil
 }
 
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fchrrq.querySpec()
-	_spec.Node.Schema = fchrrq.schemaConfig.FeedbackChatHistoriesRecapsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fchrrq.schemaConfig)
-	_spec.Node.Columns = fchrrq.ctx.Fields
-	if len(fchrrq.ctx.Fields) > 0 {
-		_spec.Unique = fchrrq.ctx.Unique != nil && *fchrrq.ctx.Unique
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.FeedbackChatHistoriesRecapsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fchrrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(feedbackchathistoriesrecapsreactions.Table, feedbackchathistoriesrecapsreactions.Columns, sqlgraph.NewFieldSpec(feedbackchathistoriesrecapsreactions.FieldID, field.TypeUUID))
-	_spec.From = fchrrq.sql
-	if unique := fchrrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fchrrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fchrrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, feedbackchathistoriesrecapsreactions.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) querySpec() *sqlgraph.Q
 			}
 		}
 	}
-	if ps := fchrrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fchrrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fchrrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fchrrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) querySpec() *sqlgraph.Q
 	return _spec
 }
 
-func (fchrrq *FeedbackChatHistoriesRecapsReactionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fchrrq.driver.Dialect())
+func (_q *FeedbackChatHistoriesRecapsReactionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(feedbackchathistoriesrecapsreactions.Table)
-	columns := fchrrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = feedbackchathistoriesrecapsreactions.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fchrrq.sql != nil {
-		selector = fchrrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fchrrq.ctx.Unique != nil && *fchrrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(fchrrq.schemaConfig.FeedbackChatHistoriesRecapsReactions)
-	ctx = internal.NewSchemaConfigContext(ctx, fchrrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.FeedbackChatHistoriesRecapsReactions)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range fchrrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fchrrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fchrrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fchrrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type FeedbackChatHistoriesRecapsReactionsGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (fchrrgb *FeedbackChatHistoriesRecapsReactionsGroupBy) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsGroupBy {
-	fchrrgb.fns = append(fchrrgb.fns, fns...)
-	return fchrrgb
+func (_g *FeedbackChatHistoriesRecapsReactionsGroupBy) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fchrrgb *FeedbackChatHistoriesRecapsReactionsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fchrrgb.build.ctx, "GroupBy")
-	if err := fchrrgb.build.prepareQuery(ctx); err != nil {
+func (_g *FeedbackChatHistoriesRecapsReactionsGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FeedbackChatHistoriesRecapsReactionsQuery, *FeedbackChatHistoriesRecapsReactionsGroupBy](ctx, fchrrgb.build, fchrrgb, fchrrgb.build.inters, v)
+	return scanWithInterceptors[*FeedbackChatHistoriesRecapsReactionsQuery, *FeedbackChatHistoriesRecapsReactionsGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (fchrrgb *FeedbackChatHistoriesRecapsReactionsGroupBy) sqlScan(ctx context.Context, root *FeedbackChatHistoriesRecapsReactionsQuery, v any) error {
+func (_g *FeedbackChatHistoriesRecapsReactionsGroupBy) sqlScan(ctx context.Context, root *FeedbackChatHistoriesRecapsReactionsQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(fchrrgb.fns))
-	for _, fn := range fchrrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*fchrrgb.flds)+len(fchrrgb.fns))
-		for _, f := range *fchrrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*fchrrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fchrrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type FeedbackChatHistoriesRecapsReactionsSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fchrrs *FeedbackChatHistoriesRecapsReactionsSelect) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsSelect {
-	fchrrs.fns = append(fchrrs.fns, fns...)
-	return fchrrs
+func (_s *FeedbackChatHistoriesRecapsReactionsSelect) Aggregate(fns ...AggregateFunc) *FeedbackChatHistoriesRecapsReactionsSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fchrrs *FeedbackChatHistoriesRecapsReactionsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fchrrs.ctx, "Select")
-	if err := fchrrs.prepareQuery(ctx); err != nil {
+func (_s *FeedbackChatHistoriesRecapsReactionsSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FeedbackChatHistoriesRecapsReactionsQuery, *FeedbackChatHistoriesRecapsReactionsSelect](ctx, fchrrs.FeedbackChatHistoriesRecapsReactionsQuery, fchrrs, fchrrs.inters, v)
+	return scanWithInterceptors[*FeedbackChatHistoriesRecapsReactionsQuery, *FeedbackChatHistoriesRecapsReactionsSelect](ctx, _s.FeedbackChatHistoriesRecapsReactionsQuery, _s, _s.inters, v)
 }
 
-func (fchrrs *FeedbackChatHistoriesRecapsReactionsSelect) sqlScan(ctx context.Context, root *FeedbackChatHistoriesRecapsReactionsQuery, v any) error {
+func (_s *FeedbackChatHistoriesRecapsReactionsSelect) sqlScan(ctx context.Context, root *FeedbackChatHistoriesRecapsReactionsQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fchrrs.fns))
-	for _, fn := range fchrrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fchrrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (fchrrs *FeedbackChatHistoriesRecapsReactionsSelect) sqlScan(ctx context.Co
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fchrrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

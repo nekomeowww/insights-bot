@@ -56,7 +56,7 @@ func (*TelegramChatFeatureFlags) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TelegramChatFeatureFlags fields.
-func (tcff *TelegramChatFeatureFlags) assignValues(columns []string, values []any) error {
+func (_m *TelegramChatFeatureFlags) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -66,52 +66,52 @@ func (tcff *TelegramChatFeatureFlags) assignValues(columns []string, values []an
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				tcff.ID = *value
+				_m.ID = *value
 			}
 		case telegramchatfeatureflags.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				tcff.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case telegramchatfeatureflags.FieldChatType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_type", values[i])
 			} else if value.Valid {
-				tcff.ChatType = value.String
+				_m.ChatType = value.String
 			}
 		case telegramchatfeatureflags.FieldChatTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_title", values[i])
 			} else if value.Valid {
-				tcff.ChatTitle = value.String
+				_m.ChatTitle = value.String
 			}
 		case telegramchatfeatureflags.FieldFeatureChatHistoriesRecap:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_chat_histories_recap", values[i])
 			} else if value.Valid {
-				tcff.FeatureChatHistoriesRecap = value.Bool
+				_m.FeatureChatHistoriesRecap = value.Bool
 			}
 		case telegramchatfeatureflags.FieldFeatureLanguage:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field feature_language", values[i])
 			} else if value.Valid {
-				tcff.FeatureLanguage = value.String
+				_m.FeatureLanguage = value.String
 			}
 		case telegramchatfeatureflags.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tcff.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case telegramchatfeatureflags.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tcff.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			tcff.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -119,53 +119,53 @@ func (tcff *TelegramChatFeatureFlags) assignValues(columns []string, values []an
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TelegramChatFeatureFlags.
 // This includes values selected through modifiers, order, etc.
-func (tcff *TelegramChatFeatureFlags) Value(name string) (ent.Value, error) {
-	return tcff.selectValues.Get(name)
+func (_m *TelegramChatFeatureFlags) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this TelegramChatFeatureFlags.
 // Note that you need to call TelegramChatFeatureFlags.Unwrap() before calling this method if this TelegramChatFeatureFlags
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tcff *TelegramChatFeatureFlags) Update() *TelegramChatFeatureFlagsUpdateOne {
-	return NewTelegramChatFeatureFlagsClient(tcff.config).UpdateOne(tcff)
+func (_m *TelegramChatFeatureFlags) Update() *TelegramChatFeatureFlagsUpdateOne {
+	return NewTelegramChatFeatureFlagsClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TelegramChatFeatureFlags entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tcff *TelegramChatFeatureFlags) Unwrap() *TelegramChatFeatureFlags {
-	_tx, ok := tcff.config.driver.(*txDriver)
+func (_m *TelegramChatFeatureFlags) Unwrap() *TelegramChatFeatureFlags {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TelegramChatFeatureFlags is not a transactional entity")
 	}
-	tcff.config.driver = _tx.drv
-	return tcff
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tcff *TelegramChatFeatureFlags) String() string {
+func (_m *TelegramChatFeatureFlags) String() string {
 	var builder strings.Builder
 	builder.WriteString("TelegramChatFeatureFlags(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tcff.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", tcff.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("chat_type=")
-	builder.WriteString(tcff.ChatType)
+	builder.WriteString(_m.ChatType)
 	builder.WriteString(", ")
 	builder.WriteString("chat_title=")
-	builder.WriteString(tcff.ChatTitle)
+	builder.WriteString(_m.ChatTitle)
 	builder.WriteString(", ")
 	builder.WriteString("feature_chat_histories_recap=")
-	builder.WriteString(fmt.Sprintf("%v", tcff.FeatureChatHistoriesRecap))
+	builder.WriteString(fmt.Sprintf("%v", _m.FeatureChatHistoriesRecap))
 	builder.WriteString(", ")
 	builder.WriteString("feature_language=")
-	builder.WriteString(tcff.FeatureLanguage)
+	builder.WriteString(_m.FeatureLanguage)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", tcff.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", tcff.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

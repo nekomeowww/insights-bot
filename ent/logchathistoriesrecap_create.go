@@ -21,187 +21,187 @@ type LogChatHistoriesRecapCreate struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetChatID(i int64) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetChatID(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetChatID(v int64) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetChatID(v)
+	return _c
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableChatID(i *int64) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetChatID(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableChatID(v *int64) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetChatID(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetRecapInputs sets the "recap_inputs" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetRecapInputs(s string) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetRecapInputs(s)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetRecapInputs(v string) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetRecapInputs(v)
+	return _c
 }
 
 // SetNillableRecapInputs sets the "recap_inputs" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableRecapInputs(s *string) *LogChatHistoriesRecapCreate {
-	if s != nil {
-		lchrc.SetRecapInputs(*s)
+func (_c *LogChatHistoriesRecapCreate) SetNillableRecapInputs(v *string) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetRecapInputs(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetRecapOutputs sets the "recap_outputs" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetRecapOutputs(s string) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetRecapOutputs(s)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetRecapOutputs(v string) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetRecapOutputs(v)
+	return _c
 }
 
 // SetNillableRecapOutputs sets the "recap_outputs" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableRecapOutputs(s *string) *LogChatHistoriesRecapCreate {
-	if s != nil {
-		lchrc.SetRecapOutputs(*s)
+func (_c *LogChatHistoriesRecapCreate) SetNillableRecapOutputs(v *string) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetRecapOutputs(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetFromPlatform(i int) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetFromPlatform(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetFromPlatform(v int) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetFromPlatform(v)
+	return _c
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableFromPlatform(i *int) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetFromPlatform(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableFromPlatform(v *int) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetFromPlatform(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetPromptTokenUsage(i int) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetPromptTokenUsage(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetPromptTokenUsage(v int) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetPromptTokenUsage(v)
+	return _c
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetPromptTokenUsage(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillablePromptTokenUsage(v *int) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetPromptTokenUsage(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetCompletionTokenUsage(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetCompletionTokenUsage(v int) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetCompletionTokenUsage(v)
+	return _c
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetCompletionTokenUsage(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableCompletionTokenUsage(v *int) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetCompletionTokenUsage(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetTotalTokenUsage(i int) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetTotalTokenUsage(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetTotalTokenUsage(v int) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetTotalTokenUsage(v)
+	return _c
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetTotalTokenUsage(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableTotalTokenUsage(v *int) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetTotalTokenUsage(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetRecapType sets the "recap_type" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetRecapType(i int) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetRecapType(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetRecapType(v int) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetRecapType(v)
+	return _c
 }
 
 // SetNillableRecapType sets the "recap_type" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableRecapType(i *int) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetRecapType(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableRecapType(v *int) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetRecapType(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetModelName sets the "model_name" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetModelName(s string) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetModelName(s)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetModelName(v string) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetModelName(v)
+	return _c
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableModelName(s *string) *LogChatHistoriesRecapCreate {
-	if s != nil {
-		lchrc.SetModelName(*s)
+func (_c *LogChatHistoriesRecapCreate) SetNillableModelName(v *string) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetModelName(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetCreatedAt(i int64) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetCreatedAt(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetCreatedAt(v int64) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableCreatedAt(i *int64) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetCreatedAt(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableCreatedAt(v *int64) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetUpdatedAt(i int64) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetUpdatedAt(i)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetUpdatedAt(v int64) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableUpdatedAt(i *int64) *LogChatHistoriesRecapCreate {
-	if i != nil {
-		lchrc.SetUpdatedAt(*i)
+func (_c *LogChatHistoriesRecapCreate) SetNillableUpdatedAt(v *int64) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (lchrc *LogChatHistoriesRecapCreate) SetID(u uuid.UUID) *LogChatHistoriesRecapCreate {
-	lchrc.mutation.SetID(u)
-	return lchrc
+func (_c *LogChatHistoriesRecapCreate) SetID(v uuid.UUID) *LogChatHistoriesRecapCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (lchrc *LogChatHistoriesRecapCreate) SetNillableID(u *uuid.UUID) *LogChatHistoriesRecapCreate {
-	if u != nil {
-		lchrc.SetID(*u)
+func (_c *LogChatHistoriesRecapCreate) SetNillableID(v *uuid.UUID) *LogChatHistoriesRecapCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return lchrc
+	return _c
 }
 
 // Mutation returns the LogChatHistoriesRecapMutation object of the builder.
-func (lchrc *LogChatHistoriesRecapCreate) Mutation() *LogChatHistoriesRecapMutation {
-	return lchrc.mutation
+func (_c *LogChatHistoriesRecapCreate) Mutation() *LogChatHistoriesRecapMutation {
+	return _c.mutation
 }
 
 // Save creates the LogChatHistoriesRecap in the database.
-func (lchrc *LogChatHistoriesRecapCreate) Save(ctx context.Context) (*LogChatHistoriesRecap, error) {
-	lchrc.defaults()
-	return withHooks(ctx, lchrc.sqlSave, lchrc.mutation, lchrc.hooks)
+func (_c *LogChatHistoriesRecapCreate) Save(ctx context.Context) (*LogChatHistoriesRecap, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (lchrc *LogChatHistoriesRecapCreate) SaveX(ctx context.Context) *LogChatHistoriesRecap {
-	v, err := lchrc.Save(ctx)
+func (_c *LogChatHistoriesRecapCreate) SaveX(ctx context.Context) *LogChatHistoriesRecap {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -209,114 +209,114 @@ func (lchrc *LogChatHistoriesRecapCreate) SaveX(ctx context.Context) *LogChatHis
 }
 
 // Exec executes the query.
-func (lchrc *LogChatHistoriesRecapCreate) Exec(ctx context.Context) error {
-	_, err := lchrc.Save(ctx)
+func (_c *LogChatHistoriesRecapCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchrc *LogChatHistoriesRecapCreate) ExecX(ctx context.Context) {
-	if err := lchrc.Exec(ctx); err != nil {
+func (_c *LogChatHistoriesRecapCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (lchrc *LogChatHistoriesRecapCreate) defaults() {
-	if _, ok := lchrc.mutation.ChatID(); !ok {
+func (_c *LogChatHistoriesRecapCreate) defaults() {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		v := logchathistoriesrecap.DefaultChatID
-		lchrc.mutation.SetChatID(v)
+		_c.mutation.SetChatID(v)
 	}
-	if _, ok := lchrc.mutation.RecapInputs(); !ok {
+	if _, ok := _c.mutation.RecapInputs(); !ok {
 		v := logchathistoriesrecap.DefaultRecapInputs
-		lchrc.mutation.SetRecapInputs(v)
+		_c.mutation.SetRecapInputs(v)
 	}
-	if _, ok := lchrc.mutation.RecapOutputs(); !ok {
+	if _, ok := _c.mutation.RecapOutputs(); !ok {
 		v := logchathistoriesrecap.DefaultRecapOutputs
-		lchrc.mutation.SetRecapOutputs(v)
+		_c.mutation.SetRecapOutputs(v)
 	}
-	if _, ok := lchrc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		v := logchathistoriesrecap.DefaultFromPlatform
-		lchrc.mutation.SetFromPlatform(v)
+		_c.mutation.SetFromPlatform(v)
 	}
-	if _, ok := lchrc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		v := logchathistoriesrecap.DefaultPromptTokenUsage
-		lchrc.mutation.SetPromptTokenUsage(v)
+		_c.mutation.SetPromptTokenUsage(v)
 	}
-	if _, ok := lchrc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		v := logchathistoriesrecap.DefaultCompletionTokenUsage
-		lchrc.mutation.SetCompletionTokenUsage(v)
+		_c.mutation.SetCompletionTokenUsage(v)
 	}
-	if _, ok := lchrc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		v := logchathistoriesrecap.DefaultTotalTokenUsage
-		lchrc.mutation.SetTotalTokenUsage(v)
+		_c.mutation.SetTotalTokenUsage(v)
 	}
-	if _, ok := lchrc.mutation.RecapType(); !ok {
+	if _, ok := _c.mutation.RecapType(); !ok {
 		v := logchathistoriesrecap.DefaultRecapType
-		lchrc.mutation.SetRecapType(v)
+		_c.mutation.SetRecapType(v)
 	}
-	if _, ok := lchrc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		v := logchathistoriesrecap.DefaultModelName
-		lchrc.mutation.SetModelName(v)
+		_c.mutation.SetModelName(v)
 	}
-	if _, ok := lchrc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := logchathistoriesrecap.DefaultCreatedAt()
-		lchrc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := lchrc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := logchathistoriesrecap.DefaultUpdatedAt()
-		lchrc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := lchrc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := logchathistoriesrecap.DefaultID()
-		lchrc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (lchrc *LogChatHistoriesRecapCreate) check() error {
-	if _, ok := lchrc.mutation.ChatID(); !ok {
+func (_c *LogChatHistoriesRecapCreate) check() error {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		return &ValidationError{Name: "chat_id", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.chat_id"`)}
 	}
-	if _, ok := lchrc.mutation.RecapInputs(); !ok {
+	if _, ok := _c.mutation.RecapInputs(); !ok {
 		return &ValidationError{Name: "recap_inputs", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.recap_inputs"`)}
 	}
-	if _, ok := lchrc.mutation.RecapOutputs(); !ok {
+	if _, ok := _c.mutation.RecapOutputs(); !ok {
 		return &ValidationError{Name: "recap_outputs", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.recap_outputs"`)}
 	}
-	if _, ok := lchrc.mutation.FromPlatform(); !ok {
+	if _, ok := _c.mutation.FromPlatform(); !ok {
 		return &ValidationError{Name: "from_platform", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.from_platform"`)}
 	}
-	if _, ok := lchrc.mutation.PromptTokenUsage(); !ok {
+	if _, ok := _c.mutation.PromptTokenUsage(); !ok {
 		return &ValidationError{Name: "prompt_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.prompt_token_usage"`)}
 	}
-	if _, ok := lchrc.mutation.CompletionTokenUsage(); !ok {
+	if _, ok := _c.mutation.CompletionTokenUsage(); !ok {
 		return &ValidationError{Name: "completion_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.completion_token_usage"`)}
 	}
-	if _, ok := lchrc.mutation.TotalTokenUsage(); !ok {
+	if _, ok := _c.mutation.TotalTokenUsage(); !ok {
 		return &ValidationError{Name: "total_token_usage", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.total_token_usage"`)}
 	}
-	if _, ok := lchrc.mutation.RecapType(); !ok {
+	if _, ok := _c.mutation.RecapType(); !ok {
 		return &ValidationError{Name: "recap_type", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.recap_type"`)}
 	}
-	if _, ok := lchrc.mutation.ModelName(); !ok {
+	if _, ok := _c.mutation.ModelName(); !ok {
 		return &ValidationError{Name: "model_name", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.model_name"`)}
 	}
-	if _, ok := lchrc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.created_at"`)}
 	}
-	if _, ok := lchrc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "LogChatHistoriesRecap.updated_at"`)}
 	}
 	return nil
 }
 
-func (lchrc *LogChatHistoriesRecapCreate) sqlSave(ctx context.Context) (*LogChatHistoriesRecap, error) {
-	if err := lchrc.check(); err != nil {
+func (_c *LogChatHistoriesRecapCreate) sqlSave(ctx context.Context) (*LogChatHistoriesRecap, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := lchrc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, lchrc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -329,62 +329,62 @@ func (lchrc *LogChatHistoriesRecapCreate) sqlSave(ctx context.Context) (*LogChat
 			return nil, err
 		}
 	}
-	lchrc.mutation.id = &_node.ID
-	lchrc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (lchrc *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, *sqlgraph.CreateSpec) {
+func (_c *LogChatHistoriesRecapCreate) createSpec() (*LogChatHistoriesRecap, *sqlgraph.CreateSpec) {
 	var (
-		_node = &LogChatHistoriesRecap{config: lchrc.config}
+		_node = &LogChatHistoriesRecap{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(logchathistoriesrecap.Table, sqlgraph.NewFieldSpec(logchathistoriesrecap.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = lchrc.schemaConfig.LogChatHistoriesRecap
-	if id, ok := lchrc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.LogChatHistoriesRecap
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := lchrc.mutation.ChatID(); ok {
+	if value, ok := _c.mutation.ChatID(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldChatID, field.TypeInt64, value)
 		_node.ChatID = value
 	}
-	if value, ok := lchrc.mutation.RecapInputs(); ok {
+	if value, ok := _c.mutation.RecapInputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapInputs, field.TypeString, value)
 		_node.RecapInputs = value
 	}
-	if value, ok := lchrc.mutation.RecapOutputs(); ok {
+	if value, ok := _c.mutation.RecapOutputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapOutputs, field.TypeString, value)
 		_node.RecapOutputs = value
 	}
-	if value, ok := lchrc.mutation.FromPlatform(); ok {
+	if value, ok := _c.mutation.FromPlatform(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 		_node.FromPlatform = value
 	}
-	if value, ok := lchrc.mutation.PromptTokenUsage(); ok {
+	if value, ok := _c.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
 		_node.PromptTokenUsage = value
 	}
-	if value, ok := lchrc.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _c.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
 		_node.CompletionTokenUsage = value
 	}
-	if value, ok := lchrc.mutation.TotalTokenUsage(); ok {
+	if value, ok := _c.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 		_node.TotalTokenUsage = value
 	}
-	if value, ok := lchrc.mutation.RecapType(); ok {
+	if value, ok := _c.mutation.RecapType(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 		_node.RecapType = value
 	}
-	if value, ok := lchrc.mutation.ModelName(); ok {
+	if value, ok := _c.mutation.ModelName(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
 		_node.ModelName = value
 	}
-	if value, ok := lchrc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := lchrc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
@@ -399,16 +399,16 @@ type LogChatHistoriesRecapCreateBulk struct {
 }
 
 // Save creates the LogChatHistoriesRecap entities in the database.
-func (lchrcb *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*LogChatHistoriesRecap, error) {
-	if lchrcb.err != nil {
-		return nil, lchrcb.err
+func (_c *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*LogChatHistoriesRecap, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(lchrcb.builders))
-	nodes := make([]*LogChatHistoriesRecap, len(lchrcb.builders))
-	mutators := make([]Mutator, len(lchrcb.builders))
-	for i := range lchrcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*LogChatHistoriesRecap, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := lchrcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*LogChatHistoriesRecapMutation)
@@ -422,11 +422,11 @@ func (lchrcb *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*Log
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, lchrcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, lchrcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -446,7 +446,7 @@ func (lchrcb *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*Log
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, lchrcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -454,8 +454,8 @@ func (lchrcb *LogChatHistoriesRecapCreateBulk) Save(ctx context.Context) ([]*Log
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lchrcb *LogChatHistoriesRecapCreateBulk) SaveX(ctx context.Context) []*LogChatHistoriesRecap {
-	v, err := lchrcb.Save(ctx)
+func (_c *LogChatHistoriesRecapCreateBulk) SaveX(ctx context.Context) []*LogChatHistoriesRecap {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -463,14 +463,14 @@ func (lchrcb *LogChatHistoriesRecapCreateBulk) SaveX(ctx context.Context) []*Log
 }
 
 // Exec executes the query.
-func (lchrcb *LogChatHistoriesRecapCreateBulk) Exec(ctx context.Context) error {
-	_, err := lchrcb.Save(ctx)
+func (_c *LogChatHistoriesRecapCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchrcb *LogChatHistoriesRecapCreateBulk) ExecX(ctx context.Context) {
-	if err := lchrcb.Exec(ctx); err != nil {
+func (_c *LogChatHistoriesRecapCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

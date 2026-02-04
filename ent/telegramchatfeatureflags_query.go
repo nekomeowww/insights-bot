@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type TelegramChatFeatureFlagsQuery struct {
 }
 
 // Where adds a new predicate for the TelegramChatFeatureFlagsQuery builder.
-func (tcffq *TelegramChatFeatureFlagsQuery) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsQuery {
-	tcffq.predicates = append(tcffq.predicates, ps...)
-	return tcffq
+func (_q *TelegramChatFeatureFlagsQuery) Where(ps ...predicate.TelegramChatFeatureFlags) *TelegramChatFeatureFlagsQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tcffq *TelegramChatFeatureFlagsQuery) Limit(limit int) *TelegramChatFeatureFlagsQuery {
-	tcffq.ctx.Limit = &limit
-	return tcffq
+func (_q *TelegramChatFeatureFlagsQuery) Limit(limit int) *TelegramChatFeatureFlagsQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tcffq *TelegramChatFeatureFlagsQuery) Offset(offset int) *TelegramChatFeatureFlagsQuery {
-	tcffq.ctx.Offset = &offset
-	return tcffq
+func (_q *TelegramChatFeatureFlagsQuery) Offset(offset int) *TelegramChatFeatureFlagsQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tcffq *TelegramChatFeatureFlagsQuery) Unique(unique bool) *TelegramChatFeatureFlagsQuery {
-	tcffq.ctx.Unique = &unique
-	return tcffq
+func (_q *TelegramChatFeatureFlagsQuery) Unique(unique bool) *TelegramChatFeatureFlagsQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tcffq *TelegramChatFeatureFlagsQuery) Order(o ...telegramchatfeatureflags.OrderOption) *TelegramChatFeatureFlagsQuery {
-	tcffq.order = append(tcffq.order, o...)
-	return tcffq
+func (_q *TelegramChatFeatureFlagsQuery) Order(o ...telegramchatfeatureflags.OrderOption) *TelegramChatFeatureFlagsQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TelegramChatFeatureFlags entity from the query.
 // Returns a *NotFoundError when no TelegramChatFeatureFlags was found.
-func (tcffq *TelegramChatFeatureFlagsQuery) First(ctx context.Context) (*TelegramChatFeatureFlags, error) {
-	nodes, err := tcffq.Limit(1).All(setContextOp(ctx, tcffq.ctx, "First"))
+func (_q *TelegramChatFeatureFlagsQuery) First(ctx context.Context) (*TelegramChatFeatureFlags, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) First(ctx context.Context) (*Telegra
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) FirstX(ctx context.Context) *TelegramChatFeatureFlags {
-	node, err := tcffq.First(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) FirstX(ctx context.Context) *TelegramChatFeatureFlags {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (tcffq *TelegramChatFeatureFlagsQuery) FirstX(ctx context.Context) *Telegra
 
 // FirstID returns the first TelegramChatFeatureFlags ID from the query.
 // Returns a *NotFoundError when no TelegramChatFeatureFlags ID was found.
-func (tcffq *TelegramChatFeatureFlagsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatFeatureFlagsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcffq.Limit(1).IDs(setContextOp(ctx, tcffq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) FirstID(ctx context.Context) (id uui
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := tcffq.FirstID(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) FirstIDX(ctx context.Context) uuid.U
 // Only returns a single TelegramChatFeatureFlags entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TelegramChatFeatureFlags entity is found.
 // Returns a *NotFoundError when no TelegramChatFeatureFlags entities are found.
-func (tcffq *TelegramChatFeatureFlagsQuery) Only(ctx context.Context) (*TelegramChatFeatureFlags, error) {
-	nodes, err := tcffq.Limit(2).All(setContextOp(ctx, tcffq.ctx, "Only"))
+func (_q *TelegramChatFeatureFlagsQuery) Only(ctx context.Context) (*TelegramChatFeatureFlags, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) Only(ctx context.Context) (*Telegram
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) OnlyX(ctx context.Context) *TelegramChatFeatureFlags {
-	node, err := tcffq.Only(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) OnlyX(ctx context.Context) *TelegramChatFeatureFlags {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (tcffq *TelegramChatFeatureFlagsQuery) OnlyX(ctx context.Context) *Telegram
 // OnlyID is like Only, but returns the only TelegramChatFeatureFlags ID in the query.
 // Returns a *NotSingularError when more than one TelegramChatFeatureFlags ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tcffq *TelegramChatFeatureFlagsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatFeatureFlagsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcffq.Limit(2).IDs(setContextOp(ctx, tcffq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) OnlyID(ctx context.Context) (id uuid
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := tcffq.OnlyID(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (tcffq *TelegramChatFeatureFlagsQuery) OnlyIDX(ctx context.Context) uuid.UU
 }
 
 // All executes the query and returns a list of TelegramChatFeatureFlagsSlice.
-func (tcffq *TelegramChatFeatureFlagsQuery) All(ctx context.Context) ([]*TelegramChatFeatureFlags, error) {
-	ctx = setContextOp(ctx, tcffq.ctx, "All")
-	if err := tcffq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatFeatureFlagsQuery) All(ctx context.Context) ([]*TelegramChatFeatureFlags, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TelegramChatFeatureFlags, *TelegramChatFeatureFlagsQuery]()
-	return withInterceptors[[]*TelegramChatFeatureFlags](ctx, tcffq, qr, tcffq.inters)
+	return withInterceptors[[]*TelegramChatFeatureFlags](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) AllX(ctx context.Context) []*TelegramChatFeatureFlags {
-	nodes, err := tcffq.All(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) AllX(ctx context.Context) []*TelegramChatFeatureFlags {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (tcffq *TelegramChatFeatureFlagsQuery) AllX(ctx context.Context) []*Telegra
 }
 
 // IDs executes the query and returns a list of TelegramChatFeatureFlags IDs.
-func (tcffq *TelegramChatFeatureFlagsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if tcffq.ctx.Unique == nil && tcffq.path != nil {
-		tcffq.Unique(true)
+func (_q *TelegramChatFeatureFlagsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tcffq.ctx, "IDs")
-	if err = tcffq.Select(telegramchatfeatureflags.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(telegramchatfeatureflags.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := tcffq.IDs(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (tcffq *TelegramChatFeatureFlagsQuery) IDsX(ctx context.Context) []uuid.UUI
 }
 
 // Count returns the count of the given query.
-func (tcffq *TelegramChatFeatureFlagsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tcffq.ctx, "Count")
-	if err := tcffq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatFeatureFlagsQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tcffq, querierCount[*TelegramChatFeatureFlagsQuery](), tcffq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TelegramChatFeatureFlagsQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) CountX(ctx context.Context) int {
-	count, err := tcffq.Count(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (tcffq *TelegramChatFeatureFlagsQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tcffq *TelegramChatFeatureFlagsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tcffq.ctx, "Exist")
-	switch _, err := tcffq.FirstID(ctx); {
+func (_q *TelegramChatFeatureFlagsQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (tcffq *TelegramChatFeatureFlagsQuery) Exist(ctx context.Context) (bool, er
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tcffq *TelegramChatFeatureFlagsQuery) ExistX(ctx context.Context) bool {
-	exist, err := tcffq.Exist(ctx)
+func (_q *TelegramChatFeatureFlagsQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (tcffq *TelegramChatFeatureFlagsQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TelegramChatFeatureFlagsQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tcffq *TelegramChatFeatureFlagsQuery) Clone() *TelegramChatFeatureFlagsQuery {
-	if tcffq == nil {
+func (_q *TelegramChatFeatureFlagsQuery) Clone() *TelegramChatFeatureFlagsQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TelegramChatFeatureFlagsQuery{
-		config:     tcffq.config,
-		ctx:        tcffq.ctx.Clone(),
-		order:      append([]telegramchatfeatureflags.OrderOption{}, tcffq.order...),
-		inters:     append([]Interceptor{}, tcffq.inters...),
-		predicates: append([]predicate.TelegramChatFeatureFlags{}, tcffq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]telegramchatfeatureflags.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TelegramChatFeatureFlags{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  tcffq.sql.Clone(),
-		path: tcffq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (tcffq *TelegramChatFeatureFlagsQuery) Clone() *TelegramChatFeatureFlagsQue
 //		GroupBy(telegramchatfeatureflags.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (tcffq *TelegramChatFeatureFlagsQuery) GroupBy(field string, fields ...string) *TelegramChatFeatureFlagsGroupBy {
-	tcffq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TelegramChatFeatureFlagsGroupBy{build: tcffq}
-	grbuild.flds = &tcffq.ctx.Fields
+func (_q *TelegramChatFeatureFlagsQuery) GroupBy(field string, fields ...string) *TelegramChatFeatureFlagsGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TelegramChatFeatureFlagsGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = telegramchatfeatureflags.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (tcffq *TelegramChatFeatureFlagsQuery) GroupBy(field string, fields ...stri
 //	client.TelegramChatFeatureFlags.Query().
 //		Select(telegramchatfeatureflags.FieldChatID).
 //		Scan(ctx, &v)
-func (tcffq *TelegramChatFeatureFlagsQuery) Select(fields ...string) *TelegramChatFeatureFlagsSelect {
-	tcffq.ctx.Fields = append(tcffq.ctx.Fields, fields...)
-	sbuild := &TelegramChatFeatureFlagsSelect{TelegramChatFeatureFlagsQuery: tcffq}
+func (_q *TelegramChatFeatureFlagsQuery) Select(fields ...string) *TelegramChatFeatureFlagsSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TelegramChatFeatureFlagsSelect{TelegramChatFeatureFlagsQuery: _q}
 	sbuild.label = telegramchatfeatureflags.Label
-	sbuild.flds, sbuild.scan = &tcffq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TelegramChatFeatureFlagsSelect configured with the given aggregations.
-func (tcffq *TelegramChatFeatureFlagsQuery) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsSelect {
-	return tcffq.Select().Aggregate(fns...)
+func (_q *TelegramChatFeatureFlagsQuery) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tcffq *TelegramChatFeatureFlagsQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tcffq.inters {
+func (_q *TelegramChatFeatureFlagsQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tcffq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tcffq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !telegramchatfeatureflags.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if tcffq.path != nil {
-		prev, err := tcffq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tcffq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (tcffq *TelegramChatFeatureFlagsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatFeatureFlags, error) {
+func (_q *TelegramChatFeatureFlagsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatFeatureFlags, error) {
 	var (
 		nodes = []*TelegramChatFeatureFlags{}
-		_spec = tcffq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TelegramChatFeatureFlags).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TelegramChatFeatureFlags{config: tcffq.config}
+		node := &TelegramChatFeatureFlags{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tcffq.schemaConfig.TelegramChatFeatureFlags
-	ctx = internal.NewSchemaConfigContext(ctx, tcffq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatFeatureFlags
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tcffq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (tcffq *TelegramChatFeatureFlagsQuery) sqlAll(ctx context.Context, hooks ..
 	return nodes, nil
 }
 
-func (tcffq *TelegramChatFeatureFlagsQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tcffq.querySpec()
-	_spec.Node.Schema = tcffq.schemaConfig.TelegramChatFeatureFlags
-	ctx = internal.NewSchemaConfigContext(ctx, tcffq.schemaConfig)
-	_spec.Node.Columns = tcffq.ctx.Fields
-	if len(tcffq.ctx.Fields) > 0 {
-		_spec.Unique = tcffq.ctx.Unique != nil && *tcffq.ctx.Unique
+func (_q *TelegramChatFeatureFlagsQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatFeatureFlags
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tcffq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tcffq *TelegramChatFeatureFlagsQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TelegramChatFeatureFlagsQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(telegramchatfeatureflags.Table, telegramchatfeatureflags.Columns, sqlgraph.NewFieldSpec(telegramchatfeatureflags.FieldID, field.TypeUUID))
-	_spec.From = tcffq.sql
-	if unique := tcffq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tcffq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tcffq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatfeatureflags.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (tcffq *TelegramChatFeatureFlagsQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := tcffq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tcffq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tcffq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tcffq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (tcffq *TelegramChatFeatureFlagsQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tcffq *TelegramChatFeatureFlagsQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tcffq.driver.Dialect())
+func (_q *TelegramChatFeatureFlagsQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(telegramchatfeatureflags.Table)
-	columns := tcffq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = telegramchatfeatureflags.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tcffq.sql != nil {
-		selector = tcffq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tcffq.ctx.Unique != nil && *tcffq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tcffq.schemaConfig.TelegramChatFeatureFlags)
-	ctx = internal.NewSchemaConfigContext(ctx, tcffq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TelegramChatFeatureFlags)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range tcffq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tcffq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tcffq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tcffq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type TelegramChatFeatureFlagsGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tcffgb *TelegramChatFeatureFlagsGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsGroupBy {
-	tcffgb.fns = append(tcffgb.fns, fns...)
-	return tcffgb
+func (_g *TelegramChatFeatureFlagsGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcffgb *TelegramChatFeatureFlagsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcffgb.build.ctx, "GroupBy")
-	if err := tcffgb.build.prepareQuery(ctx); err != nil {
+func (_g *TelegramChatFeatureFlagsGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatFeatureFlagsQuery, *TelegramChatFeatureFlagsGroupBy](ctx, tcffgb.build, tcffgb, tcffgb.build.inters, v)
+	return scanWithInterceptors[*TelegramChatFeatureFlagsQuery, *TelegramChatFeatureFlagsGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tcffgb *TelegramChatFeatureFlagsGroupBy) sqlScan(ctx context.Context, root *TelegramChatFeatureFlagsQuery, v any) error {
+func (_g *TelegramChatFeatureFlagsGroupBy) sqlScan(ctx context.Context, root *TelegramChatFeatureFlagsQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tcffgb.fns))
-	for _, fn := range tcffgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tcffgb.flds)+len(tcffgb.fns))
-		for _, f := range *tcffgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tcffgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcffgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type TelegramChatFeatureFlagsSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tcffs *TelegramChatFeatureFlagsSelect) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsSelect {
-	tcffs.fns = append(tcffs.fns, fns...)
-	return tcffs
+func (_s *TelegramChatFeatureFlagsSelect) Aggregate(fns ...AggregateFunc) *TelegramChatFeatureFlagsSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcffs *TelegramChatFeatureFlagsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcffs.ctx, "Select")
-	if err := tcffs.prepareQuery(ctx); err != nil {
+func (_s *TelegramChatFeatureFlagsSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatFeatureFlagsQuery, *TelegramChatFeatureFlagsSelect](ctx, tcffs.TelegramChatFeatureFlagsQuery, tcffs, tcffs.inters, v)
+	return scanWithInterceptors[*TelegramChatFeatureFlagsQuery, *TelegramChatFeatureFlagsSelect](ctx, _s.TelegramChatFeatureFlagsQuery, _s, _s.inters, v)
 }
 
-func (tcffs *TelegramChatFeatureFlagsSelect) sqlScan(ctx context.Context, root *TelegramChatFeatureFlagsQuery, v any) error {
+func (_s *TelegramChatFeatureFlagsSelect) sqlScan(ctx context.Context, root *TelegramChatFeatureFlagsQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tcffs.fns))
-	for _, fn := range tcffs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tcffs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (tcffs *TelegramChatFeatureFlagsSelect) sqlScan(ctx context.Context, root *
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcffs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

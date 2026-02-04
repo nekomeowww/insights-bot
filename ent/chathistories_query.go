@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type ChatHistoriesQuery struct {
 }
 
 // Where adds a new predicate for the ChatHistoriesQuery builder.
-func (chq *ChatHistoriesQuery) Where(ps ...predicate.ChatHistories) *ChatHistoriesQuery {
-	chq.predicates = append(chq.predicates, ps...)
-	return chq
+func (_q *ChatHistoriesQuery) Where(ps ...predicate.ChatHistories) *ChatHistoriesQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (chq *ChatHistoriesQuery) Limit(limit int) *ChatHistoriesQuery {
-	chq.ctx.Limit = &limit
-	return chq
+func (_q *ChatHistoriesQuery) Limit(limit int) *ChatHistoriesQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (chq *ChatHistoriesQuery) Offset(offset int) *ChatHistoriesQuery {
-	chq.ctx.Offset = &offset
-	return chq
+func (_q *ChatHistoriesQuery) Offset(offset int) *ChatHistoriesQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (chq *ChatHistoriesQuery) Unique(unique bool) *ChatHistoriesQuery {
-	chq.ctx.Unique = &unique
-	return chq
+func (_q *ChatHistoriesQuery) Unique(unique bool) *ChatHistoriesQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (chq *ChatHistoriesQuery) Order(o ...chathistories.OrderOption) *ChatHistoriesQuery {
-	chq.order = append(chq.order, o...)
-	return chq
+func (_q *ChatHistoriesQuery) Order(o ...chathistories.OrderOption) *ChatHistoriesQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first ChatHistories entity from the query.
 // Returns a *NotFoundError when no ChatHistories was found.
-func (chq *ChatHistoriesQuery) First(ctx context.Context) (*ChatHistories, error) {
-	nodes, err := chq.Limit(1).All(setContextOp(ctx, chq.ctx, "First"))
+func (_q *ChatHistoriesQuery) First(ctx context.Context) (*ChatHistories, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (chq *ChatHistoriesQuery) First(ctx context.Context) (*ChatHistories, error
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) FirstX(ctx context.Context) *ChatHistories {
-	node, err := chq.First(ctx)
+func (_q *ChatHistoriesQuery) FirstX(ctx context.Context) *ChatHistories {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (chq *ChatHistoriesQuery) FirstX(ctx context.Context) *ChatHistories {
 
 // FirstID returns the first ChatHistories ID from the query.
 // Returns a *NotFoundError when no ChatHistories ID was found.
-func (chq *ChatHistoriesQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *ChatHistoriesQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = chq.Limit(1).IDs(setContextOp(ctx, chq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (chq *ChatHistoriesQuery) FirstID(ctx context.Context) (id uuid.UUID, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := chq.FirstID(ctx)
+func (_q *ChatHistoriesQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (chq *ChatHistoriesQuery) FirstIDX(ctx context.Context) uuid.UUID {
 // Only returns a single ChatHistories entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one ChatHistories entity is found.
 // Returns a *NotFoundError when no ChatHistories entities are found.
-func (chq *ChatHistoriesQuery) Only(ctx context.Context) (*ChatHistories, error) {
-	nodes, err := chq.Limit(2).All(setContextOp(ctx, chq.ctx, "Only"))
+func (_q *ChatHistoriesQuery) Only(ctx context.Context) (*ChatHistories, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (chq *ChatHistoriesQuery) Only(ctx context.Context) (*ChatHistories, error)
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) OnlyX(ctx context.Context) *ChatHistories {
-	node, err := chq.Only(ctx)
+func (_q *ChatHistoriesQuery) OnlyX(ctx context.Context) *ChatHistories {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (chq *ChatHistoriesQuery) OnlyX(ctx context.Context) *ChatHistories {
 // OnlyID is like Only, but returns the only ChatHistories ID in the query.
 // Returns a *NotSingularError when more than one ChatHistories ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (chq *ChatHistoriesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *ChatHistoriesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = chq.Limit(2).IDs(setContextOp(ctx, chq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (chq *ChatHistoriesQuery) OnlyID(ctx context.Context) (id uuid.UUID, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := chq.OnlyID(ctx)
+func (_q *ChatHistoriesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (chq *ChatHistoriesQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 }
 
 // All executes the query and returns a list of ChatHistoriesSlice.
-func (chq *ChatHistoriesQuery) All(ctx context.Context) ([]*ChatHistories, error) {
-	ctx = setContextOp(ctx, chq.ctx, "All")
-	if err := chq.prepareQuery(ctx); err != nil {
+func (_q *ChatHistoriesQuery) All(ctx context.Context) ([]*ChatHistories, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*ChatHistories, *ChatHistoriesQuery]()
-	return withInterceptors[[]*ChatHistories](ctx, chq, qr, chq.inters)
+	return withInterceptors[[]*ChatHistories](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) AllX(ctx context.Context) []*ChatHistories {
-	nodes, err := chq.All(ctx)
+func (_q *ChatHistoriesQuery) AllX(ctx context.Context) []*ChatHistories {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (chq *ChatHistoriesQuery) AllX(ctx context.Context) []*ChatHistories {
 }
 
 // IDs executes the query and returns a list of ChatHistories IDs.
-func (chq *ChatHistoriesQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if chq.ctx.Unique == nil && chq.path != nil {
-		chq.Unique(true)
+func (_q *ChatHistoriesQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, chq.ctx, "IDs")
-	if err = chq.Select(chathistories.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(chathistories.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := chq.IDs(ctx)
+func (_q *ChatHistoriesQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (chq *ChatHistoriesQuery) IDsX(ctx context.Context) []uuid.UUID {
 }
 
 // Count returns the count of the given query.
-func (chq *ChatHistoriesQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, chq.ctx, "Count")
-	if err := chq.prepareQuery(ctx); err != nil {
+func (_q *ChatHistoriesQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, chq, querierCount[*ChatHistoriesQuery](), chq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*ChatHistoriesQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) CountX(ctx context.Context) int {
-	count, err := chq.Count(ctx)
+func (_q *ChatHistoriesQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (chq *ChatHistoriesQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (chq *ChatHistoriesQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, chq.ctx, "Exist")
-	switch _, err := chq.FirstID(ctx); {
+func (_q *ChatHistoriesQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (chq *ChatHistoriesQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (chq *ChatHistoriesQuery) ExistX(ctx context.Context) bool {
-	exist, err := chq.Exist(ctx)
+func (_q *ChatHistoriesQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (chq *ChatHistoriesQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the ChatHistoriesQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (chq *ChatHistoriesQuery) Clone() *ChatHistoriesQuery {
-	if chq == nil {
+func (_q *ChatHistoriesQuery) Clone() *ChatHistoriesQuery {
+	if _q == nil {
 		return nil
 	}
 	return &ChatHistoriesQuery{
-		config:     chq.config,
-		ctx:        chq.ctx.Clone(),
-		order:      append([]chathistories.OrderOption{}, chq.order...),
-		inters:     append([]Interceptor{}, chq.inters...),
-		predicates: append([]predicate.ChatHistories{}, chq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]chathistories.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.ChatHistories{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  chq.sql.Clone(),
-		path: chq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (chq *ChatHistoriesQuery) Clone() *ChatHistoriesQuery {
 //		GroupBy(chathistories.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (chq *ChatHistoriesQuery) GroupBy(field string, fields ...string) *ChatHistoriesGroupBy {
-	chq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &ChatHistoriesGroupBy{build: chq}
-	grbuild.flds = &chq.ctx.Fields
+func (_q *ChatHistoriesQuery) GroupBy(field string, fields ...string) *ChatHistoriesGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &ChatHistoriesGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = chathistories.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (chq *ChatHistoriesQuery) GroupBy(field string, fields ...string) *ChatHist
 //	client.ChatHistories.Query().
 //		Select(chathistories.FieldChatID).
 //		Scan(ctx, &v)
-func (chq *ChatHistoriesQuery) Select(fields ...string) *ChatHistoriesSelect {
-	chq.ctx.Fields = append(chq.ctx.Fields, fields...)
-	sbuild := &ChatHistoriesSelect{ChatHistoriesQuery: chq}
+func (_q *ChatHistoriesQuery) Select(fields ...string) *ChatHistoriesSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &ChatHistoriesSelect{ChatHistoriesQuery: _q}
 	sbuild.label = chathistories.Label
-	sbuild.flds, sbuild.scan = &chq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a ChatHistoriesSelect configured with the given aggregations.
-func (chq *ChatHistoriesQuery) Aggregate(fns ...AggregateFunc) *ChatHistoriesSelect {
-	return chq.Select().Aggregate(fns...)
+func (_q *ChatHistoriesQuery) Aggregate(fns ...AggregateFunc) *ChatHistoriesSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (chq *ChatHistoriesQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range chq.inters {
+func (_q *ChatHistoriesQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, chq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range chq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !chathistories.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if chq.path != nil {
-		prev, err := chq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		chq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (chq *ChatHistoriesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ChatHistories, error) {
+func (_q *ChatHistoriesQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ChatHistories, error) {
 	var (
 		nodes = []*ChatHistories{}
-		_spec = chq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ChatHistories).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &ChatHistories{config: chq.config}
+		node := &ChatHistories{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = chq.schemaConfig.ChatHistories
-	ctx = internal.NewSchemaConfigContext(ctx, chq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.ChatHistories
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, chq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (chq *ChatHistoriesQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (chq *ChatHistoriesQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := chq.querySpec()
-	_spec.Node.Schema = chq.schemaConfig.ChatHistories
-	ctx = internal.NewSchemaConfigContext(ctx, chq.schemaConfig)
-	_spec.Node.Columns = chq.ctx.Fields
-	if len(chq.ctx.Fields) > 0 {
-		_spec.Unique = chq.ctx.Unique != nil && *chq.ctx.Unique
+func (_q *ChatHistoriesQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.ChatHistories
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, chq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (chq *ChatHistoriesQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *ChatHistoriesQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(chathistories.Table, chathistories.Columns, sqlgraph.NewFieldSpec(chathistories.FieldID, field.TypeUUID))
-	_spec.From = chq.sql
-	if unique := chq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if chq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := chq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, chathistories.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (chq *ChatHistoriesQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := chq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := chq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := chq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := chq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (chq *ChatHistoriesQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (chq *ChatHistoriesQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(chq.driver.Dialect())
+func (_q *ChatHistoriesQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(chathistories.Table)
-	columns := chq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = chathistories.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if chq.sql != nil {
-		selector = chq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if chq.ctx.Unique != nil && *chq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(chq.schemaConfig.ChatHistories)
-	ctx = internal.NewSchemaConfigContext(ctx, chq.schemaConfig)
+	t1.Schema(_q.schemaConfig.ChatHistories)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range chq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range chq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := chq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := chq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type ChatHistoriesGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (chgb *ChatHistoriesGroupBy) Aggregate(fns ...AggregateFunc) *ChatHistoriesGroupBy {
-	chgb.fns = append(chgb.fns, fns...)
-	return chgb
+func (_g *ChatHistoriesGroupBy) Aggregate(fns ...AggregateFunc) *ChatHistoriesGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (chgb *ChatHistoriesGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chgb.build.ctx, "GroupBy")
-	if err := chgb.build.prepareQuery(ctx); err != nil {
+func (_g *ChatHistoriesGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ChatHistoriesQuery, *ChatHistoriesGroupBy](ctx, chgb.build, chgb, chgb.build.inters, v)
+	return scanWithInterceptors[*ChatHistoriesQuery, *ChatHistoriesGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (chgb *ChatHistoriesGroupBy) sqlScan(ctx context.Context, root *ChatHistoriesQuery, v any) error {
+func (_g *ChatHistoriesGroupBy) sqlScan(ctx context.Context, root *ChatHistoriesQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(chgb.fns))
-	for _, fn := range chgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*chgb.flds)+len(chgb.fns))
-		for _, f := range *chgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*chgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := chgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type ChatHistoriesSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (chs *ChatHistoriesSelect) Aggregate(fns ...AggregateFunc) *ChatHistoriesSelect {
-	chs.fns = append(chs.fns, fns...)
-	return chs
+func (_s *ChatHistoriesSelect) Aggregate(fns ...AggregateFunc) *ChatHistoriesSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (chs *ChatHistoriesSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, chs.ctx, "Select")
-	if err := chs.prepareQuery(ctx); err != nil {
+func (_s *ChatHistoriesSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*ChatHistoriesQuery, *ChatHistoriesSelect](ctx, chs.ChatHistoriesQuery, chs, chs.inters, v)
+	return scanWithInterceptors[*ChatHistoriesQuery, *ChatHistoriesSelect](ctx, _s.ChatHistoriesQuery, _s, _s.inters, v)
 }
 
-func (chs *ChatHistoriesSelect) sqlScan(ctx context.Context, root *ChatHistoriesQuery, v any) error {
+func (_s *ChatHistoriesSelect) sqlScan(ctx context.Context, root *ChatHistoriesQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(chs.fns))
-	for _, fn := range chs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*chs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (chs *ChatHistoriesSelect) sqlScan(ctx context.Context, root *ChatHistories
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := chs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

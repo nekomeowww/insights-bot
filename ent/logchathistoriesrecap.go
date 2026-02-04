@@ -62,7 +62,7 @@ func (*LogChatHistoriesRecap) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the LogChatHistoriesRecap fields.
-func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) error {
+func (_m *LogChatHistoriesRecap) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -72,76 +72,76 @@ func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) 
 			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
-				lchr.ID = *value
+				_m.ID = *value
 			}
 		case logchathistoriesrecap.FieldChatID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field chat_id", values[i])
 			} else if value.Valid {
-				lchr.ChatID = value.Int64
+				_m.ChatID = value.Int64
 			}
 		case logchathistoriesrecap.FieldRecapInputs:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field recap_inputs", values[i])
 			} else if value.Valid {
-				lchr.RecapInputs = value.String
+				_m.RecapInputs = value.String
 			}
 		case logchathistoriesrecap.FieldRecapOutputs:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field recap_outputs", values[i])
 			} else if value.Valid {
-				lchr.RecapOutputs = value.String
+				_m.RecapOutputs = value.String
 			}
 		case logchathistoriesrecap.FieldFromPlatform:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field from_platform", values[i])
 			} else if value.Valid {
-				lchr.FromPlatform = int(value.Int64)
+				_m.FromPlatform = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldPromptTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field prompt_token_usage", values[i])
 			} else if value.Valid {
-				lchr.PromptTokenUsage = int(value.Int64)
+				_m.PromptTokenUsage = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldCompletionTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field completion_token_usage", values[i])
 			} else if value.Valid {
-				lchr.CompletionTokenUsage = int(value.Int64)
+				_m.CompletionTokenUsage = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldTotalTokenUsage:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field total_token_usage", values[i])
 			} else if value.Valid {
-				lchr.TotalTokenUsage = int(value.Int64)
+				_m.TotalTokenUsage = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldRecapType:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field recap_type", values[i])
 			} else if value.Valid {
-				lchr.RecapType = int(value.Int64)
+				_m.RecapType = int(value.Int64)
 			}
 		case logchathistoriesrecap.FieldModelName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field model_name", values[i])
 			} else if value.Valid {
-				lchr.ModelName = value.String
+				_m.ModelName = value.String
 			}
 		case logchathistoriesrecap.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				lchr.CreatedAt = value.Int64
+				_m.CreatedAt = value.Int64
 			}
 		case logchathistoriesrecap.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				lchr.UpdatedAt = value.Int64
+				_m.UpdatedAt = value.Int64
 			}
 		default:
-			lchr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -149,65 +149,65 @@ func (lchr *LogChatHistoriesRecap) assignValues(columns []string, values []any) 
 
 // Value returns the ent.Value that was dynamically selected and assigned to the LogChatHistoriesRecap.
 // This includes values selected through modifiers, order, etc.
-func (lchr *LogChatHistoriesRecap) Value(name string) (ent.Value, error) {
-	return lchr.selectValues.Get(name)
+func (_m *LogChatHistoriesRecap) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this LogChatHistoriesRecap.
 // Note that you need to call LogChatHistoriesRecap.Unwrap() before calling this method if this LogChatHistoriesRecap
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (lchr *LogChatHistoriesRecap) Update() *LogChatHistoriesRecapUpdateOne {
-	return NewLogChatHistoriesRecapClient(lchr.config).UpdateOne(lchr)
+func (_m *LogChatHistoriesRecap) Update() *LogChatHistoriesRecapUpdateOne {
+	return NewLogChatHistoriesRecapClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the LogChatHistoriesRecap entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (lchr *LogChatHistoriesRecap) Unwrap() *LogChatHistoriesRecap {
-	_tx, ok := lchr.config.driver.(*txDriver)
+func (_m *LogChatHistoriesRecap) Unwrap() *LogChatHistoriesRecap {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: LogChatHistoriesRecap is not a transactional entity")
 	}
-	lchr.config.driver = _tx.drv
-	return lchr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (lchr *LogChatHistoriesRecap) String() string {
+func (_m *LogChatHistoriesRecap) String() string {
 	var builder strings.Builder
 	builder.WriteString("LogChatHistoriesRecap(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", lchr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("chat_id=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.ChatID))
+	builder.WriteString(fmt.Sprintf("%v", _m.ChatID))
 	builder.WriteString(", ")
 	builder.WriteString("recap_inputs=")
-	builder.WriteString(lchr.RecapInputs)
+	builder.WriteString(_m.RecapInputs)
 	builder.WriteString(", ")
 	builder.WriteString("recap_outputs=")
-	builder.WriteString(lchr.RecapOutputs)
+	builder.WriteString(_m.RecapOutputs)
 	builder.WriteString(", ")
 	builder.WriteString("from_platform=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.FromPlatform))
+	builder.WriteString(fmt.Sprintf("%v", _m.FromPlatform))
 	builder.WriteString(", ")
 	builder.WriteString("prompt_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.PromptTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.PromptTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("completion_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.CompletionTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.CompletionTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("total_token_usage=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.TotalTokenUsage))
+	builder.WriteString(fmt.Sprintf("%v", _m.TotalTokenUsage))
 	builder.WriteString(", ")
 	builder.WriteString("recap_type=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.RecapType))
+	builder.WriteString(fmt.Sprintf("%v", _m.RecapType))
 	builder.WriteString(", ")
 	builder.WriteString("model_name=")
-	builder.WriteString(lchr.ModelName)
+	builder.WriteString(_m.ModelName)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.CreatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(fmt.Sprintf("%v", lchr.UpdatedAt))
+	builder.WriteString(fmt.Sprintf("%v", _m.UpdatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

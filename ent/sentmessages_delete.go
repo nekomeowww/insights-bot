@@ -21,58 +21,58 @@ type SentMessagesDelete struct {
 }
 
 // Where appends a list predicates to the SentMessagesDelete builder.
-func (smd *SentMessagesDelete) Where(ps ...predicate.SentMessages) *SentMessagesDelete {
-	smd.mutation.Where(ps...)
-	return smd
+func (_d *SentMessagesDelete) Where(ps ...predicate.SentMessages) *SentMessagesDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (smd *SentMessagesDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, smd.sqlExec, smd.mutation, smd.hooks)
+func (_d *SentMessagesDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (smd *SentMessagesDelete) ExecX(ctx context.Context) int {
-	n, err := smd.Exec(ctx)
+func (_d *SentMessagesDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (smd *SentMessagesDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *SentMessagesDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(sentmessages.Table, sqlgraph.NewFieldSpec(sentmessages.FieldID, field.TypeUUID))
-	_spec.Node.Schema = smd.schemaConfig.SentMessages
-	ctx = internal.NewSchemaConfigContext(ctx, smd.schemaConfig)
-	if ps := smd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.SentMessages
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, smd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	smd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // SentMessagesDeleteOne is the builder for deleting a single SentMessages entity.
 type SentMessagesDeleteOne struct {
-	smd *SentMessagesDelete
+	_d *SentMessagesDelete
 }
 
 // Where appends a list predicates to the SentMessagesDelete builder.
-func (smdo *SentMessagesDeleteOne) Where(ps ...predicate.SentMessages) *SentMessagesDeleteOne {
-	smdo.smd.mutation.Where(ps...)
-	return smdo
+func (_d *SentMessagesDeleteOne) Where(ps ...predicate.SentMessages) *SentMessagesDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (smdo *SentMessagesDeleteOne) Exec(ctx context.Context) error {
-	n, err := smdo.smd.Exec(ctx)
+func (_d *SentMessagesDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (smdo *SentMessagesDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (smdo *SentMessagesDeleteOne) ExecX(ctx context.Context) {
-	if err := smdo.Exec(ctx); err != nil {
+func (_d *SentMessagesDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

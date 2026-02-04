@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type MetricOpenAIChatCompletionTokenUsageQuery struct {
 }
 
 // Where adds a new predicate for the MetricOpenAIChatCompletionTokenUsageQuery builder.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageQuery {
-	moacctuq.predicates = append(moacctuq.predicates, ps...)
-	return moacctuq
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Where(ps ...predicate.MetricOpenAIChatCompletionTokenUsage) *MetricOpenAIChatCompletionTokenUsageQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Limit(limit int) *MetricOpenAIChatCompletionTokenUsageQuery {
-	moacctuq.ctx.Limit = &limit
-	return moacctuq
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Limit(limit int) *MetricOpenAIChatCompletionTokenUsageQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Offset(offset int) *MetricOpenAIChatCompletionTokenUsageQuery {
-	moacctuq.ctx.Offset = &offset
-	return moacctuq
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Offset(offset int) *MetricOpenAIChatCompletionTokenUsageQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Unique(unique bool) *MetricOpenAIChatCompletionTokenUsageQuery {
-	moacctuq.ctx.Unique = &unique
-	return moacctuq
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Unique(unique bool) *MetricOpenAIChatCompletionTokenUsageQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Order(o ...metricopenaichatcompletiontokenusage.OrderOption) *MetricOpenAIChatCompletionTokenUsageQuery {
-	moacctuq.order = append(moacctuq.order, o...)
-	return moacctuq
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Order(o ...metricopenaichatcompletiontokenusage.OrderOption) *MetricOpenAIChatCompletionTokenUsageQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first MetricOpenAIChatCompletionTokenUsage entity from the query.
 // Returns a *NotFoundError when no MetricOpenAIChatCompletionTokenUsage was found.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) First(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
-	nodes, err := moacctuq.Limit(1).All(setContextOp(ctx, moacctuq.ctx, "First"))
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) First(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) First(ctx context.Con
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
-	node, err := moacctuq.First(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) FirstX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstX(ctx context.Co
 
 // FirstID returns the first MetricOpenAIChatCompletionTokenUsage ID from the query.
 // Returns a *NotFoundError when no MetricOpenAIChatCompletionTokenUsage ID was found.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = moacctuq.Limit(1).IDs(setContextOp(ctx, moacctuq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstID(ctx context.C
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := moacctuq.FirstID(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) FirstIDX(ctx context.
 // Only returns a single MetricOpenAIChatCompletionTokenUsage entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one MetricOpenAIChatCompletionTokenUsage entity is found.
 // Returns a *NotFoundError when no MetricOpenAIChatCompletionTokenUsage entities are found.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Only(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
-	nodes, err := moacctuq.Limit(2).All(setContextOp(ctx, moacctuq.ctx, "Only"))
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Only(ctx context.Context) (*MetricOpenAIChatCompletionTokenUsage, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Only(ctx context.Cont
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
-	node, err := moacctuq.Only(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) OnlyX(ctx context.Context) *MetricOpenAIChatCompletionTokenUsage {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyX(ctx context.Con
 // OnlyID is like Only, but returns the only MetricOpenAIChatCompletionTokenUsage ID in the query.
 // Returns a *NotSingularError when more than one MetricOpenAIChatCompletionTokenUsage ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = moacctuq.Limit(2).IDs(setContextOp(ctx, moacctuq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyID(ctx context.Co
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := moacctuq.OnlyID(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) OnlyIDX(ctx context.C
 }
 
 // All executes the query and returns a list of MetricOpenAIChatCompletionTokenUsages.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) All(ctx context.Context) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
-	ctx = setContextOp(ctx, moacctuq.ctx, "All")
-	if err := moacctuq.prepareQuery(ctx); err != nil {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) All(ctx context.Context) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*MetricOpenAIChatCompletionTokenUsage, *MetricOpenAIChatCompletionTokenUsageQuery]()
-	return withInterceptors[[]*MetricOpenAIChatCompletionTokenUsage](ctx, moacctuq, qr, moacctuq.inters)
+	return withInterceptors[[]*MetricOpenAIChatCompletionTokenUsage](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) AllX(ctx context.Context) []*MetricOpenAIChatCompletionTokenUsage {
-	nodes, err := moacctuq.All(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) AllX(ctx context.Context) []*MetricOpenAIChatCompletionTokenUsage {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) AllX(ctx context.Cont
 }
 
 // IDs executes the query and returns a list of MetricOpenAIChatCompletionTokenUsage IDs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if moacctuq.ctx.Unique == nil && moacctuq.path != nil {
-		moacctuq.Unique(true)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, moacctuq.ctx, "IDs")
-	if err = moacctuq.Select(metricopenaichatcompletiontokenusage.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(metricopenaichatcompletiontokenusage.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := moacctuq.IDs(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) IDsX(ctx context.Cont
 }
 
 // Count returns the count of the given query.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, moacctuq.ctx, "Count")
-	if err := moacctuq.prepareQuery(ctx); err != nil {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, moacctuq, querierCount[*MetricOpenAIChatCompletionTokenUsageQuery](), moacctuq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*MetricOpenAIChatCompletionTokenUsageQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) CountX(ctx context.Context) int {
-	count, err := moacctuq.Count(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) CountX(ctx context.Co
 }
 
 // Exist returns true if the query has elements in the graph.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, moacctuq.ctx, "Exist")
-	switch _, err := moacctuq.FirstID(ctx); {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Exist(ctx context.Con
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) ExistX(ctx context.Context) bool {
-	exist, err := moacctuq.Exist(ctx)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) ExistX(ctx context.Co
 
 // Clone returns a duplicate of the MetricOpenAIChatCompletionTokenUsageQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Clone() *MetricOpenAIChatCompletionTokenUsageQuery {
-	if moacctuq == nil {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Clone() *MetricOpenAIChatCompletionTokenUsageQuery {
+	if _q == nil {
 		return nil
 	}
 	return &MetricOpenAIChatCompletionTokenUsageQuery{
-		config:     moacctuq.config,
-		ctx:        moacctuq.ctx.Clone(),
-		order:      append([]metricopenaichatcompletiontokenusage.OrderOption{}, moacctuq.order...),
-		inters:     append([]Interceptor{}, moacctuq.inters...),
-		predicates: append([]predicate.MetricOpenAIChatCompletionTokenUsage{}, moacctuq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]metricopenaichatcompletiontokenusage.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.MetricOpenAIChatCompletionTokenUsage{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  moacctuq.sql.Clone(),
-		path: moacctuq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Clone() *MetricOpenAI
 //		GroupBy(metricopenaichatcompletiontokenusage.FieldPromptOperation).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) GroupBy(field string, fields ...string) *MetricOpenAIChatCompletionTokenUsageGroupBy {
-	moacctuq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &MetricOpenAIChatCompletionTokenUsageGroupBy{build: moacctuq}
-	grbuild.flds = &moacctuq.ctx.Fields
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) GroupBy(field string, fields ...string) *MetricOpenAIChatCompletionTokenUsageGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &MetricOpenAIChatCompletionTokenUsageGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = metricopenaichatcompletiontokenusage.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) GroupBy(field string,
 //	client.MetricOpenAIChatCompletionTokenUsage.Query().
 //		Select(metricopenaichatcompletiontokenusage.FieldPromptOperation).
 //		Scan(ctx, &v)
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Select(fields ...string) *MetricOpenAIChatCompletionTokenUsageSelect {
-	moacctuq.ctx.Fields = append(moacctuq.ctx.Fields, fields...)
-	sbuild := &MetricOpenAIChatCompletionTokenUsageSelect{MetricOpenAIChatCompletionTokenUsageQuery: moacctuq}
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Select(fields ...string) *MetricOpenAIChatCompletionTokenUsageSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &MetricOpenAIChatCompletionTokenUsageSelect{MetricOpenAIChatCompletionTokenUsageQuery: _q}
 	sbuild.label = metricopenaichatcompletiontokenusage.Label
-	sbuild.flds, sbuild.scan = &moacctuq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a MetricOpenAIChatCompletionTokenUsageSelect configured with the given aggregations.
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageSelect {
-	return moacctuq.Select().Aggregate(fns...)
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range moacctuq.inters {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, moacctuq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range moacctuq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !metricopenaichatcompletiontokenusage.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if moacctuq.path != nil {
-		prev, err := moacctuq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		moacctuq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*MetricOpenAIChatCompletionTokenUsage, error) {
 	var (
 		nodes = []*MetricOpenAIChatCompletionTokenUsage{}
-		_spec = moacctuq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*MetricOpenAIChatCompletionTokenUsage).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &MetricOpenAIChatCompletionTokenUsage{config: moacctuq.config}
+		node := &MetricOpenAIChatCompletionTokenUsage{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = moacctuq.schemaConfig.MetricOpenAIChatCompletionTokenUsage
-	ctx = internal.NewSchemaConfigContext(ctx, moacctuq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.MetricOpenAIChatCompletionTokenUsage
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, moacctuq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) sqlAll(ctx context.Co
 	return nodes, nil
 }
 
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := moacctuq.querySpec()
-	_spec.Node.Schema = moacctuq.schemaConfig.MetricOpenAIChatCompletionTokenUsage
-	ctx = internal.NewSchemaConfigContext(ctx, moacctuq.schemaConfig)
-	_spec.Node.Columns = moacctuq.ctx.Fields
-	if len(moacctuq.ctx.Fields) > 0 {
-		_spec.Unique = moacctuq.ctx.Unique != nil && *moacctuq.ctx.Unique
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.MetricOpenAIChatCompletionTokenUsage
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, moacctuq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(metricopenaichatcompletiontokenusage.Table, metricopenaichatcompletiontokenusage.Columns, sqlgraph.NewFieldSpec(metricopenaichatcompletiontokenusage.FieldID, field.TypeUUID))
-	_spec.From = moacctuq.sql
-	if unique := moacctuq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if moacctuq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := moacctuq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, metricopenaichatcompletiontokenusage.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) querySpec() *sqlgraph
 			}
 		}
 	}
-	if ps := moacctuq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := moacctuq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := moacctuq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := moacctuq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) querySpec() *sqlgraph
 	return _spec
 }
 
-func (moacctuq *MetricOpenAIChatCompletionTokenUsageQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(moacctuq.driver.Dialect())
+func (_q *MetricOpenAIChatCompletionTokenUsageQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(metricopenaichatcompletiontokenusage.Table)
-	columns := moacctuq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = metricopenaichatcompletiontokenusage.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if moacctuq.sql != nil {
-		selector = moacctuq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if moacctuq.ctx.Unique != nil && *moacctuq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(moacctuq.schemaConfig.MetricOpenAIChatCompletionTokenUsage)
-	ctx = internal.NewSchemaConfigContext(ctx, moacctuq.schemaConfig)
+	t1.Schema(_q.schemaConfig.MetricOpenAIChatCompletionTokenUsage)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range moacctuq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range moacctuq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := moacctuq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := moacctuq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type MetricOpenAIChatCompletionTokenUsageGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (moacctugb *MetricOpenAIChatCompletionTokenUsageGroupBy) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageGroupBy {
-	moacctugb.fns = append(moacctugb.fns, fns...)
-	return moacctugb
+func (_g *MetricOpenAIChatCompletionTokenUsageGroupBy) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (moacctugb *MetricOpenAIChatCompletionTokenUsageGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, moacctugb.build.ctx, "GroupBy")
-	if err := moacctugb.build.prepareQuery(ctx); err != nil {
+func (_g *MetricOpenAIChatCompletionTokenUsageGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MetricOpenAIChatCompletionTokenUsageQuery, *MetricOpenAIChatCompletionTokenUsageGroupBy](ctx, moacctugb.build, moacctugb, moacctugb.build.inters, v)
+	return scanWithInterceptors[*MetricOpenAIChatCompletionTokenUsageQuery, *MetricOpenAIChatCompletionTokenUsageGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (moacctugb *MetricOpenAIChatCompletionTokenUsageGroupBy) sqlScan(ctx context.Context, root *MetricOpenAIChatCompletionTokenUsageQuery, v any) error {
+func (_g *MetricOpenAIChatCompletionTokenUsageGroupBy) sqlScan(ctx context.Context, root *MetricOpenAIChatCompletionTokenUsageQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(moacctugb.fns))
-	for _, fn := range moacctugb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*moacctugb.flds)+len(moacctugb.fns))
-		for _, f := range *moacctugb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*moacctugb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := moacctugb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type MetricOpenAIChatCompletionTokenUsageSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (moacctus *MetricOpenAIChatCompletionTokenUsageSelect) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageSelect {
-	moacctus.fns = append(moacctus.fns, fns...)
-	return moacctus
+func (_s *MetricOpenAIChatCompletionTokenUsageSelect) Aggregate(fns ...AggregateFunc) *MetricOpenAIChatCompletionTokenUsageSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (moacctus *MetricOpenAIChatCompletionTokenUsageSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, moacctus.ctx, "Select")
-	if err := moacctus.prepareQuery(ctx); err != nil {
+func (_s *MetricOpenAIChatCompletionTokenUsageSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*MetricOpenAIChatCompletionTokenUsageQuery, *MetricOpenAIChatCompletionTokenUsageSelect](ctx, moacctus.MetricOpenAIChatCompletionTokenUsageQuery, moacctus, moacctus.inters, v)
+	return scanWithInterceptors[*MetricOpenAIChatCompletionTokenUsageQuery, *MetricOpenAIChatCompletionTokenUsageSelect](ctx, _s.MetricOpenAIChatCompletionTokenUsageQuery, _s, _s.inters, v)
 }
 
-func (moacctus *MetricOpenAIChatCompletionTokenUsageSelect) sqlScan(ctx context.Context, root *MetricOpenAIChatCompletionTokenUsageQuery, v any) error {
+func (_s *MetricOpenAIChatCompletionTokenUsageSelect) sqlScan(ctx context.Context, root *MetricOpenAIChatCompletionTokenUsageQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(moacctus.fns))
-	for _, fn := range moacctus.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*moacctus.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (moacctus *MetricOpenAIChatCompletionTokenUsageSelect) sqlScan(ctx context.
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := moacctus.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

@@ -21,58 +21,58 @@ type LogChatHistoriesRecapDelete struct {
 }
 
 // Where appends a list predicates to the LogChatHistoriesRecapDelete builder.
-func (lchrd *LogChatHistoriesRecapDelete) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapDelete {
-	lchrd.mutation.Where(ps...)
-	return lchrd
+func (_d *LogChatHistoriesRecapDelete) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (lchrd *LogChatHistoriesRecapDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, lchrd.sqlExec, lchrd.mutation, lchrd.hooks)
+func (_d *LogChatHistoriesRecapDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchrd *LogChatHistoriesRecapDelete) ExecX(ctx context.Context) int {
-	n, err := lchrd.Exec(ctx)
+func (_d *LogChatHistoriesRecapDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (lchrd *LogChatHistoriesRecapDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *LogChatHistoriesRecapDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(logchathistoriesrecap.Table, sqlgraph.NewFieldSpec(logchathistoriesrecap.FieldID, field.TypeUUID))
-	_spec.Node.Schema = lchrd.schemaConfig.LogChatHistoriesRecap
-	ctx = internal.NewSchemaConfigContext(ctx, lchrd.schemaConfig)
-	if ps := lchrd.mutation.predicates; len(ps) > 0 {
+	_spec.Node.Schema = _d.schemaConfig.LogChatHistoriesRecap
+	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, lchrd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	lchrd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // LogChatHistoriesRecapDeleteOne is the builder for deleting a single LogChatHistoriesRecap entity.
 type LogChatHistoriesRecapDeleteOne struct {
-	lchrd *LogChatHistoriesRecapDelete
+	_d *LogChatHistoriesRecapDelete
 }
 
 // Where appends a list predicates to the LogChatHistoriesRecapDelete builder.
-func (lchrdo *LogChatHistoriesRecapDeleteOne) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapDeleteOne {
-	lchrdo.lchrd.mutation.Where(ps...)
-	return lchrdo
+func (_d *LogChatHistoriesRecapDeleteOne) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (lchrdo *LogChatHistoriesRecapDeleteOne) Exec(ctx context.Context) error {
-	n, err := lchrdo.lchrd.Exec(ctx)
+func (_d *LogChatHistoriesRecapDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -84,8 +84,8 @@ func (lchrdo *LogChatHistoriesRecapDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchrdo *LogChatHistoriesRecapDeleteOne) ExecX(ctx context.Context) {
-	if err := lchrdo.Exec(ctx); err != nil {
+func (_d *LogChatHistoriesRecapDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

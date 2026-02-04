@@ -21,117 +21,117 @@ type FeedbackChatHistoriesRecapsReactionsCreate struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetChatID(i int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetChatID(i)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetChatID(v int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetChatID(v)
+	return _c
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableChatID(i *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if i != nil {
-		fchrrc.SetChatID(*i)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableChatID(v *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetChatID(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetLogID sets the "log_id" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetLogID(u uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetLogID(u)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetLogID(v uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetLogID(v)
+	return _c
 }
 
 // SetNillableLogID sets the "log_id" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableLogID(u *uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if u != nil {
-		fchrrc.SetLogID(*u)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableLogID(v *uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetLogID(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetUserID(i int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetUserID(i)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetUserID(v int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableUserID(i *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if i != nil {
-		fchrrc.SetUserID(*i)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableUserID(v *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetUserID(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetType sets the "type" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetType(f feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetType(f)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetType(v feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetType(v)
+	return _c
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableType(f *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if f != nil {
-		fchrrc.SetType(*f)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableType(v *feedbackchathistoriesrecapsreactions.Type) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetType(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetCreatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetCreatedAt(i)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetCreatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableCreatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if i != nil {
-		fchrrc.SetCreatedAt(*i)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableCreatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetUpdatedAt(i int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetUpdatedAt(i)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetUpdatedAt(v int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableUpdatedAt(i *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if i != nil {
-		fchrrc.SetUpdatedAt(*i)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableUpdatedAt(v *int64) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetID(u uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
-	fchrrc.mutation.SetID(u)
-	return fchrrc
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetID(v uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableID(u *uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
-	if u != nil {
-		fchrrc.SetID(*u)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SetNillableID(v *uuid.UUID) *FeedbackChatHistoriesRecapsReactionsCreate {
+	if v != nil {
+		_c.SetID(*v)
 	}
-	return fchrrc
+	return _c
 }
 
 // Mutation returns the FeedbackChatHistoriesRecapsReactionsMutation object of the builder.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
-	return fchrrc.mutation
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) Mutation() *FeedbackChatHistoriesRecapsReactionsMutation {
+	return _c.mutation
 }
 
 // Save creates the FeedbackChatHistoriesRecapsReactions in the database.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) Save(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
-	fchrrc.defaults()
-	return withHooks(ctx, fchrrc.sqlSave, fchrrc.mutation, fchrrc.hooks)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) Save(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SaveX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
-	v, err := fchrrc.Save(ctx)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) SaveX(ctx context.Context) *FeedbackChatHistoriesRecapsReactions {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -139,84 +139,84 @@ func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) SaveX(ctx context.Cont
 }
 
 // Exec executes the query.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) Exec(ctx context.Context) error {
-	_, err := fchrrc.Save(ctx)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) ExecX(ctx context.Context) {
-	if err := fchrrc.Exec(ctx); err != nil {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) defaults() {
-	if _, ok := fchrrc.mutation.ChatID(); !ok {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) defaults() {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultChatID
-		fchrrc.mutation.SetChatID(v)
+		_c.mutation.SetChatID(v)
 	}
-	if _, ok := fchrrc.mutation.LogID(); !ok {
+	if _, ok := _c.mutation.LogID(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultLogID()
-		fchrrc.mutation.SetLogID(v)
+		_c.mutation.SetLogID(v)
 	}
-	if _, ok := fchrrc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultUserID
-		fchrrc.mutation.SetUserID(v)
+		_c.mutation.SetUserID(v)
 	}
-	if _, ok := fchrrc.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultType
-		fchrrc.mutation.SetType(v)
+		_c.mutation.SetType(v)
 	}
-	if _, ok := fchrrc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultCreatedAt()
-		fchrrc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := fchrrc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultUpdatedAt()
-		fchrrc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := fchrrc.mutation.ID(); !ok {
+	if _, ok := _c.mutation.ID(); !ok {
 		v := feedbackchathistoriesrecapsreactions.DefaultID()
-		fchrrc.mutation.SetID(v)
+		_c.mutation.SetID(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) check() error {
-	if _, ok := fchrrc.mutation.ChatID(); !ok {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) check() error {
+	if _, ok := _c.mutation.ChatID(); !ok {
 		return &ValidationError{Name: "chat_id", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.chat_id"`)}
 	}
-	if _, ok := fchrrc.mutation.LogID(); !ok {
+	if _, ok := _c.mutation.LogID(); !ok {
 		return &ValidationError{Name: "log_id", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.log_id"`)}
 	}
-	if _, ok := fchrrc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.user_id"`)}
 	}
-	if _, ok := fchrrc.mutation.GetType(); !ok {
+	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.type"`)}
 	}
-	if v, ok := fchrrc.mutation.GetType(); ok {
+	if v, ok := _c.mutation.GetType(); ok {
 		if err := feedbackchathistoriesrecapsreactions.TypeValidator(v); err != nil {
 			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "FeedbackChatHistoriesRecapsReactions.type": %w`, err)}
 		}
 	}
-	if _, ok := fchrrc.mutation.CreatedAt(); !ok {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.created_at"`)}
 	}
-	if _, ok := fchrrc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "FeedbackChatHistoriesRecapsReactions.updated_at"`)}
 	}
 	return nil
 }
 
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) sqlSave(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
-	if err := fchrrc.check(); err != nil {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) sqlSave(ctx context.Context) (*FeedbackChatHistoriesRecapsReactions, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := fchrrc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, fchrrc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -229,42 +229,42 @@ func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) sqlSave(ctx context.Co
 			return nil, err
 		}
 	}
-	fchrrc.mutation.id = &_node.ID
-	fchrrc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (fchrrc *FeedbackChatHistoriesRecapsReactionsCreate) createSpec() (*FeedbackChatHistoriesRecapsReactions, *sqlgraph.CreateSpec) {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreate) createSpec() (*FeedbackChatHistoriesRecapsReactions, *sqlgraph.CreateSpec) {
 	var (
-		_node = &FeedbackChatHistoriesRecapsReactions{config: fchrrc.config}
+		_node = &FeedbackChatHistoriesRecapsReactions{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(feedbackchathistoriesrecapsreactions.Table, sqlgraph.NewFieldSpec(feedbackchathistoriesrecapsreactions.FieldID, field.TypeUUID))
 	)
-	_spec.Schema = fchrrc.schemaConfig.FeedbackChatHistoriesRecapsReactions
-	if id, ok := fchrrc.mutation.ID(); ok {
+	_spec.Schema = _c.schemaConfig.FeedbackChatHistoriesRecapsReactions
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
 	}
-	if value, ok := fchrrc.mutation.ChatID(); ok {
+	if value, ok := _c.mutation.ChatID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldChatID, field.TypeInt64, value)
 		_node.ChatID = value
 	}
-	if value, ok := fchrrc.mutation.LogID(); ok {
+	if value, ok := _c.mutation.LogID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldLogID, field.TypeUUID, value)
 		_node.LogID = value
 	}
-	if value, ok := fchrrc.mutation.UserID(); ok {
+	if value, ok := _c.mutation.UserID(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUserID, field.TypeInt64, value)
 		_node.UserID = value
 	}
-	if value, ok := fchrrc.mutation.GetType(); ok {
+	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldType, field.TypeEnum, value)
 		_node.Type = value
 	}
-	if value, ok := fchrrc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := fchrrc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(feedbackchathistoriesrecapsreactions.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
@@ -279,16 +279,16 @@ type FeedbackChatHistoriesRecapsReactionsCreateBulk struct {
 }
 
 // Save creates the FeedbackChatHistoriesRecapsReactions entities in the database.
-func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.Context) ([]*FeedbackChatHistoriesRecapsReactions, error) {
-	if fchrrcb.err != nil {
-		return nil, fchrrcb.err
+func (_c *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.Context) ([]*FeedbackChatHistoriesRecapsReactions, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(fchrrcb.builders))
-	nodes := make([]*FeedbackChatHistoriesRecapsReactions, len(fchrrcb.builders))
-	mutators := make([]Mutator, len(fchrrcb.builders))
-	for i := range fchrrcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*FeedbackChatHistoriesRecapsReactions, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := fchrrcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*FeedbackChatHistoriesRecapsReactionsMutation)
@@ -302,11 +302,11 @@ func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, fchrrcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, fchrrcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -326,7 +326,7 @@ func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, fchrrcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -334,8 +334,8 @@ func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Save(ctx context.
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) SaveX(ctx context.Context) []*FeedbackChatHistoriesRecapsReactions {
-	v, err := fchrrcb.Save(ctx)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreateBulk) SaveX(ctx context.Context) []*FeedbackChatHistoriesRecapsReactions {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -343,14 +343,14 @@ func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) SaveX(ctx context
 }
 
 // Exec executes the query.
-func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) Exec(ctx context.Context) error {
-	_, err := fchrrcb.Save(ctx)
+func (_c *FeedbackChatHistoriesRecapsReactionsCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (fchrrcb *FeedbackChatHistoriesRecapsReactionsCreateBulk) ExecX(ctx context.Context) {
-	if err := fchrrcb.Exec(ctx); err != nil {
+func (_c *FeedbackChatHistoriesRecapsReactionsCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

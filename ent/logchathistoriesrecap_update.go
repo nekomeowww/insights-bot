@@ -23,234 +23,234 @@ type LogChatHistoriesRecapUpdate struct {
 }
 
 // Where appends a list predicates to the LogChatHistoriesRecapUpdate builder.
-func (lchru *LogChatHistoriesRecapUpdate) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.Where(ps...)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetChatID(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetChatID()
-	lchru.mutation.SetChatID(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetChatID(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableChatID(i *int64) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetChatID(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableChatID(v *int64) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddChatID(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddChatID(i)
-	return lchru
+// AddChatID adds value to the "chat_id" field.
+func (_u *LogChatHistoriesRecapUpdate) AddChatID(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetRecapInputs sets the "recap_inputs" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetRecapInputs(s string) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.SetRecapInputs(s)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetRecapInputs(v string) *LogChatHistoriesRecapUpdate {
+	_u.mutation.SetRecapInputs(v)
+	return _u
 }
 
 // SetNillableRecapInputs sets the "recap_inputs" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableRecapInputs(s *string) *LogChatHistoriesRecapUpdate {
-	if s != nil {
-		lchru.SetRecapInputs(*s)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableRecapInputs(v *string) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetRecapInputs(*v)
 	}
-	return lchru
+	return _u
 }
 
 // SetRecapOutputs sets the "recap_outputs" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetRecapOutputs(s string) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.SetRecapOutputs(s)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetRecapOutputs(v string) *LogChatHistoriesRecapUpdate {
+	_u.mutation.SetRecapOutputs(v)
+	return _u
 }
 
 // SetNillableRecapOutputs sets the "recap_outputs" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableRecapOutputs(s *string) *LogChatHistoriesRecapUpdate {
-	if s != nil {
-		lchru.SetRecapOutputs(*s)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableRecapOutputs(v *string) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetRecapOutputs(*v)
 	}
-	return lchru
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetFromPlatform(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetFromPlatform()
-	lchru.mutation.SetFromPlatform(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetFromPlatform(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableFromPlatform(i *int) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetFromPlatform(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableFromPlatform(v *int) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddFromPlatform(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddFromPlatform(i)
-	return lchru
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *LogChatHistoriesRecapUpdate) AddFromPlatform(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetPromptTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetPromptTokenUsage()
-	lchru.mutation.SetPromptTokenUsage(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetPromptTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetPromptTokenUsage()
+	_u.mutation.SetPromptTokenUsage(v)
+	return _u
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetPromptTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillablePromptTokenUsage(v *int) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetPromptTokenUsage(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddPromptTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddPromptTokenUsage(i)
-	return lchru
+// AddPromptTokenUsage adds value to the "prompt_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdate) AddPromptTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddPromptTokenUsage(v)
+	return _u
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetCompletionTokenUsage()
-	lchru.mutation.SetCompletionTokenUsage(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetCompletionTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetCompletionTokenUsage()
+	_u.mutation.SetCompletionTokenUsage(v)
+	return _u
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetCompletionTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableCompletionTokenUsage(v *int) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetCompletionTokenUsage(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddCompletionTokenUsage(i)
-	return lchru
+// AddCompletionTokenUsage adds value to the "completion_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdate) AddCompletionTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddCompletionTokenUsage(v)
+	return _u
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetTotalTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetTotalTokenUsage()
-	lchru.mutation.SetTotalTokenUsage(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetTotalTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetTotalTokenUsage()
+	_u.mutation.SetTotalTokenUsage(v)
+	return _u
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetTotalTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableTotalTokenUsage(v *int) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetTotalTokenUsage(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddTotalTokenUsage adds i to the "total_token_usage" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddTotalTokenUsage(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddTotalTokenUsage(i)
-	return lchru
+// AddTotalTokenUsage adds value to the "total_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdate) AddTotalTokenUsage(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddTotalTokenUsage(v)
+	return _u
 }
 
 // SetRecapType sets the "recap_type" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetRecapType(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetRecapType()
-	lchru.mutation.SetRecapType(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetRecapType(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetRecapType()
+	_u.mutation.SetRecapType(v)
+	return _u
 }
 
 // SetNillableRecapType sets the "recap_type" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableRecapType(i *int) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetRecapType(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableRecapType(v *int) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetRecapType(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddRecapType adds i to the "recap_type" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddRecapType(i int) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddRecapType(i)
-	return lchru
+// AddRecapType adds value to the "recap_type" field.
+func (_u *LogChatHistoriesRecapUpdate) AddRecapType(v int) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddRecapType(v)
+	return _u
 }
 
 // SetModelName sets the "model_name" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetModelName(s string) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.SetModelName(s)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetModelName(v string) *LogChatHistoriesRecapUpdate {
+	_u.mutation.SetModelName(v)
+	return _u
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableModelName(s *string) *LogChatHistoriesRecapUpdate {
-	if s != nil {
-		lchru.SetModelName(*s)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableModelName(v *string) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetModelName(*v)
 	}
-	return lchru
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetCreatedAt()
-	lchru.mutation.SetCreatedAt(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetCreatedAt(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableCreatedAt(i *int64) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetCreatedAt(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableCreatedAt(v *int64) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddCreatedAt(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddCreatedAt(i)
-	return lchru
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *LogChatHistoriesRecapUpdate) AddCreatedAt(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lchru *LogChatHistoriesRecapUpdate) SetUpdatedAt(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.ResetUpdatedAt()
-	lchru.mutation.SetUpdatedAt(i)
-	return lchru
+func (_u *LogChatHistoriesRecapUpdate) SetUpdatedAt(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lchru *LogChatHistoriesRecapUpdate) SetNillableUpdatedAt(i *int64) *LogChatHistoriesRecapUpdate {
-	if i != nil {
-		lchru.SetUpdatedAt(*i)
+func (_u *LogChatHistoriesRecapUpdate) SetNillableUpdatedAt(v *int64) *LogChatHistoriesRecapUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return lchru
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (lchru *LogChatHistoriesRecapUpdate) AddUpdatedAt(i int64) *LogChatHistoriesRecapUpdate {
-	lchru.mutation.AddUpdatedAt(i)
-	return lchru
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *LogChatHistoriesRecapUpdate) AddUpdatedAt(v int64) *LogChatHistoriesRecapUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the LogChatHistoriesRecapMutation object of the builder.
-func (lchru *LogChatHistoriesRecapUpdate) Mutation() *LogChatHistoriesRecapMutation {
-	return lchru.mutation
+func (_u *LogChatHistoriesRecapUpdate) Mutation() *LogChatHistoriesRecapMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (lchru *LogChatHistoriesRecapUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, lchru.sqlSave, lchru.mutation, lchru.hooks)
+func (_u *LogChatHistoriesRecapUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lchru *LogChatHistoriesRecapUpdate) SaveX(ctx context.Context) int {
-	affected, err := lchru.Save(ctx)
+func (_u *LogChatHistoriesRecapUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -258,87 +258,87 @@ func (lchru *LogChatHistoriesRecapUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (lchru *LogChatHistoriesRecapUpdate) Exec(ctx context.Context) error {
-	_, err := lchru.Save(ctx)
+func (_u *LogChatHistoriesRecapUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchru *LogChatHistoriesRecapUpdate) ExecX(ctx context.Context) {
-	if err := lchru.Exec(ctx); err != nil {
+func (_u *LogChatHistoriesRecapUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (lchru *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logchathistoriesrecap.Table, logchathistoriesrecap.Columns, sqlgraph.NewFieldSpec(logchathistoriesrecap.FieldID, field.TypeUUID))
-	if ps := lchru.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := lchru.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := lchru.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := lchru.mutation.RecapInputs(); ok {
+	if value, ok := _u.mutation.RecapInputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapInputs, field.TypeString, value)
 	}
-	if value, ok := lchru.mutation.RecapOutputs(); ok {
+	if value, ok := _u.mutation.RecapOutputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapOutputs, field.TypeString, value)
 	}
-	if value, ok := lchru.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.PromptTokenUsage(); ok {
+	if value, ok := _u.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.AddedPromptTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedPromptTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.AddedCompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedCompletionTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.TotalTokenUsage(); ok {
+	if value, ok := _u.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.AddedTotalTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.RecapType(); ok {
+	if value, ok := _u.mutation.RecapType(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.AddedRecapType(); ok {
+	if value, ok := _u.mutation.AddedRecapType(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
-	if value, ok := lchru.mutation.ModelName(); ok {
+	if value, ok := _u.mutation.ModelName(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
 	}
-	if value, ok := lchru.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchru.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchru.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchru.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = lchru.schemaConfig.LogChatHistoriesRecap
-	ctx = internal.NewSchemaConfigContext(ctx, lchru.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, lchru.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.LogChatHistoriesRecap
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logchathistoriesrecap.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -346,8 +346,8 @@ func (lchru *LogChatHistoriesRecapUpdate) sqlSave(ctx context.Context) (n int, e
 		}
 		return 0, err
 	}
-	lchru.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // LogChatHistoriesRecapUpdateOne is the builder for updating a single LogChatHistoriesRecap entity.
@@ -359,241 +359,241 @@ type LogChatHistoriesRecapUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetChatID(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetChatID()
-	lchruo.mutation.SetChatID(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetChatID(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableChatID(i *int64) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetChatID(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableChatID(v *int64) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddChatID(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddChatID(i)
-	return lchruo
+// AddChatID adds value to the "chat_id" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddChatID(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetRecapInputs sets the "recap_inputs" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetRecapInputs(s string) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.SetRecapInputs(s)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetRecapInputs(v string) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.SetRecapInputs(v)
+	return _u
 }
 
 // SetNillableRecapInputs sets the "recap_inputs" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableRecapInputs(s *string) *LogChatHistoriesRecapUpdateOne {
-	if s != nil {
-		lchruo.SetRecapInputs(*s)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableRecapInputs(v *string) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetRecapInputs(*v)
 	}
-	return lchruo
+	return _u
 }
 
 // SetRecapOutputs sets the "recap_outputs" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetRecapOutputs(s string) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.SetRecapOutputs(s)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetRecapOutputs(v string) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.SetRecapOutputs(v)
+	return _u
 }
 
 // SetNillableRecapOutputs sets the "recap_outputs" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableRecapOutputs(s *string) *LogChatHistoriesRecapUpdateOne {
-	if s != nil {
-		lchruo.SetRecapOutputs(*s)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableRecapOutputs(v *string) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetRecapOutputs(*v)
 	}
-	return lchruo
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetFromPlatform(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetFromPlatform()
-	lchruo.mutation.SetFromPlatform(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetFromPlatform(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableFromPlatform(i *int) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetFromPlatform(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableFromPlatform(v *int) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddFromPlatform(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddFromPlatform(i)
-	return lchruo
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddFromPlatform(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetPromptTokenUsage sets the "prompt_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetPromptTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetPromptTokenUsage()
-	lchruo.mutation.SetPromptTokenUsage(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetPromptTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetPromptTokenUsage()
+	_u.mutation.SetPromptTokenUsage(v)
+	return _u
 }
 
 // SetNillablePromptTokenUsage sets the "prompt_token_usage" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillablePromptTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetPromptTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillablePromptTokenUsage(v *int) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetPromptTokenUsage(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddPromptTokenUsage adds i to the "prompt_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddPromptTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddPromptTokenUsage(i)
-	return lchruo
+// AddPromptTokenUsage adds value to the "prompt_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddPromptTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddPromptTokenUsage(v)
+	return _u
 }
 
 // SetCompletionTokenUsage sets the "completion_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetCompletionTokenUsage()
-	lchruo.mutation.SetCompletionTokenUsage(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetCompletionTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetCompletionTokenUsage()
+	_u.mutation.SetCompletionTokenUsage(v)
+	return _u
 }
 
 // SetNillableCompletionTokenUsage sets the "completion_token_usage" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableCompletionTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetCompletionTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableCompletionTokenUsage(v *int) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetCompletionTokenUsage(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddCompletionTokenUsage adds i to the "completion_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddCompletionTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddCompletionTokenUsage(i)
-	return lchruo
+// AddCompletionTokenUsage adds value to the "completion_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddCompletionTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddCompletionTokenUsage(v)
+	return _u
 }
 
 // SetTotalTokenUsage sets the "total_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetTotalTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetTotalTokenUsage()
-	lchruo.mutation.SetTotalTokenUsage(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetTotalTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetTotalTokenUsage()
+	_u.mutation.SetTotalTokenUsage(v)
+	return _u
 }
 
 // SetNillableTotalTokenUsage sets the "total_token_usage" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableTotalTokenUsage(i *int) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetTotalTokenUsage(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableTotalTokenUsage(v *int) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetTotalTokenUsage(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddTotalTokenUsage adds i to the "total_token_usage" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddTotalTokenUsage(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddTotalTokenUsage(i)
-	return lchruo
+// AddTotalTokenUsage adds value to the "total_token_usage" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddTotalTokenUsage(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddTotalTokenUsage(v)
+	return _u
 }
 
 // SetRecapType sets the "recap_type" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetRecapType(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetRecapType()
-	lchruo.mutation.SetRecapType(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetRecapType(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetRecapType()
+	_u.mutation.SetRecapType(v)
+	return _u
 }
 
 // SetNillableRecapType sets the "recap_type" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableRecapType(i *int) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetRecapType(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableRecapType(v *int) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetRecapType(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddRecapType adds i to the "recap_type" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddRecapType(i int) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddRecapType(i)
-	return lchruo
+// AddRecapType adds value to the "recap_type" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddRecapType(v int) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddRecapType(v)
+	return _u
 }
 
 // SetModelName sets the "model_name" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetModelName(s string) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.SetModelName(s)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetModelName(v string) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.SetModelName(v)
+	return _u
 }
 
 // SetNillableModelName sets the "model_name" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableModelName(s *string) *LogChatHistoriesRecapUpdateOne {
-	if s != nil {
-		lchruo.SetModelName(*s)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableModelName(v *string) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetModelName(*v)
 	}
-	return lchruo
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetCreatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetCreatedAt()
-	lchruo.mutation.SetCreatedAt(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetCreatedAt(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableCreatedAt(i *int64) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetCreatedAt(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableCreatedAt(v *int64) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddCreatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddCreatedAt(i)
-	return lchruo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddCreatedAt(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetUpdatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.ResetUpdatedAt()
-	lchruo.mutation.SetUpdatedAt(i)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) SetUpdatedAt(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SetNillableUpdatedAt(i *int64) *LogChatHistoriesRecapUpdateOne {
-	if i != nil {
-		lchruo.SetUpdatedAt(*i)
+func (_u *LogChatHistoriesRecapUpdateOne) SetNillableUpdatedAt(v *int64) *LogChatHistoriesRecapUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return lchruo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (lchruo *LogChatHistoriesRecapUpdateOne) AddUpdatedAt(i int64) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.AddUpdatedAt(i)
-	return lchruo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *LogChatHistoriesRecapUpdateOne) AddUpdatedAt(v int64) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the LogChatHistoriesRecapMutation object of the builder.
-func (lchruo *LogChatHistoriesRecapUpdateOne) Mutation() *LogChatHistoriesRecapMutation {
-	return lchruo.mutation
+func (_u *LogChatHistoriesRecapUpdateOne) Mutation() *LogChatHistoriesRecapMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the LogChatHistoriesRecapUpdate builder.
-func (lchruo *LogChatHistoriesRecapUpdateOne) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapUpdateOne {
-	lchruo.mutation.Where(ps...)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) Where(ps ...predicate.LogChatHistoriesRecap) *LogChatHistoriesRecapUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (lchruo *LogChatHistoriesRecapUpdateOne) Select(field string, fields ...string) *LogChatHistoriesRecapUpdateOne {
-	lchruo.fields = append([]string{field}, fields...)
-	return lchruo
+func (_u *LogChatHistoriesRecapUpdateOne) Select(field string, fields ...string) *LogChatHistoriesRecapUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated LogChatHistoriesRecap entity.
-func (lchruo *LogChatHistoriesRecapUpdateOne) Save(ctx context.Context) (*LogChatHistoriesRecap, error) {
-	return withHooks(ctx, lchruo.sqlSave, lchruo.mutation, lchruo.hooks)
+func (_u *LogChatHistoriesRecapUpdateOne) Save(ctx context.Context) (*LogChatHistoriesRecap, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (lchruo *LogChatHistoriesRecapUpdateOne) SaveX(ctx context.Context) *LogChatHistoriesRecap {
-	node, err := lchruo.Save(ctx)
+func (_u *LogChatHistoriesRecapUpdateOne) SaveX(ctx context.Context) *LogChatHistoriesRecap {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -601,26 +601,26 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) SaveX(ctx context.Context) *LogCha
 }
 
 // Exec executes the query on the entity.
-func (lchruo *LogChatHistoriesRecapUpdateOne) Exec(ctx context.Context) error {
-	_, err := lchruo.Save(ctx)
+func (_u *LogChatHistoriesRecapUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (lchruo *LogChatHistoriesRecapUpdateOne) ExecX(ctx context.Context) {
-	if err := lchruo.Exec(ctx); err != nil {
+func (_u *LogChatHistoriesRecapUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_node *LogChatHistoriesRecap, err error) {
+func (_u *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_node *LogChatHistoriesRecap, err error) {
 	_spec := sqlgraph.NewUpdateSpec(logchathistoriesrecap.Table, logchathistoriesrecap.Columns, sqlgraph.NewFieldSpec(logchathistoriesrecap.FieldID, field.TypeUUID))
-	id, ok := lchruo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "LogChatHistoriesRecap.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := lchruo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, logchathistoriesrecap.FieldID)
 		for _, f := range fields {
@@ -632,76 +632,76 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_nod
 			}
 		}
 	}
-	if ps := lchruo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := lchruo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := lchruo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := lchruo.mutation.RecapInputs(); ok {
+	if value, ok := _u.mutation.RecapInputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapInputs, field.TypeString, value)
 	}
-	if value, ok := lchruo.mutation.RecapOutputs(); ok {
+	if value, ok := _u.mutation.RecapOutputs(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapOutputs, field.TypeString, value)
 	}
-	if value, ok := lchruo.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.PromptTokenUsage(); ok {
+	if value, ok := _u.mutation.PromptTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.AddedPromptTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedPromptTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldPromptTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.CompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.CompletionTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.AddedCompletionTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedCompletionTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldCompletionTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.TotalTokenUsage(); ok {
+	if value, ok := _u.mutation.TotalTokenUsage(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.AddedTotalTokenUsage(); ok {
+	if value, ok := _u.mutation.AddedTotalTokenUsage(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldTotalTokenUsage, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.RecapType(); ok {
+	if value, ok := _u.mutation.RecapType(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.AddedRecapType(); ok {
+	if value, ok := _u.mutation.AddedRecapType(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldRecapType, field.TypeInt, value)
 	}
-	if value, ok := lchruo.mutation.ModelName(); ok {
+	if value, ok := _u.mutation.ModelName(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldModelName, field.TypeString, value)
 	}
-	if value, ok := lchruo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchruo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchruo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(logchathistoriesrecap.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := lchruo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(logchathistoriesrecap.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = lchruo.schemaConfig.LogChatHistoriesRecap
-	ctx = internal.NewSchemaConfigContext(ctx, lchruo.schemaConfig)
-	_node = &LogChatHistoriesRecap{config: lchruo.config}
+	_spec.Node.Schema = _u.schemaConfig.LogChatHistoriesRecap
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &LogChatHistoriesRecap{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, lchruo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{logchathistoriesrecap.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -709,6 +709,6 @@ func (lchruo *LogChatHistoriesRecapUpdateOne) sqlSave(ctx context.Context) (_nod
 		}
 		return nil, err
 	}
-	lchruo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

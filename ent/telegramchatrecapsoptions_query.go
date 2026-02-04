@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type TelegramChatRecapsOptionsQuery struct {
 }
 
 // Where adds a new predicate for the TelegramChatRecapsOptionsQuery builder.
-func (tcroq *TelegramChatRecapsOptionsQuery) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsQuery {
-	tcroq.predicates = append(tcroq.predicates, ps...)
-	return tcroq
+func (_q *TelegramChatRecapsOptionsQuery) Where(ps ...predicate.TelegramChatRecapsOptions) *TelegramChatRecapsOptionsQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tcroq *TelegramChatRecapsOptionsQuery) Limit(limit int) *TelegramChatRecapsOptionsQuery {
-	tcroq.ctx.Limit = &limit
-	return tcroq
+func (_q *TelegramChatRecapsOptionsQuery) Limit(limit int) *TelegramChatRecapsOptionsQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tcroq *TelegramChatRecapsOptionsQuery) Offset(offset int) *TelegramChatRecapsOptionsQuery {
-	tcroq.ctx.Offset = &offset
-	return tcroq
+func (_q *TelegramChatRecapsOptionsQuery) Offset(offset int) *TelegramChatRecapsOptionsQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tcroq *TelegramChatRecapsOptionsQuery) Unique(unique bool) *TelegramChatRecapsOptionsQuery {
-	tcroq.ctx.Unique = &unique
-	return tcroq
+func (_q *TelegramChatRecapsOptionsQuery) Unique(unique bool) *TelegramChatRecapsOptionsQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tcroq *TelegramChatRecapsOptionsQuery) Order(o ...telegramchatrecapsoptions.OrderOption) *TelegramChatRecapsOptionsQuery {
-	tcroq.order = append(tcroq.order, o...)
-	return tcroq
+func (_q *TelegramChatRecapsOptionsQuery) Order(o ...telegramchatrecapsoptions.OrderOption) *TelegramChatRecapsOptionsQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first TelegramChatRecapsOptions entity from the query.
 // Returns a *NotFoundError when no TelegramChatRecapsOptions was found.
-func (tcroq *TelegramChatRecapsOptionsQuery) First(ctx context.Context) (*TelegramChatRecapsOptions, error) {
-	nodes, err := tcroq.Limit(1).All(setContextOp(ctx, tcroq.ctx, "First"))
+func (_q *TelegramChatRecapsOptionsQuery) First(ctx context.Context) (*TelegramChatRecapsOptions, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) First(ctx context.Context) (*Telegr
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) FirstX(ctx context.Context) *TelegramChatRecapsOptions {
-	node, err := tcroq.First(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) FirstX(ctx context.Context) *TelegramChatRecapsOptions {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (tcroq *TelegramChatRecapsOptionsQuery) FirstX(ctx context.Context) *Telegr
 
 // FirstID returns the first TelegramChatRecapsOptions ID from the query.
 // Returns a *NotFoundError when no TelegramChatRecapsOptions ID was found.
-func (tcroq *TelegramChatRecapsOptionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatRecapsOptionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcroq.Limit(1).IDs(setContextOp(ctx, tcroq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) FirstID(ctx context.Context) (id uu
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := tcroq.FirstID(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) FirstIDX(ctx context.Context) uuid.
 // Only returns a single TelegramChatRecapsOptions entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TelegramChatRecapsOptions entity is found.
 // Returns a *NotFoundError when no TelegramChatRecapsOptions entities are found.
-func (tcroq *TelegramChatRecapsOptionsQuery) Only(ctx context.Context) (*TelegramChatRecapsOptions, error) {
-	nodes, err := tcroq.Limit(2).All(setContextOp(ctx, tcroq.ctx, "Only"))
+func (_q *TelegramChatRecapsOptionsQuery) Only(ctx context.Context) (*TelegramChatRecapsOptions, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) Only(ctx context.Context) (*Telegra
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) OnlyX(ctx context.Context) *TelegramChatRecapsOptions {
-	node, err := tcroq.Only(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) OnlyX(ctx context.Context) *TelegramChatRecapsOptions {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (tcroq *TelegramChatRecapsOptionsQuery) OnlyX(ctx context.Context) *Telegra
 // OnlyID is like Only, but returns the only TelegramChatRecapsOptions ID in the query.
 // Returns a *NotSingularError when more than one TelegramChatRecapsOptions ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tcroq *TelegramChatRecapsOptionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *TelegramChatRecapsOptionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = tcroq.Limit(2).IDs(setContextOp(ctx, tcroq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) OnlyID(ctx context.Context) (id uui
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := tcroq.OnlyID(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (tcroq *TelegramChatRecapsOptionsQuery) OnlyIDX(ctx context.Context) uuid.U
 }
 
 // All executes the query and returns a list of TelegramChatRecapsOptionsSlice.
-func (tcroq *TelegramChatRecapsOptionsQuery) All(ctx context.Context) ([]*TelegramChatRecapsOptions, error) {
-	ctx = setContextOp(ctx, tcroq.ctx, "All")
-	if err := tcroq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatRecapsOptionsQuery) All(ctx context.Context) ([]*TelegramChatRecapsOptions, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TelegramChatRecapsOptions, *TelegramChatRecapsOptionsQuery]()
-	return withInterceptors[[]*TelegramChatRecapsOptions](ctx, tcroq, qr, tcroq.inters)
+	return withInterceptors[[]*TelegramChatRecapsOptions](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) AllX(ctx context.Context) []*TelegramChatRecapsOptions {
-	nodes, err := tcroq.All(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) AllX(ctx context.Context) []*TelegramChatRecapsOptions {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (tcroq *TelegramChatRecapsOptionsQuery) AllX(ctx context.Context) []*Telegr
 }
 
 // IDs executes the query and returns a list of TelegramChatRecapsOptions IDs.
-func (tcroq *TelegramChatRecapsOptionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if tcroq.ctx.Unique == nil && tcroq.path != nil {
-		tcroq.Unique(true)
+func (_q *TelegramChatRecapsOptionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tcroq.ctx, "IDs")
-	if err = tcroq.Select(telegramchatrecapsoptions.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(telegramchatrecapsoptions.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := tcroq.IDs(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (tcroq *TelegramChatRecapsOptionsQuery) IDsX(ctx context.Context) []uuid.UU
 }
 
 // Count returns the count of the given query.
-func (tcroq *TelegramChatRecapsOptionsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tcroq.ctx, "Count")
-	if err := tcroq.prepareQuery(ctx); err != nil {
+func (_q *TelegramChatRecapsOptionsQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tcroq, querierCount[*TelegramChatRecapsOptionsQuery](), tcroq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TelegramChatRecapsOptionsQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) CountX(ctx context.Context) int {
-	count, err := tcroq.Count(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (tcroq *TelegramChatRecapsOptionsQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tcroq *TelegramChatRecapsOptionsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tcroq.ctx, "Exist")
-	switch _, err := tcroq.FirstID(ctx); {
+func (_q *TelegramChatRecapsOptionsQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (tcroq *TelegramChatRecapsOptionsQuery) Exist(ctx context.Context) (bool, e
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tcroq *TelegramChatRecapsOptionsQuery) ExistX(ctx context.Context) bool {
-	exist, err := tcroq.Exist(ctx)
+func (_q *TelegramChatRecapsOptionsQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (tcroq *TelegramChatRecapsOptionsQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TelegramChatRecapsOptionsQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tcroq *TelegramChatRecapsOptionsQuery) Clone() *TelegramChatRecapsOptionsQuery {
-	if tcroq == nil {
+func (_q *TelegramChatRecapsOptionsQuery) Clone() *TelegramChatRecapsOptionsQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TelegramChatRecapsOptionsQuery{
-		config:     tcroq.config,
-		ctx:        tcroq.ctx.Clone(),
-		order:      append([]telegramchatrecapsoptions.OrderOption{}, tcroq.order...),
-		inters:     append([]Interceptor{}, tcroq.inters...),
-		predicates: append([]predicate.TelegramChatRecapsOptions{}, tcroq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]telegramchatrecapsoptions.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.TelegramChatRecapsOptions{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  tcroq.sql.Clone(),
-		path: tcroq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (tcroq *TelegramChatRecapsOptionsQuery) Clone() *TelegramChatRecapsOptionsQ
 //		GroupBy(telegramchatrecapsoptions.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (tcroq *TelegramChatRecapsOptionsQuery) GroupBy(field string, fields ...string) *TelegramChatRecapsOptionsGroupBy {
-	tcroq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TelegramChatRecapsOptionsGroupBy{build: tcroq}
-	grbuild.flds = &tcroq.ctx.Fields
+func (_q *TelegramChatRecapsOptionsQuery) GroupBy(field string, fields ...string) *TelegramChatRecapsOptionsGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TelegramChatRecapsOptionsGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = telegramchatrecapsoptions.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (tcroq *TelegramChatRecapsOptionsQuery) GroupBy(field string, fields ...str
 //	client.TelegramChatRecapsOptions.Query().
 //		Select(telegramchatrecapsoptions.FieldChatID).
 //		Scan(ctx, &v)
-func (tcroq *TelegramChatRecapsOptionsQuery) Select(fields ...string) *TelegramChatRecapsOptionsSelect {
-	tcroq.ctx.Fields = append(tcroq.ctx.Fields, fields...)
-	sbuild := &TelegramChatRecapsOptionsSelect{TelegramChatRecapsOptionsQuery: tcroq}
+func (_q *TelegramChatRecapsOptionsQuery) Select(fields ...string) *TelegramChatRecapsOptionsSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TelegramChatRecapsOptionsSelect{TelegramChatRecapsOptionsQuery: _q}
 	sbuild.label = telegramchatrecapsoptions.Label
-	sbuild.flds, sbuild.scan = &tcroq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TelegramChatRecapsOptionsSelect configured with the given aggregations.
-func (tcroq *TelegramChatRecapsOptionsQuery) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsSelect {
-	return tcroq.Select().Aggregate(fns...)
+func (_q *TelegramChatRecapsOptionsQuery) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tcroq *TelegramChatRecapsOptionsQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tcroq.inters {
+func (_q *TelegramChatRecapsOptionsQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tcroq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tcroq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !telegramchatrecapsoptions.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if tcroq.path != nil {
-		prev, err := tcroq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tcroq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (tcroq *TelegramChatRecapsOptionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatRecapsOptions, error) {
+func (_q *TelegramChatRecapsOptionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TelegramChatRecapsOptions, error) {
 	var (
 		nodes = []*TelegramChatRecapsOptions{}
-		_spec = tcroq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TelegramChatRecapsOptions).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TelegramChatRecapsOptions{config: tcroq.config}
+		node := &TelegramChatRecapsOptions{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = tcroq.schemaConfig.TelegramChatRecapsOptions
-	ctx = internal.NewSchemaConfigContext(ctx, tcroq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatRecapsOptions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tcroq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (tcroq *TelegramChatRecapsOptionsQuery) sqlAll(ctx context.Context, hooks .
 	return nodes, nil
 }
 
-func (tcroq *TelegramChatRecapsOptionsQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tcroq.querySpec()
-	_spec.Node.Schema = tcroq.schemaConfig.TelegramChatRecapsOptions
-	ctx = internal.NewSchemaConfigContext(ctx, tcroq.schemaConfig)
-	_spec.Node.Columns = tcroq.ctx.Fields
-	if len(tcroq.ctx.Fields) > 0 {
-		_spec.Unique = tcroq.ctx.Unique != nil && *tcroq.ctx.Unique
+func (_q *TelegramChatRecapsOptionsQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.TelegramChatRecapsOptions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tcroq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tcroq *TelegramChatRecapsOptionsQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TelegramChatRecapsOptionsQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(telegramchatrecapsoptions.Table, telegramchatrecapsoptions.Columns, sqlgraph.NewFieldSpec(telegramchatrecapsoptions.FieldID, field.TypeUUID))
-	_spec.From = tcroq.sql
-	if unique := tcroq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tcroq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tcroq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, telegramchatrecapsoptions.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (tcroq *TelegramChatRecapsOptionsQuery) querySpec() *sqlgraph.QuerySpec {
 			}
 		}
 	}
-	if ps := tcroq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tcroq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tcroq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tcroq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (tcroq *TelegramChatRecapsOptionsQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tcroq *TelegramChatRecapsOptionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tcroq.driver.Dialect())
+func (_q *TelegramChatRecapsOptionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(telegramchatrecapsoptions.Table)
-	columns := tcroq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = telegramchatrecapsoptions.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tcroq.sql != nil {
-		selector = tcroq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tcroq.ctx.Unique != nil && *tcroq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(tcroq.schemaConfig.TelegramChatRecapsOptions)
-	ctx = internal.NewSchemaConfigContext(ctx, tcroq.schemaConfig)
+	t1.Schema(_q.schemaConfig.TelegramChatRecapsOptions)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range tcroq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tcroq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tcroq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tcroq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type TelegramChatRecapsOptionsGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tcrogb *TelegramChatRecapsOptionsGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsGroupBy {
-	tcrogb.fns = append(tcrogb.fns, fns...)
-	return tcrogb
+func (_g *TelegramChatRecapsOptionsGroupBy) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcrogb *TelegramChatRecapsOptionsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcrogb.build.ctx, "GroupBy")
-	if err := tcrogb.build.prepareQuery(ctx); err != nil {
+func (_g *TelegramChatRecapsOptionsGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatRecapsOptionsQuery, *TelegramChatRecapsOptionsGroupBy](ctx, tcrogb.build, tcrogb, tcrogb.build.inters, v)
+	return scanWithInterceptors[*TelegramChatRecapsOptionsQuery, *TelegramChatRecapsOptionsGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tcrogb *TelegramChatRecapsOptionsGroupBy) sqlScan(ctx context.Context, root *TelegramChatRecapsOptionsQuery, v any) error {
+func (_g *TelegramChatRecapsOptionsGroupBy) sqlScan(ctx context.Context, root *TelegramChatRecapsOptionsQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tcrogb.fns))
-	for _, fn := range tcrogb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tcrogb.flds)+len(tcrogb.fns))
-		for _, f := range *tcrogb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tcrogb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcrogb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type TelegramChatRecapsOptionsSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tcros *TelegramChatRecapsOptionsSelect) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsSelect {
-	tcros.fns = append(tcros.fns, fns...)
-	return tcros
+func (_s *TelegramChatRecapsOptionsSelect) Aggregate(fns ...AggregateFunc) *TelegramChatRecapsOptionsSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tcros *TelegramChatRecapsOptionsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tcros.ctx, "Select")
-	if err := tcros.prepareQuery(ctx); err != nil {
+func (_s *TelegramChatRecapsOptionsSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TelegramChatRecapsOptionsQuery, *TelegramChatRecapsOptionsSelect](ctx, tcros.TelegramChatRecapsOptionsQuery, tcros, tcros.inters, v)
+	return scanWithInterceptors[*TelegramChatRecapsOptionsQuery, *TelegramChatRecapsOptionsSelect](ctx, _s.TelegramChatRecapsOptionsQuery, _s, _s.inters, v)
 }
 
-func (tcros *TelegramChatRecapsOptionsSelect) sqlScan(ctx context.Context, root *TelegramChatRecapsOptionsQuery, v any) error {
+func (_s *TelegramChatRecapsOptionsSelect) sqlScan(ctx context.Context, root *TelegramChatRecapsOptionsQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tcros.fns))
-	for _, fn := range tcros.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tcros.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (tcros *TelegramChatRecapsOptionsSelect) sqlScan(ctx context.Context, root 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tcros.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

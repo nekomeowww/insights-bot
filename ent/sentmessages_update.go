@@ -23,178 +23,178 @@ type SentMessagesUpdate struct {
 }
 
 // Where appends a list predicates to the SentMessagesUpdate builder.
-func (smu *SentMessagesUpdate) Where(ps ...predicate.SentMessages) *SentMessagesUpdate {
-	smu.mutation.Where(ps...)
-	return smu
+func (_u *SentMessagesUpdate) Where(ps ...predicate.SentMessages) *SentMessagesUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetChatID sets the "chat_id" field.
-func (smu *SentMessagesUpdate) SetChatID(i int64) *SentMessagesUpdate {
-	smu.mutation.ResetChatID()
-	smu.mutation.SetChatID(i)
-	return smu
+func (_u *SentMessagesUpdate) SetChatID(v int64) *SentMessagesUpdate {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableChatID(i *int64) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetChatID(*i)
+func (_u *SentMessagesUpdate) SetNillableChatID(v *int64) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (smu *SentMessagesUpdate) AddChatID(i int64) *SentMessagesUpdate {
-	smu.mutation.AddChatID(i)
-	return smu
+// AddChatID adds value to the "chat_id" field.
+func (_u *SentMessagesUpdate) AddChatID(v int64) *SentMessagesUpdate {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetMessageID sets the "message_id" field.
-func (smu *SentMessagesUpdate) SetMessageID(i int) *SentMessagesUpdate {
-	smu.mutation.ResetMessageID()
-	smu.mutation.SetMessageID(i)
-	return smu
+func (_u *SentMessagesUpdate) SetMessageID(v int) *SentMessagesUpdate {
+	_u.mutation.ResetMessageID()
+	_u.mutation.SetMessageID(v)
+	return _u
 }
 
 // SetNillableMessageID sets the "message_id" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableMessageID(i *int) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetMessageID(*i)
+func (_u *SentMessagesUpdate) SetNillableMessageID(v *int) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetMessageID(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddMessageID adds i to the "message_id" field.
-func (smu *SentMessagesUpdate) AddMessageID(i int) *SentMessagesUpdate {
-	smu.mutation.AddMessageID(i)
-	return smu
+// AddMessageID adds value to the "message_id" field.
+func (_u *SentMessagesUpdate) AddMessageID(v int) *SentMessagesUpdate {
+	_u.mutation.AddMessageID(v)
+	return _u
 }
 
 // SetText sets the "text" field.
-func (smu *SentMessagesUpdate) SetText(s string) *SentMessagesUpdate {
-	smu.mutation.SetText(s)
-	return smu
+func (_u *SentMessagesUpdate) SetText(v string) *SentMessagesUpdate {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableText(s *string) *SentMessagesUpdate {
-	if s != nil {
-		smu.SetText(*s)
+func (_u *SentMessagesUpdate) SetNillableText(v *string) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return smu
+	return _u
 }
 
 // SetIsPinned sets the "is_pinned" field.
-func (smu *SentMessagesUpdate) SetIsPinned(b bool) *SentMessagesUpdate {
-	smu.mutation.SetIsPinned(b)
-	return smu
+func (_u *SentMessagesUpdate) SetIsPinned(v bool) *SentMessagesUpdate {
+	_u.mutation.SetIsPinned(v)
+	return _u
 }
 
 // SetNillableIsPinned sets the "is_pinned" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableIsPinned(b *bool) *SentMessagesUpdate {
-	if b != nil {
-		smu.SetIsPinned(*b)
+func (_u *SentMessagesUpdate) SetNillableIsPinned(v *bool) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetIsPinned(*v)
 	}
-	return smu
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (smu *SentMessagesUpdate) SetFromPlatform(i int) *SentMessagesUpdate {
-	smu.mutation.ResetFromPlatform()
-	smu.mutation.SetFromPlatform(i)
-	return smu
+func (_u *SentMessagesUpdate) SetFromPlatform(v int) *SentMessagesUpdate {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableFromPlatform(i *int) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetFromPlatform(*i)
+func (_u *SentMessagesUpdate) SetNillableFromPlatform(v *int) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (smu *SentMessagesUpdate) AddFromPlatform(i int) *SentMessagesUpdate {
-	smu.mutation.AddFromPlatform(i)
-	return smu
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *SentMessagesUpdate) AddFromPlatform(v int) *SentMessagesUpdate {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetMessageType sets the "message_type" field.
-func (smu *SentMessagesUpdate) SetMessageType(i int) *SentMessagesUpdate {
-	smu.mutation.ResetMessageType()
-	smu.mutation.SetMessageType(i)
-	return smu
+func (_u *SentMessagesUpdate) SetMessageType(v int) *SentMessagesUpdate {
+	_u.mutation.ResetMessageType()
+	_u.mutation.SetMessageType(v)
+	return _u
 }
 
 // SetNillableMessageType sets the "message_type" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableMessageType(i *int) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetMessageType(*i)
+func (_u *SentMessagesUpdate) SetNillableMessageType(v *int) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetMessageType(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddMessageType adds i to the "message_type" field.
-func (smu *SentMessagesUpdate) AddMessageType(i int) *SentMessagesUpdate {
-	smu.mutation.AddMessageType(i)
-	return smu
+// AddMessageType adds value to the "message_type" field.
+func (_u *SentMessagesUpdate) AddMessageType(v int) *SentMessagesUpdate {
+	_u.mutation.AddMessageType(v)
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (smu *SentMessagesUpdate) SetCreatedAt(i int64) *SentMessagesUpdate {
-	smu.mutation.ResetCreatedAt()
-	smu.mutation.SetCreatedAt(i)
-	return smu
+func (_u *SentMessagesUpdate) SetCreatedAt(v int64) *SentMessagesUpdate {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableCreatedAt(i *int64) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetCreatedAt(*i)
+func (_u *SentMessagesUpdate) SetNillableCreatedAt(v *int64) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (smu *SentMessagesUpdate) AddCreatedAt(i int64) *SentMessagesUpdate {
-	smu.mutation.AddCreatedAt(i)
-	return smu
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *SentMessagesUpdate) AddCreatedAt(v int64) *SentMessagesUpdate {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (smu *SentMessagesUpdate) SetUpdatedAt(i int64) *SentMessagesUpdate {
-	smu.mutation.ResetUpdatedAt()
-	smu.mutation.SetUpdatedAt(i)
-	return smu
+func (_u *SentMessagesUpdate) SetUpdatedAt(v int64) *SentMessagesUpdate {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (smu *SentMessagesUpdate) SetNillableUpdatedAt(i *int64) *SentMessagesUpdate {
-	if i != nil {
-		smu.SetUpdatedAt(*i)
+func (_u *SentMessagesUpdate) SetNillableUpdatedAt(v *int64) *SentMessagesUpdate {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return smu
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (smu *SentMessagesUpdate) AddUpdatedAt(i int64) *SentMessagesUpdate {
-	smu.mutation.AddUpdatedAt(i)
-	return smu
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *SentMessagesUpdate) AddUpdatedAt(v int64) *SentMessagesUpdate {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the SentMessagesMutation object of the builder.
-func (smu *SentMessagesUpdate) Mutation() *SentMessagesMutation {
-	return smu.mutation
+func (_u *SentMessagesUpdate) Mutation() *SentMessagesMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (smu *SentMessagesUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, smu.sqlSave, smu.mutation, smu.hooks)
+func (_u *SentMessagesUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (smu *SentMessagesUpdate) SaveX(ctx context.Context) int {
-	affected, err := smu.Save(ctx)
+func (_u *SentMessagesUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -202,72 +202,72 @@ func (smu *SentMessagesUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (smu *SentMessagesUpdate) Exec(ctx context.Context) error {
-	_, err := smu.Save(ctx)
+func (_u *SentMessagesUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (smu *SentMessagesUpdate) ExecX(ctx context.Context) {
-	if err := smu.Exec(ctx); err != nil {
+func (_u *SentMessagesUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (smu *SentMessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
+func (_u *SentMessagesUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(sentmessages.Table, sentmessages.Columns, sqlgraph.NewFieldSpec(sentmessages.FieldID, field.TypeUUID))
-	if ps := smu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := smu.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(sentmessages.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := smu.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(sentmessages.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := smu.mutation.MessageID(); ok {
+	if value, ok := _u.mutation.MessageID(); ok {
 		_spec.SetField(sentmessages.FieldMessageID, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.AddedMessageID(); ok {
+	if value, ok := _u.mutation.AddedMessageID(); ok {
 		_spec.AddField(sentmessages.FieldMessageID, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(sentmessages.FieldText, field.TypeString, value)
 	}
-	if value, ok := smu.mutation.IsPinned(); ok {
+	if value, ok := _u.mutation.IsPinned(); ok {
 		_spec.SetField(sentmessages.FieldIsPinned, field.TypeBool, value)
 	}
-	if value, ok := smu.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(sentmessages.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(sentmessages.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.MessageType(); ok {
+	if value, ok := _u.mutation.MessageType(); ok {
 		_spec.SetField(sentmessages.FieldMessageType, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.AddedMessageType(); ok {
+	if value, ok := _u.mutation.AddedMessageType(); ok {
 		_spec.AddField(sentmessages.FieldMessageType, field.TypeInt, value)
 	}
-	if value, ok := smu.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(sentmessages.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smu.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(sentmessages.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(sentmessages.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smu.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(sentmessages.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = smu.schemaConfig.SentMessages
-	ctx = internal.NewSchemaConfigContext(ctx, smu.schemaConfig)
-	if n, err = sqlgraph.UpdateNodes(ctx, smu.driver, _spec); err != nil {
+	_spec.Node.Schema = _u.schemaConfig.SentMessages
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{sentmessages.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -275,8 +275,8 @@ func (smu *SentMessagesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	smu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // SentMessagesUpdateOne is the builder for updating a single SentMessages entity.
@@ -288,185 +288,185 @@ type SentMessagesUpdateOne struct {
 }
 
 // SetChatID sets the "chat_id" field.
-func (smuo *SentMessagesUpdateOne) SetChatID(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.ResetChatID()
-	smuo.mutation.SetChatID(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetChatID(v int64) *SentMessagesUpdateOne {
+	_u.mutation.ResetChatID()
+	_u.mutation.SetChatID(v)
+	return _u
 }
 
 // SetNillableChatID sets the "chat_id" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableChatID(i *int64) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetChatID(*i)
+func (_u *SentMessagesUpdateOne) SetNillableChatID(v *int64) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetChatID(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddChatID adds i to the "chat_id" field.
-func (smuo *SentMessagesUpdateOne) AddChatID(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.AddChatID(i)
-	return smuo
+// AddChatID adds value to the "chat_id" field.
+func (_u *SentMessagesUpdateOne) AddChatID(v int64) *SentMessagesUpdateOne {
+	_u.mutation.AddChatID(v)
+	return _u
 }
 
 // SetMessageID sets the "message_id" field.
-func (smuo *SentMessagesUpdateOne) SetMessageID(i int) *SentMessagesUpdateOne {
-	smuo.mutation.ResetMessageID()
-	smuo.mutation.SetMessageID(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetMessageID(v int) *SentMessagesUpdateOne {
+	_u.mutation.ResetMessageID()
+	_u.mutation.SetMessageID(v)
+	return _u
 }
 
 // SetNillableMessageID sets the "message_id" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableMessageID(i *int) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetMessageID(*i)
+func (_u *SentMessagesUpdateOne) SetNillableMessageID(v *int) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetMessageID(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddMessageID adds i to the "message_id" field.
-func (smuo *SentMessagesUpdateOne) AddMessageID(i int) *SentMessagesUpdateOne {
-	smuo.mutation.AddMessageID(i)
-	return smuo
+// AddMessageID adds value to the "message_id" field.
+func (_u *SentMessagesUpdateOne) AddMessageID(v int) *SentMessagesUpdateOne {
+	_u.mutation.AddMessageID(v)
+	return _u
 }
 
 // SetText sets the "text" field.
-func (smuo *SentMessagesUpdateOne) SetText(s string) *SentMessagesUpdateOne {
-	smuo.mutation.SetText(s)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetText(v string) *SentMessagesUpdateOne {
+	_u.mutation.SetText(v)
+	return _u
 }
 
 // SetNillableText sets the "text" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableText(s *string) *SentMessagesUpdateOne {
-	if s != nil {
-		smuo.SetText(*s)
+func (_u *SentMessagesUpdateOne) SetNillableText(v *string) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetText(*v)
 	}
-	return smuo
+	return _u
 }
 
 // SetIsPinned sets the "is_pinned" field.
-func (smuo *SentMessagesUpdateOne) SetIsPinned(b bool) *SentMessagesUpdateOne {
-	smuo.mutation.SetIsPinned(b)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetIsPinned(v bool) *SentMessagesUpdateOne {
+	_u.mutation.SetIsPinned(v)
+	return _u
 }
 
 // SetNillableIsPinned sets the "is_pinned" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableIsPinned(b *bool) *SentMessagesUpdateOne {
-	if b != nil {
-		smuo.SetIsPinned(*b)
+func (_u *SentMessagesUpdateOne) SetNillableIsPinned(v *bool) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetIsPinned(*v)
 	}
-	return smuo
+	return _u
 }
 
 // SetFromPlatform sets the "from_platform" field.
-func (smuo *SentMessagesUpdateOne) SetFromPlatform(i int) *SentMessagesUpdateOne {
-	smuo.mutation.ResetFromPlatform()
-	smuo.mutation.SetFromPlatform(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetFromPlatform(v int) *SentMessagesUpdateOne {
+	_u.mutation.ResetFromPlatform()
+	_u.mutation.SetFromPlatform(v)
+	return _u
 }
 
 // SetNillableFromPlatform sets the "from_platform" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableFromPlatform(i *int) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetFromPlatform(*i)
+func (_u *SentMessagesUpdateOne) SetNillableFromPlatform(v *int) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetFromPlatform(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddFromPlatform adds i to the "from_platform" field.
-func (smuo *SentMessagesUpdateOne) AddFromPlatform(i int) *SentMessagesUpdateOne {
-	smuo.mutation.AddFromPlatform(i)
-	return smuo
+// AddFromPlatform adds value to the "from_platform" field.
+func (_u *SentMessagesUpdateOne) AddFromPlatform(v int) *SentMessagesUpdateOne {
+	_u.mutation.AddFromPlatform(v)
+	return _u
 }
 
 // SetMessageType sets the "message_type" field.
-func (smuo *SentMessagesUpdateOne) SetMessageType(i int) *SentMessagesUpdateOne {
-	smuo.mutation.ResetMessageType()
-	smuo.mutation.SetMessageType(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetMessageType(v int) *SentMessagesUpdateOne {
+	_u.mutation.ResetMessageType()
+	_u.mutation.SetMessageType(v)
+	return _u
 }
 
 // SetNillableMessageType sets the "message_type" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableMessageType(i *int) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetMessageType(*i)
+func (_u *SentMessagesUpdateOne) SetNillableMessageType(v *int) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetMessageType(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddMessageType adds i to the "message_type" field.
-func (smuo *SentMessagesUpdateOne) AddMessageType(i int) *SentMessagesUpdateOne {
-	smuo.mutation.AddMessageType(i)
-	return smuo
+// AddMessageType adds value to the "message_type" field.
+func (_u *SentMessagesUpdateOne) AddMessageType(v int) *SentMessagesUpdateOne {
+	_u.mutation.AddMessageType(v)
+	return _u
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (smuo *SentMessagesUpdateOne) SetCreatedAt(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.ResetCreatedAt()
-	smuo.mutation.SetCreatedAt(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetCreatedAt(v int64) *SentMessagesUpdateOne {
+	_u.mutation.ResetCreatedAt()
+	_u.mutation.SetCreatedAt(v)
+	return _u
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableCreatedAt(i *int64) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetCreatedAt(*i)
+func (_u *SentMessagesUpdateOne) SetNillableCreatedAt(v *int64) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetCreatedAt(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddCreatedAt adds i to the "created_at" field.
-func (smuo *SentMessagesUpdateOne) AddCreatedAt(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.AddCreatedAt(i)
-	return smuo
+// AddCreatedAt adds value to the "created_at" field.
+func (_u *SentMessagesUpdateOne) AddCreatedAt(v int64) *SentMessagesUpdateOne {
+	_u.mutation.AddCreatedAt(v)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (smuo *SentMessagesUpdateOne) SetUpdatedAt(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.ResetUpdatedAt()
-	smuo.mutation.SetUpdatedAt(i)
-	return smuo
+func (_u *SentMessagesUpdateOne) SetUpdatedAt(v int64) *SentMessagesUpdateOne {
+	_u.mutation.ResetUpdatedAt()
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (smuo *SentMessagesUpdateOne) SetNillableUpdatedAt(i *int64) *SentMessagesUpdateOne {
-	if i != nil {
-		smuo.SetUpdatedAt(*i)
+func (_u *SentMessagesUpdateOne) SetNillableUpdatedAt(v *int64) *SentMessagesUpdateOne {
+	if v != nil {
+		_u.SetUpdatedAt(*v)
 	}
-	return smuo
+	return _u
 }
 
-// AddUpdatedAt adds i to the "updated_at" field.
-func (smuo *SentMessagesUpdateOne) AddUpdatedAt(i int64) *SentMessagesUpdateOne {
-	smuo.mutation.AddUpdatedAt(i)
-	return smuo
+// AddUpdatedAt adds value to the "updated_at" field.
+func (_u *SentMessagesUpdateOne) AddUpdatedAt(v int64) *SentMessagesUpdateOne {
+	_u.mutation.AddUpdatedAt(v)
+	return _u
 }
 
 // Mutation returns the SentMessagesMutation object of the builder.
-func (smuo *SentMessagesUpdateOne) Mutation() *SentMessagesMutation {
-	return smuo.mutation
+func (_u *SentMessagesUpdateOne) Mutation() *SentMessagesMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the SentMessagesUpdate builder.
-func (smuo *SentMessagesUpdateOne) Where(ps ...predicate.SentMessages) *SentMessagesUpdateOne {
-	smuo.mutation.Where(ps...)
-	return smuo
+func (_u *SentMessagesUpdateOne) Where(ps ...predicate.SentMessages) *SentMessagesUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (smuo *SentMessagesUpdateOne) Select(field string, fields ...string) *SentMessagesUpdateOne {
-	smuo.fields = append([]string{field}, fields...)
-	return smuo
+func (_u *SentMessagesUpdateOne) Select(field string, fields ...string) *SentMessagesUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated SentMessages entity.
-func (smuo *SentMessagesUpdateOne) Save(ctx context.Context) (*SentMessages, error) {
-	return withHooks(ctx, smuo.sqlSave, smuo.mutation, smuo.hooks)
+func (_u *SentMessagesUpdateOne) Save(ctx context.Context) (*SentMessages, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (smuo *SentMessagesUpdateOne) SaveX(ctx context.Context) *SentMessages {
-	node, err := smuo.Save(ctx)
+func (_u *SentMessagesUpdateOne) SaveX(ctx context.Context) *SentMessages {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -474,26 +474,26 @@ func (smuo *SentMessagesUpdateOne) SaveX(ctx context.Context) *SentMessages {
 }
 
 // Exec executes the query on the entity.
-func (smuo *SentMessagesUpdateOne) Exec(ctx context.Context) error {
-	_, err := smuo.Save(ctx)
+func (_u *SentMessagesUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (smuo *SentMessagesUpdateOne) ExecX(ctx context.Context) {
-	if err := smuo.Exec(ctx); err != nil {
+func (_u *SentMessagesUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
-func (smuo *SentMessagesUpdateOne) sqlSave(ctx context.Context) (_node *SentMessages, err error) {
+func (_u *SentMessagesUpdateOne) sqlSave(ctx context.Context) (_node *SentMessages, err error) {
 	_spec := sqlgraph.NewUpdateSpec(sentmessages.Table, sentmessages.Columns, sqlgraph.NewFieldSpec(sentmessages.FieldID, field.TypeUUID))
-	id, ok := smuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "SentMessages.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := smuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, sentmessages.FieldID)
 		for _, f := range fields {
@@ -505,61 +505,61 @@ func (smuo *SentMessagesUpdateOne) sqlSave(ctx context.Context) (_node *SentMess
 			}
 		}
 	}
-	if ps := smuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := smuo.mutation.ChatID(); ok {
+	if value, ok := _u.mutation.ChatID(); ok {
 		_spec.SetField(sentmessages.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := smuo.mutation.AddedChatID(); ok {
+	if value, ok := _u.mutation.AddedChatID(); ok {
 		_spec.AddField(sentmessages.FieldChatID, field.TypeInt64, value)
 	}
-	if value, ok := smuo.mutation.MessageID(); ok {
+	if value, ok := _u.mutation.MessageID(); ok {
 		_spec.SetField(sentmessages.FieldMessageID, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.AddedMessageID(); ok {
+	if value, ok := _u.mutation.AddedMessageID(); ok {
 		_spec.AddField(sentmessages.FieldMessageID, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.Text(); ok {
+	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(sentmessages.FieldText, field.TypeString, value)
 	}
-	if value, ok := smuo.mutation.IsPinned(); ok {
+	if value, ok := _u.mutation.IsPinned(); ok {
 		_spec.SetField(sentmessages.FieldIsPinned, field.TypeBool, value)
 	}
-	if value, ok := smuo.mutation.FromPlatform(); ok {
+	if value, ok := _u.mutation.FromPlatform(); ok {
 		_spec.SetField(sentmessages.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.AddedFromPlatform(); ok {
+	if value, ok := _u.mutation.AddedFromPlatform(); ok {
 		_spec.AddField(sentmessages.FieldFromPlatform, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.MessageType(); ok {
+	if value, ok := _u.mutation.MessageType(); ok {
 		_spec.SetField(sentmessages.FieldMessageType, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.AddedMessageType(); ok {
+	if value, ok := _u.mutation.AddedMessageType(); ok {
 		_spec.AddField(sentmessages.FieldMessageType, field.TypeInt, value)
 	}
-	if value, ok := smuo.mutation.CreatedAt(); ok {
+	if value, ok := _u.mutation.CreatedAt(); ok {
 		_spec.SetField(sentmessages.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smuo.mutation.AddedCreatedAt(); ok {
+	if value, ok := _u.mutation.AddedCreatedAt(); ok {
 		_spec.AddField(sentmessages.FieldCreatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(sentmessages.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	if value, ok := smuo.mutation.AddedUpdatedAt(); ok {
+	if value, ok := _u.mutation.AddedUpdatedAt(); ok {
 		_spec.AddField(sentmessages.FieldUpdatedAt, field.TypeInt64, value)
 	}
-	_spec.Node.Schema = smuo.schemaConfig.SentMessages
-	ctx = internal.NewSchemaConfigContext(ctx, smuo.schemaConfig)
-	_node = &SentMessages{config: smuo.config}
+	_spec.Node.Schema = _u.schemaConfig.SentMessages
+	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
+	_node = &SentMessages{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, smuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{sentmessages.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -567,6 +567,6 @@ func (smuo *SentMessagesUpdateOne) sqlSave(ctx context.Context) (_node *SentMess
 		}
 		return nil, err
 	}
-	smuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

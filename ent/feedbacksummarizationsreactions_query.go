@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"math"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -29,40 +30,40 @@ type FeedbackSummarizationsReactionsQuery struct {
 }
 
 // Where adds a new predicate for the FeedbackSummarizationsReactionsQuery builder.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsQuery {
-	fsrq.predicates = append(fsrq.predicates, ps...)
-	return fsrq
+func (_q *FeedbackSummarizationsReactionsQuery) Where(ps ...predicate.FeedbackSummarizationsReactions) *FeedbackSummarizationsReactionsQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Limit(limit int) *FeedbackSummarizationsReactionsQuery {
-	fsrq.ctx.Limit = &limit
-	return fsrq
+func (_q *FeedbackSummarizationsReactionsQuery) Limit(limit int) *FeedbackSummarizationsReactionsQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Offset(offset int) *FeedbackSummarizationsReactionsQuery {
-	fsrq.ctx.Offset = &offset
-	return fsrq
+func (_q *FeedbackSummarizationsReactionsQuery) Offset(offset int) *FeedbackSummarizationsReactionsQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Unique(unique bool) *FeedbackSummarizationsReactionsQuery {
-	fsrq.ctx.Unique = &unique
-	return fsrq
+func (_q *FeedbackSummarizationsReactionsQuery) Unique(unique bool) *FeedbackSummarizationsReactionsQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Order(o ...feedbacksummarizationsreactions.OrderOption) *FeedbackSummarizationsReactionsQuery {
-	fsrq.order = append(fsrq.order, o...)
-	return fsrq
+func (_q *FeedbackSummarizationsReactionsQuery) Order(o ...feedbacksummarizationsreactions.OrderOption) *FeedbackSummarizationsReactionsQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // First returns the first FeedbackSummarizationsReactions entity from the query.
 // Returns a *NotFoundError when no FeedbackSummarizationsReactions was found.
-func (fsrq *FeedbackSummarizationsReactionsQuery) First(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
-	nodes, err := fsrq.Limit(1).All(setContextOp(ctx, fsrq.ctx, "First"))
+func (_q *FeedbackSummarizationsReactionsQuery) First(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -73,8 +74,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) First(ctx context.Context) (*F
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) FirstX(ctx context.Context) *FeedbackSummarizationsReactions {
-	node, err := fsrq.First(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) FirstX(ctx context.Context) *FeedbackSummarizationsReactions {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -83,9 +84,9 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) FirstX(ctx context.Context) *F
 
 // FirstID returns the first FeedbackSummarizationsReactions ID from the query.
 // Returns a *NotFoundError when no FeedbackSummarizationsReactions ID was found.
-func (fsrq *FeedbackSummarizationsReactionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *FeedbackSummarizationsReactionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = fsrq.Limit(1).IDs(setContextOp(ctx, fsrq.ctx, "FirstID")); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -96,8 +97,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) FirstID(ctx context.Context) (
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
-	id, err := fsrq.FirstID(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -107,8 +108,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) FirstIDX(ctx context.Context) 
 // Only returns a single FeedbackSummarizationsReactions entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one FeedbackSummarizationsReactions entity is found.
 // Returns a *NotFoundError when no FeedbackSummarizationsReactions entities are found.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Only(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
-	nodes, err := fsrq.Limit(2).All(setContextOp(ctx, fsrq.ctx, "Only"))
+func (_q *FeedbackSummarizationsReactionsQuery) Only(ctx context.Context) (*FeedbackSummarizationsReactions, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +124,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) Only(ctx context.Context) (*Fe
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyX(ctx context.Context) *FeedbackSummarizationsReactions {
-	node, err := fsrq.Only(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) OnlyX(ctx context.Context) *FeedbackSummarizationsReactions {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -134,9 +135,9 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyX(ctx context.Context) *Fe
 // OnlyID is like Only, but returns the only FeedbackSummarizationsReactions ID in the query.
 // Returns a *NotSingularError when more than one FeedbackSummarizationsReactions ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+func (_q *FeedbackSummarizationsReactionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
 	var ids []uuid.UUID
-	if ids, err = fsrq.Limit(2).IDs(setContextOp(ctx, fsrq.ctx, "OnlyID")); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -151,8 +152,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyID(ctx context.Context) (i
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
-	id, err := fsrq.OnlyID(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -160,18 +161,18 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) OnlyIDX(ctx context.Context) u
 }
 
 // All executes the query and returns a list of FeedbackSummarizationsReactionsSlice.
-func (fsrq *FeedbackSummarizationsReactionsQuery) All(ctx context.Context) ([]*FeedbackSummarizationsReactions, error) {
-	ctx = setContextOp(ctx, fsrq.ctx, "All")
-	if err := fsrq.prepareQuery(ctx); err != nil {
+func (_q *FeedbackSummarizationsReactionsQuery) All(ctx context.Context) ([]*FeedbackSummarizationsReactions, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*FeedbackSummarizationsReactions, *FeedbackSummarizationsReactionsQuery]()
-	return withInterceptors[[]*FeedbackSummarizationsReactions](ctx, fsrq, qr, fsrq.inters)
+	return withInterceptors[[]*FeedbackSummarizationsReactions](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) AllX(ctx context.Context) []*FeedbackSummarizationsReactions {
-	nodes, err := fsrq.All(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) AllX(ctx context.Context) []*FeedbackSummarizationsReactions {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -179,20 +180,20 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) AllX(ctx context.Context) []*F
 }
 
 // IDs executes the query and returns a list of FeedbackSummarizationsReactions IDs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
-	if fsrq.ctx.Unique == nil && fsrq.path != nil {
-		fsrq.Unique(true)
+func (_q *FeedbackSummarizationsReactionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, fsrq.ctx, "IDs")
-	if err = fsrq.Select(feedbacksummarizationsreactions.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(feedbacksummarizationsreactions.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) IDsX(ctx context.Context) []uuid.UUID {
-	ids, err := fsrq.IDs(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) IDsX(ctx context.Context) []uuid.UUID {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -200,17 +201,17 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) IDsX(ctx context.Context) []uu
 }
 
 // Count returns the count of the given query.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, fsrq.ctx, "Count")
-	if err := fsrq.prepareQuery(ctx); err != nil {
+func (_q *FeedbackSummarizationsReactionsQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, fsrq, querierCount[*FeedbackSummarizationsReactionsQuery](), fsrq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*FeedbackSummarizationsReactionsQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) CountX(ctx context.Context) int {
-	count, err := fsrq.Count(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -218,9 +219,9 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) CountX(ctx context.Context) in
 }
 
 // Exist returns true if the query has elements in the graph.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, fsrq.ctx, "Exist")
-	switch _, err := fsrq.FirstID(ctx); {
+func (_q *FeedbackSummarizationsReactionsQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -231,8 +232,8 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) Exist(ctx context.Context) (bo
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (fsrq *FeedbackSummarizationsReactionsQuery) ExistX(ctx context.Context) bool {
-	exist, err := fsrq.Exist(ctx)
+func (_q *FeedbackSummarizationsReactionsQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -241,19 +242,19 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) ExistX(ctx context.Context) bo
 
 // Clone returns a duplicate of the FeedbackSummarizationsReactionsQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Clone() *FeedbackSummarizationsReactionsQuery {
-	if fsrq == nil {
+func (_q *FeedbackSummarizationsReactionsQuery) Clone() *FeedbackSummarizationsReactionsQuery {
+	if _q == nil {
 		return nil
 	}
 	return &FeedbackSummarizationsReactionsQuery{
-		config:     fsrq.config,
-		ctx:        fsrq.ctx.Clone(),
-		order:      append([]feedbacksummarizationsreactions.OrderOption{}, fsrq.order...),
-		inters:     append([]Interceptor{}, fsrq.inters...),
-		predicates: append([]predicate.FeedbackSummarizationsReactions{}, fsrq.predicates...),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]feedbacksummarizationsreactions.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.FeedbackSummarizationsReactions{}, _q.predicates...),
 		// clone intermediate query.
-		sql:  fsrq.sql.Clone(),
-		path: fsrq.path,
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -271,10 +272,10 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) Clone() *FeedbackSummarization
 //		GroupBy(feedbacksummarizationsreactions.FieldChatID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (fsrq *FeedbackSummarizationsReactionsQuery) GroupBy(field string, fields ...string) *FeedbackSummarizationsReactionsGroupBy {
-	fsrq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &FeedbackSummarizationsReactionsGroupBy{build: fsrq}
-	grbuild.flds = &fsrq.ctx.Fields
+func (_q *FeedbackSummarizationsReactionsQuery) GroupBy(field string, fields ...string) *FeedbackSummarizationsReactionsGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &FeedbackSummarizationsReactionsGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = feedbacksummarizationsreactions.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -292,64 +293,64 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) GroupBy(field string, fields .
 //	client.FeedbackSummarizationsReactions.Query().
 //		Select(feedbacksummarizationsreactions.FieldChatID).
 //		Scan(ctx, &v)
-func (fsrq *FeedbackSummarizationsReactionsQuery) Select(fields ...string) *FeedbackSummarizationsReactionsSelect {
-	fsrq.ctx.Fields = append(fsrq.ctx.Fields, fields...)
-	sbuild := &FeedbackSummarizationsReactionsSelect{FeedbackSummarizationsReactionsQuery: fsrq}
+func (_q *FeedbackSummarizationsReactionsQuery) Select(fields ...string) *FeedbackSummarizationsReactionsSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &FeedbackSummarizationsReactionsSelect{FeedbackSummarizationsReactionsQuery: _q}
 	sbuild.label = feedbacksummarizationsreactions.Label
-	sbuild.flds, sbuild.scan = &fsrq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a FeedbackSummarizationsReactionsSelect configured with the given aggregations.
-func (fsrq *FeedbackSummarizationsReactionsQuery) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsSelect {
-	return fsrq.Select().Aggregate(fns...)
+func (_q *FeedbackSummarizationsReactionsQuery) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (fsrq *FeedbackSummarizationsReactionsQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range fsrq.inters {
+func (_q *FeedbackSummarizationsReactionsQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, fsrq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range fsrq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !feedbacksummarizationsreactions.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if fsrq.path != nil {
-		prev, err := fsrq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		fsrq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (fsrq *FeedbackSummarizationsReactionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FeedbackSummarizationsReactions, error) {
+func (_q *FeedbackSummarizationsReactionsQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*FeedbackSummarizationsReactions, error) {
 	var (
 		nodes = []*FeedbackSummarizationsReactions{}
-		_spec = fsrq.querySpec()
+		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*FeedbackSummarizationsReactions).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &FeedbackSummarizationsReactions{config: fsrq.config}
+		node := &FeedbackSummarizationsReactions{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = fsrq.schemaConfig.FeedbackSummarizationsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fsrq.schemaConfig)
+	_spec.Node.Schema = _q.schemaConfig.FeedbackSummarizationsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, fsrq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
@@ -358,26 +359,26 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) sqlAll(ctx context.Context, ho
 	return nodes, nil
 }
 
-func (fsrq *FeedbackSummarizationsReactionsQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := fsrq.querySpec()
-	_spec.Node.Schema = fsrq.schemaConfig.FeedbackSummarizationsReactions
-	ctx = internal.NewSchemaConfigContext(ctx, fsrq.schemaConfig)
-	_spec.Node.Columns = fsrq.ctx.Fields
-	if len(fsrq.ctx.Fields) > 0 {
-		_spec.Unique = fsrq.ctx.Unique != nil && *fsrq.ctx.Unique
+func (_q *FeedbackSummarizationsReactionsQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	_spec.Node.Schema = _q.schemaConfig.FeedbackSummarizationsReactions
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, fsrq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (fsrq *FeedbackSummarizationsReactionsQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *FeedbackSummarizationsReactionsQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(feedbacksummarizationsreactions.Table, feedbacksummarizationsreactions.Columns, sqlgraph.NewFieldSpec(feedbacksummarizationsreactions.FieldID, field.TypeUUID))
-	_spec.From = fsrq.sql
-	if unique := fsrq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if fsrq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := fsrq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, feedbacksummarizationsreactions.FieldID)
 		for i := range fields {
@@ -386,20 +387,20 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) querySpec() *sqlgraph.QuerySpe
 			}
 		}
 	}
-	if ps := fsrq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := fsrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := fsrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := fsrq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -409,36 +410,36 @@ func (fsrq *FeedbackSummarizationsReactionsQuery) querySpec() *sqlgraph.QuerySpe
 	return _spec
 }
 
-func (fsrq *FeedbackSummarizationsReactionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(fsrq.driver.Dialect())
+func (_q *FeedbackSummarizationsReactionsQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(feedbacksummarizationsreactions.Table)
-	columns := fsrq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = feedbacksummarizationsreactions.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if fsrq.sql != nil {
-		selector = fsrq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if fsrq.ctx.Unique != nil && *fsrq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(fsrq.schemaConfig.FeedbackSummarizationsReactions)
-	ctx = internal.NewSchemaConfigContext(ctx, fsrq.schemaConfig)
+	t1.Schema(_q.schemaConfig.FeedbackSummarizationsReactions)
+	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
-	for _, p := range fsrq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range fsrq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := fsrq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := fsrq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
@@ -451,41 +452,41 @@ type FeedbackSummarizationsReactionsGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (fsrgb *FeedbackSummarizationsReactionsGroupBy) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsGroupBy {
-	fsrgb.fns = append(fsrgb.fns, fns...)
-	return fsrgb
+func (_g *FeedbackSummarizationsReactionsGroupBy) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fsrgb *FeedbackSummarizationsReactionsGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fsrgb.build.ctx, "GroupBy")
-	if err := fsrgb.build.prepareQuery(ctx); err != nil {
+func (_g *FeedbackSummarizationsReactionsGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FeedbackSummarizationsReactionsQuery, *FeedbackSummarizationsReactionsGroupBy](ctx, fsrgb.build, fsrgb, fsrgb.build.inters, v)
+	return scanWithInterceptors[*FeedbackSummarizationsReactionsQuery, *FeedbackSummarizationsReactionsGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (fsrgb *FeedbackSummarizationsReactionsGroupBy) sqlScan(ctx context.Context, root *FeedbackSummarizationsReactionsQuery, v any) error {
+func (_g *FeedbackSummarizationsReactionsGroupBy) sqlScan(ctx context.Context, root *FeedbackSummarizationsReactionsQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(fsrgb.fns))
-	for _, fn := range fsrgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*fsrgb.flds)+len(fsrgb.fns))
-		for _, f := range *fsrgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*fsrgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fsrgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -499,27 +500,27 @@ type FeedbackSummarizationsReactionsSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (fsrs *FeedbackSummarizationsReactionsSelect) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsSelect {
-	fsrs.fns = append(fsrs.fns, fns...)
-	return fsrs
+func (_s *FeedbackSummarizationsReactionsSelect) Aggregate(fns ...AggregateFunc) *FeedbackSummarizationsReactionsSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (fsrs *FeedbackSummarizationsReactionsSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, fsrs.ctx, "Select")
-	if err := fsrs.prepareQuery(ctx); err != nil {
+func (_s *FeedbackSummarizationsReactionsSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*FeedbackSummarizationsReactionsQuery, *FeedbackSummarizationsReactionsSelect](ctx, fsrs.FeedbackSummarizationsReactionsQuery, fsrs, fsrs.inters, v)
+	return scanWithInterceptors[*FeedbackSummarizationsReactionsQuery, *FeedbackSummarizationsReactionsSelect](ctx, _s.FeedbackSummarizationsReactionsQuery, _s, _s.inters, v)
 }
 
-func (fsrs *FeedbackSummarizationsReactionsSelect) sqlScan(ctx context.Context, root *FeedbackSummarizationsReactionsQuery, v any) error {
+func (_s *FeedbackSummarizationsReactionsSelect) sqlScan(ctx context.Context, root *FeedbackSummarizationsReactionsQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(fsrs.fns))
-	for _, fn := range fsrs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*fsrs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -527,7 +528,7 @@ func (fsrs *FeedbackSummarizationsReactionsSelect) sqlScan(ctx context.Context, 
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := fsrs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()

@@ -98,16 +98,16 @@ func (f *LogFileFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	b.WriteString(prefixStr)
 
 	if data["file"] != nil {
-		b.WriteString(fmt.Sprintf(" [%s]", data["file"]))
+		fmt.Fprintf(b, " [%s]", data["file"])
 		delete(data, "file")
 	} else if entry.Context != nil {
 		caller, _ := entry.Context.Value(runtimeCaller).(*runtime.Frame)
 		if caller != nil {
-			b.WriteString(fmt.Sprintf(" [%s:%d]", caller.File, caller.Line))
+			fmt.Fprintf(b, " [%s:%d]", caller.File, caller.Line)
 		}
 	}
 
-	if "" != entry.Message {
+	if entry.Message != "" {
 		b.WriteString(" " + entry.Message)
 	}
 
@@ -142,7 +142,7 @@ func appendValue(b *bytes.Buffer, value interface{}, QuoteEmptyFields bool) {
 	if !needsQuoting(stringVal, QuoteEmptyFields) {
 		b.WriteString(stringVal)
 	} else {
-		b.WriteString(fmt.Sprintf("%q", stringVal))
+		fmt.Fprintf(b, "%q", stringVal)
 	}
 }
 
@@ -153,10 +153,10 @@ func needsQuoting(text string, QuoteEmptyFields bool) bool {
 	}
 
 	for _, ch := range text {
-		if !((ch >= 'a' && ch <= 'z') ||
-			(ch >= 'A' && ch <= 'Z') ||
-			(ch >= '0' && ch <= '9') ||
-			ch == '-' || ch == '.' || ch == '_' || ch == '/' || ch == '@' || ch == '^' || ch == '+') {
+		if (ch < 'a' || ch > 'z') &&
+			(ch < 'A' || ch > 'Z') &&
+			(ch < '0' || ch > '9') &&
+			ch != '-' && ch != '.' && ch != '_' && ch != '/' && ch != '@' && ch != '^' && ch != '+' {
 			return true
 		}
 	}
